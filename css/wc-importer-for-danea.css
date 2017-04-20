@@ -1,0 +1,180 @@
+/*
+WOOCOMMERCE IMPORTER FOR DANEA | STYLE
+*/
+
+@import url(http://fonts.googleapis.com/css?family=Raleway:200,300,400,500,600,700);
+
+
+.wcifd-admin {
+	display: none;
+}
+
+.wcifd-form {
+	margin:3rem 0 0 0;
+}
+
+.one-of {
+	padding-bottom: 3rem;
+	border-bottom: 1px solid #ccc;
+}
+
+#wcifd-products-submit {
+	margin:25px 0 25px 0;	
+}
+
+.wcifd-copy-url span {
+	display: inline-block;
+	padding: 4px 10px;
+	color: #FFF;
+	text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.25);
+	background-color: #5BB75B;
+	background-image: linear-gradient(to bottom, #62C462, #51A351);
+	background-repeat: repeat-x;
+	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+
+.wcifd-copy-url span.wcifd-red {
+	background: red;
+}
+
+#premium-check {
+	margin:20px 0;
+}
+
+.premium-message {
+	width: 280px;
+	max-width: 100%;
+	font-family: 'Raleway', 'Open Sans',sans-serif;
+	font-size: 20px;
+	font-weight: 300;
+	text-align: center;
+	margin:20px 0 70px;
+	padding: 12px 20px;
+	color: #FFF;
+	text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.25);
+	background-color: #F29400;
+	background-repeat: no-repeat;
+	background-position: 10px 2px;
+	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+
+.premium-message.active {
+	background-color: #5BB75B;
+	background-image: url('../images/active.png');
+	padding: 12px 20px 12px 100px;
+}
+
+a.message {
+	text-decoration: none;
+}
+
+#premium-check #premium-key {
+	width: 300px;
+	color:#777;
+	font-size: 18px;
+	padding:6px;
+}
+
+#submit-key, #submit-key:focus {
+	height:auto;
+	padding:5px 15px 5px 15px !important;
+	top: -2px;
+	margin:0;
+	position: relative;
+}
+
+#submit-key:active {
+	top: 2px;
+}
+
+.wcifd-form label { 
+	display:inline-block;
+}
+
+.nav-tab.premium {
+	background-color: #F68356;
+	color: #fff;
+}
+
+.nav-tab.premium:hover, .nav-tab.nav-tab-active.premium {
+	background-color: inherit;
+	color: inherit;
+}
+
+.nav-tab.not-available, .nav-tab.not-available:hover {
+	border-width: 1px 1px medium;
+    border-style: solid solid none;
+    border-color: #CCC #CCC -moz-use-text-color;
+    -moz-border-top-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    border-image: none;
+    background: #E4E4E4 none repeat scroll 0% 0%;
+    display: inline-block;
+    text-decoration: none;
+    opacity:0.4;
+}
+
+#wcifd-orders span.wcifd-copy-url {
+	display: inline-block;
+	margin-left: 10px;
+	padding: 4px 10px;
+	color: #FFF;
+	text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.25);
+	background-color: #5BB75B;
+	background-image: linear-gradient(to bottom, #62C462, #51A351);
+	background-repeat: repeat-x;
+	border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+
+.wcifd {
+	list-style: inside disc;	
+}
+
+.wcifd li {
+	padding-left:15px;	
+}
+
+h3.wcifd {
+	font-size: 1.3em;
+	margin: 2em 0px 1em 0;
+}
+
+h3.wcifd.main {
+	font-size: 32px;
+	font-weight: 200;
+	line-height: 35px;
+}
+
+.wrap-left {
+	float: left;
+	width: 70%;
+}
+
+.wrap-right {
+	float:left; 
+	width:30%; 
+	text-align:center; 
+	padding-top:3rem;
+}
+
+.clearer {
+	clear:both;
+}
+
+form#wcifd-options {
+	margin: 2rem 0;
+}
+
+form#wcifd-options label {
+	font-size: 14px;
+	font-weight: bold;
+	display: block;
+	margin-bottom: 0.5rem;
+}
+
+
+form#wcifd-options input.button {
+	margin-top: 1rem;
+}
