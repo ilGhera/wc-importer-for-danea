@@ -699,6 +699,9 @@ function wcifd_catalog_update($file) {
 
 		//DANEA VARIANTS SIZE & COLOR
 		$variants = $product->Variants;
+		if($variants) {
+			add_post_meta($id, 'wcifd-danea-size-color', 1);
+		}
 
 
 		//TAX RATE CHECK
@@ -845,10 +848,6 @@ function wcifd_catalog_update($file) {
 		//PRODUCTS VARS
 		if($variants) {
 
-			//DANEA VARIANTS SIZE & COLOR
-			add_post_meta($product_id, 'wcifd-danea-size-color', 1);
-
-
 			//UPDATE THE PARENT PRODUCT
 			wp_set_object_terms($product_id, 'variable', 'product_type' );
 
@@ -884,6 +883,10 @@ function wcifd_catalog_update($file) {
 
 				$avail_sizes[]  = wcifd_json_decode($size);
 				$avail_colors[] = wcifd_json_decode($color);
+
+				wp_set_object_terms( $var_id, $avail_colors, 'pa_color');
+				wp_set_object_terms( $var_id, $avail_sizes, 'pa_size');
+
 
 				$barcode  = wcifd_json_decode($variant->Barcode);
 				$in_stock = wcifd_json_decode($variant->AvailableQty);
@@ -945,10 +948,6 @@ function wcifd_catalog_update($file) {
 					}
 
 				}
-
-				wp_set_object_terms( $var_id, $avail_colors, 'pa_color');
-				wp_set_object_terms( $var_id, $avail_sizes, 'pa_size');
-
 
 				$attr = array(
 						'pa_color' => array(
