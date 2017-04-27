@@ -341,7 +341,7 @@ function wcifd_options() {
     </div><!--WRAP-LEFT-->
 	
 	<div class="wrap-right">
-		<iframe width="300" height="800" scrolling="no" src="http://www.ilghera.com/images/wcifd-iframe.html"></iframe>
+		<iframe width="300" height="1000" scrolling="no" src="http://www.ilghera.com/images/wcifd-iframe.html"></iframe>
 	</div>
 
 	<div class="clear"></div>
