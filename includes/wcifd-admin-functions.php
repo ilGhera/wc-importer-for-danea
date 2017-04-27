@@ -69,7 +69,7 @@ function wcifd_options() {
 	<div id="wcifd-generale">
 	<?php
 		//HEADER
-		echo "<h1 class=\"wcifd main\">" . __( 'Woocommmerce Importer for Danea', 'wcifd' ) . "<span style=\"font-size:60%;\"> 0.9.3 - Dev Version</span></h1>";
+		echo "<h1 class=\"wcifd main\">" . __( 'Woocommmerce Importer for Danea', 'wcifd' ) . "<span style=\"font-size:60%;\"> 0.9.2</span></h1>";
 	?>
 	</div>
 	        
@@ -341,7 +341,7 @@ function wcifd_options() {
     </div><!--WRAP-LEFT-->
 	
 	<div class="wrap-right">
-		<iframe width="300" height="1000" scrolling="no" src="http://www.ilghera.com/images/wcifd-iframe.html"></iframe>
+		<iframe width="300" height="800" scrolling="no" src="http://www.ilghera.com/images/wcifd-iframe.html"></iframe>
 	</div>
 
 	<div class="clear"></div>
