@@ -285,7 +285,6 @@ function wcifd_products() {
 			// var_dump($row);
 		    $products[] = array_combine($header, $row);
 		}
-var_dump($products);
 
 		$i = 0;
 		$u = 0;
