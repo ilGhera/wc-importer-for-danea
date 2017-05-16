@@ -1015,8 +1015,7 @@ function wcifd_products_update_request() {
 
 		if($key == $premium_key && $code == $url_code)  {
 
-			// $imagesURL = home_url() . '?key=' . $key . '&code=' . $code . '&mode=images';
-			$imagesURL = 'http://928cd1d7.ngrok.io/wp-dev?key=' . $key . '&code=' . $code . '&mode=images';
+			$imagesURL = home_url() . '?key=' . $key . '&code=' . $code . '&mode=images';
 			
 			//Update products data
 			if($mode == 'data') {
