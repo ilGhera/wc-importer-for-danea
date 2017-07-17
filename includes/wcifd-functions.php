@@ -490,7 +490,7 @@ function wcifd_products() {
 		$subcat_id = term_exists($sub_category, 'product_cat', $cat_id);
 
 		if($sub_category){
-			if(!$subcut_id) {
+			if(!$subcat_id) {
 				wp_insert_term($sub_category, 'product_cat', array('parent' => $cat_id));
 			}
 
@@ -838,7 +838,7 @@ function wcifd_catalog_update($file) {
 		$subcat_id = term_exists($sub_category, 'product_cat', $cat_id);
 
 		if($sub_category){
-			if(!$subcut_id) {
+			if(!$subcat_id) {
 				wp_insert_term($sub_category, 'product_cat', array('parent' => $cat_id));
 			}
 
