@@ -486,8 +486,8 @@ function wcifd_products() {
 
 		//ADD PRODUCT CAT AND SUB-CAT
 		wp_set_object_terms($product_id, $category, 'product_cat', true);
-		$cat_id = term_exists($category);
-		$subcat_id = term_exists($sub_category);
+		$cat_id = term_exists($category, 'product_cat');
+		$subcat_id = term_exists($sub_category, 'product_cat', $cat_id);
 
 		if($sub_category){
 			if(!$subcut_id) {
@@ -834,8 +834,8 @@ function wcifd_catalog_update($file) {
 
 		//ADD PRODUCT CAT AND SUB-CAT
 		wp_set_object_terms($product_id, $category, 'product_cat', true);
-		$cat_id = term_exists($category);
-		$subcat_id = term_exists($sub_category);
+		$cat_id = term_exists($category, 'product_cat');
+		$subcat_id = term_exists($sub_category, 'product_cat', $cat_id);
 
 		if($sub_category){
 			if(!$subcut_id) {
