@@ -484,21 +484,20 @@ function wcifd_products() {
 				}
 			}
 
-		//ADD PRODUCT CAT AND SUB-CAT
-		wp_set_object_terms($product_id, $category, 'product_cat', true);
-		$cat_id = term_exists($category, 'product_cat');
-		$subcat_id = term_exists($sub_category, 'product_cat', $cat_id);
+			//ADD PRODUCT CAT AND SUB-CAT
+			wp_set_object_terms($product_id, $category, 'product_cat', true);
+			$cat_term = term_exists($category, 'product_cat');
+			$subcat_term = term_exists($sub_category, 'product_cat', $cat_term['term_id']);
 
-		if($sub_category){
-			if(!$subcat_id) {
-				wp_insert_term($sub_category, 'product_cat', array('parent' => $cat_id));
+			if($sub_category){
+				if(!$subcat_term) {
+					$subcat_term = wp_insert_term($sub_category, 'product_cat', array('parent' => $cat_term['term_id']));
+				}
+
+				wp_set_object_terms($product_id, $subcat_term['term_id'], 'product_cat', true);					
 			}
-
-			wp_set_object_terms($product_id, $sub_category, 'product_cat', true);			
 		}
 
-			
-		}
 		$output  = '<div id="message" class="updated"><p>';
 		$output .= '<strong>Woocommerce Importer for Danea - Premium</strong><br>';
 		$output .= sprintf( __( 'Products imported: %d<br>Products updated: %d', 'wcifd' ), $i, $u );
@@ -834,15 +833,15 @@ function wcifd_catalog_update($file) {
 
 		//ADD PRODUCT CAT AND SUB-CAT
 		wp_set_object_terms($product_id, $category, 'product_cat', true);
-		$cat_id = term_exists($category, 'product_cat');
-		$subcat_id = term_exists($sub_category, 'product_cat', $cat_id);
+		$cat_term = term_exists($category, 'product_cat');
+		$subcat_term = term_exists($sub_category, 'product_cat', $cat_term['term_id']);
 
 		if($sub_category){
-			if(!$subcat_id) {
-				wp_insert_term($sub_category, 'product_cat', array('parent' => $cat_id));
+			if(!$subcat_term) {
+				$subcat_term = wp_insert_term($sub_category, 'product_cat', array('parent' => $cat_term['term_id']));
 			}
 
-			wp_set_object_terms($product_id, $sub_category, 'product_cat', true);			
+			wp_set_object_terms($product_id, $subcat_term['term_id'], 'product_cat', true);			
 		}
 
 		
@@ -1003,6 +1002,7 @@ function wcifd_get_id_by_img($img_name) {
 
 //RECEIVE PRODUCTS UPDATE AND IMAGES
 function wcifd_products_update_request() {
+	ini_set('max_execution_time', 0);
 	$premium_key = strtolower(get_option('wcifd-premium-key'));
 	$url_code = strtolower(get_option('wcifd-url-code'));
 	$import_images = get_option('wcifd-import-images');
