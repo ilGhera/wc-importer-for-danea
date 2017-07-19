@@ -267,7 +267,9 @@ function wcifd_get_tax_rate_class($value) {
 function wcifd_products() {
 
 	if($_POST['products-import'] && wp_verify_nonce( $_POST['wcifd-products-nonce'], 'wcifd-products-import' )) {
-	
+		
+		//CHANGE EXECUTIUON TIME LIMIT
+		ini_set('max_execution_time', 0);	
 
 		$tax_included = get_option('wcifd-tax-included');
 		$use_suppliers = get_option( 'wcifd-use-suppliers'); 
@@ -289,11 +291,11 @@ function wcifd_products() {
 		$u = 0;
 		foreach ($products as $product) {
 			$sku = $product['Cod.'];
-			$title = sanitize_title($product['Descrizione']);
+			$title = $product['Descrizione'];
 			$description = $product['Descriz. web (Sorgente HTML)'];
 			$product_type = $product['Tipologia'];
-			$category = strtolower($product['Categoria']);
-			$sub_category = strtolower($product['Sottocategoria']);
+			$category = $product['Categoria'];
+			$sub_category = $product['Sottocategoria'];
 			$tax  = $product['Cod. Iva'];
 			if($tax_included == 0) {
 				$price = str_replace(',', '.', str_replace(array(' ', '€'), '', $product['Listino 1']));				
@@ -485,7 +487,7 @@ function wcifd_products() {
 			}
 
 			//ADD PRODUCT CAT AND SUB-CAT
-			wp_set_object_terms($product_id, $category, 'product_cat', true);
+			wp_set_object_terms($product_id, strtolower($category), 'product_cat', true);
 			$cat_term = term_exists($category, 'product_cat');
 			$subcat_term = term_exists($sub_category, 'product_cat', $cat_term['term_id']);
 
@@ -494,10 +496,11 @@ function wcifd_products() {
 					$subcat_term = wp_insert_term($sub_category, 'product_cat', array('parent' => $cat_term['term_id']));
 				}
 
-				wp_set_object_terms($product_id, $subcat_term['term_id'], 'product_cat', true);					
+				wp_set_object_terms($product_id, intval($subcat_term['term_id']), 'product_cat', true);			
 			}
-		}
 
+			
+		}
 		$output  = '<div id="message" class="updated"><p>';
 		$output .= '<strong>Woocommerce Importer for Danea - Premium</strong><br>';
 		$output .= sprintf( __( 'Products imported: %d<br>Products updated: %d', 'wcifd' ), $i, $u );
@@ -638,8 +641,8 @@ function wcifd_catalog_update($file) {
 		$sku = $product->Code;
 		$title = $product->Description;
 		$description = ($product->DescriptionHtml) ? $product->DescriptionHtml : $title;
-		$category = strtolower($product->Category);
-		$sub_category = strtolower($product->Subcategory);
+		$category = $product->Category;
+		$sub_category = $product->Subcategory;
 		$tax  = $product->Vat;
 		$stock = $product->AvailableQty;
 		$size_um = $product->SizeUm;
@@ -841,8 +844,9 @@ function wcifd_catalog_update($file) {
 				$subcat_term = wp_insert_term($sub_category, 'product_cat', array('parent' => $cat_term['term_id']));
 			}
 
-			wp_set_object_terms($product_id, $subcat_term['term_id'], 'product_cat', true);			
+			wp_set_object_terms($product_id, intval($subcat_term['term_id']), 'product_cat', true);			
 		}
+
 
 		
 		//PRODUCTS VARS
@@ -1002,7 +1006,10 @@ function wcifd_get_id_by_img($img_name) {
 
 //RECEIVE PRODUCTS UPDATE AND IMAGES
 function wcifd_products_update_request() {
+
+	//CHANGE EXECUTIUON TIME LIMIT
 	ini_set('max_execution_time', 0);
+
 	$premium_key = strtolower(get_option('wcifd-premium-key'));
 	$url_code = strtolower(get_option('wcifd-url-code'));
 	$import_images = get_option('wcifd-import-images');
