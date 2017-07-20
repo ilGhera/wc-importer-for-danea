@@ -858,45 +858,51 @@ function wcifd_catalog_update($file) {
 			$avail_colors = array();
 			$avail_sizes = array();
 
-			$attributes = array(
-				'pa_color' => array(
-					'name' 		   => 'pa_color', 
-					'value'		   => '', 
-					'position'     => 0,
-					'is_visible'   => 1, 
-					'is_variation' => 1, 
-					'is_taxonomy'  => 1
-					), 
-				'pa_size' => array(
-					'name' 		   => 'pa_size',
-					'value' 	   => '',
-					'position'	   => 1,
-					'is_visible'   => 1, 
-					'is_variation' => 1, 
-					'is_taxonomy'  => 1
-					)
-				);
-
-			update_post_meta( $product_id, '_product_attributes', $attributes);
-
 			
 			$v = 1; //VARIANT LOOP
 			foreach($variants->children() as $variant) {
-				$size     = $variant->Size;
-				$color    = $variant->Color;
-
-				$avail_sizes[]  = wcifd_json_decode($size);
-				$avail_colors[] = wcifd_json_decode($color);
-
-				wp_set_object_terms( $var_id, $avail_colors, 'pa_color');
-				wp_set_object_terms( $var_id, $avail_sizes, 'pa_size');
-
-
+				
 				$barcode  = wcifd_json_decode($variant->Barcode);
 				$in_stock = wcifd_json_decode($variant->AvailableQty);
 
 				$man_stock = 'yes';
 				$stock_status = ($in_stock) ? 'instock' : 'outofstock';
+
+				//ATTRIBUTES
+				$size     = wcifd_json_decode($variant->Size);
+				$color    = wcifd_json_decode($variant->Color);
+
+				if($size != '-') {
+					$avail_sizes[] = $size;
+				}
+
+				if($color != '-') {
+					$avail_colors[] = $color;
+				}
+
+				$meta_input = array(
+					'_sku'               => $barcode,
+					'_stock'             => $in_stock,
+					'_stock_status'		 => $stock_status,
+					'_manage_stock'      => $man_stock,
+					'_regular_price' 	 => wcifd_json_decode($price),
+					'_price'         	 => wcifd_json_decode($price)
+			    );
+
+				if($avail_colors) {
+					wp_set_object_terms( $var_id, $avail_colors, 'pa_color');
+					$meta_input['attribute_pa_color'] = $color;					
+				}
+				if($avail_sizes) {
+					wp_set_object_terms( $var_id, $avail_sizes, 'pa_size');
+					$meta_input['attribute_pa_size'] = $size;					
+				}
+
+				// if($color != '-') {
+					// $term = wp_insert_term($color, 'pa_color', array('slug' => sanitize_title($color)));
+					// $avail_colors[] = $term['term_id'];
+				// }
+				
 
 				if(!wcifd_search_product($barcode)) {
  
@@ -907,16 +913,7 @@ function wcifd_catalog_update($file) {
 						'post_parent'	   => $product_id,
 						'post_content'	   => $description,
 						'post_status'	   => 'publish',
-						'meta_input'       => array(
-												'_sku'               => $barcode,
-												'_stock'             => $in_stock,
-												'_stock_status'		 => $stock_status,
-												'_manage_stock'      => $man_stock,
-												'attribute_pa_color' => sanitize_title($color),
-												'attribute_pa_size'  => sanitize_title($size),
-												'_regular_price'  => wcifd_json_decode($price),
-												'_price'          => wcifd_json_decode($price)
-											  )
+						'meta_input'       => $meta_input
 
 					);
 					
@@ -927,23 +924,14 @@ function wcifd_catalog_update($file) {
 					if(get_post_status(wcifd_search_product($barcode)) != 'trash') {
 
 						$var_args = array(
-						'ID'			   => wcifd_search_product($barcode),
-						'post_author'      => $author,
-						'post_name'        => 'danea-product-' . $product_id . '-variation-' . $v++,
-						'post_type'        => 'product_variation',
-						'post_parent'	   => $product_id,
-						'post_content'	   => $description,
-						'post_status'	   => 'publish',
-						'meta_input'       => array(
-												'_sku'               => $barcode,
-												'_stock'             => $in_stock,
-												'_stock_status'		 => $stock_status,
-												'_manage_stock'      => $man_stock,
-												'attribute_pa_color' => sanitize_title($color),
-												'attribute_pa_size'  => sanitize_title($size),
-												'_regular_price'  => wcifd_json_decode($price),
-												'_price'          => wcifd_json_decode($price)
-											  )
+							'ID'			   => wcifd_search_product($barcode),
+							'post_author'      => $author,
+							'post_name'        => 'danea-product-' . $product_id . '-variation-' . $v++,
+							'post_type'        => 'product_variation',
+							'post_parent'	   => $product_id,
+							'post_content'	   => $description,
+							'post_status'	   => 'publish',
+							'meta_input'       => $meta_input
 
 						);
 						
@@ -953,29 +941,61 @@ function wcifd_catalog_update($file) {
 
 				}
 
-				$attr = array(
-						'pa_color' => array(
-							'name' 		   => sanitize_title($color), 
-							'value'		   => '',
-							'is_visible'   => 1, 
-							'is_variation' => 1, 
-							'is_taxonomy'  => 1
-							), 
-						'pa_size' => array(
-							'name' 		   => sanitize_title($size), 
-							'value' 	   => '',
-							'is_visible'   => 1, 
-							'is_variation' => 1, 
-							'is_taxonomy'  => 1
-							)
-					);
+				$attr = array();
 
-			    update_post_meta( $var_id, '_product_attributes', $attr);
+				if($color) {
+					$attr['pa_color'] = array(
+						'name' 		   => $color, 
+						'value'		   => '',
+						'is_visible'   => 1, 
+						'is_variation' => 1, 
+						'is_taxonomy'  => 1
+					); 
+				}
+
+				if($size) {
+					$attr['pa_size'] = array(
+						'name' 		   => $size, 
+						'value' 	   => '',
+						'is_visible'   => 1, 
+						'is_variation' => 1, 
+						'is_taxonomy'  => 1
+					);
+				}
+
+				if($attr) {
+				    update_post_meta($var_id, '_product_attributes', $attr);					
+				}
 
 			}	
 
-			wp_set_object_terms( $product_id, $avail_colors, 'pa_color');
-			wp_set_object_terms( $product_id, $avail_sizes, 'pa_size');
+			$attributes = array();
+
+			if($avail_colors) {
+				$attributes['pa_color'] = array(
+					'name' 		   => 'pa_color', 
+					'value'		   => '', 
+					'position'     => 0,
+					'is_visible'   => 1, 
+					'is_variation' => 1, 
+					'is_taxonomy'  => 1
+				);
+				wp_set_object_terms( $product_id, $avail_colors, 'pa_color');		
+			}
+
+			if($avail_sizes) {
+				$attributes['pa_size'] = array(
+					'name' 		   => 'pa_size',
+					'value' 	   => '',
+					'position'	   => 1,
+					'is_visible'   => 1, 
+					'is_variation' => 1, 
+					'is_taxonomy'  => 1
+				);
+				wp_set_object_terms( $product_id, $avail_sizes, 'pa_size');				
+			}
+
+			update_post_meta( $product_id, '_product_attributes', $attributes);
 		
 		}
 
