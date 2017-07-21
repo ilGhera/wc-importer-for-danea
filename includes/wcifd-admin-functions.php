@@ -69,7 +69,7 @@ function wcifd_options() {
 	<div id="wcifd-generale">
 	<?php
 		//HEADER
-		echo "<h1 class=\"wcifd main\">" . __( 'Woocommmerce Importer for Danea - Premium', 'wcifd' ) . "<span style=\"font-size:60%;\"> 0.9.6 - Dev Version</span></h1>";
+		echo "<h1 class=\"wcifd main\">" . __( 'Woocommmerce Importer for Danea - Premium', 'wcifd' ) . "<span style=\"font-size:60%;\"> 0.9.6</span></h1>";
 
 		//PLUGIN PREMIUM KEY
 		$key = sanitize_text_field(get_option('wcifd-premium-key'));
