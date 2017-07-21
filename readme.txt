@@ -54,7 +54,7 @@ Completato il processo di installazione, troverai nel menù Woocommerce la pagin
 Release Date: 21 July, 2016
 
 * Bug fix: Missed subcategory importing product by csv.
-* Bug fix: Wrong subcategory assigned if different terms had the same name..
+* Bug fix: Wrong subcategory assigned if different terms have the same name.
 * Bug fix: Category names in lowercase.
 * Bug fix: Attribute names in lowercase. Danea variation products (size & color) not recognized.
 * Bug fix: Server timeout during products import.
