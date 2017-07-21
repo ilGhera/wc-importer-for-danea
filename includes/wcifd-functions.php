@@ -687,6 +687,7 @@ function wcifd_catalog_update($file) {
 
 		//MANAGE STOCK
 		$manage_stock = ($product->ManageWarehouse == 'true') ? 'yes' : 'no';
+		$stock_status = ($stock >= 1) ? 'instock' : 'outofstock';
 
 
 		//AUTHOR
@@ -731,6 +732,7 @@ function wcifd_catalog_update($file) {
 										'_tax_class'          => $tax_class,
 										'_stock'              => wcifd_json_decode($stock),
 										'_manage_stock'       => $manage_stock,
+										'_stock_status'		  => $stock_status,
 										'_visibility'	      => 'visible',
 										'_regular_price'      => wcifd_json_decode($price),
 										'_price'           	  => wcifd_json_decode($price),
@@ -818,6 +820,7 @@ function wcifd_catalog_update($file) {
 											'_tax_class'          => $tax_class,
 											'_stock'              => wcifd_json_decode($stock),
 											'_manage_stock'       => $manage_stock,
+											'_stock_status'		  => $stock_status,
 											'_visibility'	      => 'visible',
 											'_regular_price'      => wcifd_json_decode($price),
 											'_price'           	  => wcifd_json_decode($price),
