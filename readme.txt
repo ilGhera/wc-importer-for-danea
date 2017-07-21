@@ -3,7 +3,7 @@ Contributors: ghera74
 Tags: Woocommerce, Danea, Easyfatt, ecommerce, importer, csv, shop, products, suppliers, customers
 Version: 0.9.2
 Requires at least: 4.0
-Tested up to: 4.7.3
+Tested up to: 4.8
 Stable tag: 0.9.2
 
 
