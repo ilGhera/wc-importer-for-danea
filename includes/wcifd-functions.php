@@ -582,7 +582,7 @@ function wcifd_update_transient_wc_attributes() {
 
 //ADD ATTRIBUTES
 function wcifd_register_attributes() {
-	$attributes = array('size', 'color');
+	$attributes = array('Size', 'Color');
 	global $wpdb;
 
 	foreach ($attributes as $attr) {
@@ -602,15 +602,13 @@ function wcifd_register_attributes() {
 				$wpdb->insert(
 		 			$wpdb->prefix . 'woocommerce_attribute_taxonomies',
 		 			array(
-		 				// 'attribute_id'		=> 2,
-	 					'attribute_name'    => $attr,
-	 					'attribute_label'    => $attr,
+	 					'attribute_name'    => sanitize_title($attr),
+	 					'attribute_label'   => $attr,
 	 					'attribute_type'    => 'select',
 	 					'attribute_orderby' => 'menu_order',
 	 					'attribute_public'  => 0
 	 				),
 		 			array(
-		 				// '%d',
 		 				'%s',
 		 				'%s',
 		 				'%s',
@@ -868,18 +866,23 @@ function wcifd_catalog_update($file) {
 				$man_stock = 'yes';
 				$stock_status = ($in_stock) ? 'instock' : 'outofstock';
 
+
 				//ATTRIBUTES
 				$size     = wcifd_json_decode($variant->Size);
 				$color    = wcifd_json_decode($variant->Color);
 
-				if($size != '-') {
+
+				//ADD VALID ATTRIBUTE TERMS TO THE ARRAY
+				if($size != '-' && !in_array($size, $avail_sizes)) {
 					$avail_sizes[] = $size;
 				}
 
-				if($color != '-') {
+				if($color != '-' && !in_array($color, $avail_colors)) {
 					$avail_colors[] = $color;
 				}
 
+
+				//VARIATION METAS INPUT
 				$meta_input = array(
 					'_sku'               => $barcode,
 					'_stock'             => $in_stock,
@@ -889,23 +892,19 @@ function wcifd_catalog_update($file) {
 					'_price'         	 => wcifd_json_decode($price)
 			    );
 
+
+				//ADD ATTRIBUTE TERM TO THE VARIATION METAS
 				if($avail_colors) {
-					wp_set_object_terms( $var_id, $avail_colors, 'pa_color');
-					$meta_input['attribute_pa_color'] = $color;					
+					$meta_input['attribute_pa_color'] = sanitize_title($color);
 				}
 				if($avail_sizes) {
-					wp_set_object_terms( $var_id, $avail_sizes, 'pa_size');
-					$meta_input['attribute_pa_size'] = $size;					
+					$meta_input['attribute_pa_size'] = sanitize_title($size);
 				}
 
-				// if($color != '-') {
-					// $term = wp_insert_term($color, 'pa_color', array('slug' => sanitize_title($color)));
-					// $avail_colors[] = $term['term_id'];
-				// }
-				
 
 				if(!wcifd_search_product($barcode)) {
- 
+ 					
+ 					//ADD NEW VARIATION
 	 				$var_args = array(
 						'post_author'      => $supplier_id,
 						'post_name'        => 'danea-product-' . $product_id . '-variation-' . $v++,
@@ -921,6 +920,7 @@ function wcifd_catalog_update($file) {
 
 				} else {
 
+					//UPDATE VARIATION
 					if(get_post_status(wcifd_search_product($barcode)) != 'trash') {
 
 						$var_args = array(
@@ -941,11 +941,21 @@ function wcifd_catalog_update($file) {
 
 				}
 
+				//LINK VARIATIONS WITH THE AVAILABLE ATTRIBUTE TERMS
+				if($avail_colors) {
+					wp_set_object_terms( $var_id, $avail_colors, 'pa_color');
+				}
+				if($avail_sizes) {
+					wp_set_object_terms( $var_id, $avail_sizes, 'pa_size');
+				}
+
+
+				//VARIATION ATTRIBUTES
 				$attr = array();
 
 				if($color) {
 					$attr['pa_color'] = array(
-						'name' 		   => $color, 
+						'name' 		   => sanitize_title($color), 
 						'value'		   => '',
 						'is_visible'   => 1, 
 						'is_variation' => 1, 
@@ -955,7 +965,7 @@ function wcifd_catalog_update($file) {
 
 				if($size) {
 					$attr['pa_size'] = array(
-						'name' 		   => $size, 
+						'name' 		   => sanitize_title($size), 
 						'value' 	   => '',
 						'is_visible'   => 1, 
 						'is_variation' => 1, 
@@ -969,9 +979,13 @@ function wcifd_catalog_update($file) {
 
 			}	
 
+			
+			//AVAILABLE ATTRIBUTES FOR THIS PRODUCT
 			$attributes = array();
 
 			if($avail_colors) {
+				wp_set_object_terms( $product_id, $avail_colors, 'pa_color');		
+
 				$attributes['pa_color'] = array(
 					'name' 		   => 'pa_color', 
 					'value'		   => '', 
@@ -980,10 +994,11 @@ function wcifd_catalog_update($file) {
 					'is_variation' => 1, 
 					'is_taxonomy'  => 1
 				);
-				wp_set_object_terms( $product_id, $avail_colors, 'pa_color');		
 			}
 
 			if($avail_sizes) {
+				wp_set_object_terms( $product_id, $avail_sizes, 'pa_size');				
+
 				$attributes['pa_size'] = array(
 					'name' 		   => 'pa_size',
 					'value' 	   => '',
@@ -992,7 +1007,6 @@ function wcifd_catalog_update($file) {
 					'is_variation' => 1, 
 					'is_taxonomy'  => 1
 				);
-				wp_set_object_terms( $product_id, $avail_sizes, 'pa_size');				
 			}
 
 			update_post_meta( $product_id, '_product_attributes', $attributes);
