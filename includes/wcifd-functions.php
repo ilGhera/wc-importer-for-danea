@@ -235,21 +235,26 @@ function wcifd_get_tax_rate_class($value) {
 		SELECT * FROM " . $wpdb->prefix . "woocommerce_tax_rates
 	";
 	$results = $wpdb->get_results($query, ARRAY_A);
+	$i=1;
 	foreach ($results as $rate) {
+	 	$i++;
 	 	if(round($value) == round($rate['tax_rate'])) {
 	 		$tax_rate_class = ($rate['tax_rate_class']) ? $rate['tax_rate_class'] : '';
+	 		
 	 	} else {
-	 		$tax_rate_class = ($value < 22) ? 'reduced-rate' : '';
+	 		$tax_rate_class = ($value < 22) ? 'tasso-ridotto' : '';
 	 		$wpdb->insert(
 	 			$wpdb->prefix . 'woocommerce_tax_rates',
 	 			array(
+	 				'tax_rate_country' => 'IT',
  					'tax_rate'       => number_format($value, 4),
  					'tax_rate_name'  => 'IVA',
- 					'tax_rate_priority' => 1,
+ 					'tax_rate_priority' => $i,
  					'tax_rate_shipping' => 0,
  					'tax_rate_class' => $tax_rate_class
  				),
 	 			array(
+	 				'%s',
 	 				'%s',
 	 				'%s',
 	 				'%d',
@@ -362,7 +367,7 @@ function wcifd_products() {
 			$tax_class = '';
 			if($tax) {
 				$tax_status = 'taxable';
-				$tax_class = wcifd_get_tax_rate_class($tax);
+				$tax_class = wcifd_get_tax_rate_class(wcifd_json_decode($tax));
 			}
 
 
@@ -711,7 +716,7 @@ function wcifd_catalog_update($file) {
 		$tax_class = '';
 		if($tax) {
 			$tax_status = 'taxable';
-			$tax_class = wcifd_get_tax_rate_class($tax);
+			$tax_class = wcifd_get_tax_rate_class(wcifd_json_decode($tax));
 		}
 
 
@@ -1289,7 +1294,7 @@ function wcifd_orders() {
 						$tax_class = '';
 						if($tax) {
 							$tax_status = 'taxable';
-							$tax_class = wcifd_get_tax_rate_class($tax);
+							$tax_class = wcifd_get_tax_rate_class(wcifd_json_decode($tax));
 						}
 
 					
