@@ -229,27 +229,34 @@ function wcifd_search_product($sku) {
 
 
 //GET TAX RATE CLASS OR CREATE IT
-function wcifd_get_tax_rate_class($value) {
+function wcifd_get_tax_rate_class($value, $name) {
 	global $wpdb;
 	$query = "
 		SELECT * FROM " . $wpdb->prefix . "woocommerce_tax_rates
 	";
 	$results = $wpdb->get_results($query, ARRAY_A);
-	$i=1;
+
 	foreach ($results as $rate) {
-	 	$i++;
 	 	if(round($value) == round($rate['tax_rate'])) {
+
 	 		$tax_rate_class = ($rate['tax_rate_class']) ? $rate['tax_rate_class'] : '';
 	 		
 	 	} else {
-	 		$tax_rate_class = ($value < 22) ? 'tasso-ridotto' : '';
+	 		
+	 		$tax_rate_class = '';
+	 		if($value == 0) {
+ 				$tax_rate_class = 'tasso-zero';			
+	 		} elseif($value < 22) {
+ 				$tax_rate_class = 'tasso-ridotto';
+	 		}
+
 	 		$wpdb->insert(
 	 			$wpdb->prefix . 'woocommerce_tax_rates',
 	 			array(
 	 				'tax_rate_country' => 'IT',
  					'tax_rate'       => number_format($value, 4),
- 					'tax_rate_name'  => 'IVA',
- 					'tax_rate_priority' => $i,
+ 					'tax_rate_name'  => $name,
+ 					'tax_rate_priority' => 1,
  					'tax_rate_shipping' => 0,
  					'tax_rate_class' => $tax_rate_class
  				),
@@ -367,7 +374,7 @@ function wcifd_products() {
 			$tax_class = '';
 			if($tax) {
 				$tax_status = 'taxable';
-				$tax_class = wcifd_get_tax_rate_class(wcifd_json_decode($tax));
+				$tax_class = wcifd_get_tax_rate_class($tax['Perc'], $tax);
 			}
 
 
@@ -651,7 +658,7 @@ function wcifd_catalog_update($file) {
 		$size_um = $product->SizeUm;
 		$weight_um = $product->WeightUm;
 
-
+		// return $tax;
 	
 		// PARENT SKU AND VARIABLE PRODUCT
 		// Useful for importing products from Danea in a new Wordpress/ Woocommerce installation.
@@ -716,7 +723,7 @@ function wcifd_catalog_update($file) {
 		$tax_class = '';
 		if($tax) {
 			$tax_status = 'taxable';
-			$tax_class = wcifd_get_tax_rate_class(wcifd_json_decode($tax));
+			$tax_class = wcifd_get_tax_rate_class($tax['Perc'], $tax);
 		}
 
 
@@ -1294,7 +1301,7 @@ function wcifd_orders() {
 						$tax_class = '';
 						if($tax) {
 							$tax_status = 'taxable';
-							$tax_class = wcifd_get_tax_rate_class(wcifd_json_decode($tax));
+							$tax_class = wcifd_get_tax_rate_class($tax['Perc'], $tax);
 						}
 
 					

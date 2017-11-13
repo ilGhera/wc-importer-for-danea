@@ -13,11 +13,7 @@ add_action( 'admin_menu', 'wcifd_js_menu' );
 
 //CREATE WCIFD STYLE
 function wcifd_register_style() {
-	wp_register_style( 'wcifd-style', plugins_url('css/wc-importer-for-danea.css', 'wc-importer-for-danea-premium/css'));
-}
-
-function wcifd_add_style() {
-	wp_enqueue_style( 'wcifd-style');
+	wp_enqueue_style( 'wcifd-style', plugins_url('css/wc-importer-for-danea.css', 'wc-importer-for-danea-premium/css'));
 }
 
 
@@ -69,7 +65,7 @@ function wcifd_options() {
 	<div id="wcifd-generale">
 	<?php
 		//HEADER
-		echo "<h1 class=\"wcifd main\">" . __( 'Woocommmerce Importer for Danea - Premium', 'wcifd' ) . "<span style=\"font-size:60%;\"> 0.9.6</span></h1>";
+		echo "<h1 class=\"wcifd main\">" . __( 'Woocommmerce Importer for Danea - Premium', 'wcifd' ) . "<span style=\"font-size:60%;\"> 0.9.7 - Dev Version</span></h1>";
 
 		//PLUGIN PREMIUM KEY
 		$key = sanitize_text_field(get_option('wcifd-premium-key'));
@@ -428,3 +424,30 @@ function wcifd_options() {
     <?php
     
 }
+
+//UPDATE MESSAGE
+function wcifd_update_message2( $plugin_data, $response) {
+	$key = get_option('wcifd-premium-key');
+
+	if(!$key) {
+
+		$message = 'A <b>Premium Key</b> is required for keeping this plugin up to date. Please, add yours in the <a href="' . admin_url() . 'admin.php/?page=wc-importer-for-danea">options page</a> or click <a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">here</a> for prices and details.';
+	
+	} else {
+	
+		$decoded_key = explode('|', base64_decode($key));
+	    $bought_date = date( 'd-m-Y', strtotime($decoded_key[1]));
+	    $limit = strtotime($bought_date . ' + 365 day');
+	    $now = strtotime('today');
+
+	    if($limit < $now) { 
+	        $message = 'It seems like your <strong>Premium Key</strong> is expired. Please, click <a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">here</a> for prices and details.';
+	    } elseif($decoded_key[2] != 1572) {
+	    	$message = 'It seems like your <strong>Premium Key</strong> is not valid. Please, click <a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">here</a> for prices and details.';
+	    }
+
+	}
+	echo ($message) ? '<br><span class="wcexd-alert">' . $message . '</span>' : '';
+
+}
+add_action('in_plugin_update_message-wc-importer-for-danea-premium/wc-importer-for-danea-premium.php', 'wcifd_update_message2', 10, 2);
