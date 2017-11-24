@@ -232,46 +232,86 @@ function wcifd_search_product($sku) {
 function wcifd_get_tax_rate_class($value, $name) {
 	global $wpdb;
 	$query = "
-		SELECT * FROM " . $wpdb->prefix . "woocommerce_tax_rates
+		SELECT * FROM " . $wpdb->prefix . "woocommerce_tax_rates WHERE tax_rate_name = '$name'
 	";
+
 	$results = $wpdb->get_results($query, ARRAY_A);
 
-	foreach ($results as $rate) {
-	 	if(round($value) == round($rate['tax_rate'])) {
+	if($results) {
 
-	 		$tax_rate_class = ($rate['tax_rate_class']) ? $rate['tax_rate_class'] : '';
-	 		
-	 	} else {
-	 		
-	 		$tax_rate_class = '';
-	 		if($value == 0) {
- 				$tax_rate_class = 'tasso-zero';			
-	 		} elseif($value < 22) {
- 				$tax_rate_class = 'tasso-ridotto';
-	 		}
+		$tax_rate_class = ($rate['tax_rate_class']) ? $rate['tax_rate_class'] : '';
+	
+	} else {
 
-	 		$wpdb->insert(
-	 			$wpdb->prefix . 'woocommerce_tax_rates',
-	 			array(
-	 				'tax_rate_country' => 'IT',
- 					'tax_rate'       => number_format($value, 4),
- 					'tax_rate_name'  => $name,
- 					'tax_rate_priority' => 1,
- 					'tax_rate_shipping' => 0,
- 					'tax_rate_class' => $tax_rate_class
- 				),
-	 			array(
-	 				'%s',
-	 				'%s',
-	 				'%s',
-	 				'%d',
-	 				'%d',
-	 				'%s'
-	 			)
- 			);
-	 	}
-	 	return $tax_rate_class;
-	} 
+		$tax_rate_class = '';
+ 		if($value == 0) {
+				$tax_rate_class = 'tasso-zero';			
+ 		} elseif($value < 22) {
+				$tax_rate_class = 'tasso-ridotto';
+ 		}
+
+ 		$wpdb->insert(
+ 			$wpdb->prefix . 'woocommerce_tax_rates',
+ 			array(
+ 				'tax_rate_country' => 'IT',
+				'tax_rate'       => number_format($value, 4),
+				'tax_rate_name'  => $name,
+				'tax_rate_priority' => 1,
+				'tax_rate_shipping' => 0,
+				'tax_rate_class' => $tax_rate_class
+				),
+ 			array(
+ 				'%s',
+ 				'%s',
+ 				'%s',
+ 				'%d',
+ 				'%d',
+ 				'%s'
+ 			)
+		);
+	}
+
+ 	return $tax_rate_class;
+
+
+	// 	foreach ($results as $rate) {
+	// 	 	// if(round($value) == round($rate['tax_rate'])) {
+	// 		if($rate['tax_rate_name'] == $name) {
+
+	// 	 		$tax_rate_class = ($rate['tax_rate_class']) ? $rate['tax_rate_class'] : '';
+		 		
+	// 	 	} else {
+		 		
+	// 	 		$tax_rate_class = '';
+	// 	 		if($value == 0) {
+	//  				$tax_rate_class = 'tasso-zero';			
+	// 	 		} elseif($value < 22) {
+	//  				$tax_rate_class = 'tasso-ridotto';
+	// 	 		}
+
+	// 	 		$wpdb->insert(
+	// 	 			$wpdb->prefix . 'woocommerce_tax_rates',
+	// 	 			array(
+	// 	 				'tax_rate_country' => 'IT',
+	//  					'tax_rate'       => number_format($value, 4),
+	//  					'tax_rate_name'  => $name,
+	//  					'tax_rate_priority' => 1,
+	//  					'tax_rate_shipping' => 0,
+	//  					'tax_rate_class' => $tax_rate_class
+	//  				),
+	// 	 			array(
+	// 	 				'%s',
+	// 	 				'%s',
+	// 	 				'%s',
+	// 	 				'%d',
+	// 	 				'%d',
+	// 	 				'%s'
+	// 	 			)
+	//  			);
+	// 	 	}
+	// 	 	return $tax_rate_class;
+	// 	} 		
+	// }
 }
 
 
