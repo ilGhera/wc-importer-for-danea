@@ -229,7 +229,13 @@ function wcifd_search_product($sku) {
 
 
 //GET TAX RATE CLASS OR CREATE IT
-function wcifd_get_tax_rate_class($value, $name) {
+function wcifd_get_tax_rate_class($name, $value='') {
+
+	// If no value is passes, vat name is used in case it's an int
+	if(!$value) {
+		$value = (is_int($name)) ? $name : '';
+	}
+
 	global $wpdb;
 	$query = "
 		SELECT * FROM " . $wpdb->prefix . "woocommerce_tax_rates WHERE tax_rate_name = '$name'
@@ -242,36 +248,42 @@ function wcifd_get_tax_rate_class($value, $name) {
 		$tax_rate_class = ($rate['tax_rate_class']) ? $rate['tax_rate_class'] : '';
 	
 	} else {
+		// Create the new class only with a value
+		if($value) {
+			$tax_rate_class = '';
+	 		if($value == 0) {
+					$tax_rate_class = 'tasso-zero';			
+	 		} elseif($value < 22) {
+					$tax_rate_class = 'tasso-ridotto';
+	 		}
 
-		$tax_rate_class = '';
- 		if($value == 0) {
-				$tax_rate_class = 'tasso-zero';			
- 		} elseif($value < 22) {
-				$tax_rate_class = 'tasso-ridotto';
- 		}
-
- 		$wpdb->insert(
- 			$wpdb->prefix . 'woocommerce_tax_rates',
- 			array(
- 				'tax_rate_country' => 'IT',
-				'tax_rate'       => number_format($value, 4),
-				'tax_rate_name'  => $name,
-				'tax_rate_priority' => 1,
-				'tax_rate_shipping' => 0,
-				'tax_rate_class' => $tax_rate_class
-				),
- 			array(
- 				'%s',
- 				'%s',
- 				'%s',
- 				'%d',
- 				'%d',
- 				'%s'
- 			)
-		);
+	 		$wpdb->insert(
+	 			$wpdb->prefix . 'woocommerce_tax_rates',
+	 			array(
+	 				'tax_rate_country' => 'IT',
+					'tax_rate'       => number_format($value, 4),
+					'tax_rate_name'  => $name,
+					'tax_rate_priority' => 1,
+					'tax_rate_shipping' => 0,
+					'tax_rate_class' => $tax_rate_class
+					),
+	 			array(
+	 				'%s',
+	 				'%s',
+	 				'%s',
+	 				'%d',
+	 				'%d',
+	 				'%s'
+	 			)
+			);			
+		}
 	}
 
  	return $tax_rate_class;
+
+/**
+ * Mancano da controllare i tassi 0 (0 e E10), non importati nel test.
+ */
 
 
 	// 	foreach ($results as $rate) {
@@ -414,7 +426,7 @@ function wcifd_products() {
 			$tax_class = '';
 			if($tax) {
 				$tax_status = 'taxable';
-				$tax_class = wcifd_get_tax_rate_class($tax['Perc'], $tax);
+				$tax_class = wcifd_get_tax_rate_class($tax);
 			}
 
 
@@ -763,9 +775,8 @@ function wcifd_catalog_update($file) {
 		$tax_class = '';
 		if($tax) {
 			$tax_status = 'taxable';
-			$tax_class = wcifd_get_tax_rate_class($tax['Perc'], $tax);
+			$tax_class = wcifd_get_tax_rate_class( wcifd_json_decode($tax), wcifd_json_decode($tax['Perc']) );
 		}
-
 
 		//START CREATE OR UPDATE PRODUCT
 
@@ -1341,7 +1352,7 @@ function wcifd_orders() {
 						$tax_class = '';
 						if($tax) {
 							$tax_status = 'taxable';
-							$tax_class = wcifd_get_tax_rate_class($tax['Perc'], $tax);
+							$tax_class = wcifd_get_tax_rate_class( wcifd_json_decode($tax), wcifd_json_decode($tax['Perc']));
 						}
 
 					
