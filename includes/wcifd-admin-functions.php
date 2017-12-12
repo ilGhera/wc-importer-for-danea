@@ -176,6 +176,19 @@ function wcifd_options() {
 					update_option('wcifd-use-suppliers', $use_suppliers); 	
 					update_option('wcifd-current-user', get_current_user_id());			
 				}
+
+				$regular_price = get_option('wcifd-regular-price');
+				if(isset($_POST['regular-price'])) {
+					$regular_price = $_POST['regular-price'];
+					update_option('wcifd-regular-price', $regular_price);
+				}
+
+				$sale_price = get_option('wcifd-sale-price');
+				if(isset($_POST['sale-price'])) {
+					$sale_price = $_POST['sale-price'];
+					update_option('wcifd-sale-price', $sale_price);
+				}
+
 				?>
 				<tr>
 					<th scope="row"><?php echo __('Prices imported with tax', 'wcifd'); ?></th>
@@ -185,6 +198,33 @@ function wcifd_options() {
 							<option value="0" <?php echo($tax_included == 0) ? ' selected="selected"' : ''; ?>><?php echo __('No, I will enter prices exclusive of tax', 'wcifd'); ?></option>
 						</select>
 						<p class="description"><?php echo __('In Danea you can choose if export prices with tax included or not. What are you going to import?', 'wcifd'); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php echo __('Regular price', 'wcifd'); ?></th>
+					<td>
+						<select name="regular-price">
+							<?php
+							for($n=1; $n <= 4; $n++) {
+								echo '<option value="' . $n . '"' . ($regular_price == $n ? 'selected="selected"' : '') . '>Price list ' . $n . '</option>';
+							}
+							?>
+						</select>
+						<p class="description"><?php echo __('The Danea price list to use for Woocommerce regular price.', 'wcifd'); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php echo __('Sale price', 'wcifd'); ?></th>
+					<td>
+						<select name="sale-price">
+							<?php
+							echo '<option>' . __('Select a menu', 'wcifd') . '</option>';
+							for($n=1; $n <= 4; $n++) {
+								echo '<option value="' . $n . '"' . ($sale_price == $n ? 'selected="selected"' : '') . '>Price list ' . $n . '</option>';
+							}
+							?>
+						</select>
+						<p class="description"><?php echo __('The Danea price list to use for Woocommerce sale price.', 'wcifd'); ?></p>
 					</td>
 				</tr>
 				<tr>

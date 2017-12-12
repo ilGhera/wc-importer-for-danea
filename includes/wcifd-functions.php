@@ -374,7 +374,7 @@ function wcifd_products() {
 			
 			//DANEA VARIANTS SIZE & COLOR
 			if($product_type == 'Art. con magazzino (taglie/colori)') {
-				add_post_meta($id, 'wcifd-danea-size-color', 1);
+				update_post_meta($id, 'wcifd-danea-size-color', 1);
 			}
 
 
@@ -723,7 +723,7 @@ function wcifd_catalog_update($file) {
 		//DANEA VARIANTS SIZE & COLOR
 		$variants = $product->Variants;
 		if($variants) {
-			add_post_meta($id, 'wcifd-danea-size-color', 1);
+			update_post_meta($id, 'wcifd-danea-size-color', 1);
 		}
 
 
@@ -1007,7 +1007,7 @@ function wcifd_catalog_update($file) {
 
 			
 			//AVAILABLE ATTRIBUTES FOR THIS PRODUCT
-			$attributes = array();
+			$attributes = get_post_meta($product_id, '_product_attributes', true) ? get_post_meta($product_id, '_product_attributes', true) : array();
 
 			if($avail_colors) {
 				wp_set_object_terms( $product_id, $avail_colors, 'pa_color');		
