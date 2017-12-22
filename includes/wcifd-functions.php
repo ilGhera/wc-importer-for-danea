@@ -1067,8 +1067,11 @@ function wcifd_get_id_by_img($img_name) {
 //RECEIVE PRODUCTS UPDATE AND IMAGES
 function wcifd_products_update_request() {
 
-	//CHANGE EXECUTIUON TIME LIMIT
+	//CHANGE EXECUTION TIME LIMIT
 	ini_set('max_execution_time', 0);
+
+	//CHANGE MEMORY LIMIT
+	// ini_set('memory_limit','960M');
 
 	$premium_key = strtolower(get_option('wcifd-premium-key'));
 	$url_code = strtolower(get_option('wcifd-url-code'));
