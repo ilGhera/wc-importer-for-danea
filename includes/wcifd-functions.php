@@ -117,7 +117,7 @@ function wcifd_payment_gateway($method) {
 //IMPORT DANEA CONTACTS AS WORDPRESS USERS 
 function wcifd_users($type) {
 
-	if($_POST[$type . '-import'] && wp_verify_nonce( $_POST['wcifd-' . $type . '-nonce'], 'wcifd-' . $type . '-import' )) {
+	if(isset($_POST[$type . '-import']) && wp_verify_nonce( $_POST['wcifd-' . $type . '-nonce'], 'wcifd-' . $type . '-import' )) {
 
 		if(isset($_POST['wcifd-users-' . $type])) {
 			$role = sanitize_text_field($_POST['wcifd-users-' . $type]);
@@ -245,7 +245,7 @@ function wcifd_get_tax_rate_class($name, $value='') {
 
 	if($results) {
 
-		$tax_rate_class = ($rate['tax_rate_class']) ? $rate['tax_rate_class'] : '';
+		$tax_rate_class = ($results[0]['tax_rate_class']) ? $results[0]['tax_rate_class'] : '';
 	
 	} else {
 		// Create the new class only with a value
@@ -287,7 +287,7 @@ function wcifd_get_tax_rate_class($name, $value='') {
 //IMPORT DANEA PRODUCTS IN WOOCOMMERCE
 function wcifd_products() {
 
-	if($_POST['products-import'] && wp_verify_nonce( $_POST['wcifd-products-nonce'], 'wcifd-products-import' )) {
+	if(isset($_POST['products-import']) && wp_verify_nonce( $_POST['wcifd-products-nonce'], 'wcifd-products-import' )) {
 		
 		//CHANGE EXECUTIUON TIME LIMIT
 		ini_set('max_execution_time', 0);	
@@ -1076,11 +1076,11 @@ function wcifd_products_update_request() {
 	$premium_key = strtolower(get_option('wcifd-premium-key'));
 	$url_code = strtolower(get_option('wcifd-url-code'));
 	$import_images = get_option('wcifd-import-images');
-	$key  = $_GET['key'];
-	$code = $_GET['code'];
-	$mode = $_GET['mode'];
+	$key  = isset($_GET['key']) ? $_GET['key'] : '';
+	$code = isset($_GET['code']) ? $_GET['code'] : '';
+	$mode = isset($_GET['mode']) ? $_GET['mode'] : '';
 		
-	if(isset($key) && isset($code)) {
+	if($key && $code) {
 
 		if($key == $premium_key && $code == $url_code)  {
 
@@ -1121,7 +1121,7 @@ add_action('init', 'wcifd_products_update_request');
 //IMPORT DANEA ORDERS CREATING WOOCOMMERCE ORDERS
 function wcifd_orders() {
 
-	if($_POST['orders-import'] && wp_verify_nonce( $_POST['wcifd-orders-nonce'], 'wcifd-orders-import' )) {
+	if(isset($_POST['orders-import']) && wp_verify_nonce( $_POST['wcifd-orders-nonce'], 'wcifd-orders-import' )) {
 
 		//Get user options and update them into the database
 		$wcifd_orders_add_users = sanitize_text_field($_POST['wcifd-orders-add-users']);

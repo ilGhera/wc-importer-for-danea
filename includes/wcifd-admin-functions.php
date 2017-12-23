@@ -32,7 +32,7 @@ function wcifd_add_menu() {
 	$wcifd_page = add_submenu_page( 'woocommerce','WCIFD Options', 'WC Importer for Danea', 'manage_woocommerce', 'wc-importer-for-danea', 'wcifd_options');
 	
 	//Richiamo lo style per wcifd
-	add_action( 'admin_print_styles-' . $wcifd_page, 'wcifd_add_style' );
+	// add_action( 'admin_print_styles-' . $wcifd_page, 'wcifd_add_style' );
 	//Richiamo lo script per wcifd
 	add_action( 'admin_print_scripts-' . $wcifd_page, 'wcifd_js_menu');
 	
@@ -99,7 +99,7 @@ function wcifd_options() {
 		<?php 
 			global $wp_roles;
 			$roles = $wp_roles->get_names();   
-			$users_val = (sanitize_text_field($_POST['wcifd-users'])) ? sanitize_text_field($_POST['wcifd-users']) : get_option('wcifd-suppliers-role');
+			$users_val = (isset($_POST['wcifd-users'])) ? sanitize_text_field($_POST['wcifd-users']) : get_option('wcifd-suppliers-role');
 		?>
 
 	    <!--Form Fornitori-->
@@ -268,7 +268,7 @@ function wcifd_options() {
 				}
 
 				$import_images = get_option('wcifd-import-images');
-				if($_POST['hidden-receive-images']) {
+				if(isset($_POST['hidden-receive-images'])) {
 					$import_images = (isset($_POST['wcifd-import-images'])) ? $_POST['wcifd-import-images'] : 0;
 					update_option('wcifd-import-images', $import_images);
 				} 
@@ -335,7 +335,7 @@ function wcifd_options() {
     	<?php 
 			global $wp_roles;
 			$roles = $wp_roles->get_names();   
-			$users_val = (sanitize_text_field($_POST['wcifd-users'])) ? sanitize_text_field($_POST['wcifd-users']) : get_option('wcifd-clients-role');
+			$users_val = (isset($_POST['wcifd-users'])) ? sanitize_text_field($_POST['wcifd-users']) : get_option('wcifd-clients-role');
 		?>
 
 	    <!--Form Clienti-->
@@ -396,7 +396,7 @@ function wcifd_options() {
 	<form name="wcifd-orders-import" id="wcifd-orders-import" class="wcifd-form"  method="post" enctype="multipart/form-data" action="">
 		<table class="form-table">
 
-			<?php $wcifd_orders_add_users = (sanitize_text_field($_POST['wcifd-orders-add-users'])) ? sanitize_text_field($_POST['wcifd-orders-add-users']) : get_option('wcifd-orders-add-users'); ?>
+			<?php $wcifd_orders_add_users = (isset($_POST['wcifd-orders-add-users'])) ? sanitize_text_field($_POST['wcifd-orders-add-users']) : get_option('wcifd-orders-add-users'); ?>
 			<tr>
 				<th scope="row"><?php _e('New customers', 'wcifd'); ?></th>
 				<td>
