@@ -218,7 +218,7 @@ function wcifd_search_product($sku) {
 		SELECT * FROM $wpdb->posts WHERE post_type IN('product, product_variation') AND
 	"; 
 	$results = $wpdb->get_results($query, ARRAY_A);
-	$post_id = $results[0]['post_id'];
+	$post_id = $results ? $results[0]['post_id'] : '';
 
 	if(!$post_id) {
 		$product = wc_get_product($sku);
@@ -666,8 +666,6 @@ function wcifd_catalog_update($file) {
 		$stock = $product->AvailableQty;
 		$size_um = $product->SizeUm;
 		$weight_um = $product->WeightUm;
-
-		// return $tax;
 	
 		// PARENT SKU AND VARIABLE PRODUCT
 		// Useful for importing products from Danea in a new Wordpress/ Woocommerce installation.
@@ -737,9 +735,7 @@ function wcifd_catalog_update($file) {
 			$tax_class = wcifd_get_tax_rate_class( wcifd_json_decode($tax), strval($perc) );
 		}
 
-
 		//START CREATE OR UPDATE PRODUCT
-
 		if(!$id) {
 
 			$args = array(
