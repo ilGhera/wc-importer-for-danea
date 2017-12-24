@@ -9,6 +9,7 @@
  * Author URI: http://ilghera.com 
  * Requires at least: 4.0
  * Tested up to: 4.8
+ * WC tested up to: 3
  */
 
 
