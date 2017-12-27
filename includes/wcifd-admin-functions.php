@@ -177,16 +177,34 @@ function wcifd_options() {
 					update_option('wcifd-current-user', get_current_user_id());			
 				}
 
-				$regular_price = get_option('wcifd-regular-price');
-				if(isset($_POST['regular-price'])) {
-					$regular_price = $_POST['regular-price'];
-					update_option('wcifd-regular-price', $regular_price);
+				$regular_price_list = get_option('wcifd-regular-price-list');
+				if(isset($_POST['regular-price-list'])) {
+					$regular_price_list = $_POST['regular-price-list'];
+					update_option('wcifd-regular-price-list', $regular_price_list);
 				}
 
-				$sale_price = get_option('wcifd-sale-price');
-				if(isset($_POST['sale-price'])) {
-					$sale_price = $_POST['sale-price'];
-					update_option('wcifd-sale-price', $sale_price);
+				$sale_price_list = get_option('wcifd-sale-price-list');
+				if(isset($_POST['sale-price-list'])) {
+					$sale_price_list = $_POST['sale-price-list'];
+					update_option('wcifd-sale-price-list', $sale_price_list);
+				}
+
+				$size_type = get_option('wcifd-size-type');
+				if(isset($_POST['wcifd-size-type'])) {
+					$size_type = $_POST['wcifd-size-type'];
+					update_option('wcifd-size-type', $size_type);
+				}
+
+				$weight_type = get_option('wcifd-weight-type');
+				if(isset($_POST['wcifd-weight-type'])) {
+					$weight_type = $_POST['wcifd-weight-type'];
+					update_option('wcifd-weight-type', $weight_type);
+				}
+
+				$exclude_description = get_option('wcifd-exclude-description');
+				if(isset($_POST['exclude-description'])) {
+					$exclude_description = $_POST['exclude-description'] ? $_POST['exclude-description'] : 0;
+					update_option('wcifd-exclude-description', $exclude_description);
 				}
 
 				?>
@@ -203,10 +221,10 @@ function wcifd_options() {
 				<tr>
 					<th scope="row"><?php echo __('Regular price', 'wcifd'); ?></th>
 					<td>
-						<select name="regular-price">
+						<select name="regular-price-list">
 							<?php
 							for($n=1; $n <= 4; $n++) {
-								echo '<option value="' . $n . '"' . ($regular_price == $n ? 'selected="selected"' : '') . '>Price list ' . $n . '</option>';
+								echo '<option value="' . $n . '"' . ($regular_price_list == $n ? 'selected="selected"' : '') . '>Price list ' . $n . '</option>';
 							}
 							?>
 						</select>
@@ -216,15 +234,44 @@ function wcifd_options() {
 				<tr>
 					<th scope="row"><?php echo __('Sale price', 'wcifd'); ?></th>
 					<td>
-						<select name="sale-price">
+						<select name="sale-price-list">
 							<?php
-							echo '<option>' . __('Select a menu', 'wcifd') . '</option>';
+							echo '<option>' . __('Select a price list', 'wcifd') . '</option>';
 							for($n=1; $n <= 4; $n++) {
-								echo '<option value="' . $n . '"' . ($sale_price == $n ? 'selected="selected"' : '') . '>Price list ' . $n . '</option>';
+								echo '<option value="' . $n . '"' . ($sale_price_list == $n ? 'selected="selected"' : '') . '>Price list ' . $n . '</option>';
 							}
 							?>
 						</select>
 						<p class="description"><?php echo __('The Danea price list to use for Woocommerce sale price.', 'wcifd'); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php echo __('Product size type', 'wcifd'); ?></th>
+					<td>
+						<select name="wcifd-size-type">
+							<option value="gross-size"<?php echo($size_type == 'gross-size') ? ' selected="selected"' : ''; ?>><?php echo __('Gross size', 'wcifd'); ?></option>
+							<option value="net-size"<?php echo($size_type == 'net-size') ? ' selected="selected"' : ''; ?>><?php echo __('Net size', 'wcifd'); ?></option>
+						</select>
+						<p class="description"><?php echo __('Chose if import gross or net product size.', 'wcifd'); ?></p>
+					</td>
+				</tr>
+				<tr>
+				<tr>
+					<th scope="row"><?php echo __('Product weight type', 'wcifd'); ?></th>
+					<td>
+						<select name="wcifd-weight-type">
+							<option value="gross-weight"<?php echo($weight_type == 'gross-weight') ? 'selected="selected"' : ''; ?>><?php echo __('Gross weight', 'wcifd'); ?></option>
+							<option value="net-weight"<?php echo($weight_type == 'net-weight') ? 'selected="selected"' : ''; ?>><?php echo __('Net weight', 'wcifd'); ?></option>
+						</select>
+						<p class="description"><?php echo __('Chose if import gross or net product weight.', 'wcifd'); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">Exclude product description</th>
+					<td>
+    					<input type="hidden" name="exclude-description" value="0">
+						<input type="checkbox" name="exclude-description" value="1"<?php echo $exclude_description == 1 ? ' checked="checked"' : ''; ?>>
+						<?php echo __('Exclude descriptions for products updates.', 'wcifd'); ?>
 					</td>
 				</tr>
 				<tr>
