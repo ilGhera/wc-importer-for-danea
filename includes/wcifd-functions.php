@@ -650,7 +650,7 @@ add_action('init', 'wcifd_register_attributes');
 
 
 //GET THE LIST PRICE FROM THE DANEA PRODUCT UPDATE XML, BASED ON THE LIST NUMBER AND THE TAXES INCLUDED OR NOT
-function get_list_price($product, $number, $tax_included=false) {
+function wcifd_get_list_price($product, $number, $tax_included=false) {
 	$output = null;
 	switch ($number) {
 		case 1:
@@ -676,7 +676,7 @@ function get_list_price($product, $number, $tax_included=false) {
 
 
 //GET THE MEASURES OF THE PRODUCT, BASED ON THE OPTION SET.
-function get_product_size($product, $type, $measure) {
+function wcifd_get_product_size($product, $type, $measure) {
 	$x = null;
 	$y = null;
 	$z = null;
@@ -702,6 +702,19 @@ function get_product_size($product, $type, $measure) {
 		case 'z':
 			$output = $z;
 			break;
+	}
+
+	return $output;
+}
+
+
+//SHORT PRODUCT DESCRIPTION
+function wcifd_get_short_description($description) {
+	$output = null;
+	if(strlen($description) > 340) {
+		$output = substr($description, 0, 340) . '...';
+	} else {
+		$output = $description;
 	}
 
 	return $output;
@@ -776,9 +789,9 @@ function wcifd_catalog_update($file) {
 
 
 		//PRODUCT MEASURES
-		$length = get_product_size($product, $size_type, 'z');
-		$width  = get_product_size($product, $size_type, 'x');
-		$height = get_product_size($product, $size_type, 'y');
+		$length = wcifd_get_product_size($product, $size_type, 'z');
+		$width  = wcifd_get_product_size($product, $size_type, 'x');
+		$height = wcifd_get_product_size($product, $size_type, 'y');
 
 
 		//WEIGHT
@@ -798,8 +811,8 @@ function wcifd_catalog_update($file) {
 
 
 		//PRICES
-		$regular_price = get_list_price($product, $get_regular_price_list, $tax_included);
-		$sale_price    = get_list_price($product, $get_sale_price_list, $tax_included);
+		$regular_price = wcifd_get_list_price($product, $get_regular_price_list, $tax_included);
+		$sale_price    = wcifd_get_list_price($product, $get_sale_price_list, $tax_included);
 
 
 		//DANEA VARIANTS SIZE & COLOR
@@ -960,6 +973,11 @@ function wcifd_catalog_update($file) {
 				/*Product description*/
 				if(!get_option('wcifd-exclude-description')) {
 					$args['post_content'] = $description;
+
+					/*Short description*/
+					if(get_option('wcifd-short-description')) {
+						$args['post_excerpt'] = wcifd_get_short_description($description);
+					}
 
 				}
 

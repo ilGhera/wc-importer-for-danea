@@ -201,6 +201,12 @@ function wcifd_options() {
 					update_option('wcifd-weight-type', $weight_type);
 				}
 
+				$short_description = get_option('wcifd-short-description');
+				if(isset($_POST['short-description'])) {
+					$short_description = $_POST['short-description'] ? $_POST['short-description'] : 0;
+					update_option('wcifd-short-description', $short_description);
+				}
+
 				$exclude_description = get_option('wcifd-exclude-description');
 				if(isset($_POST['exclude-description'])) {
 					$exclude_description = $_POST['exclude-description'] ? $_POST['exclude-description'] : 0;
@@ -267,7 +273,15 @@ function wcifd_options() {
 					</td>
 				</tr>
 				<tr>
-					<th scope="row">Exclude product description</th>
+					<th scope="row"><?php echo __('Short description', 'wcifd'); ?></th>
+					<td>
+    					<input type="hidden" name="short-description" value="0">
+						<input type="checkbox" name="short-description" value="1"<?php echo $short_description == 1 ? ' checked="checked"' : ''; ?>>
+						<?php echo __('Use the excerpt as short product description.', 'wcifd'); ?>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php echo __('Exclude product description', 'wcifd'); ?></th>
 					<td>
     					<input type="hidden" name="exclude-description" value="0">
 						<input type="checkbox" name="exclude-description" value="1"<?php echo $exclude_description == 1 ? ' checked="checked"' : ''; ?>>
