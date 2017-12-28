@@ -213,6 +213,13 @@ function wcifd_options() {
 					update_option('wcifd-exclude-description', $exclude_description);
 				}
 
+				$publish_new_products = get_option('wcifd-publish-new-products');
+				if(isset($_POST['publish-new-products'])) {
+					$publish_new_products = $_POST['publish-new-products'] ? $_POST['publish-new-products'] : 0;
+					update_option('wcifd-publish-new-products', $publish_new_products);
+				}
+
+
 				?>
 				<tr>
 					<th scope="row"><?php echo __('Prices imported with tax', 'wcifd'); ?></th>
@@ -300,6 +307,14 @@ function wcifd_options() {
 		    			</fieldset>
 	    			</td>
 	    		</tr>
+	    		<tr>
+					<th scope="row"><?php echo __('Publish new products', 'wcifd'); ?></th>
+					<td>
+    					<input type="hidden" name="publish-new-products" value="0">
+						<input type="checkbox" name="publish-new-products" value="1"<?php echo $publish_new_products == 1 ? ' checked="checked"' : ''; ?>>
+						<?php echo __('Publish new products directly.', 'wcifd'); ?>
+					</td>
+				</tr>
 			</table>
 			<input type="submit" class="button-primary" style="margin-top: 1.5rem;" value="<?php _e('Save Changes', 'wcifd' ) ; ?>">
 		</form>

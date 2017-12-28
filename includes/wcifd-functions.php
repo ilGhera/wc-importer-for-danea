@@ -775,7 +775,8 @@ function wcifd_catalog_update($file) {
 
 
 		//POST STATUS - VARIATION MUST BE PUBLISHED
-		$status = ($var_attributes) ? 'publish' : 'draft';
+		$new_products_status = get_option('wcifd-publish-new-products') ? 'publish' : 'draft'; 
+		$status = ($var_attributes) ? 'publish' : $new_products_status;
 
 
 		//SEARCH FOR THE PRODUCT
@@ -868,6 +869,12 @@ function wcifd_catalog_update($file) {
 			} else {
 				$args['meta_input']['_sale_price'] = '';				
 			}
+
+			/*Short description*/
+			if(get_option('wcifd-short-description')) {
+				$args['post_excerpt'] = wcifd_get_short_description($description);
+			}
+
 
 
 			//ADD A NEW PRODUCT
