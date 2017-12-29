@@ -2,9 +2,9 @@
 === Woocommerce Importer for Danea - Premium ===
 Contributors: ghera74
 Tags: Woocommerce, Danea, Easyfatt, ecommerce, exporter, csv, shop, orders, products
-Version: 0.9.6
-Requires at least: 4.0
-Tested up to: 4.8
+Version: 1.0.0
+Requires at least: 4
+Tested up to: 4
 
 
 Import suppliers, clients and products, from Danea Easyfatt into your Woocommerce store.
@@ -48,6 +48,41 @@ Completato il processo di installazione, troverai nel menù Woocommerce la pagin
 3. Import your Danea EasyFatt products list
 
 
+
+
+= 1.0.0 =
+Release Date: 29 December, 2017
+
+* Enhancement: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Enhancement: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Enhancement: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Enhancement: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Enhancement: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Enhancement: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Enhancement: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Enhancement: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Enhancement: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Enhancement: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Enhancement: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Enhancement: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+* Bug fix: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Bug fix: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Bug fix: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Bug fix: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Bug fix: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Bug fix: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Bug fix: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Bug fix: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Bug fix: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Bug fix: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Bug fix: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Bug fix: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Bug fix: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Bug fix: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Bug fix: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Bug fix: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+* Bug fix: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 
 = 0.9.6 =

@@ -299,6 +299,11 @@ function wcifd_products() {
 		$update_products = sanitize_text_field($_POST['update-products']);
 		update_option('wcifd-update-products', $update_products);
 
+		$get_regular_price_list = get_option('wcifd-regular-price-list');
+		$get_sale_price_list = get_option('wcifd-sale-price-list');
+		$size_type = get_option('wcifd-size-type');
+		$weight_type = get_option('wcifd-weight-type');
+
 
 		$file = $_FILES['products-list']['tmp_name'];
 		$rows = array_map('str_getcsv', file($file));
@@ -320,9 +325,12 @@ function wcifd_products() {
 			$sub_category = $product['Sottocategoria'];
 			$tax  = $product['Cod. Iva'];
 			if($tax_included == 0) {
-				$price = str_replace(',', '.', str_replace(array(' ', '€'), '', $product['Listino 1']));				
+				$regular_price = str_replace(',', '.', str_replace(array(' ', '€'), '', $product['Listino ' . $get_regular_price_list]));				
+				$_sale_price   = str_replace(',', '.', str_replace(array(' ', '€'), '', $product['Listino ' . $get_sale_price_list]));				
+
 			} else {
-				$price = str_replace(',', '.', str_replace(array(' ', '€'), '', $product['Listino 1 (ivato)']));								
+				$regular_price = str_replace(',', '.', str_replace(array(' ', '€'), '', $product['Listino ' . $get_regular_price_list . ' (ivato)']));
+				$sale_price    = str_replace(',', '.', str_replace(array(' ', '€'), '', $product['Listino ' . $get_sale_price_list . ' (ivato)']));												
 			}
 			$supplier_id = $product['Cod. fornitore'];
 			$supplier = $product['Fornitore'];
@@ -362,11 +370,24 @@ function wcifd_products() {
 			$type = (wp_get_post_parent_id($id) || $parent_sku) ? 'product_variation' : 'product';
 
 
-
 			//MANAGE STOCK
 			$stock = $product['Q.tà giacenza'];
 			$total_sales = $product['Tot. q.tà scaricata'];
 			$manage_stock = ($product_type == 'Art. con magazzino' || $product_type == 'Art. con magazzino (taglie/colori)') ? 'yes' : 'no';
+
+
+			//PRODUCT MEASURES
+			$length = wcifd_get_product_size($product, $size_type, 'z', true);
+			$width  = wcifd_get_product_size($product, $size_type, 'x', true);
+			$height = wcifd_get_product_size($product, $size_type, 'y', true);
+
+
+			//WEIGHT
+			if($weight_type == 'gross-weight') {
+				$weight = $product['Peso lordo'];
+			} else {
+				$weight = $product['Peso netto'];
+			}
 
 
 			//AUTHOR
@@ -406,10 +427,28 @@ function wcifd_products() {
 											'_stock'         => $stock,
 											'_manage_stock'  => $manage_stock,
 											'_visibility'	 => 'visible',
-											'_regular_price' => $price,
-											'_price'         => $price
-										  )
+											'_regular_price' => $regular_price,
+											'_price'         => $regular_price,
+											'_sell_price'	 => $regular_price,
+											'_width'	     => $width,
+											'_height'    	 => $height,
+											'_length'		 => $length,
+											'_weight'		 => $weight
+				    )
 				);
+
+				if($sale_price) {
+					$args['meta_input']['_sale_price'] = $sale_price;
+					$args['meta_input']['_sell_price'] = $sale_price;
+					$args['meta_input']['_price'] = $sale_price;
+				} else {
+					$args['meta_input']['_sale_price'] = '';				
+				}
+
+				/*Short description*/
+				if(get_option('wcifd-short-description')) {
+					$args['post_excerpt'] = wcifd_get_short_description($description);
+				}
 
 				//ADD A NEW PRODUCT
 				$product_id = wp_insert_post($args);
@@ -488,20 +527,42 @@ function wcifd_products() {
 						'post_title'       => wp_strip_all_tags($title),
 						'post_name'        => sanitize_title_with_dashes(wp_strip_all_tags($title)),
 						'post_type'        => $type,
-						'post_content'	   => $description,
 						'meta_input'       => array(
 												'_sku'           => $sku,
 												'_tax_status'    => $tax_status,
 												'_tax_class'     => $tax_class,
-												'_regular_price' => $price,
-												'_price'         => $price,
 												'_stock'         => $stock,
 												'_manage_stock'  => $manage_stock,
 												'total_sales'    => $total_sales,
-												'_visibility'	 => 'visible'
-											  )
-
+												'_visibility'	 => 'visible',
+												'_regular_price' => $regular_price,
+												'_price'         => $regular_price,
+												'_sell_price'	 => $regular_price,
+												'_width'	     => $width,
+												'_height'    	 => $height,
+												'_length'		 => $length,
+												'_weight'		 => $weight
+						)
 					);
+
+					if($sale_price) {
+						$args['meta_input']['_sale_price'] = $sale_price;
+						$args['meta_input']['_sell_price'] = $sale_price;
+						$args['meta_input']['_price'] = $sale_price;
+					} else {
+						$args['meta_input']['_sale_price'] = '';				
+					}
+
+					/*Product description*/
+					if(!get_option('wcifd-exclude-description')) {
+						$args['post_content'] = $description;
+
+						/*Short description*/
+						if(get_option('wcifd-short-description')) {
+							$args['post_excerpt'] = wcifd_get_short_description($description);
+						}
+
+					}
 
 					//UPDATE PRODUCT
 					$product_id = wp_update_post($args);
@@ -676,18 +737,18 @@ function wcifd_get_list_price($product, $number, $tax_included=false) {
 
 
 //GET THE MEASURES OF THE PRODUCT, BASED ON THE OPTION SET.
-function wcifd_get_product_size($product, $type, $measure) {
+function wcifd_get_product_size($product, $type, $measure, $csv=false) {
 	$x = null;
 	$y = null;
 	$z = null;
 	if($type == 'gross-size') {
-		$x = $product->PackingSizeX;
-		$y = $product->PackingSizeY;
-		$z = $product->PackingSizeZ;
+		$x = $csv == true ? $product['Dim. imballo X'] : $product->PackingSizeX;
+		$y = $csv == true ? $product['Dim. imballo Y'] : $product->PackingSizeY;
+		$z = $csv == true ? $product['Dim. imballo Z'] : $product->PackingSizeZ;
 	} else {
-		$x = $product->NetSizeX;
-		$y = $product->NetSizeY;
-		$z = $product->NetSizeZ;
+		$x = $csv == true ? $product['Dim. netta X'] : $product->NetSizeX;
+		$y = $csv == true ? $product['Dim. netta Y'] : $product->NetSizeY;
+		$z = $csv == true ? $product['Dim. netta Z'] : $product->NetSizeZ;
 	}
 	
 	switch ($measure) {
@@ -960,7 +1021,7 @@ function wcifd_catalog_update($file) {
 											'_visibility'	      => 'visible',
 											'_regular_price'      => wcifd_json_decode($regular_price),
 											'_price'           	  => wcifd_json_decode($regular_price),
-											'_sall_price'         => wcifd_json_decode($regular_price),
+											'_sell_price'         => wcifd_json_decode($regular_price),
 											'_width'			  => wcifd_json_decode($width),
 											'_height'			  => wcifd_json_decode($height),
 											'_length'			  => wcifd_json_decode($length),
@@ -1080,11 +1141,31 @@ function wcifd_catalog_update($file) {
 				}
 
 
+				//ADD WEIGHT AND MEASURES
+				if($weight) {
+					$meta_input['_weight'] = wcifd_json_decode($weight);
+				}
+
+				if($length) {
+					$meta_input['_length'] = wcifd_json_decode($length);
+				}
+
+				if($width) {
+					$meta_input['_width'] = wcifd_json_decode($width);
+				}
+
+				if($height) {
+					$meta_input['_height'] = wcifd_json_decode($height);
+				}
+
+
+
+
 				if(!wcifd_search_product($barcode)) {
  					
  					//ADD NEW VARIATION
 	 				$var_args = array(
-						'post_author'      => $supplier_id,
+						'post_author'      => $author,
 						'post_name'        => 'danea-product-' . $product_id . '-variation-' . $v++,
 						'post_type'        => 'product_variation',
 						'post_parent'	   => $product_id,

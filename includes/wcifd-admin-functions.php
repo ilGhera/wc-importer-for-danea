@@ -65,7 +65,7 @@ function wcifd_options() {
 	<div id="wcifd-generale">
 	<?php
 		//HEADER
-		echo "<h1 class=\"wcifd main\">" . __( 'Woocommmerce Importer for Danea - Premium', 'wcifd' ) . "<span style=\"font-size:60%;\"> 0.9.7 - Dev Version</span></h1>";
+		echo "<h1 class=\"wcifd main\">" . __( 'Woocommmerce Importer for Danea - Premium', 'wcifd' ) . "<span style=\"font-size:60%;\"> 1.0.0</span></h1>";
 
 		//PLUGIN PREMIUM KEY
 		$key = sanitize_text_field(get_option('wcifd-premium-key'));
@@ -236,7 +236,7 @@ function wcifd_options() {
 					<td>
 						<select name="regular-price-list">
 							<?php
-							for($n=1; $n <= 4; $n++) {
+							for($n=1; $n <= 9; $n++) {
 								echo '<option value="' . $n . '"' . ($regular_price_list == $n ? 'selected="selected"' : '') . '>Price list ' . $n . '</option>';
 							}
 							?>
@@ -250,7 +250,7 @@ function wcifd_options() {
 						<select name="sale-price-list">
 							<?php
 							echo '<option>' . __('Select a price list', 'wcifd') . '</option>';
-							for($n=1; $n <= 4; $n++) {
+							for($n=1; $n <= 9; $n++) {
 								echo '<option value="' . $n . '"' . ($sale_price_list == $n ? 'selected="selected"' : '') . '>Price list ' . $n . '</option>';
 							}
 							?>
@@ -563,7 +563,7 @@ function wcifd_update_message2( $plugin_data, $response) {
 	    }
 
 	}
-	echo ($message) ? '<br><span class="wcexd-alert">' . $message . '</span>' : '';
+	echo ($message) ? '<br><span class="wcifd-alert">' . $message . '</span>' : '';
 
 }
 add_action('in_plugin_update_message-wc-importer-for-danea-premium/wc-importer-for-danea-premium.php', 'wcifd_update_message2', 10, 2);
