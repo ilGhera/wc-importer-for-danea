@@ -545,6 +545,8 @@ function wcifd_options() {
 function wcifd_update_message2( $plugin_data, $response) {
 	$key = get_option('wcifd-premium-key');
 
+    $message = null;
+
 	if(!$key) {
 
 		$message = 'A <b>Premium Key</b> is required for keeping this plugin up to date. Please, add yours in the <a href="' . admin_url() . 'admin.php/?page=wc-importer-for-danea">options page</a> or click <a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">here</a> for prices and details.';
