@@ -8,7 +8,7 @@
  * Version: 1.0.0
  * Author URI: http://ilghera.com 
  * Requires at least: 4.0
- * Tested up to: 4
+ * Tested up to: 4.9
  * WC tested up to: 3
  */
 

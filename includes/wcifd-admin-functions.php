@@ -224,7 +224,7 @@ function wcifd_options() {
 				<tr>
 					<th scope="row"><?php echo __('Prices imported with tax', 'wcifd'); ?></th>
 					<td>
-						<select name="tax-included">
+						<select name="tax-included" class="wcifd">
 							<option value="1" <?php echo($tax_included == 1) ? ' selected="selected"' : ''; ?>><?php echo __(' Yes, I will import prices inclusive of tax', 'wcifd'); ?></option>
 							<option value="0" <?php echo($tax_included == 0) ? ' selected="selected"' : ''; ?>><?php echo __('No, I will enter prices exclusive of tax', 'wcifd'); ?></option>
 						</select>
@@ -234,10 +234,10 @@ function wcifd_options() {
 				<tr>
 					<th scope="row"><?php echo __('Regular price', 'wcifd'); ?></th>
 					<td>
-						<select name="regular-price-list">
+						<select name="regular-price-list" class="wcifd">
 							<?php
 							for($n=1; $n <= 9; $n++) {
-								echo '<option value="' . $n . '"' . ($regular_price_list == $n ? 'selected="selected"' : '') . '>Price list ' . $n . '</option>';
+								echo '<option value="' . $n . '"' . ($regular_price_list == $n ? 'selected="selected"' : '') . '>' . __('Price list ', 'wcifd') . $n . '</option>';
 							}
 							?>
 						</select>
@@ -247,11 +247,11 @@ function wcifd_options() {
 				<tr>
 					<th scope="row"><?php echo __('Sale price', 'wcifd'); ?></th>
 					<td>
-						<select name="sale-price-list">
+						<select name="sale-price-list" class="wcifd">
 							<?php
 							echo '<option>' . __('Select a price list', 'wcifd') . '</option>';
 							for($n=1; $n <= 9; $n++) {
-								echo '<option value="' . $n . '"' . ($sale_price_list == $n ? 'selected="selected"' : '') . '>Price list ' . $n . '</option>';
+								echo '<option value="' . $n . '"' . ($sale_price_list == $n ? 'selected="selected"' : '') . '>' . __('Price list ', 'wcifd') . $n . '</option>';
 							}
 							?>
 						</select>
@@ -261,7 +261,7 @@ function wcifd_options() {
 				<tr>
 					<th scope="row"><?php echo __('Product size type', 'wcifd'); ?></th>
 					<td>
-						<select name="wcifd-size-type">
+						<select name="wcifd-size-type" class="wcifd">
 							<option value="gross-size"<?php echo($size_type == 'gross-size') ? ' selected="selected"' : ''; ?>><?php echo __('Gross size', 'wcifd'); ?></option>
 							<option value="net-size"<?php echo($size_type == 'net-size') ? ' selected="selected"' : ''; ?>><?php echo __('Net size', 'wcifd'); ?></option>
 						</select>
@@ -272,7 +272,7 @@ function wcifd_options() {
 				<tr>
 					<th scope="row"><?php echo __('Product weight type', 'wcifd'); ?></th>
 					<td>
-						<select name="wcifd-weight-type">
+						<select name="wcifd-weight-type" class="wcifd">
 							<option value="gross-weight"<?php echo($weight_type == 'gross-weight') ? 'selected="selected"' : ''; ?>><?php echo __('Gross weight', 'wcifd'); ?></option>
 							<option value="net-weight"<?php echo($weight_type == 'net-weight') ? 'selected="selected"' : ''; ?>><?php echo __('Net weight', 'wcifd'); ?></option>
 						</select>
@@ -296,7 +296,7 @@ function wcifd_options() {
 					</td>
 				</tr>
 				<tr>
-	    			<th scope="row"><?php _e("Fornitori", 'wcifd' ); ?></th>
+	    			<th scope="row"><?php _e('Suppliers', 'wcifd' ); ?></th>
 	    			<td>
 	    				<fieldset>
 		    				<label for="wcifd-use-suppliers">
