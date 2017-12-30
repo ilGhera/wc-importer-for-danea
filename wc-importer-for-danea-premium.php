@@ -5,10 +5,11 @@
  * Description: If you've built your online store with Woocommerce and you're using Danea Easyfatt as management software, you definitely need Woocommerce Importer for Danea - Premium!
  * You'll be able to import suppliers, clients and products.
  * Author: ilGhera
- * Version: 0.9.6
+ * Version: 1.0.0
  * Author URI: http://ilghera.com 
  * Requires at least: 4.0
- * Tested up to: 4.8
+ * Tested up to: 4.9
+ * WC tested up to: 3
  */
 
 
@@ -44,8 +45,20 @@ function load_wc_importer_for_danea_premium() {
 add_action( 'plugins_loaded', 'load_wc_importer_for_danea_premium', 1 );	
 
 
+//RICHIAMO "UPDATE-CHECKER"
+require( plugin_dir_path( __FILE__ ) . 'plugin-update-checker/plugin-update-checker.php');
+$wcifdUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+    'https://www.ilghera.com/wp-update-server-2/?action=get_metadata&slug=wc-importer-for-danea-premium',
+    __FILE__,
+    'wc-importer-for-danea-premium'
+);
 
-//GET THE "UPDATE-CHECKER"
-require( plugin_dir_path( __FILE__ ) . 'wcifd-update/plugin-update-checker.php');
-$key = get_option('wcifd-premium-key');
-$MyUpdateChecker = new PluginUpdateChecker_2_1('http://www.ilghera.com/wp-update-server/?key=' . $key, __FILE__, 'wc-importer-for-danea-premium');
+$wcifdUpdateChecker->addQueryArgFilter('wcifd_secure_update_check');
+function wcifd_secure_update_check($queryArgs) {
+    $key = base64_encode( get_option('wcifd-premium-key') );
+
+    if($key) {
+        $queryArgs['premium-key'] = $key;
+    }
+    return $queryArgs;
+}

@@ -2,9 +2,9 @@
 === Woocommerce Importer for Danea - Premium ===
 Contributors: ghera74
 Tags: Woocommerce, Danea, Easyfatt, ecommerce, exporter, csv, shop, orders, products
-Version: 0.9.6
+Version: 1.0.0
 Requires at least: 4.0
-Tested up to: 4.8
+Tested up to: 4.9
 
 
 Import suppliers, clients and products, from Danea Easyfatt into your Woocommerce store.
@@ -12,6 +12,7 @@ Import suppliers, clients and products, from Danea Easyfatt into your Woocommerc
 ----
 
 Importa fornitori, clienti e prodotti, da Danea EasyFatt al tuo store Woocommerce.
+
 
 
 == Description ==
@@ -23,31 +24,45 @@ You'll be able to import suppliers, clients and products.
 Se hai realizzato il tuo negozio online con Woocommerce ed utilizzi Danea Easyfatt come gestionale, Woocommerce Importer per Danea è lo strumento che ti serve perché le due piattaforme siano in grado di comunicare.
 Woocommerce Importer for Danea - Premium ti permette di importare:
 
-* L'elenco dei fornitori, sotto forma di utenti Wordpress a cui si è assegnato un ruolo specifico (CSV).
+* L'elenco dei fornitori, sotto fo
+rma di utenti Wordpress a cui si è assegnato un ruolo specifico (CSV).
 * L'elenco dei clienti, sotto forma di utenti Wordpress a cui si è assegnato un ruolo specifico (CSV).
 * L'elenco dei prodotti, sotto forma di prodotti Woocommerce (CSV).
 * L'elenco dei prodotti, con relative variazioni taglie/colori e immagini, attraverso la ricezione di un POST HTTP inviato da Danea Easyfatt.
 * L'elenco degli ordini, con creazione automatica dei prodotti mancanti ed inserimento opzionale dei nuovi clienti.
 
+
+
 == Installation ==
 
-Upload the ‘woocommerce-importer-for-danea-premium’ directory to your ‘/wp-content/plugins/’ directory, using your favorite method (ftp, sftp, scp, etc…)
-Activate Woocommerce Importer for Danea – Premium from your Plugins page.
-Once Activated, go to Woocommerce/ WC Importer for Danea.
+* Upload the ‘woocommerce-importer-for-danea-premium’ directory to your ‘/wp-content/plugins/’ directory, using your favorite method (ftp, sftp, scp, etc…)
+* Activate Woocommerce Importer for Danea – Premium from your Plugins page.
+* Once Activated, go to Woocommerce/ WC Importer for Danea.
 
 ----
 
-Per installare Woocommerce Importer for Danea, dalla Bacheca del tuo sito Wordpress vai alla voce Plugin/ Aggiungi nuovo.
-Clicca sul pulsante "Carica plugin" e seleziona la cartella compressa appena scaricata.
-Completato il processo di installazione, troverai nel menù Woocommerce la pagina opzioni con tutte le informazioni necessarie all'utilizzo di Woocommerce Importer for Danea - Premium.
+* Per installare Woocommerce Importer for Danea, dalla Bacheca del tuo sito Wordpress vai alla voce Plugin/ Aggiungi nuovo.
+* Clicca sul pulsante "Carica plugin" e seleziona la cartella compressa appena scaricata.
+* Completato il processo di installazione, troverai nel menù Woocommerce la pagina opzioni con tutte le informazioni necessarie all'utilizzo di Woocommerce Importer for Danea - Premium.
 
 
-== Screenshots ==
-1. Choose the user role and import your Danea EasyFatt suppliers list
-2. Choose the user role and import your Danea EasyFatt clients list
-3. Import your Danea EasyFatt products list
 
+== Changelog ==
 
+= 1.0.0 =
+Release Date: 29 December, 2017
+
+* Enhancement: Danea tax classes imported during synchronization.
+* Enhancement: Choose which Danea menu list use for the Woocommerce regular price, and a second one for the sell price.
+* Enhancement: Import product weight and dimension from Danea, gross or net. 
+* Enhancement: Use part of the Danea product description for the short description in Woocommerce.
+* Enhancement: Exclude product description in update synchronizations.
+* Enhancement: New products imported can now be published directly.
+* Enhancement: New plugin update checker.
+* Bug fix: Different PHP Notices.
+* Bug fix: Warning PHP in wcifd-functions.php on line 246, with different tax class than 22.
+* Bug fix: Variable product attributes created in Woocommerce lost after synchronizations.
+* Bug fix: Post meta wcifd-danea-size-color duplications.
 
 
 = 0.9.6 =

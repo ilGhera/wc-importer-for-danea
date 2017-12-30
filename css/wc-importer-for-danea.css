@@ -168,3 +168,21 @@ form#wcifd-options label {
 form#wcifd-options input.button {
 	margin-top: 1rem;
 }
+
+span.wcifd-alert {
+	display: block;
+	margin: 1rem 0 0;
+	padding: 0.6rem;
+	background: #F2DEDE;
+	border-radius: 0.2rem;
+	color: #a94442;	
+}
+
+span.wcifd-alert a {
+	color: #a94442;	
+	text-decoration: underline;
+}
+
+select.wcifd {
+	width: 180px;
+}
