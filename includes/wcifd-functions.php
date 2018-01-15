@@ -820,11 +820,11 @@ function wcifd_catalog_update($file) {
 			$notes = json_decode($product->Notes, true);
 			if($notes) {
 				// PARENT SKU
-				$parent_sku = ($notes['parent_sku']) ? $notes['parent_sku'] : null;
+				$parent_sku = array_key_exists('parent_sku', $notes) ? $notes['parent_sku'] : null;
 				if($parent_sku) {
 					$parent_product_id = wcifd_search_product($parent_sku);					
 				}
-				$var_attributes = $notes['var_attributes'];
+				$var_attributes = array_key_exists('var_attributes', $notes) ? $notes['var_attributes'] : null;
 
 				//VARIABLE PRODUCT
 				if($notes['product_type'] == 'variable' && $notes['attributes']) {
@@ -842,7 +842,7 @@ function wcifd_catalog_update($file) {
 
 		//SEARCH FOR THE PRODUCT
 		$id   = wcifd_search_product(wcifd_json_decode($sku));
-		$type = (wp_get_post_parent_id($id) || $notes['parent_sku']) ? 'product_variation' : 'product';
+		$type = (wp_get_post_parent_id($id) || $parent_sku) ? 'product_variation' : 'product';
 
 
 		//MANAGE STOCK

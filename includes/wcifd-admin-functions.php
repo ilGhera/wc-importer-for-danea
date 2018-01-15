@@ -226,7 +226,7 @@ function wcifd_options() {
 					<td>
 						<select name="tax-included" class="wcifd">
 							<option value="1" <?php echo($tax_included == 1) ? ' selected="selected"' : ''; ?>><?php echo __(' Yes, I will import prices inclusive of tax', 'wcifd'); ?></option>
-							<option value="0" <?php echo($tax_included == 0) ? ' selected="selected"' : ''; ?>><?php echo __('No, I will enter prices exclusive of tax', 'wcifd'); ?></option>
+							<option value="0" <?php echo($tax_included == 0) ? ' selected="selected"' : ''; ?>><?php echo __('No, I will import prices exclusive of tax', 'wcifd'); ?></option>
 						</select>
 						<p class="description"><?php echo __('In Danea you can choose if export prices with tax included or not. What are you going to import?', 'wcifd'); ?></p>
 					</td>
