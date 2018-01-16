@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WED\n"
 "POT-Creation-Date: 2017-12-30 15:00+0100\n"
-"PO-Revision-Date: 2017-12-30 15:00+0100\n"
+"PO-Revision-Date: 2018-01-16 13:06+0100\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera <info@ilghera.com>\n"
 "Language: it_IT\n"
@@ -373,7 +373,7 @@ msgstr "Importati %d ordini, %d clienti and %d prodotti."
 #: includes/wcifd-functions.php:1601
 #: plugin-update-checker/Puc/v4p4/Plugin/UpdateChecker.php:395
 msgid "Check for updates"
-msgstr "Controlla la presenza di aggiornamenti"
+msgstr "Verifica aggiornamenti"
 
 #: includes/wcifd-functions.php:1610
 msgid ""

@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WIFD\n"
-"POT-Creation-Date: 2017-12-30 15:00+0100\n"
+"POT-Creation-Date: 2018-01-16 13:05+0100\n"
 "PO-Revision-Date: 2016-05-26 13:25+0200\n"
 "Last-Translator: ilGhera <info@ilghera.com>\n"
 "Language-Team: ilGhera <info@ilghera.com>\n"
@@ -98,7 +98,7 @@ msgid " Yes, I will import prices inclusive of tax"
 msgstr ""
 
 #: includes/wcifd-admin-functions.php:229
-msgid "No, I will enter prices exclusive of tax"
+msgid "No, I will import prices exclusive of tax"
 msgstr ""
 
 #: includes/wcifd-admin-functions.php:231

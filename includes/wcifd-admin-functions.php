@@ -543,6 +543,8 @@ function wcifd_options() {
 
 //UPDATE MESSAGE
 function wcifd_update_message2( $plugin_data, $response) {
+
+	$message = null;
 	$key = get_option('wcifd-premium-key');
 
     $message = null;
@@ -560,7 +562,7 @@ function wcifd_update_message2( $plugin_data, $response) {
 
 	    if($limit < $now) { 
 	        $message = 'It seems like your <strong>Premium Key</strong> is expired. Please, click <a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">here</a> for prices and details.';
-	    } elseif($decoded_key[2] != 1572) {
+	    } elseif(!in_array($decoded_key[2], array(1572, 1582))) {
 	    	$message = 'It seems like your <strong>Premium Key</strong> is not valid. Please, click <a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">here</a> for prices and details.';
 	    }
 
