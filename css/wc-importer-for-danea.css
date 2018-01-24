@@ -174,7 +174,10 @@ form#wcifd-options label {
 	margin-bottom: 0.5rem;
 }
 
-
 form#wcifd-options input.button {
 	margin-top: 1rem;
+}
+
+select.wcifd {
+	width: 180px;
 }

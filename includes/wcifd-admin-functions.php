@@ -69,7 +69,7 @@ function wcifd_options() {
 	<div id="wcifd-generale">
 	<?php
 		//HEADER
-		echo "<h1 class=\"wcifd main\">" . __( 'Woocommmerce Importer for Danea', 'wcifd' ) . "<span style=\"font-size:60%;\"> 0.9.3 - Dev Version</span></h1>";
+		echo "<h1 class=\"wcifd main\">" . __( 'Woocommmerce Importer for Danea', 'wcifd' ) . "<span style=\"font-size:60%;\"> 1.0.0</span></h1>";
 	?>
 	</div>
 	        
@@ -90,7 +90,7 @@ function wcifd_options() {
 		<?php 
 			global $wp_roles;
 			$roles = $wp_roles->get_names();   
-			$users_val = (sanitize_text_field($_POST['wcifd-users'])) ? sanitize_text_field($_POST['wcifd-users']) : get_option('wcifd-suppliers-role');
+			$users_val = (isset($_POST['wcifd-users'])) ? sanitize_text_field($_POST['wcifd-users']) : get_option('wcifd-suppliers-role');
 		?>
 
 	    <!--Form Fornitori-->
@@ -157,8 +157,8 @@ function wcifd_options() {
 				<tr>
 					<th scope="row"><?php echo __('Prices imported with tax', 'wcifd'); ?></th>
 					<td>
-						<select name="tax-included" disabled="disabled">
-							<option value="1" selected="selected"><?php echo __(' Yes, I will import prices inclusive of tax', 'wcifd'); ?></option>
+						<select name="tax-included" class="wcifd" disabled="disabled">
+							<option value="1"><?php echo __(' Yes, I will import prices inclusive of tax', 'wcifd'); ?></option>
 						</select>
 						<p class="description">
 							<?php echo __('In Danea you can choose if export prices with tax included or not. What are you going to import?', 'wcifd'); ?>
@@ -167,17 +167,90 @@ function wcifd_options() {
 					</td>
 				</tr>
 				<tr>
-	    			<th scope="row"><?php _e("Fornitori", 'wcifd' ); ?></th>
+					<th scope="row"><?php echo __('Regular price', 'wcifd'); ?></th>
+					<td>
+						<select name="regular-price-list" class="wcifd" disabled="disabled">
+							<?php echo '<option value="">' . __('Price list ', 'wcifd') . '1</option>'; ?>
+						</select>
+						<p class="description">
+							<?php echo __('The Danea price list to use for Woocommerce regular price.', 'wcifd'); ?>
+				 			<a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">Upgrade</a>	
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php echo __('Sale price', 'wcifd'); ?></th>
+					<td>
+						<select name="sale-price-list" class="wcifd" disabled="disabled">
+							<?php echo '<option>' . __('Select a price list', 'wcifd') . '</option>'; ?>
+						</select>
+						<p class="description">
+							<?php echo __('The Danea price list to use for Woocommerce sale price.', 'wcifd'); ?>
+				 			<a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">Upgrade</a>	
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php echo __('Product size type', 'wcifd'); ?></th>
+					<td>
+						<select name="wcifd-size-type" class="wcifd" disabled="disabled">
+							<option value="gross-size" selected="selected"><?php echo __('Gross size', 'wcifd'); ?></option>
+						</select>
+						<p class="description">
+							<?php echo __('Chose if import gross or net product size.', 'wcifd'); ?>
+				 			<a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">Upgrade</a>	
+						</p>
+					</td>
+				</tr>
+				<tr>
+				<tr>
+					<th scope="row"><?php echo __('Product weight type', 'wcifd'); ?></th>
+					<td>
+						<select name="wcifd-weight-type" class="wcifd" disabled="disabled">
+							<option value="gross-weight" selected="selected"><?php echo __('Gross weight', 'wcifd'); ?></option>
+						</select>
+						<p class="description">
+							<?php echo __('Chose if import gross or net product weight.', 'wcifd'); ?>
+				 			<a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">Upgrade</a>	
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php echo __('Short description', 'wcifd'); ?></th>
+					<td>
+						<input type="checkbox" name="short-description" value="" disabled="disabled">
+						<?php echo __('Use the excerpt as short product description.', 'wcifd'); ?>
+			 			<a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">Upgrade</a>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><?php echo __('Exclude product description', 'wcifd'); ?></th>
+					<td>
+						<input type="checkbox" name="exclude-description" value="" disabled="disabled">
+						<?php echo __('Exclude descriptions for products updates.', 'wcifd'); ?>
+			 			<a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">Upgrade</a>
+					</td>
+				</tr>
+				<tr>
+	    			<th scope="row"><?php _e("Suppliers", 'wcifd' ); ?></th>
 	    			<td>
 	    				<fieldset>
 		    				<label for="wcifd-use-suppliers">
 								<input type="checkbox" class="wcifd-use-suppliers" name="wcifd-use-suppliers" value="1" checked="checked" disabled="disabled">
 								<?php echo __('Use the product supplier as post author.', 'wcifd'); ?>
-					 			 <a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">Upgrade</a>
+					 			<a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">Upgrade</a>
 		    				</label>
 		    			</fieldset>
 	    			</td>
 	    		</tr>
+	    		<tr>
+					<th scope="row"><?php echo __('Publish new products', 'wcifd'); ?></th>
+					<td>
+						<input type="checkbox" name="publish-new-products" value="0" checked="checked" disabled="disabled">
+						<?php echo __('Publish new products directly.', 'wcifd'); ?>
+			 			<a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">Upgrade</a>
+					</td>
+				</tr>
 			</table>
 			<input type="submit" class="button-primary" style="margin-top: 1.5rem;" disabled="disabled" value="<?php _e('Save Changes', 'wcifd' ) ; ?>">
 		</form>
@@ -232,7 +305,6 @@ function wcifd_options() {
 						</p>
 					</td>
 				</tr>
-				<input type="hidden" name="products-import" value="1">
 				<tr>
 					<th scope="row"><?php _e('Add products', 'wcifd'); ?></th>
 					<td>
