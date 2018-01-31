@@ -1300,11 +1300,12 @@ function wcifd_get_id_by_img($img_name) {
 //RECEIVE PRODUCTS UPDATE AND IMAGES
 function wcifd_products_update_request() {
 
-	//CHANGE EXECUTION TIME LIMIT
+	//INI SET
 	ini_set('max_execution_time', 0);
-
-	//CHANGE MEMORY LIMIT
-	// ini_set('memory_limit','960M');
+	ini_set('max_input_time', -1);
+	ini_set('memory_limit','256M');
+	ini_set('post_max_size', '200M');
+	ini_set('upload_max_filesize', '180M');
 
 	$premium_key = strtolower(get_option('wcifd-premium-key'));
 	$url_code = strtolower(get_option('wcifd-url-code'));
