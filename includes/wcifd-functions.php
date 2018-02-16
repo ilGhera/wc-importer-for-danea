@@ -818,7 +818,7 @@ function wcifd_catalog_update($file) {
 
 		if($product->Notes) {
 			$notes = json_decode($product->Notes, true);
-			if($notes) {
+			if(is_array($notes)) {
 				// PARENT SKU
 				$parent_sku = array_key_exists('parent_sku', $notes) ? $notes['parent_sku'] : null;
 				if($parent_sku) {
