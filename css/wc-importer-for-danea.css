@@ -94,11 +94,17 @@ a.message {
 .nav-tab.premium {
 	background-color: #F68356;
 	color: #fff;
+	border-left: 1px solid #f68356;
+	border-top: 1px solid #f68356;
+	border-right: 1px solid #f68356;
 }
 
 .nav-tab.premium:hover, .nav-tab.nav-tab-active.premium {
 	background-color: inherit;
 	color: inherit;
+	border-left: 1px solid #ccc;
+	border-top: 1px solid #ccc;
+	border-right: 1px solid #ccc;
 }
 
 .nav-tab.not-available, .nav-tab.not-available:hover {

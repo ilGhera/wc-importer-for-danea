@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WIFD\n"
-"POT-Creation-Date: 2017-04-11 23:24+0200\n"
+"POT-Creation-Date: 2018-01-24 11:07+0100\n"
 "PO-Revision-Date: 2016-05-26 13:25+0200\n"
 "Last-Translator: ilGhera <info@ilghera.com>\n"
 "Language-Team: ilGhera <info@ilghera.com>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 2.0.4\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -30,6 +30,7 @@ msgid "Woocommmerce Importer for Danea"
 msgstr ""
 
 #: includes/wcifd-admin-functions.php:78
+#: includes/wcifd-admin-functions.php:235
 msgid "Suppliers"
 msgstr ""
 
@@ -46,7 +47,7 @@ msgid "Orders"
 msgstr ""
 
 #: includes/wcifd-admin-functions.php:101
-#: includes/wcifd-admin-functions.php:248
+#: includes/wcifd-admin-functions.php:334
 msgid "User role"
 msgstr ""
 
@@ -78,132 +79,205 @@ msgstr ""
 msgid " Yes, I will import prices inclusive of tax"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:163
+#: includes/wcifd-admin-functions.php:164
 msgid ""
 "In Danea you can choose if export prices with tax included or not. What "
 "are you going to import?"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:167
-msgid "Fornitori"
+#: includes/wcifd-admin-functions.php:170
+msgid "Regular price"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:172
+#: includes/wcifd-admin-functions.php:173
+msgid "Price list "
+msgstr ""
+
+#: includes/wcifd-admin-functions.php:176
+msgid "The Danea price list to use for Woocommerce regular price."
+msgstr ""
+
+#: includes/wcifd-admin-functions.php:182
+msgid "Sale price"
+msgstr ""
+
+#: includes/wcifd-admin-functions.php:185
+msgid "Select a price list"
+msgstr ""
+
+#: includes/wcifd-admin-functions.php:188
+msgid "The Danea price list to use for Woocommerce sale price."
+msgstr ""
+
+#: includes/wcifd-admin-functions.php:194
+msgid "Product size type"
+msgstr ""
+
+#: includes/wcifd-admin-functions.php:197
+msgid "Gross size"
+msgstr ""
+
+#: includes/wcifd-admin-functions.php:200
+msgid "Chose if import gross or net product size."
+msgstr ""
+
+#: includes/wcifd-admin-functions.php:207
+msgid "Product weight type"
+msgstr ""
+
+#: includes/wcifd-admin-functions.php:210
+msgid "Gross weight"
+msgstr ""
+
+#: includes/wcifd-admin-functions.php:213
+msgid "Chose if import gross or net product weight."
+msgstr ""
+
+#: includes/wcifd-admin-functions.php:219
+msgid "Short description"
+msgstr ""
+
+#: includes/wcifd-admin-functions.php:222
+msgid "Use the excerpt as short product description."
+msgstr ""
+
+#: includes/wcifd-admin-functions.php:227
+msgid "Exclude product description"
+msgstr ""
+
+#: includes/wcifd-admin-functions.php:230
+msgid "Exclude descriptions for products updates."
+msgstr ""
+
+#: includes/wcifd-admin-functions.php:240
 msgid "Use the product supplier as post author."
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:178
-#: includes/wcifd-admin-functions.php:207
+#: includes/wcifd-admin-functions.php:247
+msgid "Publish new products"
+msgstr ""
+
+#: includes/wcifd-admin-functions.php:250
+msgid "Publish new products directly."
+msgstr ""
+
+#: includes/wcifd-admin-functions.php:255
+#: includes/wcifd-admin-functions.php:288
 msgid "Save Changes"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:183
+#: includes/wcifd-admin-functions.php:260
 msgid "Receive products from Danea"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:187
+#: includes/wcifd-admin-functions.php:264
 msgid "Receive products directly from the XML sent by Danea via HTTP post."
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:193
+#: includes/wcifd-admin-functions.php:270
 msgid "URL"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:195
+#: includes/wcifd-admin-functions.php:272
 msgid "Please insert your <strong>Premium Key</strong>"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:196
+#: includes/wcifd-admin-functions.php:274
 msgid ""
 "Add this URL to the <strong>Settings</strong> tab of the <strong>Products "
 "update</strong> function in Danea."
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:200
+#: includes/wcifd-admin-functions.php:280
 msgid "Import images"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:203
+#: includes/wcifd-admin-functions.php:283
 msgid "Import products images from Danea."
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:212
+#: includes/wcifd-admin-functions.php:293
 msgid "Import products from a file"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:216
+#: includes/wcifd-admin-functions.php:297
 msgid "Products update"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:219
+#: includes/wcifd-admin-functions.php:300
 msgid "Update products"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:221
+#: includes/wcifd-admin-functions.php:303
 msgid "Do you want to update the products already present in Woocommerce?"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:226
+#: includes/wcifd-admin-functions.php:309
 msgid "Add products"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:229
+#: includes/wcifd-admin-functions.php:313
 msgid "Select your products list file (.csv)"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:233
+#: includes/wcifd-admin-functions.php:319
 msgid "Import Products"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:253
+#: includes/wcifd-admin-functions.php:340
 msgid "Select a Wordpress user role for your clients."
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:256
+#: includes/wcifd-admin-functions.php:345
 msgid "Add clients"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:259
+#: includes/wcifd-admin-functions.php:349
 msgid "Select your clients list file (.csv)"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:265
+#: includes/wcifd-admin-functions.php:357
 msgid "Import Clients"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:280
+#: includes/wcifd-admin-functions.php:372
 msgid "New customers"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:283
+#: includes/wcifd-admin-functions.php:375
 msgid "Don't create users"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:285
+#: includes/wcifd-admin-functions.php:378
 msgid "Add new customers as Wordpress users"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:289
+#: includes/wcifd-admin-functions.php:384
 msgid "Orders status"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:296
+#: includes/wcifd-admin-functions.php:392
 msgid "Select the status that you want to assign to the imported orders."
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:300
+#: includes/wcifd-admin-functions.php:398
 msgid "Add orders"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:303
+#: includes/wcifd-admin-functions.php:402
 msgid "Select your orders list file (.xml)"
 msgstr ""
 
-#: includes/wcifd-admin-functions.php:307
+#: includes/wcifd-admin-functions.php:408
 msgid "Import Orders"
 msgstr ""
 
-#: includes/wcifd-functions.php:153
+#: includes/wcifd-functions.php:186
 #, php-format
-msgid "Imported %d of %d contacts"
+msgid "Imported %d of %d contacts<br>"
+msgstr ""
+
+#: includes/wcifd-functions.php:187
+#, php-format
+msgid "Updated %d of %d contacts"
 msgstr ""

@@ -1,10 +1,10 @@
 === Woocommerce Importer for Danea ===
 Contributors: ghera74
 Tags: Woocommerce, Danea, Easyfatt, ecommerce, importer, csv, shop, products, suppliers, customers
-Version: 0.9.2
+Version: 1.0.0
 Requires at least: 4.0
-Tested up to: 4.8
-Stable tag: 0.9.2
+Tested up to: 4.9
+Stable tag: 1.0.0
 
 
 
@@ -25,15 +25,13 @@ You'll be able to import suppliers width this free version, also clients and pro
 
 **NEW ON THIS VERSION**
 
-* Shop manager now can handle the plugin options.
-* Better tabs navigation.
-* (Premium) Now you can import/ update products directly from Danea (Ctrl+P)
-* (Premium) Danea sizes and colors now are imported as Woocommerce variations.
-* (Premium) Choose if import also product images.
-* (Premium) Woocommerce variations previously exported, now are imported correctly linked to the parent product.
-* (Premium) Now are imported also the subcategories.
-* (Premium) Using the supplier as post author is now an option.
-
+* Update users imported if already present.
+* (Premium) Danea tax classes imported during synchronization.
+* (Premium) Choose which Danea menu list use for the Woocommerce regular price, and a second one for the sell price.
+* (Premium) Import product weight and dimension from Danea, gross or net. 
+* (Premium) Use part of the Danea product description for the short description in Woocommerce.
+* (Premium) Exclude product description in update synchronizations.
+* (Premium) New products imported can now be published directly.
 
 
 **ITALIANO**
@@ -50,18 +48,18 @@ Woocommerce Importer for Danea ti permette di importare:
 
 **LE NOVITÀ DI QUESTA VERSIONE**
 
-* Funzionalità del plugin ora gestibili dallo Shop manager.
-* Migliorata la navigazione tra le funzionalità del plugin.
-* (Premium) Ora è possibile importare/ aggiornare i prodotti direttamente da Danea (Ctrl+P).
-* (Premium) Aggiunto supporto alle variazioni Taglie/ Colori di Danea Easyfatt.
-* (Premium) Le variazioni prodotto di Woocommerce precedentemente esportate verso Danea, vengono ora riconosciute ed abbinate al prodotto principale.
-* (Premium) Importazione di categorie e sottocategorie di prodotto.
-* (Premium) Opzione per utilizzare il fornitore come autore del prodotto importato.
-
+* Durante l'importazione dei fornitori, eventuali utenti già presenti vengono ora aggiornati.
+* (Premium) Nuovo metodo di importazione delle aliquote IVA provenienti da Danea Easyfatt.
+* (Premium) Possibilità di selezionare diversi listini Danea per importare il normale prezzo di vendita e quello in offerta.
+* (Premium) Importazione di peso e misure dei prodotti, scegliendo se utilizzare il valori lordi o netti di Danea.
+* (Premium) Descrizione breve del prodotto Woocommerce generata in automatico.
+* (Premium) Possibilità di escludere la descrizione prodotto dalla sincronizzzione.
+* (Premium) I nuovi prodotti importati possono ora essere pubblicati direttamente.
 
 
 == Installation ==
 From your WordPress dashboard
+
 <ul>
 <li>Visit 'Plugins > Add New'</li>
 <li>Search for 'Woocommerce Importer for Danea' and download it.</li>
@@ -72,6 +70,7 @@ From your WordPress dashboard
 
 
 From WordPress.org
+
 <ul>
 <li>Download Woocommerce Importer for Danea</li>
 <li>Upload the 'woocommerce-importer-for-danea' directory to your '/wp-content/plugins/' directory, using your favorite method (ftp, sftp, scp, etc...)</li>
@@ -80,13 +79,29 @@ From WordPress.org
 </ul>
 
 
-
 == Screenshots ==
-1. Choose the user role and import your Danea EasyFatt suppliers list
 
+1. Choose the user role and import your Danea EasyFatt suppliers list
+2. Products import options (Premium)
+3. Orders import options (Premium)
 
 
 == Changelog ==
+
+
+= 1.0.0 =
+Release Date: 24 January, 2018
+
+* Enhancement: Update users imported if already present.
+* Enhancement: (Premium) Danea tax classes imported during synchronization.
+* Enhancement: (Premium) Choose which Danea menu list use for the Woocommerce regular price, and a second one for the sell price.
+* Enhancement: (Premium) Import product weight and dimension from Danea, gross or net. 
+* Enhancement: (Premium) Use part of the Danea product description for the short description in Woocommerce.
+* Enhancement: (Premium) Exclude product description in update synchronizations.
+* Enhancement: (Premium) New products imported can now be published directly.
+* Enhancement: (Premium) New plugin update checker.
+* Bug fix: PHP Notices
+
 
 = 0.9.4 =
 Release Date: 11 April, 2016
@@ -101,14 +116,12 @@ Release Date: 11 April, 2016
 * Enhancement: (Premium) Using the supplier as post author is now an option.
 
 
-
 = 0.9.1 =
 Release Date: 06 November, 2016
 
 * Enhancement: If the Company field is presents, the name will be moved to referent.
 * Enhancement: Added the Shipping address.
 * Enhancement: Fiscal code and P.IVA fields are now recognized by checking the specific plugin installed.
-
 
 
 = 0.9.0 =

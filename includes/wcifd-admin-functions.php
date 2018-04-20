@@ -79,7 +79,6 @@ function wcifd_options() {
 		<a href="#" data-link="wcifd-products" class="nav-tab premium" onclick="return false;"><?php echo __('Products', 'wcifd'); ?></a>
         <a href="#" data-link="wcifd-clients" class="nav-tab premium" onclick="return false;"><?php echo __('Clients', 'wcifd'); ?></a>    
         <a href="#" data-link="wcifd-orders" class="nav-tab premium" onclick="return false;"><?php echo __('Orders', 'wcifd'); ?></a>
-        <!-- <a href="#" data-link="wcifd-ordini" class="nav-tab" onclick="return false;"><?php //echo __('Orders', 'wcifd'); ?></a>                                         -->
 	  </h2>
       
       
