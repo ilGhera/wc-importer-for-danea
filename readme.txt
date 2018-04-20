@@ -49,6 +49,15 @@ rma di utenti Wordpress a cui si è assegnato un ruolo specifico (CSV).
 
 == Changelog ==
 
+
+= 1.0.1 =
+Release Date: 20 April, 2018
+
+* Enhancement: Tax classes imported are now added as single aliquots for a better assignment to products.
+* Enhancement: Update users imported if already present.
+* Bug fix: Products prices not imported for certain price lists.
+
+
 = 1.0.0 =
 Release Date: 29 December, 2017
 

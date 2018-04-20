@@ -125,44 +125,44 @@ function wcifd_users($type) {
 			update_option('wcifd-' . $type . '-role', $role);
 		}
 	
-		$file = $_FILES[$type . '-list']['tmp_name'];
-		$rows = array_map('str_getcsv', file($file));
-		$header = array_shift($rows);
-		$users = array();
-		foreach ($rows as $row) {
-			// var_dump($row);
-		    $users[] = array_combine($header, $row);
-		}
-		
-		$i = 0;
-		foreach ($users as $user) {
+		$file = isset($_FILES[$type . '-list']['tmp_name']) ? $_FILES[$type . '-list']['tmp_name'] : '';
 
-			if($user['Referente']) {
-				$user_name = strtolower(str_replace(' ', '-', $user['Referente']));	
-				$name = explode(' ', $user['Referente']);			
-			} else {
-				$user_name = strtolower(str_replace(' ', '-', $user['Denominazione']));
-				$name = explode(' ', $user['Denominazione']);
+		if($file) {
+			$rows = array_map('str_getcsv', file($file));
+			$header = array_shift($rows);
+			$users = array();
+			foreach ($rows as $row) {
+				// var_dump($row);
+			    $users[] = array_combine($header, $row);
 			}
 			
-			$address = $user['Indirizzo'];
-			$cap = $user['Cap'];
-			$city = $user['Città'];
-			$state = $user['Prov.'];
-			$country = wcifd_get_state_code($user['Nazione']);
-			$tel = $user['Tel.'];
-			$email = $user['e-mail'];
-			$fiscal_code = $user['Codice fiscale'];
-			$p_iva = $user['Partita Iva'];
-			$description = $user['Note'];
+			$i = 0;
+			$n = 0;
+			foreach ($users as $user) {
 
-			$user_id = username_exists( $user_name );
-			if ( !$user_id and email_exists($email) == false ) {
-				$i++;
-				$random_password = wp_generate_password( $length = 12, $include_standard_special_chars = false );
+				if($user['Referente']) {
+					$user_name = strtolower(str_replace(' ', '-', $user['Referente']));	
+					$name = explode(' ', $user['Referente']);			
+				} else {
+					$user_name = strtolower(str_replace(' ', '-', $user['Denominazione']));
+					$name = explode(' ', $user['Denominazione']);
+				}
+				
+				$address = $user['Indirizzo'];
+				$cap = $user['Cap'];
+				$city = $user['Città'];
+				$state = $user['Prov.'];
+				$country = wcifd_get_state_code($user['Nazione']);
+				$tel = $user['Tel.'];
+				$email = $user['e-mail'];
+				$fiscal_code = $user['Codice fiscale'];
+				$p_iva = $user['Partita Iva'];
+				$description = $user['Note'];
+
 				$userdata = array(
 					'role' => $role,
 					'user_login'   => $user_name,
+					'user_pass'	   => null,
 					'first_name'   => $name[0],
 					'last_name'    => $name[1],
 					'display_name' => $user['Denominazione'],
@@ -170,39 +170,72 @@ function wcifd_users($type) {
 					'description'  => $description
 				);
 
-				$user_id = wp_insert_user($userdata);
-
+				/*Get the italian tax fields names*/
 				$cf_name = wcifd_get_italian_tax_fields_names('cf_name');
 				$pi_name = wcifd_get_italian_tax_fields_names('pi_name');
 
+				/*Check if teh user exists*/
+				$user_id = username_exists( $user_name );
+
+				/*Add the new user*/
+				if ( !$user_id and email_exists($email) == false ) {
+					
+					$i++;
+					// $random_password = wp_generate_password( $length = 12, $include_standard_special_chars = false );
+					
+					$user_id = wp_insert_user($userdata);
+
+				} else {
+					
+					/*Update the user*/
+					$n++;
+					$userdata['ID'] = $user_id;
+
+					/*Check if the user role must be changed*/
+					$user_info = get_userdata($user_id);
+					$user_roles = $user_info->roles;
+
+					if(!in_array($role, $user_roles)) {
+						unset($userdata['role']);
+						$the_user = new WP_User($user_id);
+						$the_user->set_role($role);
+					}
+
+					wp_update_user($userdata);
+
+				}
+
 				//USER META
 				if($user['Referente']) {
-					add_user_meta($user_id, 'billing_company', $user['Denominazione']);
+					update_user_meta($user_id, 'billing_company', $user['Denominazione']);
 				}
-				add_user_meta($user_id, 'billing_first_name', $name[0]);
-				add_user_meta($user_id, 'billing_last_name', $name[1]);					
-				add_user_meta($user_id, 'billing_address_1', $address);
-				add_user_meta($user_id, 'billing_city', $city);
-				add_user_meta($user_id, 'billing_postcode', $cap);
-				add_user_meta($user_id, 'billing_state', $state);
-				add_user_meta($user_id, 'billing_country', $country);
-				add_user_meta($user_id, 'billing_phone', $tel);
-				add_user_meta($user_id, 'billing_email', $email);
+				update_user_meta($user_id, 'billing_first_name', $name[0]);
+				update_user_meta($user_id, 'billing_last_name', $name[1]);					
+				update_user_meta($user_id, 'billing_address_1', $address);
+				update_user_meta($user_id, 'billing_city', $city);
+				update_user_meta($user_id, 'billing_postcode', $cap);
+				update_user_meta($user_id, 'billing_state', $state);
+				update_user_meta($user_id, 'billing_country', $country);
+				update_user_meta($user_id, 'billing_phone', $tel);
+				update_user_meta($user_id, 'billing_email', $email);
 
 				if($cf_name) {
-					add_user_meta($user_id, $cf_name, $fiscal_code);
+					update_user_meta($user_id, $cf_name, $fiscal_code);
 				}
 				if($pi_name) {
-					add_user_meta($user_id, $pi_name, $p_iva);					
+					update_user_meta($user_id, $pi_name, $p_iva);					
 				}
-			} 
-		}
 
-		$output  = '<div id="message" class="updated"><p>';
-		$output .= '<strong>Woocommerce Importer for Danea - Premium</strong><br>';
-		$output .= sprintf( __( 'Imported %d of %d contacts', 'wcifd' ), $i, count($users) );
-	    $output .= '</p></div>';
-	    echo $output;
+			}
+
+			$output  = '<div id="message" class="updated"><p>';
+			$output .= '<strong>Woocommerce Importer for Danea - Premium</strong><br>';
+			$output .= sprintf( __( 'Imported %d of %d contacts<br>', 'wcifd' ), $i, count($users) );
+			$output .= sprintf( __( 'Updated %d of %d contacts', 'wcifd' ), $n, count($users) );
+		    $output .= '</p></div>';
+		    echo $output;
+		}
+		
 	}
 
 }
@@ -254,16 +287,10 @@ function wcifd_get_tax_rate_class($name, $value='') {
 			$tax_rate_class = $name != 22 ? $name : '';
 
 			if($tax_rate_class) {
-				$tax_classes = get_option('woocommerce_tax_classes');
-				$tax_classes = $tax_classes . "<br>" . $tax_rate_class;
-				update_option('woocommerce_tax_classes', $tax_classes);
+				$tax_classes = explode("\n", get_option('woocommerce_tax_classes'));
+				$tax_classes[] = $tax_rate_class;
+				update_option('woocommerce_tax_classes', implode("\n", $tax_classes));
 			}
-
-	 	// 	if($value == '0') {
-			// 		$tax_rate_class = 'tasso-zero';			
-	 	// 	} elseif($value < '22') {
-			// 		$tax_rate_class = 'tasso-ridotto';
-	 	// 	}
 
 	 		$wpdb->insert(
 	 			$wpdb->prefix . 'woocommerce_tax_rates',
@@ -333,7 +360,7 @@ function wcifd_products() {
 			$tax  = $product['Cod. Iva'];
 			if($tax_included == 0) {
 				$regular_price = str_replace(',', '.', str_replace(array(' ', '€'), '', $product['Listino ' . $get_regular_price_list]));				
-				$_sale_price   = str_replace(',', '.', str_replace(array(' ', '€'), '', $product['Listino ' . $get_sale_price_list]));				
+				$sale_price   = str_replace(',', '.', str_replace(array(' ', '€'), '', $product['Listino ' . $get_sale_price_list]));				
 
 			} else {
 				$regular_price = str_replace(',', '.', str_replace(array(' ', '€'), '', $product['Listino ' . $get_regular_price_list . ' (ivato)']));
@@ -719,24 +746,11 @@ add_action('init', 'wcifd_register_attributes');
 
 //GET THE LIST PRICE FROM THE DANEA PRODUCT UPDATE XML, BASED ON THE LIST NUMBER AND THE TAXES INCLUDED OR NOT
 function wcifd_get_list_price($product, $number, $tax_included=false) {
-	$output = null;
-	switch ($number) {
-		case 1:
-			$output = $tax_included ? $product->GrossPrice1 : $product->NetPrice1;
-			break;
 
-		case 2:
-			$output = $tax_included ? $product->GrossPrice2 : $product->NetPrice2;
-			break;
-
-		case 3:
-			$output = $tax_included ? $product->GrossPrice3 : $product->NetPrice3;
-			break;
-
-		case 4:
-			$output = $tax_included ? $product->GrossPrice4 : $product->NetPrice4;
-			break;
-	}
+	$gross_price = 'GrossPrice' . $number;
+	$net_price	 = 'NetPrice' . $number;
+	
+	$output = $tax_included ? $product->$gross_price : $product->$net_price;
 
 	return $output;
 
