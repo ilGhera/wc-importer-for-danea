@@ -251,12 +251,19 @@ function wcifd_get_tax_rate_class($name, $value='') {
 	} else {
 		// Create the new class only with a value
 		if($value != '') {
-			$tax_rate_class = '';
-	 		if($value == '0') {
-					$tax_rate_class = 'tasso-zero';			
-	 		} elseif($value < '22') {
-					$tax_rate_class = 'tasso-ridotto';
-	 		}
+			$tax_rate_class = $name != 22 ? $name : '';
+
+			if($tax_rate_class) {
+				$tax_classes = get_option('woocommerce_tax_classes');
+				$tax_classes = $tax_classes . "<br>" . $tax_rate_class;
+				update_option('woocommerce_tax_classes', $tax_classes);
+			}
+
+	 	// 	if($value == '0') {
+			// 		$tax_rate_class = 'tasso-zero';			
+	 	// 	} elseif($value < '22') {
+			// 		$tax_rate_class = 'tasso-ridotto';
+	 	// 	}
 
 	 		$wpdb->insert(
 	 			$wpdb->prefix . 'woocommerce_tax_rates',
@@ -818,7 +825,7 @@ function wcifd_catalog_update($file) {
 
 		if($product->Notes) {
 			$notes = json_decode($product->Notes, true);
-			if(is_array($notes)) {
+			if($notes) {
 				// PARENT SKU
 				$parent_sku = array_key_exists('parent_sku', $notes) ? $notes['parent_sku'] : null;
 				if($parent_sku) {
@@ -1300,12 +1307,11 @@ function wcifd_get_id_by_img($img_name) {
 //RECEIVE PRODUCTS UPDATE AND IMAGES
 function wcifd_products_update_request() {
 
-	//INI SET
+	//CHANGE EXECUTION TIME LIMIT
 	ini_set('max_execution_time', 0);
-	ini_set('max_input_time', -1);
-	ini_set('memory_limit','256M');
-	ini_set('post_max_size', '200M');
-	ini_set('upload_max_filesize', '180M');
+
+	//CHANGE MEMORY LIMIT
+	// ini_set('memory_limit','960M');
 
 	$premium_key = strtolower(get_option('wcifd-premium-key'));
 	$url_code = strtolower(get_option('wcifd-url-code'));
