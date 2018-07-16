@@ -935,7 +935,7 @@ function wcifd_catalog_update($file) {
 										'_visibility'	      => 'visible',
 										'_regular_price'      => wcifd_json_decode($regular_price),
 										'_price'           	  => wcifd_json_decode($regular_price),
-										'_sell_price'		  => wcifd_json_decode($regular_price),
+										'_sell_price'		  => '', //wcifd_json_decode($regular_price), //Custom
 										'_width'			  => wcifd_json_decode($width),
 										'_height'			  => wcifd_json_decode($height),
 										'_length'			  => wcifd_json_decode($length),
@@ -945,11 +945,23 @@ function wcifd_catalog_update($file) {
 			);
 
 			if($sale_price) {
-				$args['meta_input']['_sale_price'] = wcifd_json_decode($sale_price);
-				$args['meta_input']['_sell_price'] = wcifd_json_decode($sale_price);
-				$args['meta_input']['_price'] = wcifd_json_decode($sale_price);
+				//$args['meta_input']['_sale_price'] = wcifd_json_decode($sale_price);
+				//$args['meta_input']['_sell_price'] = wcifd_json_decode($sale_price);
+				//$args['meta_input']['_price'] = wcifd_json_decode($sale_price);
+
+				/*Se presente il secondo prezzo, attivo WC Role Based Price Editor e salvo i prezzi per livello utente*/
+				$args['meta_input']['_enable_role_based_price'] = 1;
+				$args['meta_input']['_role_based_price'] = array(
+					'customer' => array(
+						'regular_price' => wcifd_json_decode($regular_price)
+					), 
+					'rivenditore' => array(
+						'regular_price' => wcifd_json_decode($sale_price)
+					)
+				);
+
 			} else {
-				$args['meta_input']['_sale_price'] = '';				
+				//$args['meta_input']['_sale_price'] = ''; //Custom		
 			}
 
 			/*Short description*/
@@ -1042,7 +1054,7 @@ function wcifd_catalog_update($file) {
 											'_visibility'	      => 'visible',
 											'_regular_price'      => wcifd_json_decode($regular_price),
 											'_price'           	  => wcifd_json_decode($regular_price),
-											'_sell_price'         => wcifd_json_decode($regular_price),
+											'_sell_price'         => '', //wcifd_json_decode($regular_price),
 											'_width'			  => wcifd_json_decode($width),
 											'_height'			  => wcifd_json_decode($height),
 											'_length'			  => wcifd_json_decode($length),
@@ -1052,11 +1064,23 @@ function wcifd_catalog_update($file) {
 				);
 
 				if($sale_price) {
-					$args['meta_input']['_sale_price'] = wcifd_json_decode($sale_price);
-					$args['meta_input']['_sell_price'] = wcifd_json_decode($sale_price);
-					$args['meta_input']['_price'] = wcifd_json_decode($sale_price);
+					//$args['meta_input']['_sale_price'] = wcifd_json_decode($sale_price);
+					//$args['meta_input']['_sell_price'] = wcifd_json_decode($sale_price);
+					//$args['meta_input']['_price'] = wcifd_json_decode($sale_price);
+
+					/*Se presente il secondo prezzo, attivo WC Role Based Price Editor e salvo i prezzi per livello utente*/
+					$args['meta_input']['_enable_role_based_price'] = 1;
+					$args['meta_input']['_role_based_price'] = array(
+						'customer' => array(
+							'regular_price' => wcifd_json_decode($regular_price)
+						), 
+						'rivenditore' => array(
+							'regular_price' => wcifd_json_decode($sale_price)
+						)
+					);
+
 				} else {
-					$args['meta_input']['_sale_price'] = '';				
+					//$args['meta_input']['_sale_price'] = ''; //Custom		
 				}
 
 				/*Product description*/
