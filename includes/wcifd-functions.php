@@ -604,18 +604,27 @@ function wcifd_products() {
 			}
 
 			//ADD PRODUCT CAT AND SUB-CAT
-			wp_set_object_terms($product_id, strtolower($category), 'product_cat', true);
-			$cat_term = term_exists($category, 'product_cat');
-			$subcat_term = term_exists($sub_category, 'product_cat', $cat_term['term_id']);
+			if($category) {
 
-			if($sub_category){
-				if(!$subcat_term) {
-					$subcat_term = wp_insert_term($sub_category, 'product_cat', array('parent' => $cat_term['term_id']));
+				/*Category*/
+				$cat_term = term_exists($category, 'product_cat');
+
+				if($cat_term === 0) {
+					$cat_term = wp_insert_term($category, 'product_cat');
 				}
+				wp_set_object_terms($product_id, intval($cat_term['term_id']), 'product_cat', true);
 
-				wp_set_object_terms($product_id, intval($subcat_term['term_id']), 'product_cat', true);			
+				if($sub_category){
+					
+					/*Subcategory*/
+					$subcat_term = term_exists($sub_category, 'product_cat', $cat_term['term_id']);
+
+					if($subcat_term === 0) {
+						$subcat_term = wp_insert_term($sub_category, 'product_cat', array('parent' => $cat_term['term_id']));
+					}
+					wp_set_object_terms($product_id, intval($subcat_term['term_id']), 'product_cat', true);			
+				}			
 			}
-
 			
 		}
 		$output  = '<div id="message" class="updated"><p>';
@@ -1083,18 +1092,30 @@ function wcifd_catalog_update($file) {
 
 		}
 
+
 		//ADD PRODUCT CAT AND SUB-CAT
-		wp_set_object_terms($product_id, $category, 'product_cat', true);
-		$cat_term = term_exists($category, 'product_cat');
-		$subcat_term = term_exists($sub_category, 'product_cat', $cat_term['term_id']);
+		if($category) {
 
-		if($sub_category){
-			if(!$subcat_term) {
-				$subcat_term = wp_insert_term($sub_category, 'product_cat', array('parent' => $cat_term['term_id']));
+			/*Category*/
+			$cat_term = term_exists($category, 'product_cat');
+
+			if($cat_term === 0) {
+				$cat_term = wp_insert_term($category, 'product_cat');
 			}
+			wp_set_object_terms($product_id, intval($cat_term['term_id']), 'product_cat', true);
 
-			wp_set_object_terms($product_id, intval($subcat_term['term_id']), 'product_cat', true);			
+			if($sub_category){
+				
+				/*Subcategory*/
+				$subcat_term = term_exists($sub_category, 'product_cat', $cat_term['term_id']);
+
+				if($subcat_term === 0) {
+					$subcat_term = wp_insert_term($sub_category, 'product_cat', array('parent' => $cat_term['term_id']));
+				}
+				wp_set_object_terms($product_id, intval($subcat_term['term_id']), 'product_cat', true);			
+			}			
 		}
+
 
 
 		
