@@ -609,7 +609,7 @@ function wcifd_products() {
 				/*Category*/
 				$cat_term = term_exists($category, 'product_cat');
 
-				if($cat_term === 0) {
+				if($cat_term === 0 || $cat_term === null) {
 					$cat_term = wp_insert_term($category, 'product_cat');
 				}
 				wp_set_object_terms($product_id, intval($cat_term['term_id']), 'product_cat', true);
@@ -619,7 +619,7 @@ function wcifd_products() {
 					/*Subcategory*/
 					$subcat_term = term_exists($sub_category, 'product_cat', $cat_term['term_id']);
 
-					if($subcat_term === 0) {
+					if($subcat_term === 0 || $subcat_term === null) {
 						$subcat_term = wp_insert_term($sub_category, 'product_cat', array('parent' => $cat_term['term_id']));
 					}
 					wp_set_object_terms($product_id, intval($subcat_term['term_id']), 'product_cat', true);			
@@ -1097,9 +1097,9 @@ function wcifd_catalog_update($file) {
 		if($category) {
 
 			/*Category*/
-			$cat_term = term_exists($category, 'product_cat');
+			$cat_term = term_exists($category, 'product_cat', 0);
 
-			if($cat_term === 0) {
+			if($cat_term === 0 || $cat_term === null) {
 				$cat_term = wp_insert_term($category, 'product_cat');
 			}
 			wp_set_object_terms($product_id, intval($cat_term['term_id']), 'product_cat', true);
@@ -1109,7 +1109,7 @@ function wcifd_catalog_update($file) {
 				/*Subcategory*/
 				$subcat_term = term_exists($sub_category, 'product_cat', $cat_term['term_id']);
 
-				if($subcat_term === 0) {
+				if($subcat_term === 0 || $subcat_term === null) {
 					$subcat_term = wp_insert_term($sub_category, 'product_cat', array('parent' => $cat_term['term_id']));
 				}
 				wp_set_object_terms($product_id, intval($subcat_term['term_id']), 'product_cat', true);			
