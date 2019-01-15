@@ -1,4 +1,9 @@
-//WOOCOMMERCE IMPORTER FOR DANEA - PREMIUM | NAVIGATION MENU SCRIPT
+/**
+ * Script menu di navigazione
+ * @author ilGhera
+ * @package wc-importer-for-danea-premium/js
+ * @version 1.0.2
+ */
 jQuery(document).ready(function ($) {
 
 	var wcifd_pagination = function() {

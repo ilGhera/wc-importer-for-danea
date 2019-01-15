@@ -1,25 +1,15 @@
 
 === Woocommerce Importer for Danea - Premium ===
 Contributors: ghera74
-Tags: Woocommerce, Danea, Easyfatt, ecommerce, exporter, csv, shop, orders, products
-Version: 1.0.2
+Tags: Fattura elettronica, Woocommerce, Danea Easyfatt, ecommerce, exporter, csv, shop, orders, products, gestionale
+Version: 1.1.0
 Requires at least: 4.0
 Tested up to: 5.0
 
 
 Import suppliers, clients and products, from Danea Easyfatt into your Woocommerce store.
 
-----
-
-Importa fornitori, clienti e prodotti, da Danea EasyFatt al tuo store Woocommerce.
-
-
-
 == Description ==
-If you've built your online store with Woocommerce and you're using Danea Easyfatt as management software, you definitely need Woocommerce Importer for Danea - Premium!
-You'll be able to import suppliers, clients and products.
-
-----
 
 Se hai realizzato il tuo negozio online con Woocommerce ed utilizzi Danea Easyfatt come gestionale, Woocommerce Importer per Danea è lo strumento che ti serve perché le due piattaforme siano in grado di comunicare.
 Woocommerce Importer for Danea - Premium ti permette di importare:
@@ -31,6 +21,11 @@ rma di utenti Wordpress a cui si è assegnato un ruolo specifico (CSV).
 * L'elenco dei prodotti, con relative variazioni taglie/colori e immagini, attraverso la ricezione di un POST HTTP inviato da Danea Easyfatt.
 * L'elenco degli ordini, con creazione automatica dei prodotti mancanti ed inserimento opzionale dei nuovi clienti.
 
+
+**ENGLISH**
+
+If you've built your online store with Woocommerce and you're using Danea Easyfatt as management software, you definitely need Woocommerce Importer for Danea - Premium!
+You'll be able to import suppliers, clients and products.
 
 
 == Installation ==
@@ -48,6 +43,9 @@ rma di utenti Wordpress a cui si è assegnato un ruolo specifico (CSV).
 
 
 == Changelog ==
+
+= 1.1.0 =
+Release Date: xxxx
 
 
 = 1.0.2 =

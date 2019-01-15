@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Importazione immagine prodotto
+ * @author ilGhera
+ * @package wc-importer-for-danea-premium/includes
+ * @version 1.0.2
+ */
 function wcifd_products_images() {
 	if ( ! function_exists( 'wp_handle_upload' ) ) {
 	    require_once( ABSPATH . 'wp-admin/includes/file.php' );
