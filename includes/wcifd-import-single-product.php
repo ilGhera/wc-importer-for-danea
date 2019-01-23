@@ -205,6 +205,15 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 
 		/*Non aggiornare il prodotto se nel cestino*/
 		if ( get_post_status( $id ) != 'trash' ) {
+
+			/*Verifico se i backorders sono attivati*/
+			if ( 'outofstock' === $stock_status ) {
+				$backorders = get_post_meta( $id, '_backorders', true );
+				if ( 'yes' === $backorders || 'notify' === $backorders ) {
+					$stock_status = 'onbackorder';
+				}
+			}
+
 			$args = array(
 				'ID'               => $id,
 				'post_status'      => get_post_status( $id ),
@@ -275,17 +284,15 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 			$more_terms[1] = wcifd_add_taxonomy_term( $product_id, $sub_category, $category_term['term_id'], true );
 
 			/*Sottocategorie successive*/
-			for ($i = 2; $i < 10; $i++) {
+			for ( $i = 2; $i < 10; $i++ ) {
 				$sub_name = 'Subcategory' . $i;
-				if( isset( $product->$sub_name ) ) {
-					
-					$more_terms[$i] = wcifd_add_taxonomy_term( $product_id, $product->$sub_name, $more_terms[$i - 1]['term_id'], true );				
-				
+				if ( isset( $product->$sub_name ) ) {
+
+					$more_terms[ $i ] = wcifd_add_taxonomy_term( $product_id, $product->$sub_name, $more_terms[ $i - 1 ]['term_id'], true );
+
 				}
 			}
-
 		}
-
 	}
 
 	/*Variabili di prodotto*/
@@ -301,10 +308,20 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 		foreach ( $variants->Variant as $variant ) {
 
 			$barcode  = $variant->Barcode;
+			$var_id = wcifd_search_product( $barcode );
 			$in_stock = $variant->AvailableQty;
 
 			$man_stock = 'yes';
 			$stock_status = ( $in_stock ) ? 'instock' : 'outofstock';
+
+			/*Verifico se i backorders sono attivati*/
+			if ( 'outofstock' === $stock_status ) {
+				$backorders = get_post_meta( $var_id, '_backorders', true );
+				if ( 'yes' === $backorders || 'notify' === $backorders ) {
+					$stock_status = 'onbackorder';
+				}
+			}
+
 
 			/*Attributi*/
 			$size     = $variant->Size;
@@ -364,7 +381,7 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 				$meta_input['_height'] = $height;
 			}
 
-			if ( ! wcifd_search_product( $barcode ) ) {
+			if ( ! $var_id ) {
 
 				/*Aggiunta nuova variazione*/
 				$var_args = array(
@@ -383,10 +400,10 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 			} else {
 
 				/*Aggiornamento variazione*/
-				if ( get_post_status( wcifd_search_product( $barcode ) ) != 'trash' ) {
+				if ( get_post_status( $var_id ) != 'trash' ) {
 
 					$var_args = array(
-						'ID'               => wcifd_search_product( $barcode ),
+						'ID'               => $var_id,
 						'post_author'      => $author,
 						'post_name'        => 'danea-product-' . $product_id . '-variation-' . $v++,
 						'post_type'        => 'product_variation',
