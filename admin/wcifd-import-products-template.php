@@ -63,6 +63,12 @@
 			update_option( 'wcifd-exclude-description', $exclude_description );
 		}
 
+		$deleting_categories = get_option( 'wcifd-deleting-categories' );
+		if ( isset( $_POST['deleting-categories'] ) ) {
+			$deleting_categories = $_POST['deleting-categories'] ? $_POST['deleting-categories'] : 0;
+			update_option( 'wcifd-deleting-categories', $deleting_categories );
+		}
+
 		$publish_new_products = get_option( 'wcifd-publish-new-products' );
 		if ( isset( $_POST['publish-new-products'] ) ) {
 			$publish_new_products = $_POST['publish-new-products'] ? $_POST['publish-new-products'] : 0;
@@ -141,6 +147,14 @@
 				<input type="hidden" name="exclude-description" value="0">
 				<input type="checkbox" name="exclude-description" value="1"<?php echo $exclude_description == 1 ? ' checked="checked"' : ''; ?>>
 				<?php echo __( 'Exclude descriptions for products updates.', 'wcifd' ); ?>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><?php echo __( 'Categories', 'wcifd' ); ?></th>
+			<td>
+				<input type="hidden" name="deleting-categories" value="0">
+				<input type="checkbox" name="deleting-categories" value="1"<?php echo $deleting_categories == 1 ? ' checked="checked"' : ''; ?>>
+				<?php echo __( 'Avoid deleting categories during synchronizations.', 'wcifd' ); ?>
 			</td>
 		</tr>
 		<tr>

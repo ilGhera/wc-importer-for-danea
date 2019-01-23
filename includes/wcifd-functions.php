@@ -16,6 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 require( WCIFD_INCLUDES . 'wcifd-import-users.php' );
 require( WCIFD_INCLUDES . 'wcifd-import-products.php' );
 require( WCIFD_INCLUDES . 'wcifd-catalog-update.php' );
+require( WCIFD_INCLUDES . 'wcifd-import-single-product.php' );
+require( WCIFD_INCLUDES . 'wcifd-delete-single-product.php' );
 require( WCIFD_INCLUDES . 'wcifd-import-orders.php' );
 
 
@@ -184,7 +186,34 @@ function wcifd_search_product( $sku ) {
 		$product = wc_get_product( $sku );
 		$post_id = ( $product ) ? $post_id = $sku : null;
 	}
+
 	return $post_id;
+}
+
+
+/**
+ * Aggiunge un termine di tassonimia al prodotto dato
+ * @param  int  $product_id l'id del prodotto
+ * @param  string  $category   la categoria proveniente da Danea da aggiungere al prodotto
+ * @param  integer $parent_id  id del termine di tassonomia padre se presente
+ * @param  boolean $append     determina se il termine di tassonomia debba aggiungersi a quelli presenti o sostituirli
+ * @return array              il termine di tassonomia
+ */
+function wcifd_add_taxonomy_term( $product_id, $category, $parent_id = 0, $append = false ) {
+
+	$append = '1' === get_option('wcifd-deleting-categories') ? true : $append;
+
+	$term = term_exists( $category, 'product_cat', $parent_id );
+
+	if ( $term === 0 || $term === null ) {		
+		$term = wp_insert_term( $category, 'product_cat', array( 'parent' => $parent_id ) );
+	}
+
+	if ( ! is_wp_error( $term ) ) {
+		$output = wp_set_object_terms( $product_id, intval( $term['term_id'] ), 'product_cat', $append );
+	}
+
+	return $term;
 }
 
 
@@ -261,10 +290,11 @@ function wcifd_delete_variations( $parent_id ) {
 		'post_parent' => $parent_id,
 	);
 	$vars = get_children( $args, ARRAY_A );
-	foreach ( $vars as $var ) {
-		wp_delete_post( $var['ID'] );
+	if( $vars ) {
+		foreach ( $vars as $var ) {
+			wp_delete_post( $var['ID'] );
+		}		
 	}
-
 }
 
 
@@ -393,7 +423,11 @@ function wcifd_get_list_price( $product, $number, $tax_included = false ) {
 	$gross_price = 'GrossPrice' . $number;
 	$net_price   = 'NetPrice' . $number;
 
-	$output = $tax_included ? $product->$gross_price : $product->$net_price;
+	if ( $tax_included ) {
+		$output = isset( $product->$gross_price ) ? $product->$gross_price : '';
+	} else {
+		$output = isset( $product->$net_price ) ? $product->$net_price : '';
+	}
 
 	return $output;
 
@@ -413,13 +447,25 @@ function wcifd_get_product_size( $product, $type, $measure, $csv = false ) {
 	$y = null;
 	$z = null;
 	if ( $type == 'gross-size' ) {
-		$x = $csv == true ? $product['Dim. imballo X'] : $product->PackingSizeX;
-		$y = $csv == true ? $product['Dim. imballo Y'] : $product->PackingSizeY;
-		$z = $csv == true ? $product['Dim. imballo Z'] : $product->PackingSizeZ;
+		if ( $csv ) {
+			$x = isset( $product['Dim. imballo X'] ) ? $product['Dim. imballo X'] : '';
+			$y = isset( $product['Dim. imballo Y'] ) ? $product['Dim. imballo Y'] : '';
+			$z = isset( $product['Dim. imballo Z'] ) ? $product['Dim. imballo Z'] : '';
+		} else {
+			$x = isset( $product->PackingSizeX ) ? $product->PackingSizeX : '';
+			$y = isset( $product->PackingSizeY ) ? $product->PackingSizeY : '';
+			$z = isset( $product->PackingSizeZ ) ? $product->PackingSizeZ : '';
+		}
 	} else {
-		$x = $csv == true ? $product['Dim. netta X'] : $product->NetSizeX;
-		$y = $csv == true ? $product['Dim. netta Y'] : $product->NetSizeY;
-		$z = $csv == true ? $product['Dim. netta Z'] : $product->NetSizeZ;
+		if ( $csv ) {
+			$x = isset( $product['Dim. netta X'] ) ? $product['Dim. netta X'] : '';
+			$y = isset( $product['Dim. netta Y'] ) ? $product['Dim. netta Y'] : '';
+			$z = isset( $product['Dim. netta Z'] ) ? $product['Dim. netta Z'] : '';
+		} else {
+			$x = isset( $product->NetSizeX ) ? $product->NetSizeX : '';
+			$y = isset( $product->NetSizeY ) ? $product->NetSizeY : '';
+			$z = isset( $product->NetSizeZ ) ? $product->NetSizeZ : '';
+		}
 	}
 
 	switch ( $measure ) {

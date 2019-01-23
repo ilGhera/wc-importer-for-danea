@@ -48,7 +48,7 @@ function load_wc_importer_for_danea_premium() {
 	load_plugin_textdomain( 'wcifd', false, basename( dirname( __FILE__ ) ) . '/languages' );
 
 	/*Richiamo file necessari*/
-	require( WCIFD_INCLUDES . 'wcifd-admin.php' );
+	require( WCIFD_ADMIN . 'wcifd-admin.php' );
 	require( WCIFD_INCLUDES . 'wcifd-functions.php' );
 	require( WCIFD_INCLUDES . 'wcifd-products-images.php' );
 

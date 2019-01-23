@@ -2,7 +2,7 @@
 /**
  * Pagina opzioni/ strumenti
  * @author ilGhera
- * @package wc-importer-for-danea-premium/includes
+ * @package wc-importer-for-danea-premium/admin
  * @version 1.1.0
  */
 
@@ -10,8 +10,18 @@
  * Registrazione script necessario al menu di navigazione
  */
 function wcifd_register_scripts() {
-	wp_enqueue_style( 'wcifd-style', WCIFD_URI . 'css/wc-importer-for-danea.css' );
-	wp_enqueue_script( 'wcifd-admin-nav', WCIFD_URI . 'js/wcifd-admin-nav.js', array( 'jquery' ), '1.0', true );
+
+	$screen = get_current_screen();
+	if ( $screen->id === 'woocommerce_page_wc-importer-for-danea' ) {
+
+		wp_enqueue_style( 'wcifd-style', WCIFD_URI . 'css/wc-importer-for-danea.css' );
+		wp_enqueue_script( 'wcifd-admin-nav', WCIFD_URI . 'js/wcifd-admin-nav.js', array( 'jquery' ), '1.0', true );
+
+		wp_enqueue_style( 'tzcheckbox-style', WCIFD_URI . 'js/tzCheckbox/jquery.tzCheckbox/jquery.tzCheckbox.css' );
+		wp_enqueue_script( 'tzcheckbox', WCIFD_URI . 'js/tzCheckbox/jquery.tzCheckbox/jquery.tzCheckbox.js', array( 'jquery' ) );
+		wp_enqueue_script( 'tzcheckbox-script', WCIFD_URI . 'js/tzCheckbox/js/script.js', array( 'jquery' ) );
+	}
+
 }
 add_action( 'admin_enqueue_scripts', 'wcifd_register_scripts' );
 
@@ -84,38 +94,34 @@ function wcifd_options() {
 	</h2>
 	  
 	  
-	<!-- IMPORTAZIONE RIVENDITORI -->     
-	  
+	<!-- IMPORTAZIONE RIVENDITORI -->     	  
 	<div id="wcifd-suppliers" class="wcifd-admin" style="display: block;">
 
-		<?php include( WCIFD_INCLUDES . 'wcifd-import-supplier.php' ); ?>
+		<?php include( WCIFD_ADMIN . 'wcifd-import-supplier-template.php' ); ?>
 	 
 	</div>
 
 
 	<!-- IMPORTAZIONE PRODOTTI -->
-
 	<div id="wcifd-products" class="wcifd-admin">
 	 
-		<?php include( WCIFD_INCLUDES . 'wcifd-import-products.php' ); ?>		
+		<?php include( WCIFD_ADMIN . 'wcifd-import-products-template.php' ); ?>		
 
 	</div>
 	
 
-<!-- IMPORT CLIENTS AS WORDPRESS USERS -->     
-	  
+	<!-- IMPORT CLIENTS AS WORDPRESS USERS -->     
 	<div id="wcifd-clients" class="wcifd-admin">
 
-		<?php include( WCIFD_INCLUDES . 'wcifd-import-supplier.php' ); ?>
+		<?php include( WCIFD_ADMIN . 'wcifd-import-supplier-template.php' ); ?>
 
 	 </div>
 
 
-<!-- IMPORT ORDERS AS WOOCOMMERCE ORDERS -->
-
+	<!-- IMPORT ORDERS AS WOOCOMMERCE ORDERS -->
 	<div id="wcifd-orders" class="wcifd-admin">
 	 
-		<?php include( WCIFD_INCLUDES . 'wcifd-import-orders.php' ); ?>	
+		<?php include( WCIFD_ADMIN . 'wcifd-import-orders-template.php' ); ?>	
 
 	</div>
 
@@ -134,7 +140,9 @@ function wcifd_options() {
 
 }
 
-//UPDATE MESSAGE
+/**
+ * Messaggio aggiornamento
+ */
 function wcifd_update_message2( $plugin_data, $response ) {
 
 	$message = null;
