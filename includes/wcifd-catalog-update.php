@@ -11,9 +11,10 @@ function wcifd_catalog_update( $file ) {
 
 	/*Opzioni admin*/
 	$regular_price_list = get_option( 'wcifd-regular-price-list' );
-	$sale_price_list = get_option( 'wcifd-sale-price-list' );
-	$size_type = get_option( 'wcifd-size-type' );
-	$weight_type = get_option( 'wcifd-weight-type' );
+	$sale_price_list 	= get_option( 'wcifd-sale-price-list' );
+	$size_type 			= get_option( 'wcifd-size-type' );
+	$weight_type 		= get_option( 'wcifd-weight-type' );
+	$deleted_products 	= get_option( 'wcifd-deleted-products' );
 
 	$results = simplexml_load_file( $file );
 
@@ -38,6 +39,7 @@ function wcifd_catalog_update( $file ) {
 				$size_type,
 				$weight_type,
 				$tax_attributes,
+				$deleted_products,
 			)
 		);
 	}

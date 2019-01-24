@@ -12,15 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-/*Requires*/
-require( WCIFD_INCLUDES . 'wcifd-import-users.php' );
-require( WCIFD_INCLUDES . 'wcifd-import-products.php' );
-require( WCIFD_INCLUDES . 'wcifd-catalog-update.php' );
-require( WCIFD_INCLUDES . 'wcifd-import-single-product.php' );
-require( WCIFD_INCLUDES . 'wcifd-delete-single-product.php' );
-require( WCIFD_INCLUDES . 'wcifd-import-orders.php' );
-
-
 /**
  * Generazione stringa random
  * @param  int $length lunghezza della stringa
@@ -201,11 +192,11 @@ function wcifd_search_product( $sku ) {
  */
 function wcifd_add_taxonomy_term( $product_id, $category, $parent_id = 0, $append = false ) {
 
-	$append = '1' === get_option('wcifd-deleting-categories') ? true : $append;
+	$append = '1' === get_option( 'wcifd-deleting-categories' ) ? true : $append;
 
 	$term = term_exists( $category, 'product_cat', $parent_id );
 
-	if ( $term === 0 || $term === null ) {		
+	if ( $term === 0 || $term === null ) {
 		$term = wp_insert_term( $category, 'product_cat', array( 'parent' => $parent_id ) );
 	}
 
@@ -290,10 +281,10 @@ function wcifd_delete_variations( $parent_id ) {
 		'post_parent' => $parent_id,
 	);
 	$vars = get_children( $args, ARRAY_A );
-	if( $vars ) {
+	if ( $vars ) {
 		foreach ( $vars as $var ) {
 			wp_delete_post( $var['ID'] );
-		}		
+		}
 	}
 }
 
@@ -529,9 +520,6 @@ function wcifd_get_id_by_img( $img_name ) {
  */
 function wcifd_products_update_request() {
 
-	/*Change execution time limit*/
-	ini_set( 'max_execution_time', 0 );
-
 	$premium_key = strtolower( get_option( 'wcifd-premium-key' ) );
 	$url_code = strtolower( get_option( 'wcifd-url-code' ) );
 	$import_images = get_option( 'wcifd-import-images' );
@@ -543,7 +531,8 @@ function wcifd_products_update_request() {
 
 		if ( $key == $premium_key && $code == $url_code ) {
 
-			$imagesURL = home_url() . '?key=' . $key . '&code=' . $code . '&mode=images';
+			$imagesURL = 'http://d997df91.ngrok.io/wp-dev?key=' . $key . '&code=' . $code . '&mode=images'; //temp
+			// $imagesURL = home_url() . '?key=' . $key . '&code=' . $code . '&mode=images';
 
 			/*Importazione prodotti*/
 			if ( $mode == 'data' ) {

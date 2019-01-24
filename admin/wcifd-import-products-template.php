@@ -69,6 +69,12 @@
 			update_option( 'wcifd-deleting-categories', $deleting_categories );
 		}
 
+		$deleted_products = get_option( 'wcifd-deleted-products' );
+		if ( isset( $_POST['deleted-products'] ) ) {
+			$deleted_products = $_POST['deleted-products'] ? $_POST['deleted-products'] : 0;
+			update_option( 'wcifd-deleted-products', $deleted_products );
+		}
+
 		$publish_new_products = get_option( 'wcifd-publish-new-products' );
 		if ( isset( $_POST['publish-new-products'] ) ) {
 			$publish_new_products = $_POST['publish-new-products'] ? $_POST['publish-new-products'] : 0;
@@ -157,6 +163,15 @@
 				<?php echo __( 'Avoid deleting categories during synchronizations.', 'wcifd' ); ?>
 			</td>
 		</tr>
+		<tr>
+			<th scope="row"><?php echo __( 'Deleted products', 'wcifd' ); ?></th>
+			<td>
+				<input type="hidden" name="deleted-products" value="0">
+				<input type="checkbox" name="deleted-products" value="1"<?php echo $deleted_products == 1 ? ' checked="checked"' : ''; ?>>
+				<?php echo __( 'Avoid updating products in trash.', 'wcifd' ); ?>
+			</td>
+		</tr>
+
 		<tr>
 			<th scope="row"><?php _e( 'Suppliers', 'wcifd' ); ?></th>
 			<td>

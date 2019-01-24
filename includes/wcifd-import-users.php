@@ -125,4 +125,3 @@ function wcifd_users( $type ) {
 	}
 
 }
-

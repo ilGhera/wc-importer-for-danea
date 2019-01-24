@@ -11,20 +11,22 @@
  * @param  string $size_type          misure lorde o nette, come da impostazioni dell'admin
  * @param  string $weight_type        peso lordo o netto, come da impostazioni dell'admin
  * @param  string $tax_attributes     gli attributi del campo Vat codificati in json
+ * @param  string $deleted_products   determina se i prodotti nel cestino debbano essere aggiornati o meno
  */
-function wcifd_import_single_product( $product_json, $regular_price_list, $sale_price_list, $size_type, $weight_type, $tax_attributes ) {
+function wcifd_import_single_product( $product_json, $regular_price_list, $sale_price_list, $size_type, $weight_type, $tax_attributes, $deleted_products ) {
 
-	$product = json_decode( $product_json );
-	$sku = $product->Code;
-	$title = $product->Description;
-	$description = ( is_string( $product->DescriptionHtml ) ) ? $product->DescriptionHtml : $title;
-	$category = isset( $product->Category ) ? $product->Category : '';
-	$sub_category = isset( $product->Subcategory ) ? $product->Subcategory : '';
-	$tax  = $product->Vat;
-	$tax_attributes = json_decode( $tax_attributes, true );
-	$stock = $product->AvailableQty;
-	$size_um = $product->SizeUm;
-	$weight_um = $product->WeightUm;
+	$product           = json_decode( $product_json );
+	$sku               = isset( $product->Code ) ? $product->Code : '';
+	$title             = isset( $product->Description ) ? $product->Description : '';
+	$description       = ( is_string( $product->DescriptionHtml ) ) ? $product->DescriptionHtml : $title;
+	$category          = isset( $product->Category ) ? $product->Category : '';
+	$sub_category      = isset( $product->Subcategory ) ? $product->Subcategory : '';
+	$tax               = isset( $product->Vat ) ? $product->Vat : '';
+	$tax_attributes    = json_decode( $tax_attributes, true );
+	$stock             = isset( $product->AvailableQty ) ? $product->AvailableQty : '';
+	$size_um           = isset( $product->SizeUm ) ? $product->SizeUm : '';
+	$weight_um         = isset( $product->WeightUm ) ? $product->WeightUm : '';
+	$image_file_name   = isset( $product->ImageFileName ) ? sanitize_title( $product->ImageFileName ) : '';
 	$parent_sku        = null;
 	$var_attributes    = null;
 	$variable_product  = null;
@@ -204,7 +206,9 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 	} else {
 
 		/*Non aggiornare il prodotto se nel cestino*/
-		if ( get_post_status( $id ) != 'trash' ) {
+		$status = $deleted_products === '1' ? 'trash' : '';
+
+		if ( get_post_status( $id ) !== $status ) {
 
 			/*Verifico se i backorders sono attivati*/
 			if ( 'outofstock' === $stock_status ) {
@@ -267,6 +271,10 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 			/*Aggiornamento prodotto*/
 			$product_id = wp_update_post( $args );
 
+		} else {
+
+			return;
+
 		}
 	}
 
@@ -295,6 +303,18 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 		}
 	}
 
+	/*Se presente lego l'immagine al prodotto*/
+	if ( $image_file_name ) {
+		wp_schedule_single_event(
+			time() + 5,
+			'wcifd_product_image_event',
+			array(
+				$product_id,
+				$image_file_name,
+			)
+		);
+	}
+
 	/*Variabili di prodotto*/
 	if ( $variants ) {
 
@@ -321,7 +341,6 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 					$stock_status = 'onbackorder';
 				}
 			}
-
 
 			/*Attributi*/
 			$size     = $variant->Size;
@@ -488,4 +507,4 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 
 	}
 }
-add_action( 'wcifd_import_product_event', 'wcifd_import_single_product', 10, 6 );
+add_action( 'wcifd_import_product_event', 'wcifd_import_single_product', 10, 7 );

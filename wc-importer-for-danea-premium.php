@@ -51,6 +51,13 @@ function load_wc_importer_for_danea_premium() {
 	require( WCIFD_ADMIN . 'wcifd-admin.php' );
 	require( WCIFD_INCLUDES . 'wcifd-functions.php' );
 	require( WCIFD_INCLUDES . 'wcifd-products-images.php' );
+	require( WCIFD_INCLUDES . 'wcifd-single-product-image.php' );
+	require( WCIFD_INCLUDES . 'wcifd-import-users.php' );
+	require( WCIFD_INCLUDES . 'wcifd-import-products.php' );
+	require( WCIFD_INCLUDES . 'wcifd-catalog-update.php' );
+	require( WCIFD_INCLUDES . 'wcifd-import-single-product.php' );
+	require( WCIFD_INCLUDES . 'wcifd-delete-single-product.php' );
+	require( WCIFD_INCLUDES . 'wcifd-import-orders.php' );
 
 }
 add_action( 'plugins_loaded', 'load_wc_importer_for_danea_premium', 1 );
