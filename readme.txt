@@ -45,7 +45,19 @@ You'll be able to import suppliers, clients and products.
 == Changelog ==
 
 = 1.1.0 =
-Release Date: xxxx
+Release Date: 24 January 2019
+
+* Enhancement: Add/ Delete products based on the Danea Easyfatt E-commerce option
+* Enhancement: Option for updating products in trash
+* Enhancement: Import of all the subcategories set in Danea Easyfatt
+* Enhancement: Option for deleting product categories previously removed in danea Easyfatt 
+* Enhancement: Better user interface
+* Enhancement: General code improvement
+* Bug fix: Server timeout while importing products
+* Bug fix: Duplicated product images 
+* Bug fix: Image not linked to his product in some specific cases 
+* Bug fix: Fatal error while assigning subcategories to the imported products
+* Bug fix: backorder option lost with synchronization
 
 
 = 1.0.2 =
