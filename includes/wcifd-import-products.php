@@ -12,20 +12,20 @@ function wcifd_products() {
 		/*Change execution time limit*/
 		ini_set( 'max_execution_time', 0 );
 
-		$tax_included = get_option( 'wcifd-tax-included' );
-		$use_suppliers = get_option( 'wcifd-use-suppliers' );
-
+		$tax_included 	 = get_option( 'wcifd-tax-included' );
+		$use_suppliers 	 = get_option( 'wcifd-use-suppliers' );
+		
 		$update_products = sanitize_text_field( $_POST['update-products'] );
 		update_option( 'wcifd-update-products', $update_products );
 
 		$get_regular_price_list = get_option( 'wcifd-regular-price-list' );
-		$get_sale_price_list = get_option( 'wcifd-sale-price-list' );
-		$size_type = get_option( 'wcifd-size-type' );
-		$weight_type = get_option( 'wcifd-weight-type' );
-
-		$file = $_FILES['products-list']['tmp_name'];
-		$rows = array_map( 'str_getcsv', file( $file ) );
-		$header = array_shift( $rows );
+		$get_sale_price_list    = get_option( 'wcifd-sale-price-list' );
+		$size_type 				= get_option( 'wcifd-size-type' );
+		$weight_type 			= get_option( 'wcifd-weight-type' );
+		$file 					= $_FILES['products-list']['tmp_name'];
+		$rows 					= array_map( 'str_getcsv', file( $file ) );
+		$header 				= array_shift( $rows );
+		
 		$products = array();
 		foreach ( $rows as $row ) {
 			$products[] = array_combine( $header, $row );
@@ -34,13 +34,14 @@ function wcifd_products() {
 		$i = 0;
 		$u = 0;
 		foreach ( $products as $product ) {
-			$sku = $product['Cod.'];
-			$title = $product['Descrizione'];
-			$description = $product['Descriz. web (Sorgente HTML)'];
-			$product_type = $product['Tipologia'];
-			$category = $product['Categoria'];
-			$sub_category = $product['Sottocategoria'];
-			$tax  = $product['Cod. Iva'];
+			$sku 		  = $product['Cod.'];
+			$title 		  = $product['Descrizione'];
+			$description  = isset( $product['Descriz. web (Sorgente HTML)'] ) ? $product['Descriz. web (Sorgente HTML)'] : '';
+			$product_type = isset( $product['Tipologia'] ) ? $product['Tipologia'] : '';
+			$category 	  = isset( $product['Categoria'] ) ? $product['Categoria'] : '';
+			$sub_category = isset( $product['Sottocategoria'] ) ? $product['Sottocategoria'] : '';
+			$tax  		  = isset( $product['Cod. Iva'] ) ? $product['Cod. Iva'] : '';
+
 			if ( $tax_included == 0 ) {
 				$regular_price = str_replace( ',', '.', str_replace( array( ' ', '€' ), '', $product[ 'Listino ' . $get_regular_price_list ] ) );
 				$sale_price   = str_replace( ',', '.', str_replace( array( ' ', '€' ), '', $product[ 'Listino ' . $get_sale_price_list ] ) );
@@ -49,8 +50,9 @@ function wcifd_products() {
 				$regular_price = str_replace( ',', '.', str_replace( array( ' ', '€' ), '', $product[ 'Listino ' . $get_regular_price_list . ' (ivato)' ] ) );
 				$sale_price    = str_replace( ',', '.', str_replace( array( ' ', '€' ), '', $product[ 'Listino ' . $get_sale_price_list . ' (ivato)' ] ) );
 			}
-			$supplier_id = $product['Cod. fornitore'];
-			$supplier = $product['Fornitore'];
+
+			$supplier_id 	   = isset( $product['Cod. fornitore'] ) ? $product['Cod. fornitore'] : '';
+			$supplier    	   = isset( $product['Fornitore'] ) ? $product['Fornitore'] : '';
 			$parent_sku        = null;
 			$var_attributes    = null;
 			$variable_product  = null;
@@ -90,9 +92,9 @@ function wcifd_products() {
 
 			/*Peso del prodotto*/
 			if ( $weight_type == 'gross-weight' ) {
-				$weight = $product['Peso lordo'];
+				$weight = isset( $product['Peso lordo'] ) ? $product['Peso lordo'] : '';
 			} else {
-				$weight = $product['Peso netto'];
+				$weight = isset( $product['Peso netto'] ) ? $product['Peso netto'] : '';
 			}
 
 			/*Autore del post come fornitore*/
