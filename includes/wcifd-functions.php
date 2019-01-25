@@ -531,8 +531,7 @@ function wcifd_products_update_request() {
 
 		if ( $key == $premium_key && $code == $url_code ) {
 
-			$imagesURL = 'http://d997df91.ngrok.io/wp-dev?key=' . $key . '&code=' . $code . '&mode=images'; //temp
-			// $imagesURL = home_url() . '?key=' . $key . '&code=' . $code . '&mode=images';
+			$imagesURL = home_url() . '?key=' . $key . '&code=' . $code . '&mode=images';
 
 			/*Importazione prodotti*/
 			if ( $mode == 'data' ) {
