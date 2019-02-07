@@ -551,8 +551,7 @@ function wcifd_products_update_request() {
 
 		if ( $key == $premium_key && $code == $url_code ) {
 
-			// $imagesSendURL = home_url() . '?key=' . $key . '&code=' . $code . '&mode=images';
-			$imagesSendURL = 'http://43602f20.ngrok.io/wp-dev?key=' . $key . '&code=' . $code . '&mode=images';
+			$imagesSendURL = home_url() . '?key=' . $key . '&code=' . $code . '&mode=images';
 			$imagesSendFinishURL = $imagesSendURL . '-send-finish';
 
 			/*Importazione prodotti*/
