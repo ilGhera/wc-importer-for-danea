@@ -29,6 +29,7 @@ function wcifd_catalog_update( $file ) {
 			$tax_attributes = json_encode( $product->Vat->attributes() );
 		}
 
+		/*Cronjob di importazione singolo prodotto*/
 		wp_schedule_single_event(
 			time() + 1,
 			'wcifd_import_product_event',

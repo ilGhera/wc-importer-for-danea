@@ -3,7 +3,7 @@
  * Importazione singolo prodotto
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.0
+ * @version 1.1.2
  *
  * @param  string $product_json       il singolo prodotto dal file xml codificato in json
  * @param  string $regular_price_list il listino prezzi selezionato dall'admin
@@ -89,6 +89,7 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 
 	/*Variazione taglia e colore di Danea*/
 	$variants = isset( $product->Variants ) ? $product->Variants : '';
+	
 	if ( $variants ) {
 		update_post_meta( $id, 'wcifd-danea-size-color', 1 );
 	}
@@ -306,7 +307,7 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 	/*Se presente lego l'immagine al prodotto*/
 	if ( $image_file_name ) {
 		wp_schedule_single_event(
-			time() + 5,
+			time() + 10,
 			'wcifd_product_image_event',
 			array(
 				$product_id,
@@ -327,9 +328,9 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 		$v = 1; //Variant loop
 		foreach ( $variants->Variant as $variant ) {
 
-			$barcode  = $variant->Barcode;
+			$barcode  = isset( $variant->Barcode) ? $variant->Barcode : '';
 			$var_id = wcifd_search_product( $barcode );
-			$in_stock = $variant->AvailableQty;
+			$in_stock = isset( $variant->AvailableQty) ? $variant->AvailableQty : '';
 
 			$man_stock = 'yes';
 			$stock_status = ( $in_stock ) ? 'instock' : 'outofstock';
@@ -343,8 +344,8 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 			}
 
 			/*Attributi*/
-			$size     = $variant->Size;
-			$color    = $variant->Color;
+			$size     = isset( $variant->Size) ? $variant->Size : '-';
+			$color    = isset( $variant->Color) ? $variant->Color : '-';
 
 			/*Aggiunta nuova taglia*/
 			if ( $size != '-' && ! in_array( $size, $avail_sizes ) ) {

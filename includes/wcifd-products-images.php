@@ -11,7 +11,6 @@ function wcifd_products_images() {
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
 	}
 
-	/*File immagine*/
 	$file = $_FILES['file'];
 
 	/*Elimino duplicato se presente*/

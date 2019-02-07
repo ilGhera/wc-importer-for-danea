@@ -3,7 +3,7 @@
  * Funzioni
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.0
+ * @version 1.1.2
  */
 
 /*No accesso diretto*/
@@ -516,6 +516,26 @@ function wcifd_get_id_by_img( $img_name ) {
 
 
 /**
+ * Imposta un intervallo di 5 sec per eventi cron
+ * @param  array $schedules gli intervalli cron
+ * @return array            gli intervalli aggiornati
+ */
+function wcifd_add_cron_interval( $schedules ) {
+	if( ! isset( $schedules['every_minute'] ) ) {
+
+	    $schedules['every_minute'] = array(
+	        'interval' => 60,
+	        'display'  => esc_html__( 'Every Minute' ),
+	    );
+
+	}
+ 
+    return $schedules;
+}
+add_filter( 'cron_schedules', 'wcifd_add_cron_interval' );
+
+
+/**
  * Ricezione chiamata http post proveniente da Danea Easyfatt
  */
 function wcifd_products_update_request() {
@@ -531,26 +551,57 @@ function wcifd_products_update_request() {
 
 		if ( $key == $premium_key && $code == $url_code ) {
 
-			$imagesURL = home_url() . '?key=' . $key . '&code=' . $code . '&mode=images';
+			// $imagesSendURL = home_url() . '?key=' . $key . '&code=' . $code . '&mode=images';
+			$imagesSendURL = 'http://43602f20.ngrok.io/wp-dev?key=' . $key . '&code=' . $code . '&mode=images';
+			$imagesSendFinishURL = $imagesSendURL . '-send-finish';
 
 			/*Importazione prodotti*/
 			if ( $mode == 'data' ) {
 
 				if ( move_uploaded_file( $_FILES['file']['tmp_name'], 'wcifd-prodotti.xml' ) ) {
+				
 					wcifd_catalog_update( 'wcifd-prodotti.xml' );
+				
 					echo "OK\n";
+
 					if ( $import_images == 1 ) {
-						echo "ImageSendURL=$imagesURL";
+
+						echo "ImageSendURL=$imagesSendURL\n";
+						echo "ImageSendFinishURL=$imagesSendFinishURL\n";
+				
+						/*Preparazione alla ricezione delle immagini orfane*/
+						update_option( 'wcifd-orphan-images', json_encode( array(), JSON_FORCE_OBJECT ) );
+
 					}
+
 				} else {
+
 					echo 'Error';
+				
 				}
+
 			} elseif ( $mode == 'images' && $import_images == 1 ) {
 
 				/*Aggiornamento immagini*/
 				wcifd_products_images();
 
+			} elseif ( $mode == 'images-send-finish' && $import_images == 1 ) {
+				
+				echo "OK\n";
+
+				/*Gestione delle immaigni orfane a ricezione immagini completata*/
+				if( ! wp_next_scheduled( 'wcifd_orphan_images_event ') ) {
+					
+					wp_schedule_event(
+						time(),
+						'every_minute',
+						'wcifd_orphan_images_event'
+					);
+				
+				}
+
 			}
+
 		} else {
 			echo 'Error';
 		}
