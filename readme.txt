@@ -14,8 +14,7 @@ Import suppliers, clients and products, from Danea Easyfatt into your Woocommerc
 Se hai realizzato il tuo negozio online con Woocommerce ed utilizzi Danea Easyfatt come gestionale, Woocommerce Importer per Danea è lo strumento che ti serve perché le due piattaforme siano in grado di comunicare.
 Woocommerce Importer for Danea - Premium ti permette di importare:
 
-* L'elenco dei fornitori, sotto fo
-rma di utenti Wordpress a cui si è assegnato un ruolo specifico (CSV).
+* L'elenco dei fornitori, sotto forma di utenti Wordpress a cui si è assegnato un ruolo specifico (CSV).
 * L'elenco dei clienti, sotto forma di utenti Wordpress a cui si è assegnato un ruolo specifico (CSV).
 * L'elenco dei prodotti, sotto forma di prodotti Woocommerce (CSV).
 * L'elenco dei prodotti, con relative variazioni taglie/colori e immagini, attraverso la ricezione di un POST HTTP inviato da Danea Easyfatt.
