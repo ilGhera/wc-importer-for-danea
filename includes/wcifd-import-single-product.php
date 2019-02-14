@@ -39,16 +39,28 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 		if ( is_array( $notes ) ) {
 
 			/*Parent sku*/
-			$parent_sku = array_key_exists( 'parent_sku', $notes ) ? $notes['parent_sku'] : null;
+			if ( isset( $notes['parent_sku'] ) && $notes['parent_sku'] !== '' ) {
+			
+				$parent_sku = $notes['parent_sku'];	
+			
+			} elseif (isset( $notes['parent_id']) && $notes['parent_id'] !== '' ) {
+
+				$parent_sku = $notes['parent_id'];	
+			
+			}
+
 			if ( $parent_sku ) {
 				$parent_product_id = wcifd_search_product( $parent_sku );
 			}
-			$var_attributes = array_key_exists( 'var_attributes', $notes ) ? $notes['var_attributes'] : null;
+
+			$var_attributes = isset( $notes['var_attributes'] ) ? $notes['var_attributes'] : null;
 
 			/*Prodotto variabile*/
-			if ( $notes['product_type'] == 'variable' && $notes['attributes'] ) {
-				$variable_product = true;
-				$imported_attributes = $notes['attributes'];
+			if ( isset( $notes['product_type'] ) && $notes['product_type'] == 'variable' ) {
+				if ( isset( $notes['attributes'] ) ) {
+					$variable_product = true;
+					$imported_attributes = $notes['attributes'];
+				}
 			}
 		}
 	}
@@ -62,7 +74,7 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 	$type = ( wp_get_post_parent_id( $id ) || $parent_sku ) ? 'product_variation' : 'product';
 
 	/*Gestione magazzino*/
-	$manage_stock = ( $product->ManageWarehouse == 'true' ) ? 'yes' : 'no';
+	$manage_stock = ( isset( $product->ManageWarehouse ) && $product->ManageWarehouse == 'true' ) ? 'yes' : 'no';
 	$stock_status = ( $stock >= 1 ) ? 'instock' : 'outofstock';
 
 	/*Dimensione prodotto*/
