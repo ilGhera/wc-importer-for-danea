@@ -1,36 +1,30 @@
 
 === Woocommerce Importer for Danea - Premium ===
 Contributors: ghera74
-Tags: Woocommerce, Danea, Easyfatt, ecommerce, exporter, csv, shop, orders, products
-Version: 1.0.1
+Tags: Fattura elettronica, Woocommerce, Danea Easyfatt, ecommerce, exporter, csv, shop, orders, products, gestionale
+Version: 1.1.3
 Requires at least: 4.0
-Tested up to: 4.9
+Tested up to: 5.0
 
 
 Import suppliers, clients and products, from Danea Easyfatt into your Woocommerce store.
 
-----
-
-Importa fornitori, clienti e prodotti, da Danea EasyFatt al tuo store Woocommerce.
-
-
-
 == Description ==
-If you've built your online store with Woocommerce and you're using Danea Easyfatt as management software, you definitely need Woocommerce Importer for Danea - Premium!
-You'll be able to import suppliers, clients and products.
-
-----
 
 Se hai realizzato il tuo negozio online con Woocommerce ed utilizzi Danea Easyfatt come gestionale, Woocommerce Importer per Danea è lo strumento che ti serve perché le due piattaforme siano in grado di comunicare.
 Woocommerce Importer for Danea - Premium ti permette di importare:
 
-* L'elenco dei fornitori, sotto fo
-rma di utenti Wordpress a cui si è assegnato un ruolo specifico (CSV).
+* L'elenco dei fornitori, sotto forma di utenti Wordpress a cui si è assegnato un ruolo specifico (CSV).
 * L'elenco dei clienti, sotto forma di utenti Wordpress a cui si è assegnato un ruolo specifico (CSV).
 * L'elenco dei prodotti, sotto forma di prodotti Woocommerce (CSV).
 * L'elenco dei prodotti, con relative variazioni taglie/colori e immagini, attraverso la ricezione di un POST HTTP inviato da Danea Easyfatt.
 * L'elenco degli ordini, con creazione automatica dei prodotti mancanti ed inserimento opzionale dei nuovi clienti.
 
+
+**ENGLISH**
+
+If you've built your online store with Woocommerce and you're using Danea Easyfatt as management software, you definitely need Woocommerce Importer for Danea - Premium!
+You'll be able to import suppliers, clients and products.
 
 
 == Installation ==
@@ -48,6 +42,46 @@ rma di utenti Wordpress a cui si è assegnato un ruolo specifico (CSV).
 
 
 == Changelog ==
+
+= 1.1.3 =
+Release Date: 14 February 2019
+
+* Bug fix: WooCommerce product variations previously exported not assigned to the parent product.
+
+
+= 1.1.2 =
+Release Date: 07 February 2019
+
+* Bug fix: Images received but not assigned to the rispective products
+
+
+= 1.1.1 =
+Release Date: 25 January 2019
+
+* Bug fix: "Indirizzo web inesistente" on sending products images from Danea Easyfatt.
+
+
+= 1.1.0 =
+Release Date: 24 January 2019
+
+* Enhancement: Add/ Delete products based on the Danea Easyfatt E-commerce option
+* Enhancement: Option for updating products in trash
+* Enhancement: Import of all the subcategories set in Danea Easyfatt
+* Enhancement: Option for deleting product categories previously removed in danea Easyfatt 
+* Enhancement: Better user interface
+* Enhancement: General code improvement
+* Bug fix: Server timeout while importing products
+* Bug fix: Duplicated product images 
+* Bug fix: Image not linked to his product in some specific cases 
+* Bug fix: Fatal error while assigning subcategories to the imported products
+* Bug fix: backorder option lost with synchronization
+
+
+= 1.0.2 =
+Release Date: 19 December, 2018
+
+* Bug fix: Wrong category assigned with taxonomy terms with the same name.
+* Bug fix: Error in case Danea "Note" field is used by the user for a different purpose.
 
 
 = 1.0.1 =

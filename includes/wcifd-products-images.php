@@ -1,58 +1,57 @@
 <?php
-
+/**
+ * Importazione immagine prodotto
+ * @author ilGhera
+ * @package wc-importer-for-danea-premium/includes
+ * @version 1.1.0
+ */
 function wcifd_products_images() {
+
 	if ( ! function_exists( 'wp_handle_upload' ) ) {
-	    require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		require_once( ABSPATH . 'wp-admin/includes/file.php' );
 	}
 
-	//FILE UPLOAD
-	$uploadedfile = $_FILES['file'];
-	$upload_overrides = array( 'test_form' => false );
-	$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
+	$file = $_FILES['file'];
 
-	if (!$movefile || isset($movefile['error'])) {
-	    echo 'Errore durante il caricamento delle immagini.';
-	    exit;
+	/*Elimino duplicato se presente*/
+	$old_attach = get_page_by_title( sanitize_title( $file['name'] ), OBJECT, 'attachment' );
+	if ( isset( $old_attach->ID ) ) {
+		wp_delete_post( $old_attach->ID );
 	}
 
-	//IMAGE URL
-	$image_url = $movefile['url'];
-	$image_name = preg_replace( '/\.[^.]+$/', '', basename( $image_url ) );
-	$name_parts = explode('-000', $image_name);
-	$sku = $name_parts[0];
-	//Search the sku in a different way
-	$sku2 = (strpos($sku, '-')) ? str_replace('-', '/', $sku) : '';
+	/*Caricamento immagine in WP Media*/
+	$wp_image = wp_handle_upload( $file, array( 'test_form' => false ) );
 
-	// The ID of the post this attachment is for.
-	$parent_post_id = wcifd_search_product($sku);
-	if(!$parent_post_id && $sku2) {
-		$parent_post_id = wcifd_search_product($sku2);
+	if ( ! $wp_image || isset( $wp_image['error'] ) ) {
+		echo 'Errore durante il caricamento delle immagini.';
+		exit;
 	}
+
+	/*Indirizzo immagine caricata*/
+	$image_url = $wp_image['url'];
 
 	$filetype = wp_check_filetype( basename( $image_url ), null );
 
-	//UPLOAD DIRECTORY
+	/*Upload directory*/
 	$wp_upload_dir = wp_upload_dir();
-	$dir = $wp_upload_dir['path'] . '/' . basename( $movefile['url'] );
 
 	$attachment = array(
-		'guid'           => $wp_upload_dir['url'] . '/' . basename( $image_url ), 
+		'guid'           => $wp_image['url'],
 		'post_mime_type' => $filetype['type'],
-		'post_title'     => $image_name,
+		'post_title'     => sanitize_title( $file['name'] ),
 		'post_content'   => '',
-		'post_status'    => 'inherit'
+		'post_status'    => 'inherit',
 	);
 
-	//INSERT ATTACHMENT
-	$attach_id = wp_insert_attachment( $attachment, $image_url, $parent_post_id );
+	/*Inserimento attachment*/
+	$attach_id = wp_insert_attachment( $attachment, $wp_image['file'] );
 
-	//REQUIRED BY wp_generate_attachment_metadata()
+	/*Richiesto da wp_generate_attachment_metadata()*/
 	require_once( ABSPATH . 'wp-admin/includes/image.php' );
 
-	$attach_data = wp_generate_attachment_metadata( $attach_id, $dir );
+	/*Generazione e aggiornamento metadati*/
+	$attach_data = wp_generate_attachment_metadata( $attach_id, $wp_image['file'] );
 	wp_update_attachment_metadata( $attach_id, $attach_data );
 
-	set_post_thumbnail( $parent_post_id, $attach_id );
-
-	echo 'OK';	
+	echo 'OK';
 }
