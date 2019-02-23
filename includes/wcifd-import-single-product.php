@@ -3,7 +3,7 @@
  * Importazione singolo prodotto
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.3
+ * @version 1.1.4
  *
  * @param  string $product_json       il singolo prodotto dal file xml codificato in json
  * @param  string $regular_price_list il listino prezzi selezionato dall'admin
@@ -13,7 +13,7 @@
  * @param  string $tax_attributes     gli attributi del campo Vat codificati in json
  * @param  string $deleted_products   determina se i prodotti nel cestino debbano essere aggiornati o meno
  */
-function wcifd_import_single_product( $product_json, $regular_price_list, $sale_price_list, $size_type, $weight_type, $tax_attributes, $deleted_products ) {
+function wcifd_import_single_product( $product_json, $regular_price_list, $sale_price_list, $size_type, $weight_type, $tax_attributes, $deleted_products, $wc_rbp ) {
 
 	$product           = json_decode( $product_json );
 	$sku               = isset( $product->Code ) ? $product->Code : '';
@@ -152,6 +152,26 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 			$args['meta_input']['_price'] = $sale_price;
 		} else {
 			$args['meta_input']['_sale_price'] = '';
+		}
+
+		/*WooCommerce Role Based Price*/
+		if ( is_array( $wc_rbp ) && ! empty( $wc_rbp ) ) {
+
+			$args['meta_input']['_enable_role_based_price'] = 1;
+
+			foreach ($wc_rbp as $role => $price_types) {
+				foreach ($price_types as $key => $value) {
+
+					$wc_rbp_price = wcifd_get_list_price( $product, $value, $tax_included );
+					
+					$args['meta_input']['_role_based_price'] = array(
+						$role => array(
+							$key => $wc_rbp_price,
+						),
+					);
+
+				}
+			}
 		}
 
 		/*Descrizione breve*/

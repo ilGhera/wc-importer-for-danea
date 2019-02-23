@@ -3,7 +3,7 @@
  * Pagina opzioni/ strumenti
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @version 1.1.0
+ * @version 1.1.4
  */
 
 /**
@@ -91,6 +91,9 @@ function wcifd_options() {
 		<a href="#" data-link="wcifd-products" class="nav-tab" onclick="return false;"><?php echo __( 'Products', 'wcifd' ); ?></a>
 		<a href="#" data-link="wcifd-clients" class="nav-tab" onclick="return false;"><?php echo __( 'Clients', 'wcifd' ); ?></a>    
 		<a href="#" data-link="wcifd-orders" class="nav-tab" onclick="return false;"><?php echo __( 'Orders', 'wcifd' ); ?></a>
+		<?php if ( function_exists( 'woocommerce_role_based_price' ) && get_option( 'wc_rbp_general') ) { ?>
+			<a href="#" data-link="wcifd-rbp" class="nav-tab" onclick="return false;"><?php echo __( 'WooCommerce Role Based Price', 'wcifd' ); ?></a>
+		<?php } ?>
 	</h2>
 	  
 	  
@@ -115,13 +118,20 @@ function wcifd_options() {
 
 		<?php include( WCIFD_ADMIN . 'wcifd-import-supplier-template.php' ); ?>
 
-	 </div>
+	</div>
 
 
 	<!-- IMPORT ORDERS AS WOOCOMMERCE ORDERS -->
 	<div id="wcifd-orders" class="wcifd-admin">
 	 
 		<?php include( WCIFD_ADMIN . 'wcifd-import-orders-template.php' ); ?>	
+
+	</div>
+
+	<!-- WOOCOMMERCE ROLE BASED PRICE -->
+	<div id="wcifd-rbp" class="wcifd-admin">
+	 
+		<?php include( WCIFD_ADMIN . 'wcifd-role-based-price.php' ); ?>	
 
 	</div>
 
