@@ -3,7 +3,7 @@
  * Importazione prodotti
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @version 1.1.0
+ * @version 1.1.4
  */
 ?>
 
@@ -253,20 +253,20 @@
 
 <form name="wcifd-products-import" id="wcifd-products-import" class="wcifd-form one-of"  method="post" enctype="multipart/form-data" action="">
 
-	<?php $update_products = ( isset( $_POST['update-products'] ) ) ? sanitize_text_field( $_POST['update-products'] ) : get_option( 'wcifd-update-products' ); ?>
+	<?php $file_type = ( isset( $_POST['file-type'] ) ) ? sanitize_text_field( $_POST['file-type'] ) : get_option( 'wcifd-file-type' ); ?>
 
 
 	<h2 class="title"><?php echo __( 'Import products from a file', 'wcifd' ); ?></h2>
 
 	<table class="form-table">
 		<tr>
-			<th scoper="row"><?php echo __( 'Products update', 'wcifd' ); ?></th>
+			<th scoper="row"><?php echo __( 'File type', 'wcifd' ); ?></th>
 			<td>
-				<select name="update-products">
-						<option value="1" <?php echo( $update_products == 1 ) ? ' selected="selected"' : ''; ?>><?php echo __( 'Update products', 'wcifd' ); ?></option>
-						<option value="0" <?php echo( $update_products == 0 ) ? ' selected="selected"' : ''; ?>><?php echo __( 'Don\'t update products', 'wcifd' ); ?></option>
+				<select name="file-type" class="wcifd">
+						<option value="xml" <?php echo( 'xml' === $file_type ) ? ' selected="selected"' : ''; ?>><?php echo __( 'xml', 'wcifd' ); ?></option>
+						<option value="csv" <?php echo( 'csv' === $file_type ) ? ' selected="selected"' : ''; ?>><?php echo __( 'csv', 'wcifd' ); ?></option>
 				</select>
-				<p class="description"><?php echo __( 'Do you want to update the products already present in Woocommerce?', 'wcifd' ); ?></p>
+				<p class="description"><?php echo __( 'Select the file type to be imported', 'wcifd' ); ?></p>
 			</td>
 		</tr>
 		<?php wp_nonce_field( 'wcifd-products-import', 'wcifd-products-nonce' ); ?>
@@ -275,7 +275,7 @@
 			<th scope="row"><?php _e( 'Add products', 'wcifd' ); ?></th>
 			<td>
 				<input type="file" name="products-list">
-				<p class="description"><?php _e( 'Select your products list file (.csv)', 'wcifd' ); ?></p>
+				<p class="description"><?php _e( 'Select your products list file', 'wcifd' ); ?></p>
 			</td>
 		</tr>
 	</table>

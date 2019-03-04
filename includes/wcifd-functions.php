@@ -3,7 +3,7 @@
  * Funzioni
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.2
+ * @version 1.1.4
  */
 
 /*No accesso diretto*/
@@ -484,6 +484,9 @@ function wcifd_get_product_size( $product, $type, $measure, $csv = false ) {
  */
 function wcifd_get_short_description( $description ) {
 	$output = null;
+	
+	$description = wp_strip_all_tags( $description );
+
 	if ( strlen( $description ) > 340 ) {
 		$output = substr( $description, 0, 340 ) . '...';
 	} else {

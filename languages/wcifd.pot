@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WIFD\n"
-"POT-Creation-Date: 2019-01-24 16:06+0100\n"
+"POT-Creation-Date: 2019-03-04 13:14+0100\n"
 "PO-Revision-Date: 2016-05-26 13:25+0200\n"
 "Last-Translator: ilGhera <info@ilghera.com>\n"
 "Language-Team: ilGhera <info@ilghera.com>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.1.1\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -283,19 +283,19 @@ msgid "Import products from a file"
 msgstr ""
 
 #: admin/wcifd-import-products-template.php:263
-msgid "Products update"
+msgid "File type"
 msgstr ""
 
 #: admin/wcifd-import-products-template.php:266
-msgid "Update products"
+msgid "xml"
 msgstr ""
 
 #: admin/wcifd-import-products-template.php:267
-msgid "Don't update products"
+msgid "csv"
 msgstr ""
 
 #: admin/wcifd-import-products-template.php:269
-msgid "Do you want to update the products already present in Woocommerce?"
+msgid "Select the file type to be imported"
 msgstr ""
 
 #: admin/wcifd-import-products-template.php:275
@@ -303,7 +303,7 @@ msgid "Add products"
 msgstr ""
 
 #: admin/wcifd-import-products-template.php:278
-msgid "Select your products list file (.csv)"
+msgid "Select your products list file"
 msgstr ""
 
 #: admin/wcifd-import-products-template.php:282
@@ -366,23 +366,23 @@ msgstr ""
 msgid "New %s"
 msgstr ""
 
-#: includes/wcifd-functions.php:571
+#: includes/wcifd-functions.php:623
 #: plugin-update-checker/Puc/v4p5/Plugin/Ui.php:128
 msgid "Check for updates"
 msgstr ""
 
-#: includes/wcifd-functions.php:585
+#: includes/wcifd-functions.php:637
 msgid ""
 "<strong>Woocommerce Importer for Danea - Premium</strong> is up to date."
 msgstr ""
 
-#: includes/wcifd-functions.php:587
+#: includes/wcifd-functions.php:639
 msgid ""
 "A new version of <strong>Woocommerce Importer for Danea - Premium</strong> "
 "is available."
 msgstr ""
 
-#: includes/wcifd-functions.php:589
+#: includes/wcifd-functions.php:641
 msgid "There was an error trying to update. Please try again later."
 msgstr ""
 
@@ -391,7 +391,11 @@ msgstr ""
 msgid "Imported %1$d orders, %2$d users and %3$d products."
 msgstr ""
 
-#: includes/wcifd-import-products.php:298
+#: includes/wcifd-import-products.php:22
+msgid "The import process has started and is running in the background"
+msgstr ""
+
+#: includes/wcifd-import-products.php:312
 #, php-format
 msgid "Products imported: %1$d<br>Products updated: %2$d"
 msgstr ""
