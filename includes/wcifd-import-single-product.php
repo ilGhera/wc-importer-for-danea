@@ -3,7 +3,7 @@
  * Importazione singolo prodotto
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.3
+ * @version 1.1.4
  *
  * @param  string $product_json       il singolo prodotto dal file xml codificato in json
  * @param  string $regular_price_list il listino prezzi selezionato dall'admin
@@ -338,7 +338,9 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 		$avail_sizes = array();
 
 		$v = 1; //Variant loop
-		foreach ( $variants->Variant as $variant ) {
+		$variants_array = is_array( $variants->Variant ) ? $variants->Variant : $variants; 
+
+		foreach ( $variants_array as $variant ) {
 
 			$barcode  = isset( $variant->Barcode) ? $variant->Barcode : '';
 			$var_id = wcifd_search_product( $barcode );
