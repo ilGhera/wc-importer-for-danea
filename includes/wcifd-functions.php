@@ -426,6 +426,35 @@ function wcifd_get_list_price( $product, $number, $tax_included = false ) {
 
 
 /**
+ * Restituisce prezzi e label per ruolo utente definite con WC Role Based Price
+ * @return array
+ */
+function get_wc_rbp() {
+
+	$output = null;
+	if( function_exists( 'woocommerce_role_based_price' ) && $wc_rbp_general = get_option( 'wc_rbp_general') ) {
+		$wc_rbp_allowed_roles = isset( $wc_rbp_general['wc_rbp_allowed_roles'] ) ? $wc_rbp_general['wc_rbp_allowed_roles'] : '';
+		$wc_rbp_allowed_price = isset( $wc_rbp_general['wc_rbp_allowed_price'] ) ? $wc_rbp_general['wc_rbp_allowed_price'] : '';
+	
+		if ( $wc_rbp_allowed_roles ) {
+			$output = array();
+			foreach ( $wc_rbp_allowed_roles as $role ) {
+				foreach ( $wc_rbp_allowed_price as $price_type) {
+					$field_name = $price_type . '_' . $role;
+					$price_list = get_option( 'wcifd_' . $field_name );
+
+					$output[ $role ][ $price_type ] = $price_list;
+
+				}
+			}
+		}
+	}
+
+	return $output;
+}
+
+
+/**
  * Recupera le dimensioni del prodotto, sulla base delle impostazioni
  * @param  mixed   $product il prodotto
  * @param  string  $type    misure nette o meno

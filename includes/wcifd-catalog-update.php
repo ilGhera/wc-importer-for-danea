@@ -17,24 +17,7 @@ function wcifd_catalog_update( $file ) {
 	$deleted_products 	= get_option( 'wcifd-deleted-products' );
 
 	/*WooCommerce Role Based Price*/
-	$wc_rbp = null;
-	if( function_exists( 'woocommerce_role_based_price' ) && $wc_rbp_general = get_option( 'wc_rbp_general') ) {
-		$wc_rbp_allowed_roles = isset( $wc_rbp_general['wc_rbp_allowed_roles'] ) ? $wc_rbp_general['wc_rbp_allowed_roles'] : '';
-		$wc_rbp_allowed_price = isset( $wc_rbp_general['wc_rbp_allowed_price'] ) ? $wc_rbp_general['wc_rbp_allowed_price'] : '';
-	
-		if ( $wc_rbp_allowed_roles ) {
-			$wc_rbp = array();
-			foreach ( $wc_rbp_allowed_roles as $role ) {
-				foreach ( $wc_rbp_allowed_price as $price_type) {
-					$field_name = $price_type . '_' . $role;
-					$price_list = get_option( 'wcifd_' . $field_name );
-
-					$wc_rbp[ $role ][ $price_type ] = $price_list;
-
-				}
-			}
-		}
-	}
+	$wc_rbp = get_wc_rbp();
 
 	$results = simplexml_load_file( $file );
 
