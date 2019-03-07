@@ -342,16 +342,16 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 		}
 	}
 
-	/*Se presente lego l'immagine al prodotto*/
+	/*Salvo le informazioni relative all'immagine se presente*/
 	if ( $image_file_name ) {
-		wp_schedule_single_event(
-			time() + 10,
-			'wcifd_product_image_event',
-			array(
-				$product_id,
-				$image_file_name,
-			)
-		);
+		
+		$orphanImages = json_decode( get_option('wcifd-orphan-images'), true );
+		
+		if( is_array( $orphanImages ) ) {
+			$orphanImages[$product_id] = $image_file_name;			
+		}
+		
+		update_option( 'wcifd-orphan-images', json_encode( $orphanImages, JSON_FORCE_OBJECT ) );
 	}
 
 	/*Variabili di prodotto*/
