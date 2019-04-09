@@ -163,17 +163,15 @@ function wcifd_payment_gateway( $method ) {
  */
 function wcifd_search_product( $sku ) {
 	global $wpdb;
+
 	$query = "
 		SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_sku' AND meta_value = '$sku'
 	";
 
-	$query2 = "
-		SELECT * FROM $wpdb->posts WHERE post_type IN('product, product_variation') AND
-	";
 	$results = $wpdb->get_results( $query, ARRAY_A );
-	$post_id = $results ? $results[0]['post_id'] : '';
+	$post_id = isset($results[0]) ? $results[0]['post_id'] : '';
 
-	if ( ! $post_id ) {
+	if ( ! get_post_status( $post_id ) ) {
 		$product = wc_get_product( $sku );
 		$post_id = ( $product ) ? $post_id = $sku : null;
 	}
