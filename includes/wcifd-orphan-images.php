@@ -7,14 +7,6 @@
  */
 function wcifd_orphan_images() {
 
-	/*Interrompo se tutti i prodotti sono stati trasferiti*/
-	if ( ! wp_next_scheduled( 'wcifd_import_product_event' ) ) {
-		$timestamp = wp_next_scheduled( 'wcifd_orphan_images_event' );
-		wp_unschedule_event( $timestamp, 'wcifd_orphan_images_event' );
-	} else {
-		error_log( 'Next: ' . wp_next_scheduled( 'wcifd_import_product_event' ) );
-	}
-
 	$orphanImages = json_decode( get_option('wcifd-orphan-images'), true );
 		
 	if ( is_array( $orphanImages ) && !empty( $orphanImages ) ) {
@@ -33,6 +25,18 @@ function wcifd_orphan_images() {
 
 		}
 
+	}
+
+	/*Interrompo se tutti i prodotti sono stati trasferiti e le immagini gestite*/
+	if ( ! wp_next_scheduled( 'wcifd_import_product_event' ) ) {
+	
+		if ( is_array( $orphanImages ) && empty( $orphanImages ) ) {
+	
+			$timestamp = wp_next_scheduled( 'wcifd_orphan_images_event' );
+			wp_unschedule_event( $timestamp, 'wcifd_orphan_images_event' );
+	
+		}
+	
 	}
 
 }
