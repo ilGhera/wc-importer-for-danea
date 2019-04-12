@@ -100,7 +100,16 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 	$sale_price    = wcifd_get_list_price( $product, $sale_price_list, $tax_included );
 
 	/*Variazione taglia e colore di Danea*/
-	$variants = isset( $product->Variants ) ? $product->Variants : '';
+	$variants = null;
+	if ( isset( $product->Variants ) ) {
+
+		$variants = $product->Variants;
+	
+	} elseif ( isset( $product->Variant ) ) {
+		foreach ($product->Variant as $variant) {
+			$variants[] = $variant;
+		}
+	}
 	
 	if ( $variants ) {
 		update_post_meta( $id, 'wcifd-danea-size-color', 1 );
@@ -364,7 +373,12 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 		$avail_sizes = array();
 
 		$v = 1; //Variant loop
-		$variants_array = is_array( $variants->Variant ) ? $variants->Variant : $variants; 
+
+		/*Definisco l'arrey delle variazioni*/
+		$variants_array = $variants;
+		if ( isset( $variants->Variant ) && is_array( $variants->Variant )) {
+			$variants_array = $variants->Variant;
+		} 
 
 		foreach ( $variants_array as $variant ) {
 
