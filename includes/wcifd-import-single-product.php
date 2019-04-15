@@ -3,7 +3,7 @@
  * Importazione singolo prodotto
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.5
+ * @version 1.1.6
  *
  * @param  string $product_json       il singolo prodotto dal file xml codificato in json
  * @param  string $regular_price_list il listino prezzi selezionato dall'admin
