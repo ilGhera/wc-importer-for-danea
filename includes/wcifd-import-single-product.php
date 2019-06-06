@@ -18,7 +18,7 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 	$product           = json_decode( $product_json );
 	$sku               = isset( $product->Code ) ? $product->Code : '';
 	$title             = isset( $product->Description ) ? $product->Description : '';
-	$description       = ( is_string( $product->DescriptionHtml ) ) ? $product->DescriptionHtml : $title;
+	$description       = ( isset( $product->DescriptionHtml ) && is_string( $product->DescriptionHtml ) ) ? $product->DescriptionHtml : $title;
 	$category          = isset( $product->Category ) ? $product->Category : '';
 	$sub_category      = isset( $product->Subcategory ) ? $product->Subcategory : '';
 	$tax               = isset( $product->Vat ) ? $product->Vat : '';
@@ -32,7 +32,7 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 	$variable_product  = null;
 	$parent_product_id = null;
 
-	if ( is_string( $product->Notes ) ) {
+	if ( isset( $product->Notes ) && is_string( $product->Notes ) ) {
 
 		$notes = json_decode( $product->Notes, true );
 
@@ -90,7 +90,7 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 	}
 
 	/*Autore del post come fornitore*/
-	$author = ( get_option( 'wcifd-use-suppliers' ) == 1 && $product->SupplierCode ) ? $product->SupplierCode : get_option( 'wcifd-current-user' );
+	$author = ( get_option( 'wcifd-use-suppliers' ) == 1 && isset( $product->SupplierCode ) ) ? $product->SupplierCode : get_option( 'wcifd-current-user' );
 
 	/*Imposte incluse*/
 	$tax_included = get_option( 'wcifd-tax-included' );
