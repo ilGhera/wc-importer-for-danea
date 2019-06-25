@@ -3,7 +3,7 @@
  * Funzioni
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.6
+ * @version 1.1.7
  */
 
 /*No accesso diretto*/
@@ -282,6 +282,10 @@ function wcifd_delete_variations( $parent_id ) {
 	if ( $vars ) {
 		foreach ( $vars as $var ) {
 			wp_delete_post( $var['ID'] );
+
+			/*Aggiornamento meta lookup table*/
+			new wcifdProductMetaLookup( array( 'product_id' => $var['ID'] ), 'delete' );
+
 		}
 	}
 }

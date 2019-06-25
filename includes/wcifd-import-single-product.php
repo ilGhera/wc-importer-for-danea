@@ -3,7 +3,7 @@
  * Importazione singolo prodotto
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.6
+ * @version 1.1.7
  *
  * @param  string $product_json       il singolo prodotto dal file xml codificato in json
  * @param  string $regular_price_list il listino prezzi selezionato dall'admin
@@ -18,7 +18,7 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 	$product           = json_decode( $product_json );
 	$sku               = isset( $product->Code ) ? $product->Code : '';
 	$title             = isset( $product->Description ) ? $product->Description : '';
-	$description       = ( isset( $product->DescriptionHtml ) && is_string( $product->DescriptionHtml ) ) ? $product->DescriptionHtml : $title;
+	$description       = ( is_string( $product->DescriptionHtml ) ) ? $product->DescriptionHtml : $title;
 	$category          = isset( $product->Category ) ? $product->Category : '';
 	$sub_category      = isset( $product->Subcategory ) ? $product->Subcategory : '';
 	$tax               = isset( $product->Vat ) ? $product->Vat : '';
@@ -32,7 +32,7 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 	$variable_product  = null;
 	$parent_product_id = null;
 
-	if ( isset( $product->Notes ) && is_string( $product->Notes ) ) {
+	if ( is_string( $product->Notes ) ) {
 
 		$notes = json_decode( $product->Notes, true );
 
@@ -90,7 +90,7 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 	}
 
 	/*Autore del post come fornitore*/
-	$author = ( get_option( 'wcifd-use-suppliers' ) == 1 && isset( $product->SupplierCode ) ) ? $product->SupplierCode : get_option( 'wcifd-current-user' );
+	$author = ( get_option( 'wcifd-use-suppliers' ) == 1 && $product->SupplierCode ) ? $product->SupplierCode : get_option( 'wcifd-current-user' );
 
 	/*Imposte incluse*/
 	$tax_included = get_option( 'wcifd-tax-included' );
@@ -98,6 +98,7 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 	/*Prezzo di listino e prezzo scontato*/
 	$regular_price = wcifd_get_list_price( $product, $regular_price_list, $tax_included );
 	$sale_price    = wcifd_get_list_price( $product, $sale_price_list, $tax_included );
+	$on_sale       = $sale_price ? 1 : 0;
 
 	/*Variazione taglia e colore di Danea*/
 	$variants = null;
@@ -214,6 +215,7 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 					wp_set_object_terms( $product_id, $value, $key );
 				}
 			}
+
 		} elseif ( $parent_sku && $var_attributes ) {
 
 			foreach ( $var_attributes as $key => $value ) {
@@ -238,6 +240,26 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 				update_post_meta( $product_id, '_product_attributes', $metas );
 			}
 		}
+
+		/*Aggiornamento meta lookup table*/
+		$lookup_data = array(
+			'product_id' 	 => $product_id,
+			'sku' 			 => $sku,
+			'virtual' 		 => 0,
+			'downloadable' 	 => 0,
+			'min_price' 	 => $args['meta_input']['_price'], //temp
+			'max_price' 	 => $args['meta_input']['_price'], //temp
+			'onsale' 		 => $on_sale,
+			'stock_quantity' => $stock,
+			'stock_status'   => $stock_status,
+			'rating_count' 	 => 0,
+			'average_rating' => 0.00,
+			'total_sales'	 => 0,
+
+		);
+
+		new wcifdProductMetaLookup( $lookup_data );
+
 	} else {
 
 		/*Non aggiornare il prodotto se nel cestino*/
@@ -318,6 +340,19 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 
 			/*Aggiornamento prodotto*/
 			$product_id = wp_update_post( $args );
+
+			/*Aggiornamento meta lookup table*/
+			$lookup_data = array(
+				'product_id' 	 => $product_id,
+				'sku' 			 => $sku,
+				'min_price' 	 => $args['meta_input']['_price'],
+				'max_price' 	 => $args['meta_input']['_price'],
+				'onsale' 		 => $on_sale,
+				'stock_quantity' => $stock,
+				'stock_status'   => $stock_status,
+			);
+
+			new wcifdProductMetaLookup( $lookup_data, 'update' );
 
 		} else {
 
@@ -471,6 +506,19 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 
 				$var_id = wp_insert_post( $var_args );
 
+				/*Aggiornamento meta lookup table*/
+				$lookup_data = array(
+					'product_id' 	 => $var_id,
+					'sku' 			 => $barcode,
+					'min_price' 	 => $meta_input['_price'],
+					'max_price' 	 => $meta_input['_price'],
+					'onsale' 		 => $on_sale,
+					'stock_quantity' => $in_stock,
+					'stock_status'   => $stock_status,
+				);
+
+				new wcifdProductMetaLookup( $lookup_data );
+
 			} else {
 
 				/*Aggiornamento variazione*/
@@ -489,6 +537,20 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 					);
 
 					$var_id = wp_update_post( $var_args );
+
+					/*Aggiornamento meta lookup table*/
+					$lookup_data = array(
+						'product_id' 	 => $var_id,
+						'sku' 			 => $barcode,
+						'min_price' 	 => $meta_input['_price'],
+						'max_price' 	 => $meta_input['_price'],
+						'onsale' 		 => $on_sale,
+						'stock_quantity' => $in_stock,
+						'stock_status'   => $stock_status,
+					);
+
+					new wcifdProductMetaLookup( $lookup_data, 'update' );
+
 
 				}
 			}
