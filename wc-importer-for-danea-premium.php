@@ -8,7 +8,7 @@
  * Version: 1.1.7
  * Author URI: https://ilghera.com
  * Requires at least: 4.0
- * Tested up to: 5.0
+ * Tested up to: 5.2
  * WC tested up to: 3
  * Text Domain: wcifd
  */

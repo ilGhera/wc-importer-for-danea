@@ -13,22 +13,29 @@ class wcifdProductMetaLookup {
 	 */
 	public function __construct( $args, $mode = 'add' ) {
 
-		// $this->data = $data;
-		// $this->mode = $mode;
+		global $wpdb;
+		$this->wpdb = $wpdb;
 
 		$this->data = $this->setup_data( $args );
 
-		switch ( $mode ) {
-			case 'add':
-				$this->add( $this->data );
-				break;
-			case 'update':
-				$this->update( $this->data );
-				break;
-			case 'delete':
-				$this->delete( $this->data );
-				break;
-			
+		if ( WC()->version >= '3.6.0' ) {
+
+			switch ( $mode ) {
+				case 'add':
+					$this->add( $this->data );
+					break;
+				case 'update':
+					$this->update( $this->data );
+					break;
+				case 'delete':
+					$this->delete( $this->data );
+					break;
+			}
+
+		} else {
+
+			return;
+
 		}
 
 	}
@@ -62,9 +69,7 @@ class wcifdProductMetaLookup {
 	 */
 	private function product_exists() {
 
-		global $wpdb;
-
-		$response = $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . "wc_product_meta_lookup WHERE product_id = " . $this->product_id );
+		$response = $this->wpdb->get_row( "SELECT * FROM " . $this->wpdb->prefix . "wc_product_meta_lookup WHERE product_id = " . $this->product_id );
 
 		$output = $response ? true : false;
 		
@@ -77,13 +82,11 @@ class wcifdProductMetaLookup {
 	 */
 	private function add() {
 
-		global $wpdb;
-
 		if ( ! $this->product_exists() ) {
 
-			$output = $wpdb->insert(
+			$output = $this->wpdb->insert(
 
-				$wpdb->prefix . 'wc_product_meta_lookup',
+				$this->wpdb->prefix . 'wc_product_meta_lookup',
 				array(
 					'product_id' 	 => $this->product_id,
 					'sku' 			 => $this->sku,
@@ -131,13 +134,11 @@ class wcifdProductMetaLookup {
 	 */
 	private function update() {
 
-		global $wpdb;
-
 		if ( $this->product_exists() ) {
 
-			$output = $wpdb->update(
+			$output = $this->wpdb->update(
 
-				$wpdb->prefix . 'wc_product_meta_lookup',
+				$this->wpdb->prefix . 'wc_product_meta_lookup',
 				array(
 					'product_id' 	 => $this->product_id,
 					'sku' 			 => $this->sku,
@@ -178,11 +179,9 @@ class wcifdProductMetaLookup {
 	 */
 	private function delete() {
 
-		global $wpdb;
+		$output = $this->wpdb->delete(
 
-		$output = $wpdb->delete(
-
-			$wpdb->prefix . 'wc_product_meta_lookup',
+			$this->wpdb->prefix . 'wc_product_meta_lookup',
 			array(
 				'product_id' => $this->product_id,
 			),
