@@ -116,7 +116,7 @@ function wcifd_options() {
 	<!-- IMPORT CLIENTS AS WORDPRESS USERS -->     
 	<div id="wcifd-clients" class="wcifd-admin">
 
-		<?php include( WCIFD_ADMIN . 'wcifd-import-supplier-template.php' ); ?>
+		<?php include( WCIFD_ADMIN . 'wcifd-import-clients-template.php' ); ?>
 
 	</div>
 
