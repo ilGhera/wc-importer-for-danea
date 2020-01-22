@@ -3,7 +3,7 @@
  * Importazione singolo prodotto
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.7
+ * @version 1.1.8
  *
  * @param  string $product_json       il singolo prodotto dal file xml codificato in json
  * @param  string $regular_price_list il listino prezzi selezionato dall'admin
@@ -391,15 +391,28 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 	}
 
 	/*Salvo le informazioni relative all'immagine se presente*/
-	if ( $image_file_name ) {
+	if ( get_option( 'wcifd-import-images' ) ) {
+
+		if ( $image_file_name ) {
+			
+			$orphanImages = json_decode( get_option('wcifd-orphan-images'), true );
+			
+			if( is_array( $orphanImages ) ) {
+				$orphanImages[$product_id] = $image_file_name;			
+			}
+			
+			update_option( 'wcifd-orphan-images', json_encode( $orphanImages, JSON_FORCE_OBJECT ) );
 		
-		$orphanImages = json_decode( get_option('wcifd-orphan-images'), true );
-		
-		if( is_array( $orphanImages ) ) {
-			$orphanImages[$product_id] = $image_file_name;			
+		} else {
+
+			/*Rimuovo immagine prodotto*/
+			if( has_post_thumbnail( $product_id ) ) {
+		        $attachment_id = get_post_thumbnail_id( $product_id);
+		        wp_delete_attachment( $attachment_id, true );
+		    }
+
 		}
-		
-		update_option( 'wcifd-orphan-images', json_encode( $orphanImages, JSON_FORCE_OBJECT ) );
+
 	}
 
 	/*Variabili di prodotto*/

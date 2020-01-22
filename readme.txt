@@ -43,6 +43,13 @@ You'll be able to import suppliers, clients and products.
 
 == Changelog ==
 
+= 1.1.8 =
+Release Date: xx January 2020
+
+* Enhancement: Avoid product name update with a dedicated option
+* Bug fix: Images not deleted in WordPress when removed in Danea Easyfatt 
+
+
 = 1.1.7 =
 Release Date: 27 June 2019
 

@@ -3,7 +3,7 @@
  * Funzioni
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.7
+ * @version 1.1.8
  */
 
 /*No accesso diretto*/
@@ -574,22 +574,22 @@ add_filter( 'cron_schedules', 'wcifd_add_cron_interval' );
  */
 function wcifd_products_update_request() {
 
-	$premium_key = strtolower( get_option( 'wcifd-premium-key' ) );
-	$url_code = strtolower( get_option( 'wcifd-url-code' ) );
+	$premium_key   = strtolower( get_option( 'wcifd-premium-key' ) );
+	$url_code      = strtolower( get_option( 'wcifd-url-code' ) );
 	$import_images = get_option( 'wcifd-import-images' );
-	$key  = isset( $_GET['key'] ) ? $_GET['key'] : '';
-	$code = isset( $_GET['code'] ) ? $_GET['code'] : '';
-	$mode = isset( $_GET['mode'] ) ? $_GET['mode'] : '';
+	$key           = isset( $_GET['key'] ) ? $_GET['key'] : '';
+	$code          = isset( $_GET['code'] ) ? $_GET['code'] : '';
+	$mode          = isset( $_GET['mode'] ) ? $_GET['mode'] : '';
 
 	if ( $key && $code ) {
 
 		if ( $key == $premium_key && $code == $url_code ) {
 
-			$imagesSendURL = home_url() . '?key=' . $key . '&code=' . $code . '&mode=images';
+			$imagesSendURL       = home_url() . '?key=' . $key . '&code=' . $code . '&mode=images';
 			$imagesSendFinishURL = $imagesSendURL . '-send-finish';
 
 			/*Importazione prodotti*/
-			if ( $mode == 'data' ) {
+			if ( 'data' == $mode ) {
 
 				if ( move_uploaded_file( $_FILES['file']['tmp_name'], 'wcifd-prodotti.xml' ) ) {
 				
@@ -597,7 +597,7 @@ function wcifd_products_update_request() {
 				
 					echo "OK\n";
 
-					if ( $import_images == 1 ) {
+					if ( 1 == $import_images ) {
 
 						echo "ImageSendURL=$imagesSendURL\n";
 						echo "ImageSendFinishURL=$imagesSendFinishURL\n";
@@ -613,12 +613,12 @@ function wcifd_products_update_request() {
 				
 				}
 
-			} elseif ( $mode == 'images' && $import_images == 1 ) {
+			} elseif ( 'images' == $mode && 1 == $import_images ) {
 
 				/*Aggiornamento immagini*/
 				wcifd_products_images();
 
-			} elseif ( $mode == 'images-send-finish' && $import_images == 1 ) {
+			} elseif ( 'images-send-finish' == $mode && 1 == $import_images ) {
 				
 				echo "OK\n";
 
@@ -636,10 +636,13 @@ function wcifd_products_update_request() {
 			}
 
 		} else {
+
 			echo 'Error';
+		
 		}
 
 		exit;
+
 	}
 
 }

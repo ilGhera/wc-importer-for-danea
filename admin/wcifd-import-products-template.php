@@ -3,7 +3,7 @@
  * Importazione prodotti
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @version 1.1.4
+ * @version 1.1.8
  */
 ?>
 
