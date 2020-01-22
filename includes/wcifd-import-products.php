@@ -285,8 +285,6 @@ function wcifd_products() {
 							'ID'               => $id,
 							'post_status'      => get_post_status( $id ),
 							'post_author'      => $author,
-							'post_title'       => wp_strip_all_tags( $title ),
-							'post_name'        => sanitize_title_with_dashes( wp_strip_all_tags( $title ) ),
 							'post_type'        => $type,
 							'meta_input'       => array(
 								'_sku'           => $sku,
@@ -338,6 +336,12 @@ function wcifd_products() {
 									$args['meta_input']['_role_based_price'][ $role ][ $key ] = $wc_rbp_price;
 								}
 							}
+						}
+
+						/*Nome prodotto*/
+						if ( ! get_option( 'wcifd-exclude-title' ) ) {
+							$args['post_title'] = $title;
+							$args['post_name']  = sanitize_title_with_dashes( wp_strip_all_tags( $title ) );
 						}
 
 						/*Descrizione prodotto*/

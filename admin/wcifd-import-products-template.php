@@ -63,6 +63,12 @@
 			update_option( 'wcifd-exclude-description', $exclude_description );
 		}
 
+		$exclude_title = get_option( 'wcifd-exclude-title' );
+		if ( isset( $_POST['exclude-title'] ) ) {
+			$exclude_title = $_POST['exclude-title'] ? $_POST['exclude-title'] : 0;
+			update_option( 'wcifd-exclude-title', $exclude_title );
+		}
+
 		$deleting_categories = get_option( 'wcifd-deleting-categories' );
 		if ( isset( $_POST['deleting-categories'] ) ) {
 			$deleting_categories = $_POST['deleting-categories'] ? $_POST['deleting-categories'] : 0;
@@ -153,6 +159,14 @@
 				<input type="hidden" name="exclude-description" value="0">
 				<input type="checkbox" name="exclude-description" value="1"<?php echo $exclude_description == 1 ? ' checked="checked"' : ''; ?>>
 				<?php echo __( 'Exclude descriptions for products updates.', 'wcifd' ); ?>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><?php echo __( 'Exclude product title', 'wcifd' ); ?></th>
+			<td>
+				<input type="hidden" name="exclude-title" value="0">
+				<input type="checkbox" name="exclude-title" value="1"<?php echo $exclude_title == 1 ? ' checked="checked"' : ''; ?>>
+				<?php echo __( 'Exclude title for products updates.', 'wcifd' ); ?>
 			</td>
 		</tr>
 		<tr>
