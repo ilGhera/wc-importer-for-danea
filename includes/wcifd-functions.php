@@ -393,16 +393,22 @@ function wcifd_update_transient_wc_attributes() {
  * Registrazione degli attributi "Size" end "Color"
  */
 function wcifd_register_attributes() {
-	$attributes = array( 'Size', 'Color' );
+	
+	$attributes = array( 
+		'size'     => __( 'Size', 'wcifd' ),
+		'color'    => __( 'Color', 'wcifd' ),
+		'producer' => __( 'Producer', 'wcifd' ),
+	);
+	
 	global $wpdb;
 
-	foreach ( $attributes as $attr ) {
+	foreach ( $attributes as $key => $value ) {
 
-		wcifd_register_taxonomy( $attr );
+		wcifd_register_taxonomy( $key );
 		add_action( 'woocommerce_after_register_taxonomy', 'wcifd_register_taxonomy' );
 
 		$query = '
-			SELECT * FROM ' . $wpdb->prefix . "woocommerce_attribute_taxonomies WHERE attribute_name = '$attr'
+			SELECT * FROM ' . $wpdb->prefix . "woocommerce_attribute_taxonomies WHERE attribute_name = '$key'
 			";
 
 		$results = $wpdb->get_results( $query, ARRAY_A );
@@ -413,8 +419,8 @@ function wcifd_register_attributes() {
 				$wpdb->insert(
 					$wpdb->prefix . 'woocommerce_attribute_taxonomies',
 					array(
-						'attribute_name'    => sanitize_title( $attr ),
-						'attribute_label'   => $attr,
+						'attribute_name'    => sanitize_title( $key ),
+						'attribute_label'   => $value,
 						'attribute_type'    => 'select',
 						'attribute_orderby' => 'menu_order',
 						'attribute_public'  => 0,

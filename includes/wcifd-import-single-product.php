@@ -21,6 +21,7 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 	$description       = ( isset( $product->DescriptionHtml ) && is_string( $product->DescriptionHtml ) ) ? $product->DescriptionHtml : $title;
 	$category          = isset( $product->Category ) ? $product->Category : '';
 	$sub_category      = isset( $product->Subcategory ) ? $product->Subcategory : '';
+	$producer_name     = isset( $product->ProducerName ) ? $product->ProducerName : '';
 	$tax               = isset( $product->Vat ) ? $product->Vat : '';
 	$tax_attributes    = json_decode( $tax_attributes, true );
 	$stock             = isset( $product->AvailableQty ) ? $product->AvailableQty : '';
@@ -415,6 +416,26 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 
 	}
 
+	/*Attributo produttore*/
+	if ( $producer_name ) {
+
+		/*Attributi disponibili per il prodotto*/
+		$attributes = get_post_meta( $product_id, '_product_attributes', true ) ? get_post_meta( $product_id, '_product_attributes', true ) : array();
+
+		wp_set_object_terms( $product_id, array( $producer_name ), 'pa_producer' );
+
+		$attributes['pa_producer'] = array(
+			'name'         => 'pa_producer',
+			'value'        => '',
+			'is_visible'   => '1',
+			'is_variation' => '0',
+			'is_taxonomy'  => '1',
+		);
+		
+		update_post_meta( $product_id, '_product_attributes', $attributes );
+
+	}
+
 	/*Variabili di prodotto*/
 	if ( $variants ) {
 
@@ -435,10 +456,10 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 		foreach ( $variants_array as $variant ) {
 
 			$barcode  = isset( $variant->Barcode) ? $variant->Barcode : '';
-			$var_id = wcifd_search_product( $barcode );
+			$var_id   = wcifd_search_product( $barcode );
 			$in_stock = isset( $variant->AvailableQty) ? $variant->AvailableQty : '';
 
-			$man_stock = 'yes';
+			$man_stock    = 'yes';
 			$stock_status = ( $in_stock ) ? 'instock' : 'outofstock';
 
 			/*Verifico se i backorders sono attivati*/
@@ -458,7 +479,7 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 				$avail_sizes[] = $size;
 			}
 
-			/*Aggiunta nuovo coloro*/
+			/*Aggiunta nuovo colore*/
 			if ( $color != '-' && ! in_array( $color, $avail_colors ) ) {
 				$avail_colors[] = $color;
 			}
@@ -640,5 +661,6 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 		update_post_meta( $product_id, '_product_attributes', $attributes );
 
 	}
+
 }
 add_action( 'wcifd_import_product_event', 'wcifd_import_single_product', 10, 8 );

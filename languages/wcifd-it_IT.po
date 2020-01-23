@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WED\n"
-"POT-Creation-Date: 2020-01-22 15:37+0100\n"
-"PO-Revision-Date: 2020-01-23 06:29+0100\n"
+"POT-Creation-Date: 2020-01-23 12:45+0100\n"
+"PO-Revision-Date: 2020-01-23 12:46+0100\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera <info@ilghera.com>\n"
 "Language: it_IT\n"
@@ -349,59 +349,71 @@ msgstr "Importa i Fornitori"
 msgid "The Danea price list to use"
 msgstr "Il listino Danea da usare come prezzo di vendita"
 
-#: includes/wcifd-functions.php:308
+#: includes/wcifd-functions.php:342
 #, php-format
 msgid "Search %s"
 msgstr "Cerca %s"
 
-#: includes/wcifd-functions.php:309
+#: includes/wcifd-functions.php:343
 #, php-format
 msgid "All %s"
 msgstr "Tutti %s"
 
-#: includes/wcifd-functions.php:310
+#: includes/wcifd-functions.php:344
 #, php-format
 msgid "Parent %s"
 msgstr "Genitore %s"
 
-#: includes/wcifd-functions.php:311
+#: includes/wcifd-functions.php:345
 #, php-format
 msgid "Parent %s:"
 msgstr "Genitore %s:"
 
-#: includes/wcifd-functions.php:312
+#: includes/wcifd-functions.php:346
 #, php-format
 msgid "Edit %s"
 msgstr "Modifica %s"
 
-#: includes/wcifd-functions.php:313
+#: includes/wcifd-functions.php:347
 #, php-format
 msgid "Update %s"
 msgstr "Aggiorna %s"
 
-#: includes/wcifd-functions.php:314
+#: includes/wcifd-functions.php:348
 #, php-format
 msgid "Add New %s"
 msgstr "Aggiungi nuovo %s"
 
-#: includes/wcifd-functions.php:315
+#: includes/wcifd-functions.php:349
 #, php-format
 msgid "New %s"
 msgstr "Nuovo %s"
 
-#: includes/wcifd-functions.php:654
+#: includes/wcifd-functions.php:398
+msgid "Size"
+msgstr "Taglia"
+
+#: includes/wcifd-functions.php:399
+msgid "Color"
+msgstr "Colore"
+
+#: includes/wcifd-functions.php:400
+msgid "Producer"
+msgstr "Produttore"
+
+#: includes/wcifd-functions.php:697
 #: plugin-update-checker/Puc/v4p8/Plugin/Ui.php:128
 msgid "Check for updates"
 msgstr "Verifica aggiornamenti"
 
-#: includes/wcifd-functions.php:668
+#: includes/wcifd-functions.php:711
 msgid ""
 "<strong>Woocommerce Importer for Danea - Premium</strong> is up to date."
 msgstr ""
 "<strong>Woocommerce Importer for Danea - Premium</strong> è aggiornato "
 "all'ultima versione."
 
-#: includes/wcifd-functions.php:670
+#: includes/wcifd-functions.php:713
 msgid ""
 "A new version of <strong>Woocommerce Importer for Danea - Premium</strong> "
 "is available."
@@ -409,7 +421,7 @@ msgstr ""
 "È disponibile una nuova versione di <strong>Woocommerce Importer for Danea - "
 "Premium</strong>."
 
-#: includes/wcifd-functions.php:672
+#: includes/wcifd-functions.php:715
 msgid "There was an error trying to update. Please try again later."
 msgstr ""
 "Si è verificato un errore durante l'aggiornamento. Si prega di riprovare più "
@@ -424,7 +436,7 @@ msgstr "Importati %d ordini, %d clienti and %d prodotti."
 msgid "The import process has started and is running in the background"
 msgstr "Il processo di importazione è iniziato ed è attivo in background"
 
-#: includes/wcifd-import-products.php:389
+#: includes/wcifd-import-products.php:393
 #, php-format
 msgid ""
 "New products imported: %1$d<br>New variations imported: %2$d<br>Items "
@@ -433,12 +445,12 @@ msgstr ""
 "Prodotti importati: %1$d<br>Variazioni importate: %2$d<br>Prodotti "
 "aggiornati: %3$d"
 
-#: includes/wcifd-import-users.php:120
+#: includes/wcifd-import-users.php:133
 #, php-format
 msgid "Imported %1$d of %2$d contacts<br>"
 msgstr "Importati %d di %d contatti<br>"
 
-#: includes/wcifd-import-users.php:121
+#: includes/wcifd-import-users.php:134
 #, php-format
 msgid "Updated %1$d of %2$d contacts"
 msgstr "Importati %d di %d contatti"
