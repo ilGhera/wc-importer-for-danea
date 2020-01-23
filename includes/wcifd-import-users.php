@@ -3,7 +3,7 @@
  * Importazione contatti Danea come utenti WordPress
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.0
+ * @version 1.1.8
  *
  * @param  string $type il ruolo da assegnare agli utenti importati
  */
@@ -38,15 +38,17 @@ function wcifd_users( $type ) {
 					$name = explode( ' ', $user['Denominazione'] );
 				}
 
-				$address = $user['Indirizzo'];
-				$cap = $user['Cap'];
-				$city = $user['Città'];
-				$state = $user['Prov.'];
-				$country = wcifd_get_state_code( $user['Nazione'] );
-				$tel = $user['Tel.'];
-				$email = $user['e-mail'];
+				$address     = $user['Indirizzo'];
+				$cap         = $user['Cap'];
+				$city        = $user['Città'];
+				$state       = $user['Prov.'];
+				$country     = wcifd_get_state_code( $user['Nazione'] );
+				$tel         = $user['Tel.'];
+				$email       = $user['e-mail'];
 				$fiscal_code = $user['Codice fiscale'];
-				$p_iva = $user['Partita Iva'];
+				$p_iva       = $user['Partita Iva'];
+				$pec         = $user['Pec'];
+				$pa_code     = $user['Cod. destinatario Fatt. elettr.'];
 				$description = $user['Note'];
 
 				$userdata = array(
@@ -61,8 +63,10 @@ function wcifd_users( $type ) {
 				);
 
 				/*Definisco i campi fiscali*/
-				$cf_name = wcifd_get_italian_tax_fields_names( 'cf_name' );
-				$pi_name = wcifd_get_italian_tax_fields_names( 'pi_name' );
+				$cf_name      = wcifd_get_italian_tax_fields_names( 'cf_name' );
+				$pi_name      = wcifd_get_italian_tax_fields_names( 'pi_name' );
+				$pec_name     = wcifd_get_italian_tax_fields_names( 'pec_name' );
+				$pa_code_name = wcifd_get_italian_tax_fields_names( 'pa_code_name' );
 
 				/*Verifico la presenza dell'utente*/
 				$user_id = username_exists( $user_name );
@@ -110,8 +114,17 @@ function wcifd_users( $type ) {
 				if ( $cf_name ) {
 					update_user_meta( $user_id, $cf_name, $fiscal_code );
 				}
+
 				if ( $pi_name ) {
 					update_user_meta( $user_id, $pi_name, $p_iva );
+				}
+
+				if ( $pec_name ) {
+					update_user_meta( $user_id, $pec_name, $pec );
+				}
+
+				if ( $pa_code_name ) {
+					update_user_meta( $user_id, $pa_code_name, $pa_code );
 				}
 			}
 

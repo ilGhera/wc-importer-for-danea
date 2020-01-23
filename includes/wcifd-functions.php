@@ -34,31 +34,65 @@ function wcifd_rand_md5( $length ) {
  */
 function wcifd_get_italian_tax_fields_names( $field ) {
 
-	/*WooCommerce Aggiungere CF e P.IVA*/
-	if ( class_exists( 'WC_BrazilianCheckoutFields' ) ) {
-		$cf_name = 'billing_cpf';
-		$pi_name = 'billing_cnpj';
-	}
-	/*WooCommerce P.IVA e Codice Fiscale per Italia*/
-	elseif ( class_exists( 'WooCommerce_Piva_Cf_Invoice_Ita' ) ) {
-		$cf_name = 'billing_cf';
-		$pi_name = 'billing_piva';
-	}
-	//YITH WooCommerce Checkout Manager
-	elseif ( function_exists( 'ywccp_init' ) ) {
-		$cf_name = 'billing_Codice_Fiscale';
-		$pi_name = 'billing_Partita_IVA';
-	}
-	//WOO Codice Fiscale
-	elseif ( function_exists( 'woocf_on_checkout' ) ) {
-		$cf_name = 'billing_CF';
-		$pi_name = 'billing_iva';
+	$cf_name      = null;
+	$pi_name      = null;
+	$pec_name     = null;
+	$pa_code_name = null;
+
+	/*Campi generati dal plugin*/
+	if ( get_option( 'wcexd_company_invoice' ) || get_option( 'wcexd_private_invoice' ) ) {
+
+		$cf_name      = 'billing_wcexd_cf';
+		$pi_name      = 'billing_wcexd_piva';
+		$pec_name     = 'billing_wcexd_pec';
+		$pa_code_name = 'billing_wcexd_pa_code';
+
+	} else {
+
+		/*Plugin supportati*/
+
+		/*WooCommerce Aggiungere CF e P.IVA*/
+		if ( class_exists( 'WC_BrazilianCheckoutFields' ) ) {
+			$cf_name = 'billing_cpf';
+			$pi_name = 'billing_cnpj';
+		}
+
+		/*WooCommerce P.IVA e Codice Fiscale per Italia*/
+		elseif ( class_exists( 'WooCommerce_Piva_Cf_Invoice_Ita' ) || class_exists( 'WC_Piva_Cf_Invoice_Ita' ) ) {
+			$cf_name      = 'billing_cf';
+			$pi_name      = 'billing_piva';
+			$pec_name     = 'billing_pec';
+			$pa_code_name = 'billing_pa_code';
+		}
+
+		/*YITH WooCommerce Checkout Manager*/
+		elseif ( function_exists( 'ywccp_init' ) ) {
+			$cf_name = 'billing_Codice_Fiscale';
+			$pi_name = 'billing_Partita_IVA';
+		}
+
+		/*WOO Codice Fiscale*/
+		elseif ( function_exists( 'woocf_on_checkout' ) ) {
+			$cf_name = 'billing_CF';
+			$pi_name = 'billing_iva';
+		}
+
+
 	}
 
-	if ( $field == 'cf_name' ) {
-		return $cf_name;
-	} else {
-		return $pi_name;
+	switch ( $field ) {
+		case 'cf_name':
+			return $cf_name;
+			break;
+		case 'pi_name':
+			return $pi_name;
+			break;
+		case 'pec_name':
+			return $pec_name;
+			break;
+		case 'pa_code_name':
+			return $pa_code_name;
+			break;
 	}
 
 }
