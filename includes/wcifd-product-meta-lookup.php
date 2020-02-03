@@ -118,8 +118,6 @@ class wcifdProductMetaLookup {
 
 			);
 
-			// error_log( 'ADD: ' . print_r( $output, true ) );
-
 		} else {
 
 			$this->update();
@@ -163,8 +161,6 @@ class wcifdProductMetaLookup {
 
 			);
 
-			// error_log( 'AGG: ' . print_r( $output, true ) );
-
 		} else {
 
 			$this->add();
@@ -189,8 +185,6 @@ class wcifdProductMetaLookup {
 				'%d',
 			)
 		);
-
-		// error_log( 'DEL: ' . print_r( $output, true ) );
 
 	}
 
