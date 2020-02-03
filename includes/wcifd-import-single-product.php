@@ -416,25 +416,63 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 
 	}
 
+	/*Attributi disponibili per il prodotto*/
+	$attributes = get_post_meta( $product_id, '_product_attributes', true ) ? get_post_meta( $product_id, '_product_attributes', true ) : array();
+
 	/*Attributo produttore*/
 	if ( $producer_name ) {
 
-		/*Attributi disponibili per il prodotto*/
-		$attributes = get_post_meta( $product_id, '_product_attributes', true ) ? get_post_meta( $product_id, '_product_attributes', true ) : array();
+		$is_visible = get_option('wcifd-display-producer') ? get_option('wcifd-display-producer') : '0';
 
 		wp_set_object_terms( $product_id, array( $producer_name ), 'pa_producer' );
 
 		$attributes['pa_producer'] = array(
 			'name'         => 'pa_producer',
 			'value'        => '',
-			'is_visible'   => '1',
+			'is_visible'   => $is_visible,
 			'is_variation' => '0',
 			'is_taxonomy'  => '1',
 		);
 		
-		update_post_meta( $product_id, '_product_attributes', $attributes );
+	}
+		
+	/*Custom fields*/
+	for ( $i = 1; $i < 5; $i++) { 
+		
+		$field_name   = 'CustomField' . $i;
+		$pa_name      = 'pa_' . strtolower( $field_name );
+		$custom_field = isset( $product->$field_name ) ? $product->$field_name : '';
+
+
+		if ( $custom_field ) {
+			
+			$fields_options = get_option( 'wcifd-custom-fields' );
+			$import         = isset( $fields_options[ $i ]['import'] ) ? $fields_options[ $i ]['import'] : '0';
+			$is_visible     = isset( $fields_options[ $i ]['display'] ) ? $fields_options[ $i ]['display'] : '0';
+
+			if ( $import ) {
+				
+				wp_set_object_terms( $product_id, array( $custom_field ), $pa_name );
+
+				$attributes[ $pa_name ] = array(
+					'name'         => $pa_name,
+					'value'        => '',
+					'is_visible'   => $is_visible,
+					'is_variation' => '0',
+					'is_taxonomy'  => '1',
+				);
+
+			} else {
+
+				unset( $attributes[ $pa_name ] );
+
+			}
+		
+		}
 
 	}
+
+	update_post_meta( $product_id, '_product_attributes', $attributes );
 
 	/*Variabili di prodotto*/
 	if ( $variants ) {

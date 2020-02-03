@@ -8,7 +8,8 @@
 @import url(https://fonts.googleapis.com/css?family=Raleway:200,300,400,500,600,700);
 
 
-.wcifd-admin {
+.wcifd-admin,
+.wcifd-products-sub {
 	display: none;
 }
 
@@ -188,4 +189,24 @@ span.wcifd-alert a {
 
 select.wcifd {
 	width: 180px;
+}
+
+ul.wcifd.subsubsub {
+	margin-top: 2rem;
+}
+
+ul.wcifd.subsubsub li {
+	padding-left: 0;
+}
+
+ul.wcifd.subsubsub li a {
+	cursor: pointer;
+}
+
+.description.bottom {
+	margin-bottom: 20px;
+}
+
+input.custom-field-name {
+	width: 260px;
 }

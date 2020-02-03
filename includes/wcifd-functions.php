@@ -399,6 +399,28 @@ function wcifd_register_attributes() {
 		'color'    => __( 'Color', 'wcifd' ),
 		'producer' => __( 'Producer', 'wcifd' ),
 	);
+
+	if ( isset( $_POST['wcifd-custom-fields-hidden'] ) ) {
+		
+		/*Recupero i campi liberi di Danea abilitati dall'admin*/
+		$custom_fields = get_option( 'wcifd-custom-fields' );
+		
+		if ( $custom_fields && is_array( $custom_fields ) ) {
+		
+			for ( $i=1; $i <= count( $custom_fields ); $i++ ) { 
+					
+				if ( isset( $custom_fields[ $i ]['import'] ) && 1 == $custom_fields[ $i ]['import'] ) {
+
+					$name = isset( $custom_fields[ $i ]['name'] ) ? $custom_fields[ $i ]['name'] : sprintf( __( 'Custom Field %d', 'wcifd' ), $i );
+					$attributes[ 'customfield' . $i ] = $name;
+
+				}
+
+			}	
+		
+		}
+
+	}
 	
 	global $wpdb;
 
