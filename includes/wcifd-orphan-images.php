@@ -3,7 +3,7 @@
  * Ricevute tutte le immagini dal gestionale, abbina quelle non legate al rispettivo prodotto
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.6
+ * @since 1.1.6
  */
 function wcifd_orphan_images() {
 

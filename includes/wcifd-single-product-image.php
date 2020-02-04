@@ -3,7 +3,7 @@
  * Abbinamento immagine a singolo prodotto
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.2
+ * @since 1.1.2
  */
 function wcifd_single_product_image( $product_id, $image_file_name, $orphan = false ) {
 

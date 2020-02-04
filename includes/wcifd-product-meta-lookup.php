@@ -3,7 +3,7 @@
  * Aggiorna la tabella wp_wc_product_meta_lookup con i dati del prodotto
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.7 
+ * @since 1.1.7 
  */
 class wcifdProductMetaLookup {
 

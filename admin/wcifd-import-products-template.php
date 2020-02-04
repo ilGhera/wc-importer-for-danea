@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @version 1.1.8
+ * @since 1.2.0
  */
 
 $tax_included = get_option( 'wcifd-tax-included' );

@@ -3,7 +3,7 @@
  * Aggiornaemnto del catalogo prodotti
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.5
+ * @since 1.1.5
  *
  * @param file $file l'xml proveniente da Danea Easyfatt
  */

@@ -3,7 +3,7 @@
  * Importazione ordini da Danea Easyfatt
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.0
+ * @since 1.1.0
  */
 function wcifd_orders() {
 

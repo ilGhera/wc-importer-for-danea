@@ -3,7 +3,7 @@
  * Importazione contatti Danea come utenti WordPress
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.8
+ * @since 1.2.0
  *
  * @param  string $type il ruolo da assegnare agli utenti importati
  */

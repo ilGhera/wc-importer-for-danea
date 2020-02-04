@@ -3,7 +3,7 @@
  * Eliminazione del singolo prodotto a cui sia stato tolto il flag E-commerce in Danea Easyfatt
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.7
+ * @since 1.1.7
  *
  * @param  string $product_sku lo sku del singolo prodotto da eliminare, codificato in json
  */

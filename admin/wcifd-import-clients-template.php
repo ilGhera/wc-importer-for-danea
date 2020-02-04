@@ -3,7 +3,7 @@
  * Importazione clienti
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @version 1.1.0
+ * @since 1.1.0
  */
 
 global $wp_roles;

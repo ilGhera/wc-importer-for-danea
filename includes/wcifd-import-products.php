@@ -3,7 +3,7 @@
  * Importazione prodotti da file csv
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.8
+ * @since 1.2.0
  */
 function wcifd_products() {
 

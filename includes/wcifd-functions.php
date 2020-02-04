@@ -3,7 +3,7 @@
  * Funzioni
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @version 1.1.8
+ * @since 1.2.0
  */
 
 /*No accesso diretto*/
