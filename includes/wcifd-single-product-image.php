@@ -3,13 +3,13 @@
  * Abbinamento immagine a singolo prodotto
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.1.2
+ * @since 1.2.1
  */
 function wcifd_single_product_image( $product_id, $image_file_name, $orphan = false ) {
 
 	$attachment = get_page_by_title( $image_file_name, OBJECT, 'attachment' );
 
-	if ( isset( $attachment->ID ) ) {
+	if ( $product_id && isset( $attachment->ID ) ) {
 
 		/*Lego l'immagine al prodotto*/
 		set_post_thumbnail( $product_id, $attachment->ID );
@@ -22,25 +22,20 @@ function wcifd_single_product_image( $product_id, $image_file_name, $orphan = fa
 			)
 		);
 		
-		if( $orphan && 0 !== $updated ) {
-			$orphanImages = json_decode( get_option('wcifd-orphan-images'), true );
-			if( isset( $orphanImages[$product_id] ) ) {
-				unset( $orphanImages[$product_id] );
-			}
+	}
 
-			update_option( 'wcifd-orphan-images', json_encode( $orphanImages, JSON_FORCE_OBJECT ) );
-
-		}
-
-	} else {
+	if ( $product_id && $orphan ) {
 		
 		$orphanImages = json_decode( get_option('wcifd-orphan-images'), true );
 		
-		if( is_array( $orphanImages ) ) {
-			$orphanImages[$product_id] = $image_file_name;			
-		}
+		if ( isset( $orphanImages[ $product_id ] ) ) {
+			
+			unset( $orphanImages[ $product_id ] );
 		
+		}
+
 		update_option( 'wcifd-orphan-images', json_encode( $orphanImages, JSON_FORCE_OBJECT ) );
+
 	}
 
 }
