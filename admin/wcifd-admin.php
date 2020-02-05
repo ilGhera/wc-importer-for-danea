@@ -3,7 +3,7 @@
  * Pagina opzioni/ strumenti
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @since 1.2.0
+ * @since 1.1.0
  */
 
 /**
@@ -38,6 +38,32 @@ add_action( 'admin_menu', 'wcifd_add_menu' );
 
 
 /**
+ * Go premium button
+ */
+function go_premium() {
+
+	$title = __( 'This is a premium functionality, click here for more information', 'wp-restaurant-booking' );
+	$output = '<span class="wcifd label label-warning premium">';
+		$output .= '<a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium" target="_blank" title="' . esc_attr( $title ) . '">Premium</a>';
+	$output .= '</span>';
+
+	$allowed = array(
+		'span' => array(
+			'class' => [],
+		),
+		'a'    => array(
+			'target' => [],
+			'title'  => [],
+			'href'   => [],
+		),
+	);
+
+	echo wp_kses( $output, $allowed );
+
+}
+
+
+/**
  * Pagina opzioni
  */
 function wcifd_options() {
@@ -65,24 +91,10 @@ function wcifd_options() {
 		
 
 	<div id="wcifd-generale">
-	<?php
+		<?php
 		/*Header*/
-		echo '<h1 class="wcifd main">' . __( 'Woocommmerce Importer for Danea - Premium', 'wcifd' ) . '</h1>';
-
-		/*Plugin premium key*/
-		$key = sanitize_text_field( get_option( 'wcifd-premium-key' ) );
-	if ( isset( $_POST['wcifd-premium-key'] ) ) {
-		$key = sanitize_text_field( $_POST['wcifd-premium-key'] );
-		update_option( 'wcifd-premium-key', $key );
-	}
-		echo '<form id="wcifd-options" method="post" action="">';
-		echo '<label>' . __( 'Premium Key', 'wcifd' ) . '</label>';
-		echo '<input type="text" class="regular-text" name="wcifd-premium-key" id="wcifd-premium-key" placeholder="' . __( 'Add your Premium Key', 'wcifd' ) . '" value="' . $key . '" />';
-		echo '<p class="description">' . __( 'Add your Premium Key and keep update your copy of <strong>Woocommerce Importer for Danea - Premium</strong>.', 'wcifd' ) . '</p>';
-		echo '<input type="hidden" name="done" value="1" />';
-		echo '<input type="submit" class="button button-primary" value="' . __( 'Save ', 'wcifd' ) . '" />';
-		echo '</form>';
-	?>
+		echo '<h1 class="wcifd main">' . __( 'Woocommmerce Importer for Danea', 'wcifd' ) . '</h1>';
+		?>
 	</div>
 			
 	<div class="icon32 icon32-woocommerce-settings" id="icon-woocommerce"><br /></div>
@@ -139,7 +151,7 @@ function wcifd_options() {
 	</div><!--WRAP-LEFT-->
 	
 	<div class="wrap-right">
-		<iframe width="300" height="900" scrolling="no" src="https://www.ilghera.com/images/wcifd-premium-iframe.html"></iframe>
+		<iframe width="300" height="1200" scrolling="no" src="https://www.ilghera.com/images/wcifd-iframe.html"></iframe>
 	</div>
 	<div class="clear"></div>
 	
@@ -149,35 +161,3 @@ function wcifd_options() {
 	<?php
 
 }
-
-/**
- * Messaggio aggiornamento
- */
-function wcifd_update_message2( $plugin_data, $response ) {
-
-	$message = null;
-	$key = get_option( 'wcifd-premium-key' );
-
-	$message = null;
-
-	if ( ! $key ) {
-
-		$message = 'A <b>Premium Key</b> is required for keeping this plugin up to date. Please, add yours in the <a href="' . admin_url() . 'admin.php/?page=wc-importer-for-danea">options page</a> or click <a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">here</a> for prices and details.';
-
-	} else {
-
-		$decoded_key = explode( '|', base64_decode( $key ) );
-		$bought_date = date( 'd-m-Y', strtotime( $decoded_key[1] ) );
-		$limit = strtotime( $bought_date . ' + 365 day' );
-		$now = strtotime( 'today' );
-
-		if ( $limit < $now ) {
-			$message = 'It seems like your <strong>Premium Key</strong> is expired. Please, click <a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">here</a> for prices and details.';
-		} elseif ( ! in_array( $decoded_key[2], array( 1572, 1582 ) ) ) {
-			$message = 'It seems like your <strong>Premium Key</strong> is not valid. Please, click <a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">here</a> for prices and details.';
-		}
-	}
-	echo ( $message ) ? '<br><span class="wcifd-alert">' . $message . '</span>' : '';
-
-}
-add_action( 'in_plugin_update_message-wc-importer-for-danea-premium/wc-importer-for-danea-premium.php', 'wcifd_update_message2', 10, 2 );

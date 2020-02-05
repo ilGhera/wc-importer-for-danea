@@ -2,7 +2,7 @@
  * Script menu di navigazione
  * @author ilGhera
  * @package wc-importer-for-danea-premium/js
- * @since 1.2.0
+ * @since 1.1.0
  */
 jQuery(document).ready(function ($) {
 
