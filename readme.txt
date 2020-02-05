@@ -24,6 +24,8 @@ You'll be able to import suppliers width this free version, also clients and pro
 
 **NEW ON THIS VERSION**
 
+* Impost customers
+* Customers and suppliers import now supports the fiscal fields coming from the Exporter plugin.
 * (Premium) Avoid product name update with a dedicated option
 * (Premium) Import Producer from Danea and add it to the product as attribute
 * (Premium) Option for showing the Producer in front-end or not
@@ -45,6 +47,8 @@ Woocommerce Importer for Danea ti permette di importare:
 
 **LE NOVITÀ DI QUESTA VERSIONE**
 
+* Importazione dei clienti da Danea
+* L'importazione di clienti e fornitori supporta ora i campi fiscali utilizzati anche dall'Exporter
 * (Premium) Opzione per escludere il nome del prodotto dalla sincronizzazione
 * (Premium) Importazione del campo Produttore di Danea come attributo di prodotto WooCommerce
 * (Premium) Opzione per mostrare o meno il campo Produttore in front-end
@@ -74,8 +78,12 @@ From WordPress.org
 == Screenshots ==
 
 1. Choose the user role and import your Danea EasyFatt suppliers list
-2. Products import options (Premium)
-3. Orders import options (Premium)
+2. Products import - General settings
+3. Products import - Custom fields
+4. Products import - Remote
+5. Products import - File
+6. Choose the user role and import your Danea EasyFatt client list
+6. Import orders in Woocommerce
 
 
 == Changelog ==
@@ -83,6 +91,7 @@ From WordPress.org
 = 1.1.0 =
 Release Date: 05 February 2020
 
+* Enhancement: Import customers
 * Enhancement: Customers and suppliers import now supports the fiscal fields coming from the Exporter plugin.
 * Enhancement: New product sub-menu for a better navigation 
 * Enhancement: (Premium) Avoid product name update with a dedicated option

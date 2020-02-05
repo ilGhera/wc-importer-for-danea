@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WED\n"
-"POT-Creation-Date: 2020-02-05 18:14+0100\n"
-"PO-Revision-Date: 2020-02-05 18:15+0100\n"
+"POT-Creation-Date: 2020-02-05 18:33+0100\n"
+"PO-Revision-Date: 2020-02-05 18:33+0100\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera <info@ilghera.com>\n"
 "Language: it_IT\n"
@@ -327,11 +327,10 @@ msgstr ""
 
 #: admin/wcifd-import-products-template.php:234
 msgid ""
-"Add this URL to the <strong>Settings</strong> tab of the <strong>Products "
-"update</strong> function in Danea."
+"Add this URL to the Settings tab of the Products update function in Danea."
 msgstr ""
-"Aggiungi questo URL al tab <strong>Impostazioni</strong> della funzione "
-"<strong>Aggiorna prodotti</strong> (Ctrl+P) di Danea."
+"Aggiungi questo URL al tab Impostazioni della funzione Aggiorna prodotti "
+"(Ctrl+P) di Danea."
 
 #: admin/wcifd-import-products-template.php:238
 msgid "Import images"
@@ -446,6 +445,7 @@ msgid "Every Minute"
 msgstr "Ogni minuto"
 
 #: includes/wcifd-functions.php:719
+#: plugin-update-checker/Puc/v4p8/Plugin/Ui.php:128
 msgid "Check for updates"
 msgstr "Verifica aggiornamenti"
 
@@ -480,6 +480,24 @@ msgstr "Importati %d di %d contatti<br>"
 msgid "Updated %1$d of %2$d contacts"
 msgstr "Importati %d di %d contatti"
 
+#: plugin-update-checker/Puc/v4p8/Plugin/Ui.php:54
+msgid "View details"
+msgstr "Vedi dettagli"
+
+#: plugin-update-checker/Puc/v4p8/Plugin/Ui.php:77
+#, php-format
+msgid "More information about %s"
+msgstr "Più informazioni su %s"
+
+#: plugin-update-checker/Puc/v4p8/Plugin/Ui.php:223
+#, php-format
+msgid "Unknown update checker status \"%s\""
+msgstr "Update Checker - Stato sconosciuto \"%s\""
+
+#: plugin-update-checker/Puc/v4p8/Vcs/PluginUpdateChecker.php:98
+msgid "There is no changelog available."
+msgstr "Changelog non disponibile."
+
 #~ msgid "Add your Premium Key"
 #~ msgstr "Inserisci la tua Premium Key"
 
@@ -505,18 +523,6 @@ msgstr "Importati %d di %d contatti"
 #~ msgstr ""
 #~ "Prodotti importati: %1$d<br>Variazioni importate: %2$d<br>Prodotti "
 #~ "aggiornati: %3$d"
-
-#~ msgid "View details"
-#~ msgstr "Vedi dettagli"
-
-#~ msgid "More information about %s"
-#~ msgstr "Più informazioni su %s"
-
-#~ msgid "Unknown update checker status \"%s\""
-#~ msgstr "Update Checker - Stato sconosciuto \"%s\""
-
-#~ msgid "There is no changelog available."
-#~ msgstr "Changelog non disponibile."
 
 #~ msgid "Products update"
 #~ msgstr "Aggiornamento prodotti"

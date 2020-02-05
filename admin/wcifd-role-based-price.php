@@ -3,7 +3,7 @@
  * WooCommerce role Based Price
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @since 1.1.4
+ * @since 1.1.0
  */
 ?>
 
@@ -25,12 +25,6 @@
 						$price_label = $price_type === 'regular_price' ? $wc_rbp_general['wc_rbp_regular_price_label'] : $wc_rbp_general['wc_rbp_selling_price_label'];
 						$field_name = $price_type . '_' . $role;
 
-						$price_list = get_option( 'wcifd_' . $field_name );
-						if ( isset( $_POST[ $field_name ] ) ) {
-							$price_list = $_POST[ $field_name ];
-							update_option( 'wcifd_' . $field_name, $price_list );
-						}
-						
 						if ( count( $wc_rbp_allowed_price ) === 1 ) {
 							
 							echo '<tr class="one-of">';						
@@ -46,7 +40,7 @@
 								<select name="<?php echo $field_name; ?>" class="wcifd">
 									<?php
 									for ( $n = 1; $n <= 9; $n++ ) {
-										echo '<option value="' . $n . '"' . ( $price_list == $n ? 'selected="selected"' : '' ) . '>' . __( 'Price list ', 'wcifd' ) . $n . '</option>';
+										echo '<option value="' . $n . '">' . __( 'Price list ', 'wcifd' ) . $n . '</option>';
 									}
 									?>
 								</select>
@@ -59,6 +53,10 @@
 			}
 		}
 		?>
+		<tr>
+			<th></th>
+			<td><?php go_premium(); ?></td>
+		</tr>
 	</table>
-	<input type="submit" class="button-primary" style="margin-top: 1.5rem;" value="<?php _e( 'Save Changes', 'wcifd' ); ?>">
+	<input type="submit" class="button-primary" style="margin-top: 1.5rem;" value="<?php _e( 'Save Changes', 'wcifd' ); ?>" disabled>
 </form>
