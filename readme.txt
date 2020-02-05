@@ -83,8 +83,8 @@ From WordPress.org
 4. Products import - Remote
 5. Products import - File
 6. Choose the user role and import your Danea EasyFatt client list
-6. Import orders in Woocommerce
-
+7. Import orders in Woocommerce
+8. WooCommerce Role Based Price support
 
 == Changelog ==
 
