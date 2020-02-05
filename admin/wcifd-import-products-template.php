@@ -231,7 +231,7 @@
 				<th scope="row"><?php esc_html_e( 'URL', 'wcifd' ); ?></th>
 				<td>
 					<div class="wcifd-copy-url"><span class="wcifd-red"><?php echo $receive_orders_url; ?></span></div>
-					<p class="description"><?php esc_html_e( 'Add this URL to the <strong>Settings</strong> tab of the <strong>Products update</strong> function in Danea.', 'wcifd' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Add this URL to the Settings tab of the Products update function in Danea.', 'wcifd' ); ?></p>
 				</td>
 			</tr>
 			<tr>
