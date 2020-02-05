@@ -24,7 +24,7 @@ You'll be able to import suppliers width this free version, also clients and pro
 
 **NEW ON THIS VERSION**
 
-* Impost customers
+* Import customers
 * Customers and suppliers import now supports the fiscal fields coming from the Exporter plugin.
 * (Premium) Avoid product name update with a dedicated option
 * (Premium) Import Producer from Danea and add it to the product as attribute
