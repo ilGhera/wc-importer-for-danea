@@ -205,11 +205,6 @@ function wcifd_search_product( $sku ) {
 	$results = $wpdb->get_results( $query, ARRAY_A );
 	$post_id = isset($results[0]) ? $results[0]['post_id'] : '';
 
-	if ( ! get_post_status( $post_id ) ) {
-		$product = wc_get_product( $sku );
-		$post_id = ( $product ) ? $post_id = $sku : null;
-	}
-
 	return $post_id;
 }
 
