@@ -2,7 +2,7 @@
 === Woocommerce Importer for Danea - Premium ===
 Contributors: ghera74
 Tags: Fattura elettronica, Woocommerce, Danea Easyfatt, ecommerce, exporter, csv, shop, orders, products, gestionale
-Version: 1.2.1
+Version: 1.2.2
 Requires at least: 4.0
 Tested up to: 5.3
 
@@ -42,6 +42,12 @@ You'll be able to import suppliers, clients and products.
 
 
 == Changelog ==
+
+= 1.2.2 =
+Release Date: 10 March 2020
+
+* Bug fix: Update of the wrong product in case of WordPress ID equal to the sku received by Danea Easyfatt
+
 
 = 1.2.1 =
 Release Date: 04 February 2020
