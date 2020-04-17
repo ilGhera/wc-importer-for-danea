@@ -1,6 +1,7 @@
 <?php
 /**
  * Importazione immagine prodotto
+ *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
  * @since 1.1.0
@@ -15,8 +16,9 @@ function wcifd_products_images() {
 
 	/*Elimino duplicato se presente*/
 	$old_attach = get_page_by_title( sanitize_title( $file['name'] ), OBJECT, 'attachment' );
+
 	if ( isset( $old_attach->ID ) ) {
-		wp_delete_post( $old_attach->ID );
+		$test = wp_delete_post( $old_attach->ID );
 	}
 
 	/*Caricamento immagine in WP Media*/

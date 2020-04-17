@@ -5,14 +5,13 @@
  * Description: If you've built your online store with Woocommerce and you're using Danea Easyfatt as management software, you definitely need Woocommerce Importer for Danea - Premium!
  * You'll be able to import suppliers, clients and products.
  * Author: ilGhera
- * Version: 1.2.2
+ * Version: 1.3.0
  * Author URI: https://ilghera.com
  * Requires at least: 4.0
- * Tested up to: 5.3
- * WC tested up to: 3
+ * Tested up to: 5.4
+ * WC tested up to: 4
  * Text Domain: wcifd
  */
-
 
 /*Evito accesso diretto*/
 if ( ! defined( 'ABSPATH' ) ) {
@@ -48,21 +47,21 @@ function load_wc_importer_for_danea_premium() {
 	load_plugin_textdomain( 'wcifd', false, basename( dirname( __FILE__ ) ) . '/languages' );
 
 	/*Richiamo file necessari*/
-	require( WCIFD_ADMIN . 'wcifd-admin.php' );
-	require( WCIFD_INCLUDES . 'wcifd-functions.php' );
-	require( WCIFD_INCLUDES . 'wcifd-products-images.php' );
-	require( WCIFD_INCLUDES . 'wcifd-single-product-image.php' );
-	require( WCIFD_INCLUDES . 'wcifd-orphan-images.php' );
-	require( WCIFD_INCLUDES . 'wcifd-import-users.php' );
-	require( WCIFD_INCLUDES . 'wcifd-import-products.php' );
-	require( WCIFD_INCLUDES . 'wcifd-catalog-update.php' );
-	require( WCIFD_INCLUDES . 'wcifd-import-single-product.php' );
-	require( WCIFD_INCLUDES . 'wcifd-product-meta-lookup.php' );
-	require( WCIFD_INCLUDES . 'wcifd-delete-single-product.php' );
-	require( WCIFD_INCLUDES . 'wcifd-import-orders.php' );
-
+	require_once( WCIFD_DIR . 'libraries/action-scheduler/action-scheduler.php' );
+	require_once( WCIFD_ADMIN . 'wcifd-admin.php' );
+	require_once( WCIFD_INCLUDES . 'wcifd-functions.php' );
+	require_once( WCIFD_INCLUDES . 'wcifd-products-images.php' );
+	require_once( WCIFD_INCLUDES . 'wcifd-single-product-image.php' );
+	require_once( WCIFD_INCLUDES . 'wcifd-orphan-images.php' );
+	require_once( WCIFD_INCLUDES . 'wcifd-import-users.php' );
+	require_once( WCIFD_INCLUDES . 'wcifd-import-products.php' );
+	require_once( WCIFD_INCLUDES . 'wcifd-catalog-update.php' );
+	require_once( WCIFD_INCLUDES . 'wcifd-import-single-product.php' );
+	require_once( WCIFD_INCLUDES . 'wcifd-product-meta-lookup.php' );
+	require_once( WCIFD_INCLUDES . 'wcifd-delete-single-product.php' );
+	require_once( WCIFD_INCLUDES . 'wcifd-import-orders.php' );
 }
-add_action( 'plugins_loaded', 'load_wc_importer_for_danea_premium', 1 );
+add_action( 'plugins_loaded', 'load_wc_importer_for_danea_premium', -10 );
 
 
 /*Richiamo "Update-Checker"*/

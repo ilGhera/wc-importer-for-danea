@@ -1,26 +1,27 @@
 <?php
 /**
  * Ricevute tutte le immagini dal gestionale, abbina quelle non legate al rispettivo prodotto
+ *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.1.6
+ * @since 1.3.0
  */
 function wcifd_orphan_images() {
 
-	$orphanImages = json_decode( get_option('wcifd-orphan-images'), true );
-		
-	if ( is_array( $orphanImages ) && !empty( $orphanImages ) ) {
+	$orphan_images = json_decode( get_option( 'wcifd-orphan-images' ), true );
 
-		foreach ($orphanImages as $key => $value) {
+	if ( is_array( $orphan_images ) && ! empty( $orphan_images ) ) {
 
-			wp_schedule_single_event(
-				time() + 1,
+		foreach ( $orphan_images as $key => $value ) {
+
+			as_enqueue_async_action(
 				'wcifd_product_image_event',
 				array(
 					$key,
 					$value,
 					true,
-				)
+				),
+				'wcifd-product-image'
 			);
 
 		}
@@ -28,16 +29,39 @@ function wcifd_orphan_images() {
 	}
 
 	/*Interrompo se tutti i prodotti sono stati trasferiti e le immagini gestite*/
-	if ( ! wp_next_scheduled( 'wcifd_import_product_event' ) ) {
-	
-		if ( is_array( $orphanImages ) && empty( $orphanImages ) ) {
-	
-			$timestamp = wp_next_scheduled( 'wcifd_orphan_images_event' );
-			wp_unschedule_event( $timestamp, 'wcifd_orphan_images_event' );
-	
+	$next = as_next_scheduled_action(
+		'wcifd_import_product_event',
+		array(),
+		'wcifd-import-product'
+	);
+
+	if ( ! $next ) {
+
+		if ( is_array( $orphan_images ) && empty( $orphan_images ) ) {
+
+			/*Schedulo un azione per interrompere il processo ricorrente*/
+			as_enqueue_async_action(
+				'wcifd_stop_orphan_images_event',
+				array(),
+				'wcifd-orphan-images'
+			);
+
 		}
-	
+
 	}
 
 }
 add_action( 'wcifd_orphan_images_event', 'wcifd_orphan_images' );
+
+
+/**
+ * Interrompe l'azione programmata di assegnazione delle immagini orfane
+ *
+ * @return void
+ */
+function wcifd_stop_orphan_images() {
+
+	as_unschedule_action( 'wcifd_orphan_images_event' );
+
+}
+add_action( 'wcifd_stop_orphan_images_event', 'wcifd_stop_orphan_images' );
