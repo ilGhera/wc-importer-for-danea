@@ -680,7 +680,13 @@ function wcifd_products_update_request() {
 						echo "ImageSendFinishURL=$imagesSendFinishURL\n";
 
 						/*Preparazione alla ricezione delle immagini orfane*/
-						update_option( 'wcifd-orphan-images', json_encode( array(), JSON_FORCE_OBJECT ) );
+						$orphan_images = json_decode( get_option( 'wcifd-orphan-images' ), true );
+
+						if ( ! $orphan_images || ! is_array( $orphan_images ) ) {
+
+							update_option( 'wcifd-orphan-images', json_encode( array(), JSON_FORCE_OBJECT ) );
+
+						}
 
 					}
 
