@@ -3,7 +3,7 @@
  * Importazione singolo prodotto
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.2.0
+ * @since 1.3.0
  *
  * @param  string $product_json       il singolo prodotto dal file xml codificato in json
  * @param  string $regular_price_list il listino prezzi selezionato dall'admin
@@ -324,6 +324,10 @@ function wcifd_import_single_product( $product_json, $regular_price_list, $sale_
 			/*Nome prodotto*/
 			if ( ! get_option( 'wcifd-exclude-title' ) ) {
 				$args['post_title'] = $title;
+			}
+
+			/*URL prodotto*/
+			if ( ! get_option( 'wcifd-exclude-url' ) ) {
 				$args['post_name']  = sanitize_title_with_dashes( wp_strip_all_tags( $title ) );
 			}
 

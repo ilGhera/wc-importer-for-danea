@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @since 1.2.0
+ * @since 1.3.0
  */
 
 $tax_included = get_option( 'wcifd-tax-included' );
@@ -66,6 +66,12 @@ $exclude_title = get_option( 'wcifd-exclude-title' );
 if ( isset( $_POST['exclude-title'] ) ) {
 	$exclude_title = $_POST['exclude-title'] ? $_POST['exclude-title'] : 0;
 	update_option( 'wcifd-exclude-title', $exclude_title );
+}
+
+$exclude_url = get_option( 'wcifd-exclude-url' );
+if ( isset( $_POST['exclude-url'] ) ) {
+	$exclude_url = $_POST['exclude-url'] ? $_POST['exclude-url'] : 0;
+	update_option( 'wcifd-exclude-url', $exclude_url );
 }
 
 $deleting_categories = get_option( 'wcifd-deleting-categories' );
@@ -176,7 +182,7 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 				<td>
 					<input type="hidden" name="exclude-description" value="0">
 					<input type="checkbox" name="exclude-description" value="1"<?php echo $exclude_description == 1 ? ' checked="checked"' : ''; ?>>
-					<p class="description"><?php esc_html_e( 'Exclude descriptions for products updates.', 'wcifd' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Exclude descriptions from products updates.', 'wcifd' ); ?></p>
 				</td>
 			</tr>
 			<tr>
@@ -184,7 +190,15 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 				<td>
 					<input type="hidden" name="exclude-title" value="0">
 					<input type="checkbox" name="exclude-title" value="1"<?php echo $exclude_title == 1 ? ' checked="checked"' : ''; ?>>
-					<p class="description"><?php esc_html_e( 'Exclude title for products updates.', 'wcifd' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Exclude title from products updates.', 'wcifd' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Exclude product URL', 'wcifd' ); ?></th>
+				<td>
+					<input type="hidden" name="exclude-url" value="0">
+					<input type="checkbox" name="exclude-url" value="1"<?php echo $exclude_url == 1 ? ' checked="checked"' : ''; ?>>
+					<p class="description"><?php esc_html_e( 'Exclude URL from products updates.', 'wcifd' ); ?></p>
 				</td>
 			</tr>
 			<tr>
