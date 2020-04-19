@@ -1,9 +1,10 @@
 <?php
 /**
- * Funzioni
+ * Funzioni generali
+ *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.1.0
+ * @since 1.1.1
  */
 
 /*No accesso diretto*/
@@ -14,7 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Generazione stringa random
- * @param  int $length lunghezza della stringa
+ *
+ * @param  int $length lunghezza della stringa.
  * @return string
  */
 function wcifd_rand_md5( $length ) {
@@ -29,7 +31,8 @@ function wcifd_rand_md5( $length ) {
 
 /**
  * Definisce i nomi dei campi fiscali in uso, in particolare i post_meta da recuperare dal db
- * @param  string $field il campo da definire
+ *
+ * @param  string $field il campo da definire.
  * @return string        il post_meta
  */
 function wcifd_get_italian_tax_fields_names( $field ) {
@@ -77,7 +80,6 @@ function wcifd_get_italian_tax_fields_names( $field ) {
 			$pi_name = 'billing_iva';
 		}
 
-
 	}
 
 	switch ( $field ) {
@@ -100,7 +102,8 @@ function wcifd_get_italian_tax_fields_names( $field ) {
 
 /**
  * Verifica la presenza di un codice di tassazione, utilizzato per la ricerca degli ute4nti
- * @param  string $tax_code il codice
+ *
+ * @param  string $tax_code il codice.
  * @return int              l'id dell'utente legato al codice
  */
 function check_tax_code( $tax_code ) {
@@ -115,7 +118,8 @@ function check_tax_code( $tax_code ) {
 
 /**
  * Restituisce il codice di statto a due lettere, partendo dal nome completo
- * @param  string $state_name lo stato
+ *
+ * @param  string $state_name lo stato.
  * @return string             il codice dello stato
  */
 function wcifd_get_state_code( $state_name ) {
@@ -132,7 +136,8 @@ function wcifd_get_state_code( $state_name ) {
 
 /**
  * Restituisce il valore di un dato campo del file xml
- * @param  string $field il campo da recuperare
+ *
+ * @param  string $field il campo da recuperare.
  * @return string        il valore
  */
 function wcifd_json_decode( $field = '' ) {
@@ -144,7 +149,8 @@ function wcifd_json_decode( $field = '' ) {
 
 /**
  * Recupera l'ordine WooCommerce generato dall'importazione precedente di un ordine di Danea Easyfatt
- * @param  int $number l'id dell'ordine di Danea Easyfatt
+ *
+ * @param  int $number l'id dell'ordine di Danea Easyfatt.
  * @return int         l'id dell'ordine WooCommerce
  */
 function get_order_by_number( $number ) {
@@ -159,7 +165,8 @@ function get_order_by_number( $number ) {
 
 /**
  * Restituisce il metodo di pagamento utilizzato negli ordini importati da Danea Easyfatt
- * @param  string $method il metodo proveniente da Danea
+ *
+ * @param  string $method il metodo proveniente da Danea.
  * @return string         il metodo WC equivalente
  */
 function wcifd_payment_gateway( $method ) {
@@ -192,7 +199,8 @@ function wcifd_payment_gateway( $method ) {
 
 /**
  * Verifica la presenza di un prodotto attraverso lo sku
- * @param  string $sku lo sku del prodotto
+ *
+ * @param  string $sku lo sku del prodotto.
  * @return int         l'id del prodotto corrispondente se trovato
  */
 function wcifd_search_product( $sku ) {
@@ -203,7 +211,7 @@ function wcifd_search_product( $sku ) {
 	";
 
 	$results = $wpdb->get_results( $query, ARRAY_A );
-	$post_id = isset($results[0]) ? $results[0]['post_id'] : '';
+	$post_id = isset( $results[0] ) ? $results[0]['post_id'] : '';
 
 	return $post_id;
 }
@@ -211,10 +219,11 @@ function wcifd_search_product( $sku ) {
 
 /**
  * Aggiunge un termine di tassonimia al prodotto dato
- * @param  int  $product_id l'id del prodotto
- * @param  string  $category   la categoria proveniente da Danea da aggiungere al prodotto
- * @param  integer $parent_id  id del termine di tassonomia padre se presente
- * @param  boolean $append     determina se il termine di tassonomia debba aggiungersi a quelli presenti o sostituirli
+ *
+ * @param  int     $product_id l'id del prodotto.
+ * @param  string  $category   la categoria proveniente da Danea da aggiungere al prodotto.
+ * @param  integer $parent_id  id del termine di tassonomia padre se presente.
+ * @param  boolean $append     determina se il termine di tassonomia debba aggiungersi a quelli presenti o sostituirli.
  * @return array              il termine di tassonomia
  */
 function wcifd_add_taxonomy_term( $product_id, $category, $parent_id = 0, $append = false ) {
@@ -223,7 +232,7 @@ function wcifd_add_taxonomy_term( $product_id, $category, $parent_id = 0, $appen
 
 	$term = term_exists( $category, 'product_cat', $parent_id );
 
-	if ( $term === 0 || $term === null ) {
+	if ( 0 === $term || null === $term ) {
 		$term = wp_insert_term( $category, 'product_cat', array( 'parent' => $parent_id ) );
 	}
 
@@ -237,14 +246,15 @@ function wcifd_add_taxonomy_term( $product_id, $category, $parent_id = 0, $appen
 
 /**
  * Recupera un'imposta in WooCommerce
- * @param  string $name  il nome dell'imposta
- * @param  string $value il valore
+ *
+ * @param  string $name  il nome dell'imposta.
+ * @param  string $value il valore.
  * @return string        la classe di imposta
  */
 function wcifd_get_tax_rate_class( $name, $value = '' ) {
 
 	/*Se non viene passato un valore, utilizza il nome dell'imposta se numerico*/
-	if ( $value == '' ) {
+	if ( '' == $value ) {
 		$value = ( is_numeric( $name ) ) ? $name : '';
 	}
 
@@ -262,8 +272,8 @@ function wcifd_get_tax_rate_class( $name, $value = '' ) {
 	} else {
 
 		/*Crea una nuova classe di tasszione solo con il valore numerico*/
-		if ( $value != '' ) {
-			$tax_rate_class = $name != 22 ? $name : '';
+		if ( '' != $value ) {
+			$tax_rate_class = 22 != $name ? $name : '';
 
 			if ( $tax_rate_class ) {
 				$tax_classes = explode( "\n", get_option( 'woocommerce_tax_classes' ) );
@@ -300,7 +310,8 @@ function wcifd_get_tax_rate_class( $name, $value = '' ) {
 
 /**
  * Elimina le variazioni di un dato prodotto
- * @param  int $parent_id l'id del prodotto padre
+ *
+ * @param  int $parent_id l'id del prodotto padre.
  */
 function wcifd_delete_variations( $parent_id ) {
 	$args = array(
@@ -322,7 +333,8 @@ function wcifd_delete_variations( $parent_id ) {
 
 /**
  * Registrazione tassonomie
- * @param  string $name il nome della tassonomia da creare
+ *
+ * @param  string $name il nome della tassonomia da creare.
  */
 function wcifd_register_taxonomy( $name ) {
 	$paname = 'pa_' . $name;
@@ -334,13 +346,21 @@ function wcifd_register_taxonomy( $name ) {
 			'labels'                => array(
 				'name'              => $name,
 				'singular_name'     => $name,
+				/* Translators: the taxonomy name */
 				'search_items'      => sprintf( __( 'Search %s', 'woocommerce' ), $name ),
+				/* Translators: the taxonomy name */
 				'all_items'         => sprintf( __( 'All %s', 'woocommerce' ), $name ),
+				/* Translators: the taxonomy name */
 				'parent_item'       => sprintf( __( 'Parent %s', 'woocommerce' ), $name ),
+				/* Translators: the taxonomy name */
 				'parent_item_colon' => sprintf( __( 'Parent %s:', 'woocommerce' ), $name ),
+				/* Translators: the taxonomy name */
 				'edit_item'         => sprintf( __( 'Edit %s', 'woocommerce' ), $name ),
+				/* Translators: the taxonomy name */
 				'update_item'       => sprintf( __( 'Update %s', 'woocommerce' ), $name ),
+				/* Translators: the taxonomy name */
 				'add_new_item'      => sprintf( __( 'Add New %s', 'woocommerce' ), $name ),
+				/* Translators: the taxonomy name */
 				'new_item_name'     => sprintf( __( 'New %s', 'woocommerce' ), $name ),
 			),
 			'show_ui'           => false,
@@ -388,35 +408,36 @@ function wcifd_update_transient_wc_attributes() {
  * Registrazione degli attributi "Size" end "Color"
  */
 function wcifd_register_attributes() {
-	
-	$attributes = array( 
+
+	$attributes = array(
 		'size'     => __( 'Size', 'wcifd' ),
 		'color'    => __( 'Color', 'wcifd' ),
 		'producer' => __( 'Producer', 'wcifd' ),
 	);
 
 	if ( isset( $_POST['wcifd-custom-fields-hidden'] ) ) {
-		
+
 		/*Recupero i campi liberi di Danea abilitati dall'admin*/
 		$custom_fields = get_option( 'wcifd-custom-fields' );
-		
+
 		if ( $custom_fields && is_array( $custom_fields ) ) {
-		
-			for ( $i=1; $i <= count( $custom_fields ); $i++ ) { 
-					
+
+			for ( $i = 1; $i <= count( $custom_fields ); $i++ ) {
+
 				if ( isset( $custom_fields[ $i ]['import'] ) && 1 == $custom_fields[ $i ]['import'] ) {
 
+					/* Translators: the custom field number */
 					$name = isset( $custom_fields[ $i ]['name'] ) ? $custom_fields[ $i ]['name'] : sprintf( __( 'Custom Field %d', 'wcifd' ), $i );
 					$attributes[ 'customfield' . $i ] = $name;
 
 				}
 
-			}	
-		
+			}
+
 		}
 
 	}
-	
+
 	global $wpdb;
 
 	foreach ( $attributes as $key => $value ) {
@@ -431,7 +452,7 @@ function wcifd_register_attributes() {
 		$results = $wpdb->get_results( $query, ARRAY_A );
 
 		$changes = false;
-		if ( $results == null ) {
+		if ( null == $results ) {
 				$changes = true;
 				$wpdb->insert(
 					$wpdb->prefix . 'woocommerce_attribute_taxonomies',
@@ -463,9 +484,10 @@ add_action( 'init', 'wcifd_register_attributes' );
 
 /**
  * Restituisce il prezzo di listino dal file xml in base alle impostazioni dell'admin
- * @param  object  $product      il singolo prodotto
- * @param  int     $number       il listino impostato
- * @param  boolean $tax_included prezzi ivati o meno
+ *
+ * @param  object  $product      il singolo prodotto.
+ * @param  int     $number       il listino impostato.
+ * @param  boolean $tax_included prezzi ivati o meno.
  * @return stringa               il prezzo
  */
 function wcifd_get_list_price( $product, $number, $tax_included = false ) {
@@ -486,19 +508,22 @@ function wcifd_get_list_price( $product, $number, $tax_included = false ) {
 
 /**
  * Restituisce prezzi e label per ruolo utente definite con WC Role Based Price
+ *
  * @return array
  */
 function get_wc_rbp() {
 
-	$output = null;
-	if( function_exists( 'woocommerce_role_based_price' ) && $wc_rbp_general = get_option( 'wc_rbp_general') ) {
+	$output         = null;
+	$wc_rbp_general = get_option( 'wc_rbp_general' );
+
+	if ( function_exists( 'woocommerce_role_based_price' ) && $wc_rbp_general ) {
 		$wc_rbp_allowed_roles = isset( $wc_rbp_general['wc_rbp_allowed_roles'] ) ? $wc_rbp_general['wc_rbp_allowed_roles'] : '';
 		$wc_rbp_allowed_price = isset( $wc_rbp_general['wc_rbp_allowed_price'] ) ? $wc_rbp_general['wc_rbp_allowed_price'] : '';
-	
+
 		if ( $wc_rbp_allowed_roles ) {
 			$output = array();
 			foreach ( $wc_rbp_allowed_roles as $role ) {
-				foreach ( $wc_rbp_allowed_price as $price_type) {
+				foreach ( $wc_rbp_allowed_price as $price_type ) {
 					$field_name = $price_type . '_' . $role;
 					$price_list = get_option( 'wcifd_' . $field_name );
 
@@ -515,17 +540,18 @@ function get_wc_rbp() {
 
 /**
  * Recupera le dimensioni del prodotto, sulla base delle impostazioni
- * @param  mixed   $product il prodotto
- * @param  string  $type    misure nette o meno
- * @param  string  $measure la dimensione da restituire
- * @param  boolean $csv     csv o oggetto
+ *
+ * @param  mixed   $product il prodotto.
+ * @param  string  $type    misure nette o meno.
+ * @param  string  $measure la dimensione da restituire.
+ * @param  boolean $csv     csv o oggetto.
  * @return string           il dato
  */
 function wcifd_get_product_size( $product, $type, $measure, $csv = false ) {
 	$x = null;
 	$y = null;
 	$z = null;
-	if ( $type == 'gross-size' ) {
+	if ( 'gross-size' === $type ) {
 		if ( $csv ) {
 			$x = isset( $product['Dim. imballo X'] ) ? $product['Dim. imballo X'] : '';
 			$y = isset( $product['Dim. imballo Y'] ) ? $product['Dim. imballo Y'] : '';
@@ -567,12 +593,13 @@ function wcifd_get_product_size( $product, $type, $measure, $csv = false ) {
 
 /**
  * Genera la descrizione breve del prodotto
- * @param  string $description la descrizione completa del prodotto
+ *
+ * @param  string $description la descrizione completa del prodotto.
  * @return string
  */
 function wcifd_get_short_description( $description ) {
 	$output = null;
-	
+
 	$description = wp_strip_all_tags( $description );
 
 	if ( strlen( $description ) > 340 ) {
@@ -585,45 +612,38 @@ function wcifd_get_short_description( $description ) {
 }
 
 
-//CHECK IF AN IMAGE ALREADY EXISTS
+/**
+ * Check if an image already exists
+ *
+ * @param  $guid $guid the guid.
+ * @return array the post ids
+ */
 function wcifd_get_guid( $guid ) {
 	global $wpdb;
 	$query = "
 		SELECT ID FROM $wpdb->posts WHERE guid = '" . $guid . "'
 	";
 	$results = $wpdb->get_results( $query, ARRAY_A );
+
 	return $results;
 }
 
 
+/**
+ * Return the image id from his name
+ *
+ * @param  string $img_name the image name.
+ * @return id the image id
+ */
 function wcifd_get_id_by_img( $img_name ) {
 	global $wpdb;
 	$query = "
 		SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'danea_img_name' AND meta_value = '$img_name'
 	";
 	$results = $wpdb->get_results( $query, ARRAY_A );
+
 	return $results[0]['post_id'];
 }
-
-
-/**
- * Imposta un intervallo di 5 sec per eventi cron
- * @param  array $schedules gli intervalli cron
- * @return array            gli intervalli aggiornati
- */
-function wcifd_add_cron_interval( $schedules ) {
-	if( ! isset( $schedules['every_minute'] ) ) {
-
-	    $schedules['every_minute'] = array(
-	        'interval' => 60,
-	        'display'  => esc_html__( 'Every Minute' ),
-	    );
-
-	}
- 
-    return $schedules;
-}
-add_filter( 'cron_schedules', 'wcifd_add_cron_interval' );
 
 
 /**
@@ -649,25 +669,31 @@ function wcifd_products_update_request() {
 			if ( 'data' == $mode ) {
 
 				if ( move_uploaded_file( $_FILES['file']['tmp_name'], 'wcifd-prodotti.xml' ) ) {
-				
+
 					wcifd_catalog_update( 'wcifd-prodotti.xml' );
-				
+
 					echo "OK\n";
 
 					if ( 1 == $import_images ) {
 
 						echo "ImageSendURL=$imagesSendURL\n";
 						echo "ImageSendFinishURL=$imagesSendFinishURL\n";
-				
+
 						/*Preparazione alla ricezione delle immagini orfane*/
-						update_option( 'wcifd-orphan-images', json_encode( array(), JSON_FORCE_OBJECT ) );
+						$orphan_images = json_decode( get_option( 'wcifd-orphan-images' ), true );
+
+						if ( ! $orphan_images || ! is_array( $orphan_images ) ) {
+
+							update_option( 'wcifd-orphan-images', json_encode( array(), JSON_FORCE_OBJECT ) );
+
+						}
 
 					}
 
 				} else {
 
 					echo 'Error';
-				
+
 				}
 
 			} elseif ( 'images' == $mode && 1 == $import_images ) {
@@ -676,18 +702,26 @@ function wcifd_products_update_request() {
 				wcifd_products_images();
 
 			} elseif ( 'images-send-finish' == $mode && 1 == $import_images ) {
-				
+
 				echo "OK\n";
 
 				/*Gestione delle immaigni orfane a ricezione immagini completata*/
-				if( ! wp_next_scheduled( 'wcifd_orphan_images_event ') ) {
-					
-					wp_schedule_event(
+				$next = as_next_scheduled_action(
+					'wcifd_orphan_images_event',
+					array(),
+					'wcifd-orphan-images'
+				);
+
+				if ( ! $next ) {
+
+					as_schedule_recurring_action(
 						time(),
-						'every_minute',
-						'wcifd_orphan_images_event'
+						60,
+						'wcifd_orphan_images_event',
+						array(),
+						'wcifd-orphan-images'
 					);
-				
+
 				}
 
 			}
@@ -695,7 +729,7 @@ function wcifd_products_update_request() {
 		} else {
 
 			echo 'Error';
-		
+
 		}
 
 		exit;
@@ -708,6 +742,7 @@ add_action( 'init', 'wcifd_products_update_request' );
 
 /**
  * Personalizzazione messaggio di controllo aggiornamenti
+ *
  * @return string
  */
 function wcifd_check_update() {
@@ -718,18 +753,25 @@ add_filter( 'puc_manual_check_link-wc-importer-for-danea-premium', 'wcifd_check_
 
 /**
  * Personalizzazione messaggi di aggiornamento
- * @param  string $message il testo messaggio
- * @param  string $status  lo status della risposta
+ *
+ * @param  string $message il testo messaggio.
+ * @param  string $status  lo status della risposta.
  * @return string
  */
 function wcifd_update_message( $message = '', $status = '' ) {
 
-	if ( $status == 'no_update' ) {
+	if ( 'no_update' === $status ) {
+
 		$message = __( '<strong>Woocommerce Importer for Danea - Premium</strong> is up to date.', 'wcifd' );
-	} else if ( $status == 'update_available' ) {
+
+	} else if ( 'update_available' === $status ) {
+
 		$message = __( 'A new version of <strong>Woocommerce Importer for Danea - Premium</strong> is available.', 'wcifd' );
+
 	} else {
+
 		$message = __( 'There was an error trying to update. Please try again later.', 'wcifd' );
+
 	}
 
 	return $message;
