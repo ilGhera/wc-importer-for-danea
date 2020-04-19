@@ -27,6 +27,7 @@ You'll be able to import suppliers width this free version, also clients and pro
 * Import customers
 * Customers and suppliers import now supports the fiscal fields coming from the Exporter plugin.
 * (Premium) Avoid product name update with a dedicated option
+* (Premium) Avoid product URL update with a dedicated option
 * (Premium) Import Producer from Danea and add it to the product as attribute
 * (Premium) Option for showing the Producer in front-end or not
 * (Premium) Import Danea custom fields and add them to the product as attributes
@@ -50,6 +51,7 @@ Woocommerce Importer for Danea ti permette di importare:
 * Importazione dei clienti da Danea
 * L'importazione di clienti e fornitori supporta ora i campi fiscali utilizzati anche dall'Exporter
 * (Premium) Opzione per escludere il nome del prodotto dalla sincronizzazione
+* (Premium) Opzione per escludere l'URL del prodotto dalla sincronizzazione
 * (Premium) Importazione del campo Produttore di Danea come attributo di prodotto WooCommerce
 * (Premium) Opzione per mostrare o meno il campo Produttore in front-end
 * (Premium) Importazione dei campi aggiuntivi di Danea come attributi di prodotto WooCommerce
@@ -89,9 +91,10 @@ From WordPress.org
 == Changelog ==
 
 = 1.1.1 =
-Release Date: xxx 2020
+Release Date: 19 April 2020
 
-* Enhancement: The Action Scheduler library is now used for synchronizing products
+* Enhancement: (Premium) Action Scheduler library is now used to synchronize products
+* Enhancement: (Premium) Exclude product URL from updates
 
 
 = 1.1.0 =

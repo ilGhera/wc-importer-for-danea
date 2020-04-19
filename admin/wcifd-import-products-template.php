@@ -96,7 +96,7 @@
 				<td>
 					<input type="hidden" name="exclude-description" value="0">
 					<input type="checkbox" name="exclude-description" value="1">
-					<p class="description"><?php esc_html_e( 'Exclude descriptions for products updates.', 'wcifd' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Exclude descriptions from products updates.', 'wcifd' ); ?></p>
 				</td>
 			</tr>
 			<tr>
@@ -104,7 +104,15 @@
 				<td>
 					<input type="hidden" name="exclude-title" value="0">
 					<input type="checkbox" name="exclude-title" value="1">
-					<p class="description"><?php esc_html_e( 'Exclude title for products updates.', 'wcifd' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Exclude title from products updates.', 'wcifd' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Exclude product URL', 'wcifd' ); ?></th>
+				<td>
+					<input type="hidden" name="exclude-url" value="0">
+					<input type="checkbox" name="exclude-url" value="1">
+					<p class="description"><?php esc_html_e( 'Exclude URL from products updates.', 'wcifd' ); ?></p>
 				</td>
 			</tr>
 			<tr>
