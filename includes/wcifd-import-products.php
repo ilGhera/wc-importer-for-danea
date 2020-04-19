@@ -3,7 +3,7 @@
  * Importazione prodotti da file csv
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.2.0
+ * @since 1.3.0
  */
 function wcifd_products() {
 
@@ -341,6 +341,10 @@ function wcifd_products() {
 						/*Nome prodotto*/
 						if ( ! get_option( 'wcifd-exclude-title' ) ) {
 							$args['post_title'] = $title;
+						}
+
+						/*URL prodotto*/
+						if ( ! get_option( 'wcifd-exclude-url' ) ) {
 							$args['post_name']  = sanitize_title_with_dashes( wp_strip_all_tags( $title ) );
 						}
 

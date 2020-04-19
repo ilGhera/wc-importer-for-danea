@@ -44,9 +44,10 @@ You'll be able to import suppliers, clients and products.
 == Changelog ==
 
 = 1.3.0 =
-Release Date: xxx 2020
+Release Date: 19 April 2020
 
-* Enhancement: The Action Scheduler library is now used for synchronizing products
+* Enhancement: Action Scheduler library is now used to synchronize products
+* Enhancement: Exclude product URL from updates
 
 
 = 1.2.2 =
