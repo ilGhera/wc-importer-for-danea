@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.0
+ * @since 1.3.1
  *
  * @param file $file l'xml proveniente da Danea Easyfatt.
  */
@@ -31,25 +31,36 @@ function wcifd_catalog_update( $file ) {
 		$tax_attributes = null;
 		if ( isset( $product->Vat ) ) {
 
-			$tax_attributes = json_encode( $product->Vat->attributes() );
+			$tax_attributes = $product->Vat->attributes();
 
 		}
+
+		$data = array(
+			'product'            => $product,
+			'regular_price_list' => $regular_price_list,
+			'sale_price_list'    => $sale_price_list,
+			'size_type'          => $size_type,
+			'weight_type'        => $weight_type,
+			'tax_attributes'     => $tax_attributes,
+			'deleted_products'   => $deleted_products,
+			'wc_rbp'             => $wc_rbp,
+
+		);
+
+		$hash = md5( json_encode( $data ) );
+
+		/*Aggiungo i dati temporanei nella tabella dedicata*/
+		wcifd_add_temporary_data( $hash, json_encode( $data ) );
 
 		/*Importazione singolo prodotto*/
 		as_enqueue_async_action(
 			'wcifd_import_product_event',
 			array(
-				json_encode( $product ),
-				$regular_price_list,
-				$sale_price_list,
-				$size_type,
-				$weight_type,
-				$tax_attributes,
-				$deleted_products,
-				$wc_rbp,
+				'hash' => $hash,
 			),
 			'wcifd-import-product'
 		);
+
 	}
 
 	/*Cancellazione prodotti*/

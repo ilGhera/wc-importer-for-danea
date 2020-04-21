@@ -4,12 +4,123 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.0
+ * @since 1.3.1
  */
 
 /*No accesso diretto*/
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
+
+
+/**
+ * Crea la/ le tabelle previste dal plugin se non presenti
+ *
+ * @return void
+ */
+function wcifd_db_tables() {
+
+	global $wpdb;
+
+	$temporary_data = $wpdb->prefix . 'wcifd_temporary_data';
+
+	if ( $wpdb->get_var( "SHOW TABLES LIKE '$temporary_data'" ) != $temporary_data ) {
+
+		$charset_collate = $wpdb->get_charset_collate();
+
+		$sql = "CREATE TABLE $temporary_data (
+			id 			bigint(20) NOT NULL AUTO_INCREMENT,
+			hash        varchar(255) NOT NULL,
+			data 		longtext NOT NULL,
+			UNIQUE KEY id (id)
+		) $charset_collate;";
+
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
+		dbDelta( $sql );
+
+	}
+
+}
+
+
+/**
+ * Recupera i dati temporanei del prodotto nella tabella dedicata
+ *
+ * @param  string $hash il codice identificativo del prodotto.
+ * @return array i dati del prodotto
+ */
+function wcifd_get_temporary_data( $hash ) {
+
+	global $wpdb;
+
+	$query = 'SELECT * FROM ' . $wpdb->prefix . "wcifd_temporary_data WHERE hash = '$hash'";
+
+	$results = $wpdb->get_results( $query, ARRAY_A );
+
+	if ( isset( $results[0]['data'] ) ) {
+
+		return json_decode( $results[0]['data'], true );
+
+	}
+
+}
+
+
+/**
+ * Aggiungi i dati del prodotto nella tabella dedicata in attesa che venga creato
+ *
+ * @param  string $hash il codice identificativo del prodotto.
+ * @param  string $data tutti i dati del prodotto.
+ * @return void
+ */
+function wcifd_add_temporary_data( $hash, $data ) {
+
+	global $wpdb;
+
+	$query = 'SELECT * FROM ' . $wpdb->prefix . "wcifd_temporary_data WHERE hash = '$hash'";
+
+	$results = wcifd_get_temporary_data( $hash );
+
+	if ( null == $results ) {
+
+		$wpdb->insert(
+			$wpdb->prefix . 'wcifd_temporary_data',
+			array(
+				'hash' => $hash,
+				'data' => $data,
+			),
+			array(
+				'%s',
+				'%s',
+			)
+		);
+
+	}
+
+}
+
+
+/**
+ * Cancella i dati temporanei del prodotto dalla tabella dedicata
+ *
+ * @param  string $hash il codice identificativo del prodotto.
+ * @return void
+ */
+function wcifd_delete_temporary_data( $hash ) {
+
+	global $wpdb;
+
+	$wpdb->delete(
+		$wpdb->prefix . 'wcifd_temporary_data',
+		array(
+			'hash' => $hash,
+		),
+		array(
+			'%s',
+		)
+	);
+
 }
 
 

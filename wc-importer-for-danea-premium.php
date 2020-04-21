@@ -5,7 +5,7 @@
  * Description: If you've built your online store with Woocommerce and you're using Danea Easyfatt as management software, you definitely need Woocommerce Importer for Danea - Premium!
  * You'll be able to import suppliers, clients and products.
  * Author: ilGhera
- * Version: 1.3.0
+ * Version: 1.3.1
  * Author URI: https://ilghera.com
  * Requires at least: 4.0
  * Tested up to: 5.4
@@ -60,6 +60,10 @@ function load_wc_importer_for_danea_premium() {
 	require_once( WCIFD_INCLUDES . 'wcifd-product-meta-lookup.php' );
 	require_once( WCIFD_INCLUDES . 'wcifd-delete-single-product.php' );
 	require_once( WCIFD_INCLUDES . 'wcifd-import-orders.php' );
+
+	/*Tabelle db*/
+	wcifd_db_tables();
+
 }
 add_action( 'plugins_loaded', 'load_wc_importer_for_danea_premium', -10 );
 
