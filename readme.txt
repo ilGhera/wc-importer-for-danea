@@ -46,6 +46,8 @@ You'll be able to import suppliers, clients and products.
 = 1.3.1 =
 Release Date: 21 April 2020
 
+* Enhancement: Improved images import
+* Enhancement: Improved error handling 
 * Bug fix: PHP Fatal error: ActionScheduler_Action::$args too long. To ensure the args column can be indexed, action args should not be more than %d characters when encoded as JSON.
 
 
