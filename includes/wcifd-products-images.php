@@ -24,9 +24,23 @@ function wcifd_products_images() {
 	/*Caricamento immagine in WP Media*/
 	$wp_image = wp_handle_upload( $file, array( 'test_form' => false ) );
 
-	if ( ! $wp_image || isset( $wp_image['error'] ) ) {
-		echo 'Errore durante il caricamento delle immagini.';
-		exit;
+	if ( isset( $wp_image['error'] ) {
+		
+		error_log( 'WCIFD ERROR | Immagine: ' . print_r( $wp_image['error'], true )  );
+
+		echo 'OK';
+
+		return;
+
+
+	} elseif ( ! $wp_image ) ) {
+		
+		error_log( 'WCIFD ERROR | Immagine ' . $file['name'] . ' non ricevuta'  );
+
+		echo 'OK';
+
+		return;
+
 	}
 
 	/*Indirizzo immagine caricata*/
