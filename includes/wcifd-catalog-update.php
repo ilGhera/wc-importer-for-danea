@@ -47,10 +47,11 @@ function wcifd_catalog_update( $file ) {
 
 		);
 
-		$hash = md5( json_encode( $data ) );
-
+		$hash  = md5( json_encode( $data ) );
+		$class = new WCIFD_Temporary_Data();
+		
 		/*Aggiungo i dati temporanei nella tabella dedicata*/
-		wcifd_add_temporary_data( $hash, json_encode( $data ) );
+		$class->wcifd_add_temporary_data( $hash, json_encode( $data ) );
 
 		/*Importazione singolo prodotto*/
 		as_enqueue_async_action(

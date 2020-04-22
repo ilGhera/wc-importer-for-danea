@@ -1,40 +1,45 @@
 <?php
 /**
  * Abbinamento immagine a singolo prodotto
+ *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.2.1
+ * @since 1.3.1
+ *
+ * @param string $hash il codice del prodotto WooCommerce che identifica l'abbinamento da eseguire.
+ * @return void
  */
-function wcifd_single_product_image( $product_id, $image_file_name, $orphan = false ) {
+function wcifd_single_product_image( $hash ) {
 
-	$attachment = get_page_by_title( $image_file_name, OBJECT, 'attachment' );
+	$temp       = new WCIFD_Temporary_Data();
+	$data       = $temp->wcifd_get_temporary_data( $hash, true );
+	$product_id = isset( $data['product_id'] ) ? $data['product_id'] : '';
+	$image_name = isset( $data['image_name'] ) ? $data['image_name'] : '';
 
-	if ( $product_id && isset( $attachment->ID ) ) {
+	if ( $product_id && $image_name ) {
 
-		/*Lego l'immagine al prodotto*/
-		set_post_thumbnail( $product_id, $attachment->ID );
+		$attachment = get_page_by_title( $image_name, OBJECT, 'attachment' );
 
-		/*Assegno il prodotto come post_parent dell'immagine*/
-		$updated = wp_update_post(
-			array(
-				'ID'          => $attachment->ID,
-				'post_parent' => $product_id,
-			)
-		);
-		
-	}
+		if ( $product_id && isset( $attachment->ID ) ) {
 
-	if ( $product_id && $orphan ) {
-		
-		$orphanImages = json_decode( get_option('wcifd-orphan-images'), true );
-		
-		if ( isset( $orphanImages[ $product_id ] ) ) {
-			
-			unset( $orphanImages[ $product_id ] );
-		
+			/*Lego l'immagine al prodotto*/
+			set_post_thumbnail( $product_id, $attachment->ID );
+
+			/*Assegno il prodotto come post_parent dell'immagine*/
+			$updated = wp_update_post(
+				array(
+					'ID'          => $attachment->ID,
+					'post_parent' => $product_id,
+				)
+			);
+
+			if ( 0 !== $updated && ! is_wp_error( $updated ) ) {
+
+				$temp->wcifd_delete_temporary_data( $hash, true );
+
+			}
+
 		}
-
-		update_option( 'wcifd-orphan-images', json_encode( $orphanImages, JSON_FORCE_OBJECT ) );
 
 	}
 

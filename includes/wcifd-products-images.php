@@ -24,7 +24,7 @@ function wcifd_products_images() {
 	/*Caricamento immagine in WP Media*/
 	$wp_image = wp_handle_upload( $file, array( 'test_form' => false ) );
 
-	if ( isset( $wp_image['error'] ) {
+	if ( isset( $wp_image['error'] ) ) {
 		
 		error_log( 'WCIFD ERROR | Immagine: ' . print_r( $wp_image['error'], true )  );
 
@@ -33,7 +33,7 @@ function wcifd_products_images() {
 		return;
 
 
-	} elseif ( ! $wp_image ) ) {
+	} elseif ( ! $wp_image ) {
 		
 		error_log( 'WCIFD ERROR | Immagine ' . $file['name'] . ' non ricevuta'  );
 

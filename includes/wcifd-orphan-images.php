@@ -4,22 +4,22 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.0
+ * @since 1.3.1
  */
 function wcifd_orphan_images() {
 
-	$orphan_images = json_decode( get_option( 'wcifd-orphan-images' ), true );
+	$temp = new WCIFD_Temporary_Data();
+
+	$orphan_images = $temp->wcifd_get_temporary_images_data();
 
 	if ( is_array( $orphan_images ) && ! empty( $orphan_images ) ) {
 
-		foreach ( $orphan_images as $key => $value ) {
+		foreach ( $orphan_images as $image ) {
 
 			as_enqueue_async_action(
 				'wcifd_product_image_event',
 				array(
-					$key,
-					$value,
-					true,
+					$image['hash'],
 				),
 				'wcifd-product-image'
 			);

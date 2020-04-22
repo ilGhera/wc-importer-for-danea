@@ -10,14 +10,15 @@
  */
 function wcifd_import_single_product( $hash ) {
 
-	$data    = wcifd_get_temporary_data( $hash );
+	$temp    = new WCIFD_Temporary_Data();
+	$data    = $temp->wcifd_get_temporary_data( $hash );
 	$product = isset( $data['product'] ) ? $data['product'] : '';
 
 	/*Termina se il prodotto non esiste*/
 	if ( ! $product ) {
 
 		/*Cancello i dati temporanei dalla tabella dedicata*/
-		wcifd_delete_temporary_data( $hash );
+		$temp->wcifd_delete_temporary_data( $hash );
 
 		return;
 
@@ -413,13 +414,8 @@ function wcifd_import_single_product( $hash ) {
 
 		if ( $image_file_name ) {
 
-			$orphan_images = json_decode( get_option( 'wcifd-orphan-images' ), true );
-
-			if ( is_array( $orphan_images ) ) {
-				$orphan_images[ $product_id ] = $image_file_name;
-			}
-
-			update_option( 'wcifd-orphan-images', json_encode( $orphan_images, JSON_FORCE_OBJECT ) );
+			/*Aggiungo i dati temporanei alla tabella dedicata per l'abbinamento immagine/ prodotto*/
+			$temp->wcifd_add_temporary_image( $hash, $product_id, $image_file_name );
 
 		} else {
 
@@ -716,7 +712,7 @@ function wcifd_import_single_product( $hash ) {
 	}
 
 	/*Cancello i dati temporanei dalla tabella dedicata*/
-	wcifd_delete_temporary_data( $hash );
+	$temp->wcifd_delete_temporary_data( $hash );
 
 }
 add_action( 'wcifd_import_product_event', 'wcifd_import_single_product', 10, 8 );

@@ -41,6 +41,7 @@ function load_wc_importer_for_danea_premium() {
 	define( 'WCIFD_DIR', plugin_dir_path( __FILE__ ) );
 	define( 'WCIFD_URI', plugin_dir_url( __FILE__ ) );
 	define( 'WCIFD_INCLUDES', WCIFD_DIR . 'includes/' );
+	define( 'WCIFD_CLASSES', WCIFD_DIR . 'classes/' );
 	define( 'WCIFD_ADMIN', WCIFD_DIR . 'admin/' );
 
 	/*Internationalization*/
@@ -50,6 +51,7 @@ function load_wc_importer_for_danea_premium() {
 	require_once( WCIFD_DIR . 'libraries/action-scheduler/action-scheduler.php' );
 	require_once( WCIFD_ADMIN . 'wcifd-admin.php' );
 	require_once( WCIFD_INCLUDES . 'wcifd-functions.php' );
+	require_once( WCIFD_CLASSES . 'class-wcifd-temporary-data.php' );
 	require_once( WCIFD_INCLUDES . 'wcifd-products-images.php' );
 	require_once( WCIFD_INCLUDES . 'wcifd-single-product-image.php' );
 	require_once( WCIFD_INCLUDES . 'wcifd-orphan-images.php' );
@@ -60,9 +62,6 @@ function load_wc_importer_for_danea_premium() {
 	require_once( WCIFD_INCLUDES . 'wcifd-product-meta-lookup.php' );
 	require_once( WCIFD_INCLUDES . 'wcifd-delete-single-product.php' );
 	require_once( WCIFD_INCLUDES . 'wcifd-import-orders.php' );
-
-	/*Tabelle db*/
-	wcifd_db_tables();
 
 }
 add_action( 'plugins_loaded', 'load_wc_importer_for_danea_premium', -10 );
