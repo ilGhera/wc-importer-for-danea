@@ -26,7 +26,7 @@ function wcifd_products_images() {
 
 	if ( isset( $wp_image['error'] ) ) {
 		
-		error_log( 'WCIFD ERROR | Immagine: ' . print_r( $wp_image['error'], true )  );
+		error_log( 'WCIFD ERROR | Immagine: ' . $file['name'] . ' | ' . print_r( $wp_image['error'], true )  );
 
 		echo 'OK';
 
@@ -35,7 +35,7 @@ function wcifd_products_images() {
 
 	} elseif ( ! $wp_image ) {
 		
-		error_log( 'WCIFD ERROR | Immagine ' . $file['name'] . ' non ricevuta'  );
+		error_log( 'WCIFD ERROR | Immagine: ' . $file['name'] . ' |  Errore di ricezione'  );
 
 		echo 'OK';
 

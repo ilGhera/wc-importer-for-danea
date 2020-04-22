@@ -202,13 +202,13 @@ function wcifd_import_single_product( $hash ) {
 
 		if ( 0 == $product_id ) {
 
-			error_log( 'WCIFD ERROR | Nuovo prodotto | SKU: ' . $sku  );
+			error_log( 'WCIFD ERROR | Nuovo prodotto | Sku: ' . $sku );
 
 			return;
 
 		} elseif ( is_wp_error( $product_id ) ) {
 
-			error_log( 'WCIFD ERROR | Nuovo prodotto | ' . print_r( $product_id->get_error_message(), true )  );
+			error_log( 'WCIFD ERROR | Nuovo prodotto | Sku: ' . $sku . ' | ' . print_r( $product_id->get_error_message(), true ) );
 
 			return;
 
@@ -382,13 +382,13 @@ function wcifd_import_single_product( $hash ) {
 
 			if ( 0 == $product_id ) {
 
-				error_log( 'WCIFD ERROR | Aggiornamento prodotto | SKU: ' . $sku  );
+				error_log( 'WCIFD ERROR | Aggiornamento prodotto | Sku: ' . $sku );
 
 				return;
 
 			} elseif ( is_wp_error( $product_id ) ) {
 
-				error_log( 'WCIFD ERROR | Aggiornamento prodotto | ' . print_r( $product_id->get_error_message(), true )  );
+				error_log( 'WCIFD ERROR | Aggiornamento prodotto | Sku: ' . $sku . ' | ' . print_r( $product_id->get_error_message(), true ) );
 
 				return;
 
@@ -408,7 +408,6 @@ function wcifd_import_single_product( $hash ) {
 				new wcifdProductMetaLookup( $lookup_data, 'update' );
 
 			}
-
 
 		} else {
 
