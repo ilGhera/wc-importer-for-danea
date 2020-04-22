@@ -204,9 +204,13 @@ function wcifd_import_single_product( $hash ) {
 
 			error_log( 'WCIFD ERROR | Nuovo prodotto | SKU: ' . $sku  );
 
+			return;
+
 		} elseif ( is_wp_error( $product_id ) ) {
 
 			error_log( 'WCIFD ERROR | Nuovo prodotto | ' . print_r( $product_id->get_error_message(), true )  );
+
+			return;
 
 		} else {
 
@@ -380,9 +384,13 @@ function wcifd_import_single_product( $hash ) {
 
 				error_log( 'WCIFD ERROR | Aggiornamento prodotto | SKU: ' . $sku  );
 
+				return;
+
 			} elseif ( is_wp_error( $product_id ) ) {
 
 				error_log( 'WCIFD ERROR | Aggiornamento prodotto | ' . print_r( $product_id->get_error_message(), true )  );
+
+				return;
 
 			} else {
 
