@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WIFD\n"
-"POT-Creation-Date: 2020-04-19 08:49+0200\n"
+"POT-Creation-Date: 2020-04-22 18:28+0200\n"
 "PO-Revision-Date: 2016-05-26 13:25+0200\n"
 "Last-Translator: ilGhera <info@ilghera.com>\n"
 "Language-Team: ilGhera <info@ilghera.com>\n"
@@ -460,22 +460,33 @@ msgstr ""
 msgid "Color"
 msgstr ""
 
-#: includes/wcifd-functions.php:749
+#: includes/wcifd-functions.php:686
+msgid ""
+"WCIFD ERROR | An error accourred while receiving data from Danea Easyfatt"
+msgstr ""
+
+#: includes/wcifd-functions.php:722
+msgid ""
+"WCIFD ERROR | It seems like the URL entered in Danea Easyfatt is not "
+"correct"
+msgstr ""
+
+#: includes/wcifd-functions.php:740
 msgid "Check for updates"
 msgstr ""
 
-#: includes/wcifd-functions.php:765
+#: includes/wcifd-functions.php:756
 msgid ""
 "<strong>Woocommerce Importer for Danea - Premium</strong> is up to date."
 msgstr ""
 
-#: includes/wcifd-functions.php:769
+#: includes/wcifd-functions.php:760
 msgid ""
 "A new version of <strong>Woocommerce Importer for Danea - Premium</strong> "
 "is available."
 msgstr ""
 
-#: includes/wcifd-functions.php:773
+#: includes/wcifd-functions.php:764
 msgid "There was an error trying to update. Please try again later."
 msgstr ""
 
