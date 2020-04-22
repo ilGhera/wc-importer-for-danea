@@ -692,10 +692,6 @@ function wcifd_products_update_request() {
 				/*Aggiornamento immagini*/
 				wcifd_products_images();
 
-			} elseif ( 'images-send-finish' == $mode && 1 == $import_images ) {
-
-				echo "OK\n";
-
 				/*Gestione delle immaigni orfane a ricezione immagini completata*/
 				$next = as_next_scheduled_action(
 					'wcifd_orphan_images_event',
@@ -714,6 +710,11 @@ function wcifd_products_update_request() {
 					);
 
 				}
+
+
+			} elseif ( 'images-send-finish' == $mode && 1 == $import_images ) {
+
+				echo "OK\n";
 
 			}
 
