@@ -200,23 +200,60 @@ function wcifd_import_single_product( $hash ) {
 		/*Inserimento nuovo prodotto*/
 		$product_id = wp_insert_post( $args );
 
-		if ( $variable_product ) {
+		if ( 0 == $product_id ) {
 
-			/*Aggiornamento prodotto padre*/
-			wp_set_object_terms( $product_id, 'variable', 'product_type' );
+			error_log( 'WCIFD ERROR | Nuovo prodotto | SKU: ' . $sku  );
 
-			if ( $imported_attributes ) {
-				foreach ( $imported_attributes as $key => $value ) {
+		} elseif ( is_wp_error( $product_id ) ) {
 
+			error_log( 'WCIFD ERROR | Nuovo prodotto | ' . print_r( $product_id->get_error_message(), true )  );
+
+		} else {
+
+			if ( $variable_product ) {
+
+				/*Aggiornamento prodotto padre*/
+				wp_set_object_terms( $product_id, 'variable', 'product_type' );
+
+				if ( $imported_attributes ) {
+					foreach ( $imported_attributes as $key => $value ) {
+
+						$attr = array(
+							$key => array(
+								'name'         => $key,
+								'value'        => '',
+								'is_visible'   => 1,
+								'is_variation' => 1,
+								'is_taxonomy'  => 1,
+							),
+						);
+
+						if ( get_post_meta( $product_id, '_product_attributes', true ) ) {
+							$metas = get_post_meta( $product_id, '_product_attributes', true );
+						} else {
+							$metas = array();
+						}
+
+						$metas[ $key ] = $attr[ $key ];
+						update_post_meta( $product_id, '_product_attributes', $metas );
+
+						wp_set_object_terms( $product_id, $value, $key );
+					}
+				}
+
+			} elseif ( $parent_sku && $var_attributes ) {
+
+				foreach ( $var_attributes as $key => $value ) {
 					$attr = array(
 						$key => array(
-							'name'         => $key,
+							'name'         => $value,
 							'value'        => '',
 							'is_visible'   => 1,
 							'is_variation' => 1,
 							'is_taxonomy'  => 1,
 						),
 					);
+					update_post_meta( $product_id, 'attribute_' . $key, $value );
 
 					if ( get_post_meta( $product_id, '_product_attributes', true ) ) {
 						$metas = get_post_meta( $product_id, '_product_attributes', true );
@@ -226,54 +263,29 @@ function wcifd_import_single_product( $hash ) {
 
 					$metas[ $key ] = $attr[ $key ];
 					update_post_meta( $product_id, '_product_attributes', $metas );
-
-					wp_set_object_terms( $product_id, $value, $key );
 				}
 			}
 
-		} elseif ( $parent_sku && $var_attributes ) {
+			/*Aggiornamento meta lookup table*/
+			$lookup_data = array(
+				'product_id'     => $product_id,
+				'sku'            => $sku,
+				'virtual'        => 0,
+				'downloadable'   => 0,
+				'min_price'      => $args['meta_input']['_price'],
+				'max_price'      => $args['meta_input']['_price'],
+				'onsale'         => $on_sale,
+				'stock_quantity' => $stock,
+				'stock_status'   => $stock_status,
+				'rating_count'   => 0,
+				'average_rating' => 0.00,
+				'total_sales'    => 0,
 
-			foreach ( $var_attributes as $key => $value ) {
-				$attr = array(
-					$key => array(
-						'name'         => $value,
-						'value'        => '',
-						'is_visible'   => 1,
-						'is_variation' => 1,
-						'is_taxonomy'  => 1,
-					),
-				);
-				update_post_meta( $product_id, 'attribute_' . $key, $value );
+			);
 
-				if ( get_post_meta( $product_id, '_product_attributes', true ) ) {
-					$metas = get_post_meta( $product_id, '_product_attributes', true );
-				} else {
-					$metas = array();
-				}
+			new wcifdProductMetaLookup( $lookup_data );
 
-				$metas[ $key ] = $attr[ $key ];
-				update_post_meta( $product_id, '_product_attributes', $metas );
-			}
 		}
-
-		/*Aggiornamento meta lookup table*/
-		$lookup_data = array(
-			'product_id'     => $product_id,
-			'sku'            => $sku,
-			'virtual'        => 0,
-			'downloadable'   => 0,
-			'min_price'      => $args['meta_input']['_price'],
-			'max_price'      => $args['meta_input']['_price'],
-			'onsale'         => $on_sale,
-			'stock_quantity' => $stock,
-			'stock_status'   => $stock_status,
-			'rating_count'   => 0,
-			'average_rating' => 0.00,
-			'total_sales'    => 0,
-
-		);
-
-		new wcifdProductMetaLookup( $lookup_data );
 
 	} else {
 
@@ -364,18 +376,31 @@ function wcifd_import_single_product( $hash ) {
 			/*Aggiornamento prodotto*/
 			$product_id = wp_update_post( $args );
 
-			/*Aggiornamento meta lookup table*/
-			$lookup_data = array(
-				'product_id'     => $product_id,
-				'sku'            => $sku,
-				'min_price'      => $args['meta_input']['_price'],
-				'max_price'      => $args['meta_input']['_price'],
-				'onsale'         => $on_sale,
-				'stock_quantity' => $stock,
-				'stock_status'   => $stock_status,
-			);
+			if ( 0 == $product_id ) {
 
-			new wcifdProductMetaLookup( $lookup_data, 'update' );
+				error_log( 'WCIFD ERROR | Aggiornamento prodotto | SKU: ' . $sku  );
+
+			} elseif ( is_wp_error( $product_id ) ) {
+
+				error_log( 'WCIFD ERROR | Aggiornamento prodotto | ' . print_r( $product_id->get_error_message(), true )  );
+
+			} else {
+
+				/*Aggiornamento meta lookup table*/
+				$lookup_data = array(
+					'product_id'     => $product_id,
+					'sku'            => $sku,
+					'min_price'      => $args['meta_input']['_price'],
+					'max_price'      => $args['meta_input']['_price'],
+					'onsale'         => $on_sale,
+					'stock_quantity' => $stock,
+					'stock_status'   => $stock_status,
+				);
+
+				new wcifdProductMetaLookup( $lookup_data, 'update' );
+
+			}
+
 
 		} else {
 
