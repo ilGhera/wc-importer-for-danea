@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.1
+ * @since 1.3.2
  *
  * @param  string $hash il codice identificativo del prodotto.
  */
@@ -26,7 +26,7 @@ function wcifd_import_single_product( $hash ) {
 
 	$sku                = isset( $product['Code'] ) ? $product['Code'] : '';
 	$title              = isset( $product['Description'] ) ? $product['Description'] : '';
-	$description        = ( isset( $product['DescriptionHtml'] ) && is_string( $product['DescriptionHtml'] ) ) ? $product['DescriptionHtml'] : $title;
+	$description        = ( isset( $product['DescriptionHtml'] ) && is_string( $product['DescriptionHtml'] ) ) ? wp_filter_kses( $product['DescriptionHtml'] ) : $title;
 	$category           = isset( $product['Category'] ) ? $product['Category'] : '';
 	$sub_category       = isset( $product['Subcategory'] ) ? $product['Subcategory'] : '';
 	$producer_name      = isset( $product['ProducerName'] ) ? $product['ProducerName'] : '';

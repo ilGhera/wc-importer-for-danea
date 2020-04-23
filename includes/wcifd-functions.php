@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.1
+ * @since 1.3.2
  */
 
 /*No accesso diretto*/
@@ -485,7 +485,7 @@ add_action( 'init', 'wcifd_register_attributes' );
 /**
  * Restituisce il prezzo di listino dal file xml in base alle impostazioni dell'admin
  *
- * @param  object  $product      il singolo prodotto.
+ * @param  array   $product      il singolo prodotto.
  * @param  int     $number       il listino impostato.
  * @param  boolean $tax_included prezzi ivati o meno.
  * @return stringa               il prezzo
@@ -496,9 +496,9 @@ function wcifd_get_list_price( $product, $number, $tax_included = false ) {
 	$net_price   = 'NetPrice' . $number;
 
 	if ( $tax_included ) {
-		$output = isset( $product->$gross_price ) ? $product->$gross_price : '';
+		$output = isset( $product[ $gross_price ] ) ? $product[ $gross_price ] : '';
 	} else {
-		$output = isset( $product->$net_price ) ? $product->$net_price : '';
+		$output = isset( $product[ $net_price ] ) ? $product[ $net_price ] : '';
 	}
 
 	return $output;
@@ -541,7 +541,7 @@ function get_wc_rbp() {
 /**
  * Recupera le dimensioni del prodotto, sulla base delle impostazioni
  *
- * @param  mixed   $product il prodotto.
+ * @param  array   $product il prodotto.
  * @param  string  $type    misure nette o meno.
  * @param  string  $measure la dimensione da restituire.
  * @param  boolean $csv     csv o oggetto.
@@ -557,9 +557,9 @@ function wcifd_get_product_size( $product, $type, $measure, $csv = false ) {
 			$y = isset( $product['Dim. imballo Y'] ) ? $product['Dim. imballo Y'] : '';
 			$z = isset( $product['Dim. imballo Z'] ) ? $product['Dim. imballo Z'] : '';
 		} else {
-			$x = isset( $product->PackingSizeX ) ? $product->PackingSizeX : '';
-			$y = isset( $product->PackingSizeY ) ? $product->PackingSizeY : '';
-			$z = isset( $product->PackingSizeZ ) ? $product->PackingSizeZ : '';
+			$x = isset( $product['PackingSizeX'] ) ? $product['PackingSizeX'] : '';
+			$y = isset( $product['PackingSizeY'] ) ? $product['PackingSizeY'] : '';
+			$z = isset( $product['PackingSizeZ'] ) ? $product['PackingSizeZ'] : '';
 		}
 	} else {
 		if ( $csv ) {
@@ -567,9 +567,9 @@ function wcifd_get_product_size( $product, $type, $measure, $csv = false ) {
 			$y = isset( $product['Dim. netta Y'] ) ? $product['Dim. netta Y'] : '';
 			$z = isset( $product['Dim. netta Z'] ) ? $product['Dim. netta Z'] : '';
 		} else {
-			$x = isset( $product->NetSizeX ) ? $product->NetSizeX : '';
-			$y = isset( $product->NetSizeY ) ? $product->NetSizeY : '';
-			$z = isset( $product->NetSizeZ ) ? $product->NetSizeZ : '';
+			$x = isset( $product['NetSizeX'] ) ? $product['NetSizeX'] : '';
+			$y = isset( $product['NetSizeY'] ) ? $product['NetSizeY'] : '';
+			$z = isset( $product['NetSizeZ'] ) ? $product['NetSizeZ'] : '';
 		}
 	}
 
