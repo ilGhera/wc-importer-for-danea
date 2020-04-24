@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.2
+ * @since 1.3.3
  *
  * @param  string $hash il codice identificativo del prodotto.
  */
@@ -26,7 +26,7 @@ function wcifd_import_single_product( $hash ) {
 
 	$sku                = isset( $product['Code'] ) ? $product['Code'] : '';
 	$title              = isset( $product['Description'] ) ? $product['Description'] : '';
-	$description        = ( isset( $product['DescriptionHtml'] ) && is_string( $product['DescriptionHtml'] ) ) ? wp_filter_kses( $product['DescriptionHtml'] ) : $title;
+	$description        = ( isset( $product['DescriptionHtml'] ) && is_string( $product['DescriptionHtml'] ) ) ? wp_filter_post_kses( $product['DescriptionHtml'] ) : $title;
 	$category           = isset( $product['Category'] ) ? $product['Category'] : '';
 	$sub_category       = isset( $product['Subcategory'] ) ? $product['Subcategory'] : '';
 	$producer_name      = isset( $product['ProducerName'] ) ? $product['ProducerName'] : '';
@@ -531,15 +531,15 @@ function wcifd_import_single_product( $hash ) {
 
 		/*Definisco l'arrey delle variazioni*/
 		$variants_array = $variants;
-		if ( isset( $variants->Variant ) && is_array( $variants->Variant ) ) {
-			$variants_array = $variants->Variant;
+		if ( isset( $variants['Variant'] ) && is_array( $variants['Variant'] ) ) {
+			$variants_array = $variants['Variant'];
 		}
 
 		foreach ( $variants_array as $variant ) {
 
-			$barcode  = isset( $variant->Barcode ) ? $variant->Barcode : '';
+			$barcode  = isset( $variant['Barcode'] ) ? $variant['Barcode'] : '';
 			$var_id   = wcifd_search_product( $barcode );
-			$in_stock = isset( $variant->AvailableQty ) ? $variant->AvailableQty : '';
+			$in_stock = isset( $variant['AvailableQty'] ) ? $variant['AvailableQty'] : '';
 
 			$man_stock    = 'yes';
 			$stock_status = ( $in_stock ) ? 'instock' : 'outofstock';
@@ -553,8 +553,8 @@ function wcifd_import_single_product( $hash ) {
 			}
 
 			/*Attributi*/
-			$size  = isset( $variant->Size ) ? $variant->Size : '-';
-			$color = isset( $variant->Color ) ? $variant->Color : '-';
+			$size  = isset( $variant['Size'] ) ? $variant['Size'] : '-';
+			$color = isset( $variant['Color'] ) ? $variant['Color'] : '-';
 
 			/*Aggiunta nuova taglia*/
 			if ( '-' != $size && ! in_array( $size, $avail_sizes ) ) {
