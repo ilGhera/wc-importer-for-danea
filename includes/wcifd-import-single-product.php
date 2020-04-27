@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.3
+ * @since 1.3.4
  *
  * @param  string $hash il codice identificativo del prodotto.
  */
@@ -41,7 +41,7 @@ function wcifd_import_single_product( $hash ) {
 	$weight_type        = isset( $data['weight_type'] ) ? $data['weight_type'] : '';
 	$tax_attributes     = isset( $data['tax_attributes'] ) ? $data['tax_attributes'] : '';
 	$deleted_products   = isset( $data['deleted_products'] ) ? $data['deleted_products'] : '';
-	$wc_rbp             = isset( $data['$wc_rbp'] ) ? $data['$wc_rbp'] : '';
+	$wc_rbp             = isset( $data['wc_rbp'] ) ? $data['wc_rbp'] : '';
 	$parent_sku         = null;
 	$var_attributes     = null;
 	$variable_product   = null;
