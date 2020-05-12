@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.2
+ * @since 1.3.6
  */
 
 /*No accesso diretto*/
@@ -101,7 +101,7 @@ function wcifd_get_italian_tax_fields_names( $field ) {
 
 
 /**
- * Verifica la presenza di un codice di tassazione, utilizzato per la ricerca degli ute4nti
+ * Verifica la presenza di un codice di tassazione, utilizzato per la ricerca degli utenti
  *
  * @param  string $tax_code il codice.
  * @return int              l'id dell'utente legato al codice
@@ -245,6 +245,31 @@ function wcifd_add_taxonomy_term( $product_id, $category, $parent_id = 0, $appen
 
 
 /**
+ * Aggiunge una nuova tax class WooCommerce
+ * 
+ * @param  string $tax_name il nome dell'aliquota.
+ * @return void
+ */
+function wcifd_add_tax_rate_class( $tax_name ) {
+
+	global $wpdb;
+
+	$response = $wpdb->insert(
+		$wpdb->prefix . 'wc_tax_rate_classes',
+		array(
+			'name' => $tax_name,
+			'slug' => sanitize_title_with_dashes( $tax_name ),
+		),
+		array(
+			'%s',
+			'%s',
+		)
+	);
+
+}
+
+
+/**
  * Recupera un'imposta in WooCommerce
  *
  * @param  string $name  il nome dell'imposta.
@@ -271,7 +296,7 @@ function wcifd_get_tax_rate_class( $name, $value = '' ) {
 
 	} else {
 
-		/*Crea una nuova classe di tasszione solo con il valore numerico*/
+		/*Crea una nuova classe di tassazione solo con il valore numerico*/
 		if ( '' != $value ) {
 			$tax_rate_class = 22 != $name ? $name : '';
 
@@ -281,7 +306,10 @@ function wcifd_get_tax_rate_class( $name, $value = '' ) {
 				update_option( 'woocommerce_tax_classes', implode( "\n", $tax_classes ) );
 			}
 
-			$wpdb->insert(
+			/* Nuova classe di tassazione */
+			wcifd_add_tax_rate_class( $tax_rate_class );
+
+			$response = $wpdb->insert(
 				$wpdb->prefix . 'woocommerce_tax_rates',
 				array(
 					'tax_rate_country' => 'IT',
@@ -300,6 +328,7 @@ function wcifd_get_tax_rate_class( $name, $value = '' ) {
 					'%s',
 				)
 			);
+
 		}
 	}
 
