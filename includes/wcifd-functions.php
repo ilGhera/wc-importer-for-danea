@@ -307,7 +307,9 @@ function wcifd_get_tax_rate_class( $name, $value = '' ) {
 			}
 
 			/* Nuova classe di tassazione */
-			wcifd_add_tax_rate_class( $tax_rate_class );
+			if ( $tax_rate_class ) {
+				wcifd_add_tax_rate_class( $tax_rate_class );
+			}
 
 			$response = $wpdb->insert(
 				$wpdb->prefix . 'woocommerce_tax_rates',

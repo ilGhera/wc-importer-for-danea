@@ -30,7 +30,7 @@ function wcifd_import_single_product( $hash ) {
 	$category           = isset( $product['Category'] ) ? $product['Category'] : '';
 	$sub_category       = isset( $product['Subcategory'] ) ? $product['Subcategory'] : '';
 	$producer_name      = isset( $product['ProducerName'] ) ? $product['ProducerName'] : '';
-	$tax                = isset( $product['Vat'][0] ) ? $product['Vat'][0] : '';
+	$tax                = isset( $product['Vat'] ) ? $product['Vat'] : '';
 	$stock              = isset( $product['AvailableQty'] ) ? $product['AvailableQty'] : '';
 	$size_um            = isset( $product['SizeUm'] ) ? $product['SizeUm'] : '';
 	$weight_um          = isset( $product['WeightUm'] ) ? $product['WeightUm'] : '';
