@@ -6,7 +6,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/classes
- * @since 1.3.1
+ * @since 1.3.6
  */
 class WCIFD_Temporary_Data {
 
@@ -19,7 +19,7 @@ class WCIFD_Temporary_Data {
 
 		if ( $init ) {
 
-			add_action( 'plugins_loaded', array( $this, 'wcifd_db_tables' ), 1 );
+			$this->wcifd_db_tables();
 
 		}
 

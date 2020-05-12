@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.4
+ * @since 1.3.6
  *
  * @param  string $hash il codice identificativo del prodotto.
  */
@@ -30,7 +30,7 @@ function wcifd_import_single_product( $hash ) {
 	$category           = isset( $product['Category'] ) ? $product['Category'] : '';
 	$sub_category       = isset( $product['Subcategory'] ) ? $product['Subcategory'] : '';
 	$producer_name      = isset( $product['ProducerName'] ) ? $product['ProducerName'] : '';
-	$tax                = isset( $product['Vat'] ) ? $product['Vat'] : '';
+	$tax                = isset( $product['Vat'][0] ) ? $product['Vat'][0] : '';
 	$stock              = isset( $product['AvailableQty'] ) ? $product['AvailableQty'] : '';
 	$size_um            = isset( $product['SizeUm'] ) ? $product['SizeUm'] : '';
 	$weight_um          = isset( $product['WeightUm'] ) ? $product['WeightUm'] : '';
