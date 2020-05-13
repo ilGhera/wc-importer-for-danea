@@ -45,7 +45,7 @@ You'll be able to import suppliers, clients and products.
 
 
 = 1.3.6 =
-Release Date: 12 May 2020
+Release Date: 13 May 2020
 
 * Bug fix: Database tables not created on plugin activation
 * Bug fix: PHP Notice: Array to string conversion... importing product tax name
