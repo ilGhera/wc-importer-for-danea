@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.7
+ * @since 1.3.8
  *
  * @param  string $hash il codice identificativo del prodotto.
  */
@@ -183,14 +183,20 @@ function wcifd_import_single_product( $hash ) {
 		/*WooCommerce Role Based Price*/
 		if ( is_array( $wc_rbp ) && ! empty( $wc_rbp ) ) {
 
-			$args['meta_input']['_enable_role_based_price'] = 1;
-
 			foreach ( $wc_rbp as $role => $price_types ) {
 				foreach ( $price_types as $key => $value ) {
+
 					$wc_rbp_price = wcifd_get_list_price( $product, $value, $tax_included );
-					$args['meta_input']['_role_based_price'][ $role ][ $key ] = $wc_rbp_price;
+
+					if ( $wc_rbp_price ) {
+
+						$args['meta_input']['_enable_role_based_price'] = 1;
+						$args['meta_input']['_role_based_price'][ $role ][ $key ] = $wc_rbp_price;
+
+					}
 				}
 			}
+
 		}
 
 		/*Descrizione breve*/
@@ -342,14 +348,21 @@ function wcifd_import_single_product( $hash ) {
 			/*WooCommerce Role Based Price*/
 			if ( is_array( $wc_rbp ) && ! empty( $wc_rbp ) ) {
 
-				$args['meta_input']['_enable_role_based_price'] = 1;
-
 				foreach ( $wc_rbp as $role => $price_types ) {
 					foreach ( $price_types as $key => $value ) {
+						
 						$wc_rbp_price = wcifd_get_list_price( $product, $value, $tax_included );
-						$args['meta_input']['_role_based_price'][ $role ][ $key ] = $wc_rbp_price;
+						
+						if ( $wc_rbp_price ) {
+
+							$args['meta_input']['_enable_role_based_price'] = 1;
+							$args['meta_input']['_role_based_price'][ $role ][ $key ] = $wc_rbp_price;
+						
+						}
+
 					}
 				}
+
 			}
 
 			/*Nome prodotto*/
@@ -584,6 +597,25 @@ function wcifd_import_single_product( $hash ) {
 				$meta_input['_price'] = $sale_price;
 			} else {
 				$meta_input['_sale_price'] = '';
+			}
+
+			/*WooCommerce Role Based Price*/
+			if ( is_array( $wc_rbp ) && ! empty( $wc_rbp ) ) {
+
+				foreach ( $wc_rbp as $role => $price_types ) {
+					foreach ( $price_types as $key => $value ) {
+
+						$wc_rbp_price = wcifd_get_list_price( $product, $value, $tax_included );
+
+						if ( $wc_rbp_price ) {
+							
+							$meta_input['_enable_role_based_price'] = 1;
+							$meta_input['_role_based_price'][ $role ][ $key ] = $wc_rbp_price;
+
+						}
+
+					}
+				}
 			}
 
 			/*Aggiunta attributo ai post_meta della variazione*/
