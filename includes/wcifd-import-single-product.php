@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.8
+ * @since 1.3.9
  *
  * @param  string $hash il codice identificativo del prodotto.
  */
@@ -349,18 +349,26 @@ function wcifd_import_single_product( $hash ) {
 			if ( is_array( $wc_rbp ) && ! empty( $wc_rbp ) ) {
 
 				foreach ( $wc_rbp as $role => $price_types ) {
+
 					foreach ( $price_types as $key => $value ) {
-						
+
 						$wc_rbp_price = wcifd_get_list_price( $product, $value, $tax_included );
-						
+
 						if ( $wc_rbp_price ) {
 
 							$args['meta_input']['_enable_role_based_price'] = 1;
 							$args['meta_input']['_role_based_price'][ $role ][ $key ] = $wc_rbp_price;
-						
+
 						}
 
 					}
+
+					if ( $variants && function_exists( 'wc_rbp_delete_variation_data' ) ) {
+
+						wc_rbp_delete_variation_data( $id, $role );
+
+					}
+
 				}
 
 			}
@@ -543,9 +551,9 @@ function wcifd_import_single_product( $hash ) {
 
 		$v = 1;
 
-		/*Definisco l'arrey delle variazioni*/
+		/*Definisco l'array delle variazioni*/
 		$variants_array = $variants;
-		if ( isset( $variants['Variant'] ) && is_array( $variants['Variant'] ) ) {
+		if ( isset( $variants['Variant'][0] ) && is_array( $variants['Variant'][0] ) ) {
 			$variants_array = $variants['Variant'];
 		}
 
@@ -608,7 +616,7 @@ function wcifd_import_single_product( $hash ) {
 						$wc_rbp_price = wcifd_get_list_price( $product, $value, $tax_included );
 
 						if ( $wc_rbp_price ) {
-							
+
 							$meta_input['_enable_role_based_price'] = 1;
 							$meta_input['_role_based_price'][ $role ][ $key ] = $wc_rbp_price;
 
