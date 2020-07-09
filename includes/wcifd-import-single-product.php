@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.9
+ * @since 1.3.10
  *
  * @param  string $hash il codice identificativo del prodotto.
  */
@@ -90,8 +90,17 @@ function wcifd_import_single_product( $hash ) {
 	$type = ( wp_get_post_parent_id( $id ) || $parent_sku ) ? 'product_variation' : 'product';
 
 	/*Gestione magazzino*/
-	$manage_stock = ( isset( $product['ManageWarehouse'] ) && 'true' == $product['ManageWarehouse'] ) ? 'yes' : 'no';
-	$stock_status = ( $stock >= 1 ) ? 'instock' : 'outofstock';
+	$manage_stock = get_option( 'woocommerce_manage_stock' ); // WC option.
+
+	if ( 'yes' === $manage_stock ) {
+		$manage_stock = ( isset( $product['ManageWarehouse'] ) && 'true' == $product['ManageWarehouse'] ) ? 'yes' : 'no'; // Single product from Danea.
+	}
+
+	$stock_status = 'instock';
+
+	if ( 'yes' === $manage_stock && 1 > $stock ) {
+		$stock_status = 'outofstock';
+	}
 
 	/*Dimensione prodotto*/
 	$length = wcifd_get_product_size( $product, $size_type, 'z' );
