@@ -453,7 +453,7 @@ function wcifd_import_single_product( $hash ) {
 		/*Categoria*/
 		$category_term = wcifd_add_taxonomy_term( $product_id, $category, 0 );
 
-		if ( $sub_category && isset( $category_term['term_id'] ) ) {
+		if ( $sub_category && ! is_wp_error( $category_term ) && isset( $category_term['term_id'] ) ) {
 
 			$more_terms = array();
 
