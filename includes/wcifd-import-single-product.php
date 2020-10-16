@@ -152,8 +152,16 @@ function wcifd_import_single_product( $hash ) {
 		$tax_class = wcifd_get_tax_rate_class( $tax, strval( $perc ) );
 	}
 
+	/* Opzione evita creazione nuovi prodotti se non disponibili a magazzino */	
+	$products_not_available = get_option( 'wcifd-products-not-available' );
+
 	/*Inizio aggiornamento prodotto o creazione se non presente*/
 	if ( ! $id ) {
+
+		/* Se impostato dall'admin, non creare nuovi prodotti se non disponibili a magazzino */
+		if ( $products_not_available && 1 > $stock ) {
+			return;
+		}
 
 		$args = array(
 			'post_author'      => $author,
@@ -403,8 +411,7 @@ function wcifd_import_single_product( $hash ) {
 			}
 
 			if ( $variants ) {
-				$transient_product_meta_key = '_transient_wc_var_prices_' . $id;
-				update_option( $transient_product_meta_key, strtotime( '-12 hours' ) );
+				wc_delete_product_transients( $id );
 				wp_cache_delete( 'alloptions', 'options' );
 			}
 
@@ -568,10 +575,9 @@ function wcifd_import_single_product( $hash ) {
 
 		foreach ( $variants_array as $variant ) {
 
-			$barcode  = isset( $variant['Barcode'] ) ? $variant['Barcode'] : '';
-			$var_id   = wcifd_search_product( $barcode );
-			$in_stock = isset( $variant['AvailableQty'] ) ? $variant['AvailableQty'] : '';
-
+			$barcode      = isset( $variant['Barcode'] ) ? $variant['Barcode'] : '';
+			$var_id       = wcifd_search_product( $barcode );
+			$in_stock     = isset( $variant['AvailableQty'] ) ? $variant['AvailableQty'] : '';
 			$man_stock    = 'yes';
 			$stock_status = ( $in_stock ) ? 'instock' : 'outofstock';
 
@@ -662,6 +668,11 @@ function wcifd_import_single_product( $hash ) {
 
 			if ( ! $var_id ) {
 
+				/* Se impostato dall'admin, non creare nuove variazioni se non disponibili a magazzino */
+				if ( $products_not_available && 1 > $in_stock ) {
+					continue;
+				}
+
 				/*Aggiunta nuova variazione*/
 				$var_args = array(
 					'post_author'      => $author,
@@ -724,40 +735,45 @@ function wcifd_import_single_product( $hash ) {
 				}
 			}
 
-			/*Termine di tassonomia (attributo) assegnato alla variazione di prodotto*/
-			if ( $avail_colors ) {
-				wp_set_object_terms( $var_id, $avail_colors, 'pa_color' );
-			}
-			if ( $avail_sizes ) {
-				wp_set_object_terms( $var_id, $avail_sizes, 'pa_size' );
+			if ( $var_id ) {
+
+				/*Termine di tassonomia (attributo) assegnato alla variazione di prodotto*/
+				if ( $avail_colors ) {
+					wp_set_object_terms( $var_id, $avail_colors, 'pa_color' );
+				}
+				if ( $avail_sizes ) {
+					wp_set_object_terms( $var_id, $avail_sizes, 'pa_size' );
+				}
+
+				/*Attributi della variazione di prodotto*/
+				$attr = array();
+
+				if ( $color ) {
+					$attr['pa_color'] = array(
+						'name'         => sanitize_title( $color ),
+						'value'        => '',
+						'is_visible'   => 1,
+						'is_variation' => 1,
+						'is_taxonomy'  => 1,
+					);
+				}
+
+				if ( $size ) {
+					$attr['pa_size'] = array(
+						'name'         => sanitize_title( $size ),
+						'value'        => '',
+						'is_visible'   => 1,
+						'is_variation' => 1,
+						'is_taxonomy'  => 1,
+					);
+				}
+
+				if ( $attr ) {
+					update_post_meta( $var_id, '_product_attributes', $attr );
+				}
+
 			}
 
-			/*Attributi della variazione di prodotto*/
-			$attr = array();
-
-			if ( $color ) {
-				$attr['pa_color'] = array(
-					'name'         => sanitize_title( $color ),
-					'value'        => '',
-					'is_visible'   => 1,
-					'is_variation' => 1,
-					'is_taxonomy'  => 1,
-				);
-			}
-
-			if ( $size ) {
-				$attr['pa_size'] = array(
-					'name'         => sanitize_title( $size ),
-					'value'        => '',
-					'is_visible'   => 1,
-					'is_variation' => 1,
-					'is_taxonomy'  => 1,
-				);
-			}
-
-			if ( $attr ) {
-				update_post_meta( $var_id, '_product_attributes', $attr );
-			}
 		}
 
 		/*Attributi disponibili per il prodotto padre*/

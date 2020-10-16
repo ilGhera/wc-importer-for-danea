@@ -86,6 +86,12 @@ if ( isset( $_POST['deleted-products'] ) ) {
 	update_option( 'wcifd-deleted-products', $deleted_products );
 }
 
+$products_not_available = get_option( 'wcifd-products-not-available' );
+if ( isset( $_POST['products-not-available'] ) ) {
+	$products_not_available = $_POST['products-not-available'] ? $_POST['products-not-available'] : 0;
+	update_option( 'wcifd-products-not-available', $products_not_available );
+}
+
 $publish_new_products = get_option( 'wcifd-publish-new-products' );
 if ( isset( $_POST['publish-new-products'] ) ) {
 	$publish_new_products = $_POST['publish-new-products'] ? $_POST['publish-new-products'] : 0;
@@ -215,6 +221,14 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 					<input type="hidden" name="deleted-products" value="0">
 					<input type="checkbox" name="deleted-products" value="1"<?php echo $deleted_products == 1 ? ' checked="checked"' : ''; ?>>
 					<p class="description"><?php esc_html_e( 'Avoid updating products in trash.', 'wcifd' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Products not available', 'wcifd' ); ?></th>
+				<td>
+					<input type="hidden" name="products-not-available" value="0">
+					<input type="checkbox" name="products-not-available" value="1"<?php echo $products_not_available == 1 ? ' checked="checked"' : ''; ?>>
+					<p class="description"><?php esc_html_e( 'Avoid creating new products if not available in stock.', 'wcifd' ); ?></p>
 				</td>
 			</tr>
 			<tr>
