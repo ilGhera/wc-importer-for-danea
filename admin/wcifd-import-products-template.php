@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @since 1.3.0
+ * @since 1.4.0
  */
 
 $tax_included = get_option( 'wcifd-tax-included' );
@@ -84,6 +84,12 @@ $deleted_products = get_option( 'wcifd-deleted-products' );
 if ( isset( $_POST['deleted-products'] ) ) {
 	$deleted_products = $_POST['deleted-products'] ? $_POST['deleted-products'] : 0;
 	update_option( 'wcifd-deleted-products', $deleted_products );
+}
+
+$products_variations_prices = get_option( 'wcifd-products-variations-prices' );
+if ( isset( $_POST['products-variations-prices'] ) ) {
+	$products_variations_prices = $_POST['products-variations-prices'] ? $_POST['products-variations-prices'] : 0;
+	update_option( 'wcifd-products-variations-prices', $products_variations_prices );
 }
 
 $products_not_available = get_option( 'wcifd-products-not-available' );
@@ -224,6 +230,14 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 				</td>
 			</tr>
 			<tr>
+				<th scope="row"><?php esc_html_e( 'Variations prices', 'wcifd' ); ?></th>
+				<td>
+					<input type="hidden" name="products-variations-prices" value="0">
+					<input type="checkbox" name="products-variations-prices" value="1"<?php echo $products_variations_prices == 1 ? ' checked="checked"' : ''; ?>>
+					<p class="description"><?php esc_html_e( 'Exclude variations prices from products updates.', 'wcifd' ); ?></p>
+				</td>
+			</tr>
+			<tr>
 				<th scope="row"><?php esc_html_e( 'Products not available', 'wcifd' ); ?></th>
 				<td>
 					<input type="hidden" name="products-not-available" value="0">
@@ -244,7 +258,7 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 				<td>
 					<input type="hidden" name="hidden-display-producer" value="0">
 					<input type="checkbox" name="wcifd-display-producer" value="1"<?php echo $display_producer == 1 ? ' checked="checked"' : ''; ?>>
-					<p class="description"><?php esc_html_e( 'Display the producer to the user', 'wcifd' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Display the producer to the user.', 'wcifd' ); ?></p>
 				</td>
 			</tr>
 

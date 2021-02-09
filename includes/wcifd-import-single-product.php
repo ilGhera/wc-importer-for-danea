@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.10
+ * @since 1.4.0
  *
  * @param  string $hash il codice identificativo del prodotto.
  */
@@ -573,6 +573,9 @@ function wcifd_import_single_product( $hash ) {
 			$variants_array = $variants['Variant'];
 		}
 
+        /* Verifico opzione aggiornamento prezzi delle variazioni di prodotto */
+        $exclude_variations_prices = get_option( 'wcifd-products-variations-prices' );
+
 		foreach ( $variants_array as $variant ) {
 
 			$barcode      = isset( $variant['Barcode'] ) ? $variant['Barcode'] : '';
@@ -609,37 +612,42 @@ function wcifd_import_single_product( $hash ) {
 				'_stock'             => $in_stock,
 				'_stock_status'      => $stock_status,
 				'_manage_stock'      => $man_stock,
-				'_regular_price'     => $regular_price,
-				'_price'             => $regular_price,
-				'_sell_price'        => $regular_price,
-			);
+            );
 
-			if ( $sale_price ) {
-				$meta_input['_sale_price'] = $sale_price;
-				$meta_input['_sell_price'] = $sale_price;
-				$meta_input['_price'] = $sale_price;
-			} else {
-				$meta_input['_sale_price'] = '';
-			}
+            if ( ! $var_id || ( $var_id && ! $exclude_variations_prices ) ) {
 
-			/*WooCommerce Role Based Price*/
-			if ( is_array( $wc_rbp ) && ! empty( $wc_rbp ) ) {
+                $meta_input['_regular_price'] = $regular_price;
 
-				foreach ( $wc_rbp as $role => $price_types ) {
-					foreach ( $price_types as $key => $value ) {
+                if ( $sale_price ) {
+                    $meta_input['_sale_price'] = $sale_price;
+                    $meta_input['_sell_price'] = $sale_price;
+                    $meta_input['_price']      = $sale_price;
+                } else {
+                    $meta_input['_sale_price'] = '';
+                    $meta_input['_sell_price'] = $regular_price;
+                    $meta_input['_price']      = $regular_price;
+                }
 
-						$wc_rbp_price = wcifd_get_list_price( $product, $value, $tax_included );
+                /*WooCommerce Role Based Price*/
+                if ( is_array( $wc_rbp ) && ! empty( $wc_rbp ) ) {
 
-						if ( $wc_rbp_price ) {
+                    foreach ( $wc_rbp as $role => $price_types ) {
+                        foreach ( $price_types as $key => $value ) {
 
-							$meta_input['_enable_role_based_price'] = 1;
-							$meta_input['_role_based_price'][ $role ][ $key ] = $wc_rbp_price;
+                            $wc_rbp_price = wcifd_get_list_price( $product, $value, $tax_included );
 
-						}
+                            if ( $wc_rbp_price ) {
 
-					}
-				}
-			}
+                                $meta_input['_enable_role_based_price'] = 1;
+                                $meta_input['_role_based_price'][ $role ][ $key ] = $wc_rbp_price;
+
+                            }
+
+                        }
+                    }
+                }
+
+            }
 
 			/*Aggiunta attributo ai post_meta della variazione*/
 			if ( $avail_colors ) {
@@ -723,12 +731,16 @@ function wcifd_import_single_product( $hash ) {
 					$lookup_data = array(
 						'product_id'     => $var_id,
 						'sku'            => $barcode,
-						'min_price'      => $meta_input['_price'],
-						'max_price'      => $meta_input['_price'],
 						'onsale'         => $on_sale,
 						'stock_quantity' => $in_stock,
 						'stock_status'   => $stock_status,
 					);
+
+                    /* Solo se non attivata l'esclusione dei prezzi della variazioni */
+                    if ( ! $exclude_variations_prices ) {
+						$lookup_data['min_price'] = $meta_input['_price'];
+						$lookup_data['max_price'] = $meta_input['_price'];
+                    }
 
 					new wcifdProductMetaLookup( $lookup_data, 'update' );
 
