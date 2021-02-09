@@ -47,8 +47,8 @@ You'll be able to import suppliers, clients and products.
 = 1.4.0 =
 Release Date: 09 February 2021
 
-* Enhancement: Exclud new products import if not in stock
-* Enhancement: Exclude products variations prices update  
+* Enhancement: Exclude new products import if not in stock
+* Enhancement: Exclude variations prices from products update  
 
 
 = 1.3.10 =
