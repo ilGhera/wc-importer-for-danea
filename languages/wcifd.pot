@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.4\n"
 "X-Poedit-Basepath: ..\n"
-"X-Poedit-KeywordsList: _;__;esc_html__;esc_html_e;esc_attr__;esc_attr_e;_e\n"
+"X-Poedit-KeywordsList: _;__;esc_html__;esc_html_e;esc_attr__;esc_attr_e\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: plugin-update-checker\n"
 
@@ -51,61 +51,12 @@ msgstr ""
 msgid "WooCommerce Role Based Price"
 msgstr ""
 
-#: admin/wcifd-import-clients-template.php:19
-#: admin/wcifd-import-supplier-template.php:19
-msgid "User role"
-msgstr ""
-
-#: admin/wcifd-import-clients-template.php:40
-msgid "Select a Wordpress user role for your clients."
-msgstr ""
-
-#: admin/wcifd-import-clients-template.php:47
-msgid "Add clients"
-msgstr ""
-
-#: admin/wcifd-import-clients-template.php:50
-msgid "Select your clients list file (.csv)"
-msgstr ""
-
-#: admin/wcifd-import-clients-template.php:56
-msgid "Import Clients"
-msgstr ""
-
-#: admin/wcifd-import-orders-template.php:14
-msgid "New customers"
-msgstr ""
-
-#: admin/wcifd-import-orders-template.php:17
-msgid "Don't create users"
-msgstr ""
-
-#: admin/wcifd-import-orders-template.php:18
-msgid "Create users"
-msgstr ""
-
-#: admin/wcifd-import-orders-template.php:20
-msgid "Add new customers as Wordpress users"
-msgstr ""
-
 #: admin/wcifd-import-orders-template.php:24
 msgid "Orders status"
 msgstr ""
 
 #: admin/wcifd-import-orders-template.php:34
 msgid "Select the status that you want to assign to the imported orders."
-msgstr ""
-
-#: admin/wcifd-import-orders-template.php:42
-msgid "Add orders"
-msgstr ""
-
-#: admin/wcifd-import-orders-template.php:45
-msgid "Select your orders list file (.xml)"
-msgstr ""
-
-#: admin/wcifd-import-orders-template.php:53
-msgid "Import Orders"
 msgstr ""
 
 #: admin/wcifd-import-products-template.php:12
@@ -277,13 +228,6 @@ msgstr ""
 msgid "Publish new products directly."
 msgstr ""
 
-#: admin/wcifd-import-products-template.php:164
-#: admin/wcifd-import-products-template.php:216
-#: admin/wcifd-import-products-template.php:258
-#: admin/wcifd-role-based-price.php:61
-msgid "Save Changes"
-msgstr ""
-
 #: admin/wcifd-import-products-template.php:174
 msgid "Import Danea Custom Fields"
 msgstr ""
@@ -360,34 +304,6 @@ msgstr ""
 
 #: admin/wcifd-import-products-template.php:278
 msgid "Select the file type to be imported"
-msgstr ""
-
-#: admin/wcifd-import-products-template.php:284
-msgid "Add products"
-msgstr ""
-
-#: admin/wcifd-import-products-template.php:287
-msgid "Select your products list file"
-msgstr ""
-
-#: admin/wcifd-import-products-template.php:295
-msgid "Import Products"
-msgstr ""
-
-#: admin/wcifd-import-supplier-template.php:40
-msgid "Select a Wordpress user role for your suppliers."
-msgstr ""
-
-#: admin/wcifd-import-supplier-template.php:47
-msgid "Add suppliers"
-msgstr ""
-
-#: admin/wcifd-import-supplier-template.php:50
-msgid "Select your suppliers list file (.csv)"
-msgstr ""
-
-#: admin/wcifd-import-supplier-template.php:56
-msgid "Import Suppliers"
 msgstr ""
 
 #: admin/wcifd-role-based-price.php:47

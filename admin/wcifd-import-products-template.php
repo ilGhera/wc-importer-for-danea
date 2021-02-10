@@ -3,9 +3,8 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @since 1.1.0
+ * @since 1.1.2
  */
-
 ?>
 
 <ul class="subsubsub wcifd">
@@ -129,6 +128,22 @@
 					<input type="hidden" name="deleted-products" value="0">
 					<input type="checkbox" name="deleted-products" value="1">
 					<p class="description"><?php esc_html_e( 'Avoid updating products in trash.', 'wcifd' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Variations prices', 'wcifd' ); ?></th>
+				<td>
+					<input type="hidden" name="products-variations-prices" value="0">
+					<input type="checkbox" name="products-variations-prices" value="1">
+					<p class="description"><?php esc_html_e( 'Exclude variations prices from products updates.', 'wcifd' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Products not available', 'wcifd' ); ?></th>
+				<td>
+					<input type="hidden" name="products-not-available" value="0">
+					<input type="checkbox" name="products-not-available" value="1">
+					<p class="description"><?php esc_html_e( 'Avoid creating new products if not available in stock.', 'wcifd' ); ?></p>
 				</td>
 			</tr>
 			<tr>

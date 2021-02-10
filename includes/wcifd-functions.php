@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.1.1
+ * @since 1.1.2
  */
 
 /*No accesso diretto*/
@@ -101,7 +101,7 @@ function wcifd_get_italian_tax_fields_names( $field ) {
 
 
 /**
- * Verifica la presenza di un codice di tassazione, utilizzato per la ricerca degli ute4nti
+ * Verifica la presenza di un codice di tassazione, utilizzato per la ricerca degli utenti
  *
  * @param  string $tax_code il codice.
  * @return int              l'id dell'utente legato al codice
@@ -245,6 +245,31 @@ function wcifd_add_taxonomy_term( $product_id, $category, $parent_id = 0, $appen
 
 
 /**
+ * Aggiunge una nuova tax class WooCommerce
+ * 
+ * @param  string $tax_name il nome dell'aliquota.
+ * @return void
+ */
+function wcifd_add_tax_rate_class( $tax_name ) {
+
+	global $wpdb;
+
+	$response = $wpdb->insert(
+		$wpdb->prefix . 'wc_tax_rate_classes',
+		array(
+			'name' => $tax_name,
+			'slug' => sanitize_title_with_dashes( $tax_name ),
+		),
+		array(
+			'%s',
+			'%s',
+		)
+	);
+
+}
+
+
+/**
  * Recupera un'imposta in WooCommerce
  *
  * @param  string $name  il nome dell'imposta.
@@ -271,7 +296,7 @@ function wcifd_get_tax_rate_class( $name, $value = '' ) {
 
 	} else {
 
-		/*Crea una nuova classe di tasszione solo con il valore numerico*/
+		/*Crea una nuova classe di tassazione solo con il valore numerico*/
 		if ( '' != $value ) {
 			$tax_rate_class = 22 != $name ? $name : '';
 
@@ -281,7 +306,12 @@ function wcifd_get_tax_rate_class( $name, $value = '' ) {
 				update_option( 'woocommerce_tax_classes', implode( "\n", $tax_classes ) );
 			}
 
-			$wpdb->insert(
+			/* Nuova classe di tassazione */
+			if ( $tax_rate_class ) {
+				wcifd_add_tax_rate_class( $tax_rate_class );
+			}
+
+			$response = $wpdb->insert(
 				$wpdb->prefix . 'woocommerce_tax_rates',
 				array(
 					'tax_rate_country' => 'IT',
@@ -300,6 +330,7 @@ function wcifd_get_tax_rate_class( $name, $value = '' ) {
 					'%s',
 				)
 			);
+
 		}
 	}
 
@@ -485,7 +516,7 @@ add_action( 'init', 'wcifd_register_attributes' );
 /**
  * Restituisce il prezzo di listino dal file xml in base alle impostazioni dell'admin
  *
- * @param  object  $product      il singolo prodotto.
+ * @param  array   $product      il singolo prodotto.
  * @param  int     $number       il listino impostato.
  * @param  boolean $tax_included prezzi ivati o meno.
  * @return stringa               il prezzo
@@ -496,9 +527,9 @@ function wcifd_get_list_price( $product, $number, $tax_included = false ) {
 	$net_price   = 'NetPrice' . $number;
 
 	if ( $tax_included ) {
-		$output = isset( $product->$gross_price ) ? $product->$gross_price : '';
+		$output = isset( $product[ $gross_price ] ) ? $product[ $gross_price ] : '';
 	} else {
-		$output = isset( $product->$net_price ) ? $product->$net_price : '';
+		$output = isset( $product[ $net_price ] ) ? $product[ $net_price ] : '';
 	}
 
 	return $output;
@@ -541,7 +572,7 @@ function get_wc_rbp() {
 /**
  * Recupera le dimensioni del prodotto, sulla base delle impostazioni
  *
- * @param  mixed   $product il prodotto.
+ * @param  array   $product il prodotto.
  * @param  string  $type    misure nette o meno.
  * @param  string  $measure la dimensione da restituire.
  * @param  boolean $csv     csv o oggetto.
@@ -557,9 +588,9 @@ function wcifd_get_product_size( $product, $type, $measure, $csv = false ) {
 			$y = isset( $product['Dim. imballo Y'] ) ? $product['Dim. imballo Y'] : '';
 			$z = isset( $product['Dim. imballo Z'] ) ? $product['Dim. imballo Z'] : '';
 		} else {
-			$x = isset( $product->PackingSizeX ) ? $product->PackingSizeX : '';
-			$y = isset( $product->PackingSizeY ) ? $product->PackingSizeY : '';
-			$z = isset( $product->PackingSizeZ ) ? $product->PackingSizeZ : '';
+			$x = isset( $product['PackingSizeX'] ) ? $product['PackingSizeX'] : '';
+			$y = isset( $product['PackingSizeY'] ) ? $product['PackingSizeY'] : '';
+			$z = isset( $product['PackingSizeZ'] ) ? $product['PackingSizeZ'] : '';
 		}
 	} else {
 		if ( $csv ) {
@@ -567,9 +598,9 @@ function wcifd_get_product_size( $product, $type, $measure, $csv = false ) {
 			$y = isset( $product['Dim. netta Y'] ) ? $product['Dim. netta Y'] : '';
 			$z = isset( $product['Dim. netta Z'] ) ? $product['Dim. netta Z'] : '';
 		} else {
-			$x = isset( $product->NetSizeX ) ? $product->NetSizeX : '';
-			$y = isset( $product->NetSizeY ) ? $product->NetSizeY : '';
-			$z = isset( $product->NetSizeZ ) ? $product->NetSizeZ : '';
+			$x = isset( $product['NetSizeX'] ) ? $product['NetSizeX'] : '';
+			$y = isset( $product['NetSizeY'] ) ? $product['NetSizeY'] : '';
+			$z = isset( $product['NetSizeZ'] ) ? $product['NetSizeZ'] : '';
 		}
 	}
 
@@ -678,21 +709,12 @@ function wcifd_products_update_request() {
 
 						echo "ImageSendURL=$imagesSendURL\n";
 						echo "ImageSendFinishURL=$imagesSendFinishURL\n";
-
-						/*Preparazione alla ricezione delle immagini orfane*/
-						$orphan_images = json_decode( get_option( 'wcifd-orphan-images' ), true );
-
-						if ( ! $orphan_images || ! is_array( $orphan_images ) ) {
-
-							update_option( 'wcifd-orphan-images', json_encode( array(), JSON_FORCE_OBJECT ) );
-
-						}
-
+				
 					}
 
 				} else {
 
-					echo 'Error';
+					esc_html_e( 'WCIFD ERROR | An error accourred while receiving data from Danea Easyfatt', 'wcifd' );
 
 				}
 
@@ -728,7 +750,7 @@ function wcifd_products_update_request() {
 
 		} else {
 
-			echo 'Error';
+			esc_html_e( 'WCIFD ERROR | It seems like the URL entered in Danea Easyfatt is not correct', 'wcifd' );
 
 		}
 

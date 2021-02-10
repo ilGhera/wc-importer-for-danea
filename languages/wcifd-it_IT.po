@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WED\n"
-"POT-Creation-Date: 2020-04-19 09:35+0200\n"
+"POT-Creation-Date: 2020-04-19 09:26+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.4\n"
-"X-Poedit-KeywordsList: _;__;esc_html__;esc_html_e;esc_attr__;esc_attr_e;_e\n"
+"X-Poedit-KeywordsList: _;__;esc_html__;esc_html_e;esc_attr__;esc_attr_e\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: plugin-update-checker\n"
@@ -52,43 +52,6 @@ msgstr "Ordini"
 msgid "WooCommerce Role Based Price"
 msgstr ""
 
-#: admin/wcifd-import-clients-template.php:19
-#: admin/wcifd-import-supplier-template.php:19
-msgid "User role"
-msgstr "Ruolo utente"
-
-#: admin/wcifd-import-clients-template.php:40
-msgid "Select a Wordpress user role for your clients."
-msgstr "Seleziona un livello utente Wordrpess per i tuoi clienti."
-
-#: admin/wcifd-import-clients-template.php:47
-msgid "Add clients"
-msgstr "Aggiungi i clienti"
-
-#: admin/wcifd-import-clients-template.php:50
-msgid "Select your clients list file (.csv)"
-msgstr "Seleziona l'elenco dei tuoi clienti (.csv)"
-
-#: admin/wcifd-import-clients-template.php:56
-msgid "Import Clients"
-msgstr "Importa i clienti"
-
-#: admin/wcifd-import-orders-template.php:14
-msgid "New customers"
-msgstr "Nuovi clienti"
-
-#: admin/wcifd-import-orders-template.php:17
-msgid "Don't create users"
-msgstr "Non creare utenti"
-
-#: admin/wcifd-import-orders-template.php:18
-msgid "Create users"
-msgstr "Crea uteni"
-
-#: admin/wcifd-import-orders-template.php:20
-msgid "Add new customers as Wordpress users"
-msgstr "Aggiungi i nuovi clienti come utenti Wordpress"
-
 #: admin/wcifd-import-orders-template.php:24
 msgid "Orders status"
 msgstr "Stato ordini"
@@ -96,18 +59,6 @@ msgstr "Stato ordini"
 #: admin/wcifd-import-orders-template.php:34
 msgid "Select the status that you want to assign to the imported orders."
 msgstr "Seleziona lo stato che vuoi assegnare agli ordini importati."
-
-#: admin/wcifd-import-orders-template.php:42
-msgid "Add orders"
-msgstr "Aggiungi gli ordini"
-
-#: admin/wcifd-import-orders-template.php:45
-msgid "Select your orders list file (.xml)"
-msgstr "Seleziona l'elenco degli ordini (.xml)"
-
-#: admin/wcifd-import-orders-template.php:53
-msgid "Import Orders"
-msgstr "Importa gli Ordini"
 
 #: admin/wcifd-import-products-template.php:12
 msgid "General"
@@ -280,13 +231,6 @@ msgstr "Pubblicazione nuovi prodotti"
 msgid "Publish new products directly."
 msgstr "Pubblicare i nuovi prodotti direttamente."
 
-#: admin/wcifd-import-products-template.php:164
-#: admin/wcifd-import-products-template.php:216
-#: admin/wcifd-import-products-template.php:258
-#: admin/wcifd-role-based-price.php:61
-msgid "Save Changes"
-msgstr "Salva impostazioni"
-
 #: admin/wcifd-import-products-template.php:174
 msgid "Import Danea Custom Fields"
 msgstr "Importazione dei Campi Aggiuntivi di Danea"
@@ -366,34 +310,6 @@ msgstr ""
 #: admin/wcifd-import-products-template.php:278
 msgid "Select the file type to be imported"
 msgstr "Seleziona il tipo di file da importare"
-
-#: admin/wcifd-import-products-template.php:284
-msgid "Add products"
-msgstr "Aggiungi i prodotti"
-
-#: admin/wcifd-import-products-template.php:287
-msgid "Select your products list file"
-msgstr "Seleziona l'elenco dei tuoi prodotti"
-
-#: admin/wcifd-import-products-template.php:295
-msgid "Import Products"
-msgstr "Importa i Prodotti"
-
-#: admin/wcifd-import-supplier-template.php:40
-msgid "Select a Wordpress user role for your suppliers."
-msgstr "Seleziona un livello utente Wordpress per i tuoi fornitori."
-
-#: admin/wcifd-import-supplier-template.php:47
-msgid "Add suppliers"
-msgstr "Aggiungi i fornitori"
-
-#: admin/wcifd-import-supplier-template.php:50
-msgid "Select your suppliers list file (.csv)"
-msgstr "Seleziona l'elenco dei tuoi fornitori (.csv)"
-
-#: admin/wcifd-import-supplier-template.php:56
-msgid "Import Suppliers"
-msgstr "Importa i Fornitori"
 
 #: admin/wcifd-role-based-price.php:47
 msgid "The Danea price list to use"
@@ -482,11 +398,71 @@ msgstr "Importati %d di %d contatti<br>"
 msgid "Updated %1$d of %2$d contacts"
 msgstr "Importati %d di %d contatti"
 
+#~ msgid "User role"
+#~ msgstr "Ruolo utente"
+
+#~ msgid "Select a Wordpress user role for your clients."
+#~ msgstr "Seleziona un livello utente Wordrpess per i tuoi clienti."
+
+#~ msgid "Add clients"
+#~ msgstr "Aggiungi i clienti"
+
+#~ msgid "Select your clients list file (.csv)"
+#~ msgstr "Seleziona l'elenco dei tuoi clienti (.csv)"
+
+#~ msgid "Import Clients"
+#~ msgstr "Importa i clienti"
+
+#~ msgid "New customers"
+#~ msgstr "Nuovi clienti"
+
+#~ msgid "Don't create users"
+#~ msgstr "Non creare utenti"
+
+#~ msgid "Create users"
+#~ msgstr "Crea uteni"
+
+#~ msgid "Add new customers as Wordpress users"
+#~ msgstr "Aggiungi i nuovi clienti come utenti Wordpress"
+
+#~ msgid "Add orders"
+#~ msgstr "Aggiungi gli ordini"
+
+#~ msgid "Select your orders list file (.xml)"
+#~ msgstr "Seleziona l'elenco degli ordini (.xml)"
+
+#~ msgid "Import Orders"
+#~ msgstr "Importa gli Ordini"
+
 #~ msgid "Exclude descriptions for products updates."
 #~ msgstr "Escludere descrizione dall'aggiornamento dei prodotti."
 
 #~ msgid "Exclude title for products updates."
 #~ msgstr "Escludere il titolo dall'aggiornamento dei prodotti."
+
+#~ msgid "Save Changes"
+#~ msgstr "Salva impostazioni"
+
+#~ msgid "Add products"
+#~ msgstr "Aggiungi i prodotti"
+
+#~ msgid "Select your products list file"
+#~ msgstr "Seleziona l'elenco dei tuoi prodotti"
+
+#~ msgid "Import Products"
+#~ msgstr "Importa i Prodotti"
+
+#~ msgid "Select a Wordpress user role for your suppliers."
+#~ msgstr "Seleziona un livello utente Wordpress per i tuoi fornitori."
+
+#~ msgid "Add suppliers"
+#~ msgstr "Aggiungi i fornitori"
+
+#~ msgid "Select your suppliers list file (.csv)"
+#~ msgstr "Seleziona l'elenco dei tuoi fornitori (.csv)"
+
+#~ msgid "Import Suppliers"
+#~ msgstr "Importa i Fornitori"
 
 #~ msgid "Imported %1$d orders, %2$d users and %3$d products."
 #~ msgstr "Importati %d ordini, %d clienti and %d prodotti."
