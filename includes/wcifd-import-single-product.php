@@ -86,7 +86,7 @@ function wcifd_import_single_product( $hash ) {
 	$status = ( $var_attributes ) ? 'publish' : $new_products_status;
 
 	/*Verifico la presenza del prodotto*/
-	$id   = wcifd_search_product( $sku );
+	$id   = wcifd_search_product( $sku, $parent_product_id );
 	$type = ( wp_get_post_parent_id( $id ) || $parent_product_id ) ? 'product_variation' : 'product';
 
 	/*Gestione magazzino*/
