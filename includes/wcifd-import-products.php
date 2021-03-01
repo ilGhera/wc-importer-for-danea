@@ -3,7 +3,7 @@
  * Importazione prodotti da file csv
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.0
+ * @since 1.4.1
  */
 function wcifd_products() {
 
@@ -80,9 +80,9 @@ function wcifd_products() {
 					
 						$parent_sku = $notes['parent_sku'];	
 					
-					} elseif (isset( $notes['parent_id']) && $notes['parent_id'] !== '' ) {
+					} elseif ( isset( $notes['parent_id'] ) && $notes['parent_id'] !== '' ) {
 
-						$parent_sku = $notes['parent_id'];	
+						$parent_product_id = $notes['parent_id'];	
 					
 					}
 
@@ -94,7 +94,7 @@ function wcifd_products() {
 					$var_type = isset( $notes['product_type'] ) ? $notes['product_type'] : '';
 
 					/*Prodotto variabile*/
-					if ( $var_type == 'variable' && $notes['attributes'] ) {
+					if ( 'variable' === $var_type && $notes['attributes'] ) {
 						$variable_product = true;
 						$imported_attributes = $notes['attributes'];
 					}
@@ -106,7 +106,7 @@ function wcifd_products() {
 
 				/*Verifico la presenza del prodotto*/
 				$id   = wcifd_search_product( $sku );
-				$type = ( wp_get_post_parent_id( $id ) || $parent_sku ) ? 'product_variation' : 'product';
+				$type = ( wp_get_post_parent_id( $id ) || $parent_product_id ) ? 'product_variation' : 'product';
 
 				/*Gestione magazzino*/
 				$stock = $product['Q.tà giacenza'];

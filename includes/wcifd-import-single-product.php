@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.4.0
+ * @since 1.4.1
  *
  * @param  string $hash il codice identificativo del prodotto.
  */
@@ -61,7 +61,7 @@ function wcifd_import_single_product( $hash ) {
 
 			} elseif ( isset( $notes['parent_id'] ) && '' !== $notes['parent_id'] ) {
 
-				$parent_sku = $notes['parent_id'];
+                $parent_product_id = $notes['parent_id'];	
 
 			}
 
@@ -87,7 +87,7 @@ function wcifd_import_single_product( $hash ) {
 
 	/*Verifico la presenza del prodotto*/
 	$id   = wcifd_search_product( $sku );
-	$type = ( wp_get_post_parent_id( $id ) || $parent_sku ) ? 'product_variation' : 'product';
+	$type = ( wp_get_post_parent_id( $id ) || $parent_product_id ) ? 'product_variation' : 'product';
 
 	/*Gestione magazzino*/
 	$manage_stock = get_option( 'woocommerce_manage_stock' ); // WC option.
@@ -244,15 +244,20 @@ function wcifd_import_single_product( $hash ) {
 				wp_set_object_terms( $product_id, 'variable', 'product_type' );
 
 				if ( $imported_attributes ) {
+
 					foreach ( $imported_attributes as $key => $value ) {
+
+                        $is_taxonomy = false === strpos( $key, 'pa_' ) ? false : true;
+                        $attr_value  = $is_taxonomy ? null : $value;
+                        $attr_value  = is_array( $attr_value ) ? implode( ' | ', $attr_value ) : $attr_value;
 
 						$attr = array(
 							$key => array(
 								'name'         => $key,
-								'value'        => '',
+								'value'        => $attr_value,
 								'is_visible'   => 1,
 								'is_variation' => 1,
-								'is_taxonomy'  => 1,
+								'is_taxonomy'  => $is_taxonomy,
 							),
 						);
 
@@ -265,32 +270,47 @@ function wcifd_import_single_product( $hash ) {
 						$metas[ $key ] = $attr[ $key ];
 						update_post_meta( $product_id, '_product_attributes', $metas );
 
-						wp_set_object_terms( $product_id, $value, $key );
+                        if ( $is_taxonomy ) {
+
+                            wp_set_object_terms( $product_id, $value, $key );
+
+                        }
+
 					}
 				}
 
-			} elseif ( $parent_sku && $var_attributes ) {
+			} elseif ( $parent_product_id && $var_attributes ) {
 
 				foreach ( $var_attributes as $key => $value ) {
-					$attr = array(
-						$key => array(
-							'name'         => $value,
-							'value'        => '',
-							'is_visible'   => 1,
-							'is_variation' => 1,
-							'is_taxonomy'  => 1,
-						),
-					);
+
 					update_post_meta( $product_id, 'attribute_' . $key, $value );
 
-					if ( get_post_meta( $product_id, '_product_attributes', true ) ) {
-						$metas = get_post_meta( $product_id, '_product_attributes', true );
-					} else {
-						$metas = array();
-					}
+                    $is_taxonomy = false === strpos( $key, 'pa_' ) ? false : true;
 
-					$metas[ $key ] = $attr[ $key ];
-					update_post_meta( $product_id, '_product_attributes', $metas );
+                    if ( $is_taxonomy ) {
+
+                        $attr = array(
+                            $key => array(
+                                'name'         => $value,
+                                'value'        => '',
+                                'is_visible'   => 1,
+                                'is_variation' => 1,
+                                'is_taxonomy'  => 1,
+                            ),
+                        );
+
+
+                        if ( get_post_meta( $product_id, '_product_attributes', true ) ) {
+                            $metas = get_post_meta( $product_id, '_product_attributes', true );
+                        } else {
+                            $metas = array();
+                        }
+
+                        $metas[ $key ] = $attr[ $key ];
+                        update_post_meta( $product_id, '_product_attributes', $metas );
+
+                    }
+
 				}
 			}
 
