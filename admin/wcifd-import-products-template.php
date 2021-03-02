@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @since 1.4.0
+ * @since 1.4.1
  */
 
 $tax_included = get_option( 'wcifd-tax-included' );
@@ -24,6 +24,18 @@ $display_producer = get_option( 'wcifd-display-producer' );
 if ( isset( $_POST['hidden-display-producer'] ) ) {
 	$display_producer = ( isset( $_POST['wcifd-display-producer'] ) ) ? $_POST['wcifd-display-producer'] : 0;
 	update_option( 'wcifd-display-producer', $display_producer );
+}
+
+$display_supplier = get_option( 'wcifd-display-supplier' );
+if ( isset( $_POST['hidden-display-supplier'] ) ) {
+	$display_supplier = ( isset( $_POST['wcifd-display-supplier'] ) ) ? $_POST['wcifd-display-supplier'] : 0;
+	update_option( 'wcifd-display-supplier', $display_supplier );
+}
+
+$display_sup_product_code = get_option( 'wcifd-display-sup-product-code' );
+if ( isset( $_POST['hidden-display-sup-product-code'] ) ) {
+	$display_sup_product_code = ( isset( $_POST['wcifd-display-sup-product-code'] ) ) ? $_POST['wcifd-display-sup-product-code'] : 0;
+	update_option( 'wcifd-display-sup-product-code', $display_sup_product_code );
 }
 
 $regular_price_list = get_option( 'wcifd-regular-price-list' );
@@ -127,7 +139,7 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 				<th scope="row"><?php esc_html_e( 'Prices imported with tax', 'wcifd' ); ?></th>
 				<td>
 					<select name="tax-included" class="wcifd">
-						<option value="1" <?php echo( $tax_included == 1 ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( ' Yes, I will import prices inclusive of tax', 'wcifd' ); ?></option>
+						<option value="1" <?php echo( $tax_included == 1 ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Yes, I will import prices inclusive of tax', 'wcifd' ); ?></option>
 						<option value="0" <?php echo( $tax_included == 0 ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'No, I will import prices exclusive of tax', 'wcifd' ); ?></option>
 					</select>
 					<p class="description"><?php esc_html_e( 'In Danea you can choose if export prices with tax included or not. What are you going to import?', 'wcifd' ); ?></p>
@@ -246,7 +258,7 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php esc_html_e( 'Supplier', 'wcifd' ); ?></th>
+				<th scope="row"><?php esc_html_e( 'Supplier as author', 'wcifd' ); ?></th>
 				<td>
 					<input type="hidden" name="hidden-use-suppliers" value="0">
 					<input type="checkbox" name="wcifd-use-suppliers" value="1"<?php echo $use_suppliers == 1 ? ' checked="checked"' : ''; ?>>
@@ -261,7 +273,22 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 					<p class="description"><?php esc_html_e( 'Display the producer to the user.', 'wcifd' ); ?></p>
 				</td>
 			</tr>
-
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Supplier', 'wcifd' ); ?></th>
+				<td>
+					<input type="hidden" name="hidden-display-supplier" value="0">
+					<input type="checkbox" name="wcifd-display-supplier" value="1"<?php echo $display_supplier == 1 ? ' checked="checked"' : ''; ?>>
+					<p class="description"><?php esc_html_e( 'Display the supplier to the user.', 'wcifd' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Supplier product code', 'wcifd' ); ?></th>
+				<td>
+					<input type="hidden" name="hidden-display-sup-product-code" value="0">
+					<input type="checkbox" name="wcifd-display-sup-product-code" value="1"<?php echo $display_sup_product_code == 1 ? ' checked="checked"' : ''; ?>>
+					<p class="description"><?php esc_html_e( 'Display the Supplier product code to the user.', 'wcifd' ); ?></p>
+				</td>
+			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Publish new products', 'wcifd' ); ?></th>
 				<td>

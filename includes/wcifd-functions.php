@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.6
+ * @since 1.4.1
  */
 
 /*No accesso diretto*/
@@ -449,14 +449,16 @@ function wcifd_update_transient_wc_attributes() {
 
 
 /**
- * Registrazione degli attributi "Size" end "Color"
+ * Registrazione degli attributi
  */
 function wcifd_register_attributes() {
 
 	$attributes = array(
-		'size'     => __( 'Size', 'wcifd' ),
-		'color'    => __( 'Color', 'wcifd' ),
-		'producer' => __( 'Producer', 'wcifd' ),
+		'size'             => __( 'Size', 'wcifd' ),
+		'color'            => __( 'Color', 'wcifd' ),
+		'producer'         => __( 'Producer', 'wcifd' ),
+		'supplier'         => __( 'Supplier', 'wcifd' ),
+		'sup-product-code' => __( 'Supplier product code', 'wcifd' ),
 	);
 
 	if ( isset( $_POST['wcifd-custom-fields-hidden'] ) ) {
