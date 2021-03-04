@@ -45,8 +45,10 @@ You'll be able to import suppliers, clients and products.
 
 
 = 1.4.1 =
-Release Date: 22 February 2021
+Release Date: 4 March 2021
 
+* Enhancement: Import and display in front-end the supplier name 
+* Enhancement: Import and display in front-end the supplier product code
 * Bug fix: Import variable products with no sku via CSV
 * Bug fix: No update of variations based on custom attributes previously imported via CSV
 
