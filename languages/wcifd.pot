@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WIFD\n"
-"POT-Creation-Date: 2021-03-01 17:35+0100\n"
+"POT-Creation-Date: 2021-03-04 17:43+0100\n"
 "PO-Revision-Date: 2016-05-26 13:25+0200\n"
 "Last-Translator: ilGhera <info@ilghera.com>\n"
 "Language-Team: ilGhera <info@ilghera.com>\n"
@@ -313,11 +313,12 @@ msgid "Display the supplier to the user."
 msgstr ""
 
 #: admin/wcifd-import-products-template.php:285
-msgid "Sup. product code"
+#: includes/wcifd-functions.php:461
+msgid "Supplier product code"
 msgstr ""
 
 #: admin/wcifd-import-products-template.php:289
-msgid "Display the supplier product code to the user."
+msgid "Display the Supplier product code to the user."
 msgstr ""
 
 #: admin/wcifd-import-products-template.php:293
@@ -491,10 +492,6 @@ msgstr ""
 
 #: includes/wcifd-functions.php:458
 msgid "Color"
-msgstr ""
-
-#: includes/wcifd-functions.php:461
-msgid "Supplier product code"
 msgstr ""
 
 #: includes/wcifd-functions.php:732
