@@ -3,7 +3,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @since 1.1.2
+ * @since 1.1.3
  */
 ?>
 
@@ -28,7 +28,7 @@
 				<th scope="row"><?php esc_html_e( 'Prices imported with tax', 'wcifd' ); ?></th>
 				<td>
 					<select name="tax-included" class="wcifd">
-						<option value="1"><?php esc_html_e( ' Yes, I will import prices inclusive of tax', 'wcifd' ); ?></option>
+						<option value="1"><?php esc_html_e( 'Yes, I will import prices inclusive of tax', 'wcifd' ); ?></option>
 						<option value="0"><?php esc_html_e( 'No, I will import prices exclusive of tax', 'wcifd' ); ?></option>
 					</select>
 					<p class="description"><?php esc_html_e( 'In Danea you can choose if export prices with tax included or not. What are you going to import?', 'wcifd' ); ?></p>
@@ -147,7 +147,7 @@
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php esc_html_e( 'Supplier', 'wcifd' ); ?></th>
+				<th scope="row"><?php esc_html_e( 'Supplier as author', 'wcifd' ); ?></th>
 				<td>
 					<input type="hidden" name="hidden-use-suppliers" value="0">
 					<input type="checkbox" name="wcifd-use-suppliers" value="1">
@@ -162,7 +162,22 @@
 					<p class="description"><?php esc_html_e( 'Display the producer to the user', 'wcifd' ); ?></p>
 				</td>
 			</tr>
-
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Supplier', 'wcifd' ); ?></th>
+				<td>
+					<input type="hidden" name="hidden-display-supplier" value="0">
+					<input type="checkbox" name="wcifd-display-supplier" value="1">
+					<p class="description"><?php esc_html_e( 'Display the supplier to the user.', 'wcifd' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Supplier product code', 'wcifd' ); ?></th>
+				<td>
+					<input type="hidden" name="hidden-display-sup-product-code" value="0">
+					<input type="checkbox" name="wcifd-display-sup-product-code" value="1">
+					<p class="description"><?php esc_html_e( 'Display the Supplier product code to the user.', 'wcifd' ); ?></p>
+				</td>
+			</tr>
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Publish new products', 'wcifd' ); ?></th>
 				<td>

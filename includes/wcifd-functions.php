@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.1.2
+ * @since 1.1.3
  */
 
 /*No accesso diretto*/
@@ -200,10 +200,11 @@ function wcifd_payment_gateway( $method ) {
 /**
  * Verifica la presenza di un prodotto attraverso lo sku
  *
- * @param  string $sku lo sku del prodotto.
- * @return int         l'id del prodotto corrispondente se trovato
+ * @param  string $sku               lo sku del prodotto.
+ * @param  int    $parent_product_id l'id del prodotto padre se presente.
+ * @return int l'id del prodotto corrispondente se trovato
  */
-function wcifd_search_product( $sku ) {
+function wcifd_search_product( $sku, $parent_product_id = null ) {
 	global $wpdb;
 
 	$query = "
@@ -211,7 +212,19 @@ function wcifd_search_product( $sku ) {
 	";
 
 	$results = $wpdb->get_results( $query, ARRAY_A );
-	$post_id = isset( $results[0] ) ? $results[0]['post_id'] : '';
+    $post_id = isset( $results[0] ) ? $results[0]['post_id'] : '';
+
+    if ( ! $post_id && $parent_product_id && is_numeric( $sku ) ) {
+
+        $product = wc_get_product( $sku );
+
+        if ( $product && ! is_wp_error( $product ) ) {
+
+            $post_id = intval( $parent_product_id ) === $product->get_parent_id() ? $product->get_id() : null;
+
+        }
+
+    }
 
 	return $post_id;
 }
@@ -436,14 +449,16 @@ function wcifd_update_transient_wc_attributes() {
 
 
 /**
- * Registrazione degli attributi "Size" end "Color"
+ * Registrazione degli attributi
  */
 function wcifd_register_attributes() {
 
 	$attributes = array(
-		'size'     => __( 'Size', 'wcifd' ),
-		'color'    => __( 'Color', 'wcifd' ),
-		'producer' => __( 'Producer', 'wcifd' ),
+		'size'             => __( 'Size', 'wcifd' ),
+		'color'            => __( 'Color', 'wcifd' ),
+		'producer'         => __( 'Producer', 'wcifd' ),
+		'supplier'         => __( 'Supplier', 'wcifd' ),
+		'sup-product-code' => __( 'Supplier product code', 'wcifd' ),
 	);
 
 	if ( isset( $_POST['wcifd-custom-fields-hidden'] ) ) {
