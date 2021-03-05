@@ -90,7 +90,7 @@ From WordPress.org
 == Changelog ==
 
 = 1.1.3 =
-Release Date: 4 March 2021
+Release Date: 5 March 2021
 
 * Enhancement: (Premium) Import and display in front-end the supplier name 
 * Enhancement: (Premium) Import and display in front-end the supplier product code
