@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.1
+ * @since 1.5.0
  *
  * @param file $file l'xml proveniente da Danea Easyfatt.
  */
