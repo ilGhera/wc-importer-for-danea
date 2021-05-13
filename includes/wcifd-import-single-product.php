@@ -186,7 +186,7 @@ function wcifd_import_single_product( $hash ) {
 
 		$args = array(
 			'post_author'      => $author,
-			'post_title'       => wp_strip_all_tags( $title ),
+			'post_title'       => $title,
 			'post_type'        => $type,
 			'post_parent'      => $parent_product_id,
 			'post_content'     => $description,
