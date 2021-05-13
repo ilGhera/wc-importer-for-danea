@@ -98,6 +98,12 @@ if ( isset( $_POST['deleted-products'] ) ) {
 	update_option( 'wcifd-deleted-products', $deleted_products );
 }
 
+$replace_products = get_option( 'wcifd-replace-products' );
+if ( isset( $_POST['replace-products'] ) ) {
+	$replace_products = $_POST['replace-products'] ? $_POST['replace-products'] : 0;
+	update_option( 'wcifd-replace-products', $replace_products );
+}
+
 $products_variations_prices = get_option( 'wcifd-products-variations-prices' );
 if ( isset( $_POST['products-variations-prices'] ) ) {
 	$products_variations_prices = $_POST['products-variations-prices'] ? $_POST['products-variations-prices'] : 0;
@@ -239,6 +245,14 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 					<input type="hidden" name="deleted-products" value="0">
 					<input type="checkbox" name="deleted-products" value="1"<?php echo $deleted_products == 1 ? ' checked="checked"' : ''; ?>>
 					<p class="description"><?php esc_html_e( 'Avoid updating products in trash.', 'wcifd' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Replace products', 'wcifd' ); ?></th>
+				<td>
+					<input type="hidden" name="replace-products" value="0">
+					<input type="checkbox" name="replace-products" value="1"<?php echo $replace_products == 1 ? ' checked="checked"' : ''; ?>>
+					<p class="description"><?php esc_html_e( 'Replace all WC products with a full update coming from Danea Easyfatt ', 'wcifd' ); ?></p>
 				</td>
 			</tr>
 			<tr>

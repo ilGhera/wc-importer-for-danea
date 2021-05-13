@@ -16,6 +16,7 @@ function wcifd_catalog_update( $file ) {
 	$size_type          = get_option( 'wcifd-size-type' );
 	$weight_type        = get_option( 'wcifd-weight-type' );
 	$deleted_products   = get_option( 'wcifd-deleted-products' );
+    $replace_products   = get_option( 'wcifd-replace-products' );
 
 	/*WooCommerce Role Based Price*/
 	$wc_rbp = get_wc_rbp();
@@ -23,9 +24,8 @@ function wcifd_catalog_update( $file ) {
 	$results = simplexml_load_file( $file );
 
     /*Cancellazione prodotti esistenti*/
-    if ( 'full' == $results->attributes()->Mode[0] ) {
+    if ( $replace_products && 'full' == $results->attributes()->Mode[0] ) {
 
-        error_log( 'MODE 2: ' . $results->attributes()->Mode[0] );
         wcifd_delete_all_products();
 
     }

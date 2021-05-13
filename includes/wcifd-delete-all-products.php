@@ -27,8 +27,6 @@ function wcifd_delete_all_products() {
 
         $result = $wpdb->query( $query );
 
-        error_log( 'QUERY ' . $key . ': ' . $result );
-
     }
 
 }
