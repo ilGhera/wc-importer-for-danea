@@ -10,9 +10,10 @@
  */
 function wcifd_import_single_product( $hash ) {
 
-	$temp    = new WCIFD_Temporary_Data();
-	$data    = $temp->wcifd_get_temporary_data( $hash );
-	$product = isset( $data['product'] ) ? $data['product'] : '';
+	$temp                  = new WCIFD_Temporary_Data();
+	$data                  = $temp->wcifd_get_temporary_data( $hash );
+	$product               = isset( $data['product'] ) ? $data['product'] : '';
+    $notes_as_descriptions = get_option( 'wcifd-notes-as-description' );
 
 	/*Termina se il prodotto non esiste*/
 	if ( ! $product ) {
@@ -26,7 +27,6 @@ function wcifd_import_single_product( $hash ) {
 
 	$sku                 = isset( $product['Code'] ) ? $product['Code'] : '';
 	$title               = isset( $product['Description'] ) ? $product['Description'] : '';
-	$description         = ( isset( $product['DescriptionHtml'] ) && is_string( $product['DescriptionHtml'] ) ) ? wp_filter_post_kses( $product['DescriptionHtml'] ) : $title;
 	$category            = isset( $product['Category'] ) ? $product['Category'] : '';
 	$sub_category        = isset( $product['Subcategory'] ) ? $product['Subcategory'] : '';
 	$producer_name       = isset( $product['ProducerName'] ) ? $product['ProducerName'] : '';
@@ -48,39 +48,58 @@ function wcifd_import_single_product( $hash ) {
 	$parent_sku          = null;
 	$var_attributes      = null;
 	$variable_product    = null;
-	$parent_product_id   = null;
+    $parent_product_id   = null;
 
-	if ( isset( $product['Notes'] ) && is_string( $product['Notes'] ) ) {
+    /* Descrizione prodotto */
+    $description = null;
 
-		$notes = json_decode( $product['Notes'], true );
+    if ( isset( $product['DescriptionHtml'] ) && is_string( $product['DescriptionHtml'] ) ) {
 
-		if ( is_array( $notes ) ) {
+        $description = wp_filter_post_kses( $product['DescriptionHtml'] );
 
-			/*Parent sku*/
-			if ( isset( $notes['parent_sku'] ) && '' !== $notes['parent_sku'] ) {
+    } elseif ( $notes_as_descriptions && isset( $product['Notes'] ) && is_string( $product['Notes'] ) ) {
 
-				$parent_sku = $notes['parent_sku'];
+        $description = wp_filter_post_kses( $product['Notes'] );
 
-			} elseif ( isset( $notes['parent_id'] ) && '' !== $notes['parent_id'] ) {
+    } else {
+
+        $description = $title;
+
+    }
+
+	if ( ! $notes_as_descriptions && isset( $product['Notes'] ) && is_string( $product['Notes'] ) ) {
+
+        $notes = json_decode( $product['Notes'], true );
+
+        if ( is_array( $notes ) ) {
+
+            /*Parent sku*/
+            if ( isset( $notes['parent_sku'] ) && '' !== $notes['parent_sku'] ) {
+
+                $parent_sku = $notes['parent_sku'];
+
+            } elseif ( isset( $notes['parent_id'] ) && '' !== $notes['parent_id'] ) {
 
                 $parent_product_id = $notes['parent_id'];	
 
-			}
+            }
 
-			if ( $parent_sku ) {
-				$parent_product_id = wcifd_search_product( $parent_sku );
-			}
+            if ( $parent_sku ) {
+                $parent_product_id = wcifd_search_product( $parent_sku );
+            }
 
-			$var_attributes = isset( $notes['var_attributes'] ) ? $notes['var_attributes'] : null;
+            $var_attributes = isset( $notes['var_attributes'] ) ? $notes['var_attributes'] : null;
 
-			/*Prodotto variabile*/
-			if ( isset( $notes['product_type'] ) && 'variable' === $notes['product_type'] ) {
-				if ( isset( $notes['attributes'] ) ) {
-					$variable_product = true;
-					$imported_attributes = $notes['attributes'];
-				}
-			}
-		}
+            /*Prodotto variabile*/
+            if ( isset( $notes['product_type'] ) && 'variable' === $notes['product_type'] ) {
+                if ( isset( $notes['attributes'] ) ) {
+                    $variable_product = true;
+                    $imported_attributes = $notes['attributes'];
+                }
+            }
+
+        }
+
 	}
 
 	/*Post status - Le variazioni devono essere pubblicate*/

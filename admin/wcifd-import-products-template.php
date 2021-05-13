@@ -62,6 +62,12 @@ if ( isset( $_POST['wcifd-weight-type'] ) ) {
 	update_option( 'wcifd-weight-type', $weight_type );
 }
 
+$notes_as_description = get_option( 'wcifd-notes-as-description' );
+if ( isset( $_POST['notes-as-description'] ) ) {
+	$notes_as_description = $_POST['notes-as-description'] ? $_POST['notes-as-description'] : 0;
+	update_option( 'wcifd-notes-as-description', $notes_as_description );
+}
+
 $short_description = get_option( 'wcifd-short-description' );
 if ( isset( $_POST['short-description'] ) ) {
 	$short_description = $_POST['short-description'] ? $_POST['short-description'] : 0;
@@ -197,6 +203,14 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 						<option value="net-weight"<?php echo( $weight_type == 'net-weight' ) ? 'selected="selected"' : ''; ?>><?php esc_html_e( 'Net weight', 'wcifd' ); ?></option>
 					</select>
 					<p class="description"><?php esc_html_e( 'Chose if import gross or net product weight.', 'wcifd' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Notes as description', 'wcifd' ); ?></th>
+				<td>
+					<input type="hidden" name="notes-as-description" value="0">
+					<input type="checkbox" name="notes-as-description" value="1"<?php echo $notes_as_description == 1 ? ' checked="checked"' : ''; ?>>
+					<p class="description"><?php esc_html_e( 'Use the Notes field content if HTML description is empty.', 'wcifd' ); ?></p>
 				</td>
 			</tr>
 			<tr>
