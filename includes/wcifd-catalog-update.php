@@ -22,6 +22,14 @@ function wcifd_catalog_update( $file ) {
 
 	$results = simplexml_load_file( $file );
 
+    /*Cancellazione prodotti esistenti*/
+    if ( 'full' == $results->attributes()->Mode[0] ) {
+
+        error_log( 'MODE 2: ' . $results->attributes()->Mode[0] );
+        wcifd_delete_all_products();
+
+    }
+
 	/*Verifica che si tratti di un aggiornamento o dell'intero catalogo prodotti*/
 	$products = $results->Products ? $results->Products : $results->UpdatedProducts;
 

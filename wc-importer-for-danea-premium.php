@@ -61,6 +61,7 @@ function load_wc_importer_for_danea_premium() {
 	require_once( WCIFD_INCLUDES . 'wcifd-import-single-product.php' );
 	require_once( WCIFD_INCLUDES . 'wcifd-product-meta-lookup.php' );
 	require_once( WCIFD_INCLUDES . 'wcifd-delete-single-product.php' );
+	require_once( WCIFD_INCLUDES . 'wcifd-delete-all-products.php' );
 	require_once( WCIFD_INCLUDES . 'wcifd-import-orders.php' );
 
 }
