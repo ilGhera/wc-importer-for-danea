@@ -26,7 +26,7 @@ function wcifd_import_single_product( $hash ) {
 	}
 
 	$sku                 = isset( $product['Code'] ) ? $product['Code'] : '';
-	$title               = isset( $product['Description'] ) ? $product['Description'] : '';
+	$title               = isset( $product['Description'] ) ? htmlentities( $product['Description'] ) : '';
 	$category            = isset( $product['Category'] ) ? $product['Category'] : '';
 	$sub_category        = isset( $product['Subcategory'] ) ? $product['Subcategory'] : '';
 	$producer_name       = isset( $product['ProducerName'] ) ? $product['ProducerName'] : '';
