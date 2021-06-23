@@ -311,7 +311,7 @@ function wcifd_get_tax_rate_class( $name, $value = '' ) {
 
 		/*Crea una nuova classe di tassazione solo con il valore numerico*/
 		if ( '' != $value ) {
-			$tax_rate_class = 22 != $name ? $name : '';
+			$tax_rate_class = 22 !== $name ? $name : '';
 
 			if ( $tax_rate_class ) {
 				$tax_classes = explode( "\n", get_option( 'woocommerce_tax_classes' ) );
