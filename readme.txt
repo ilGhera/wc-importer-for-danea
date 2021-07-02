@@ -57,6 +57,7 @@ Woocommerce Importer for Danea ti permette di importare:
 * (Premium) Possibilità di assegnare un nome personalizzato agli attributi creati con l'importazione dei campi aggiuntivi di Danea.
 * (Premium) Opzione per mostrare o meno i campi aggiuntivi in front-end
 
+https://youtu.be/LZ6urO531OE
 
 == Installation ==
 
