@@ -1,25 +1,16 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WED\n"
-<<<<<<< HEAD
 "POT-Creation-Date: 2021-03-05 10:09+0100\n"
 "PO-Revision-Date: \n"
-=======
-"POT-Creation-Date: 2021-10-07 12:29+0200\n"
-"PO-Revision-Date: 2021-10-07 12:35+0200\n"
->>>>>>> master
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: it_IT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-<<<<<<< HEAD
 "X-Generator: Poedit 2.4.1\n"
 "X-Poedit-KeywordsList: _;__;esc_html__;esc_html_e;esc_attr__;esc_attr_e;_e\n"
-=======
-"X-Generator: Poedit 3.0\n"
->>>>>>> master
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: plugin-update-checker\n"
@@ -118,7 +109,6 @@ msgstr "Seleziona l'elenco degli ordini (.xml)"
 msgid "Import Orders"
 msgstr "Importa gli Ordini"
 
-<<<<<<< HEAD
 #: admin/wcifd-import-products-template.php:11
 msgid "General"
 msgstr "Generali"
@@ -144,49 +134,14 @@ msgid "Prices imported with tax"
 msgstr "Prezzi importati IVA inclusa"
 
 #: admin/wcifd-import-products-template.php:31
-=======
-#: admin/wcifd-import-products-template.php:134
-msgid "General"
-msgstr "Generali"
-
-#: admin/wcifd-import-products-template.php:135
-msgid "Custom fields"
-msgstr "Campi aggiuntivi"
-
-#: admin/wcifd-import-products-template.php:136
-msgid "Remote"
-msgstr "Ricezione"
-
-#: admin/wcifd-import-products-template.php:137
-msgid "Import file"
-msgstr "Importazione file"
-
-#: admin/wcifd-import-products-template.php:147
-msgid "Generall settings"
-msgstr "Impostazioni generali"
-
-#: admin/wcifd-import-products-template.php:151
-msgid "Prices imported with tax"
-msgstr "Prezzi importati IVA inclusa"
-
-#: admin/wcifd-import-products-template.php:154
->>>>>>> master
 msgid "Yes, I will import prices inclusive of tax"
 msgstr "Si, IVA inclusa"
 
-<<<<<<< HEAD
 #: admin/wcifd-import-products-template.php:32
 msgid "No, I will import prices exclusive of tax"
 msgstr "No, IVA esclusa"
 
 #: admin/wcifd-import-products-template.php:34
-=======
-#: admin/wcifd-import-products-template.php:155
-msgid "No, I will import prices exclusive of tax"
-msgstr "No, IVA esclusa"
-
-#: admin/wcifd-import-products-template.php:157
->>>>>>> master
 msgid ""
 "In Danea you can choose if export prices with tax included or not. What are "
 "you going to import?"
@@ -194,7 +149,6 @@ msgstr ""
 "In Danea puoi scegliere se esportare prezzi con IVA inclusa o no. Cosa vuoi "
 "importare?"
 
-<<<<<<< HEAD
 #: admin/wcifd-import-products-template.php:38
 msgid "Regular price"
 msgstr "Prezzo di listino"
@@ -326,197 +280,28 @@ msgid "Use the product supplier as post author."
 msgstr "Usa il fornitore come autore del post."
 
 #: admin/wcifd-import-products-template.php:158
-=======
-#: admin/wcifd-import-products-template.php:161
-msgid "Regular price"
-msgstr "Prezzo di listino"
-
-#: admin/wcifd-import-products-template.php:166
-#: admin/wcifd-import-products-template.php:180
-#: admin/wcifd-role-based-price.php:49
-msgid "Price list "
-msgstr "Listino "
-
-#: admin/wcifd-import-products-template.php:170
-msgid "The Danea price list to use for Woocommerce regular price."
-msgstr "Il listino Danea da usare come prezzo di listino."
-
-#: admin/wcifd-import-products-template.php:174
-msgid "Sale price"
-msgstr "Prezzo in offerta"
-
-#: admin/wcifd-import-products-template.php:178
-msgid "Select a price list"
-msgstr "Seleziona un listino prezzi"
-
-#: admin/wcifd-import-products-template.php:184
-msgid "The Danea price list to use for Woocommerce sale price."
-msgstr "Il listino Danea da usare come prezzo in offerta."
-
-#: admin/wcifd-import-products-template.php:188
-msgid "Product size type"
-msgstr "Misure prodotti"
-
-#: admin/wcifd-import-products-template.php:191
-msgid "Gross size"
-msgstr "Misure lorde"
-
-#: admin/wcifd-import-products-template.php:192
-msgid "Net size"
-msgstr "Misure nette"
-
-#: admin/wcifd-import-products-template.php:194
-msgid "Chose if import gross or net product size."
-msgstr "Scegli se importare misure lorde o nette."
-
-#: admin/wcifd-import-products-template.php:199
-msgid "Product weight type"
-msgstr "Peso prodotti"
-
-#: admin/wcifd-import-products-template.php:202
-msgid "Gross weight"
-msgstr "Peso lordo"
-
-#: admin/wcifd-import-products-template.php:203
-msgid "Net weight"
-msgstr "Peso netto"
-
-#: admin/wcifd-import-products-template.php:205
-msgid "Chose if import gross or net product weight."
-msgstr "Scegli se importare il peso lordo o netto."
-
-#: admin/wcifd-import-products-template.php:209
-msgid "Notes as description"
-msgstr "Note come descrizione"
-
-#: admin/wcifd-import-products-template.php:213
-msgid "Use the Notes field content if HTML description is empty."
-msgstr ""
-"Utilizza il contenuto del campo Note se Descrizione HTML non è presente."
-
-#: admin/wcifd-import-products-template.php:217
-msgid "Short description"
-msgstr "Descrizione breve"
-
-#: admin/wcifd-import-products-template.php:221
-msgid "Use the excerpt as short product description."
-msgstr "Usa parte della descrizione prodotto come descrizione breve."
-
-#: admin/wcifd-import-products-template.php:225
-msgid "Exclude product description"
-msgstr "Escludere descrizione prodotto"
-
-#: admin/wcifd-import-products-template.php:229
-msgid "Exclude descriptions from products updates."
-msgstr "Escludere la descrizione dall'aggiornamento dei prodotti."
-
-#: admin/wcifd-import-products-template.php:233
-msgid "Exclude product title"
-msgstr "Escludere nome prodotto"
-
-#: admin/wcifd-import-products-template.php:237
-msgid "Exclude title from products updates."
-msgstr "Escludere il titolo dall'aggiornamento dei prodotti."
-
-#: admin/wcifd-import-products-template.php:241
-msgid "Exclude product URL"
-msgstr "Escludere URL prodotto"
-
-#: admin/wcifd-import-products-template.php:245
-msgid "Exclude URL from products updates."
-msgstr "Escludere l'URL dall'aggiornamento dei prodotti."
-
-#: admin/wcifd-import-products-template.php:249
-msgid "Categories"
-msgstr "Categorie"
-
-#: admin/wcifd-import-products-template.php:253
-msgid "Avoid deleting categories during synchronizations."
-msgstr "Non cancellare le categorie dei prodotti con la sincronizzazione."
-
-#: admin/wcifd-import-products-template.php:257
-msgid "Deleted products"
-msgstr "Prodotti eliminati"
-
-#: admin/wcifd-import-products-template.php:261
-msgid "Avoid updating products in trash."
-msgstr "Non aggiornare i prodotti nel cestino."
-
-#: admin/wcifd-import-products-template.php:265
-msgid "Replace products"
-msgstr "Sostituzione  prodotti"
-
-#: admin/wcifd-import-products-template.php:269
-msgid "Replace all WC products with a full update coming from Danea Easyfatt "
-msgstr ""
-"Sostituisci tutti i prodotti WooCommerce in caso di ricezione dell'intero "
-"catalogo da Danea Easyfatt."
-
-#: admin/wcifd-import-products-template.php:273
-msgid "Variations prices"
-msgstr "Prezzo variazioni"
-
-#: admin/wcifd-import-products-template.php:277
-msgid "Exclude variations prices from products updates."
-msgstr "Escludere il prezzo delle variazioni dall'aggiornamento dei prodotti."
-
-#: admin/wcifd-import-products-template.php:281
-msgid "Products not available"
-msgstr "Prodotti non disponibili"
-
-#: admin/wcifd-import-products-template.php:285
-msgid "Avoid creating new products if not available in stock."
-msgstr "Non creare nuovi prodotti o variazioni non disponibili a magazzino."
-
-#: admin/wcifd-import-products-template.php:289
-msgid "Supplier as author"
-msgstr "Fornitore come autore"
-
-#: admin/wcifd-import-products-template.php:293
-msgid "Use the product supplier as post author."
-msgstr "Usa il fornitore come autore del post."
-
-#: admin/wcifd-import-products-template.php:297
->>>>>>> master
 #: includes/wcifd-functions.php:459
 msgid "Producer"
 msgstr "Produttore"
 
-<<<<<<< HEAD
 #: admin/wcifd-import-products-template.php:162
 msgid "Display the producer to the user"
 msgstr "Mostra il campo Produttore in front-end"
 
 #: admin/wcifd-import-products-template.php:166
-=======
-#: admin/wcifd-import-products-template.php:301
-msgid "Display the producer to the user."
-msgstr "Mostra il campo Produttore in front-end."
-
-#: admin/wcifd-import-products-template.php:305
->>>>>>> master
 #: includes/wcifd-functions.php:460
 msgid "Supplier"
 msgstr "Fornitori"
 
-<<<<<<< HEAD
 #: admin/wcifd-import-products-template.php:170
 msgid "Display the supplier to the user."
 msgstr "Mostra il campo Fornitore in front-end."
 
 #: admin/wcifd-import-products-template.php:174
-=======
-#: admin/wcifd-import-products-template.php:309
-msgid "Display the supplier to the user."
-msgstr "Mostra il campo Fornitore in front-end."
-
-#: admin/wcifd-import-products-template.php:313
->>>>>>> master
 #: includes/wcifd-functions.php:461
 msgid "Supplier product code"
 msgstr "Codice prodotto fornitore"
 
-<<<<<<< HEAD
 #: admin/wcifd-import-products-template.php:178
 msgid "Display the Supplier product code to the user."
 msgstr "Mostra il campo Codice prodotto fornitore in front-end."
@@ -541,73 +326,30 @@ msgid "Import Danea Custom Fields"
 msgstr "Importazione dei Campi Aggiuntivi di Danea"
 
 #: admin/wcifd-import-products-template.php:215
-=======
-#: admin/wcifd-import-products-template.php:317
-msgid "Display the Supplier product code to the user."
-msgstr "Mostra il campo Codice prodotto fornitore in front-end."
-
-#: admin/wcifd-import-products-template.php:321
-msgid "Publish new products"
-msgstr "Pubblicazione nuovi prodotti"
-
-#: admin/wcifd-import-products-template.php:325
-msgid "Publish new products directly."
-msgstr "Pubblicare i nuovi prodotti direttamente."
-
-#: admin/wcifd-import-products-template.php:329
-#: admin/wcifd-import-products-template.php:409
-#: admin/wcifd-import-products-template.php:464
-#: admin/wcifd-role-based-price.php:63
-msgid "Save Changes"
-msgstr "Salva impostazioni"
-
-#: admin/wcifd-import-products-template.php:339
-msgid "Import Danea Custom Fields"
-msgstr "Importazione dei Campi Aggiuntivi di Danea"
-
-#: admin/wcifd-import-products-template.php:381
->>>>>>> master
 #: includes/wcifd-functions.php:476
 #, php-format
 msgid "Custom Field %d"
 msgstr "Campo aggiuntivo %d"
 
-<<<<<<< HEAD
 #: admin/wcifd-import-products-template.php:221
-=======
-#: admin/wcifd-import-products-template.php:387
->>>>>>> master
 #, php-format
 msgid "Import Danea Custom Field %d"
 msgstr "Importa il campo aggiuntivo %d"
 
-<<<<<<< HEAD
 #: admin/wcifd-import-products-template.php:227
-=======
-#: admin/wcifd-import-products-template.php:393
->>>>>>> master
 #, php-format
 msgid "Make Custom Field %d visible in front-end"
 msgstr "Rendi visibile in front-end il campo aggiuntivo %d"
 
-<<<<<<< HEAD
 #: admin/wcifd-import-products-template.php:231
 msgid "My custom field"
 msgstr "Il mio campo personalizzato"
 
 #: admin/wcifd-import-products-template.php:232
-=======
-#: admin/wcifd-import-products-template.php:397
-msgid "My custom field"
-msgstr "Il mio campo personalizzato"
-
-#: admin/wcifd-import-products-template.php:398
->>>>>>> master
 #, php-format
 msgid "Add a name to Custom Field %d"
 msgstr "Assegna un nome al campo aggiuntivo %d"
 
-<<<<<<< HEAD
 #: admin/wcifd-import-products-template.php:256
 msgid "Receive products from Danea"
 msgstr "Ricevi  i prodotti da Danea"
@@ -625,32 +367,12 @@ msgid "URL"
 msgstr ""
 
 #: admin/wcifd-import-products-template.php:272
-=======
-#: admin/wcifd-import-products-template.php:419
-msgid "Receive products from Danea"
-msgstr "Ricevi  i prodotti da Danea"
-
-#: admin/wcifd-import-products-template.php:423
-msgid "Receive products directly from the XML sent by Danea via HTTP post."
-msgstr "Ricevi i prodotti da un XML inviato da Danea in HTTP post."
-
-#: admin/wcifd-import-products-template.php:436
-msgid "Please insert your <strong>Premium Key</strong>"
-msgstr "È necessaria la tua <strong>Premium Key</strong>"
-
-#: admin/wcifd-import-products-template.php:449
-msgid "URL"
-msgstr ""
-
-#: admin/wcifd-import-products-template.php:452
->>>>>>> master
 msgid ""
 "Add this URL to the Settings tab of the Products update function in Danea."
 msgstr ""
 "Aggiungi questo URL al tab Impostazioni della funzione Aggiorna prodotti "
 "(Ctrl+P) di Danea."
 
-<<<<<<< HEAD
 #: admin/wcifd-import-products-template.php:276
 msgid "Import images"
 msgstr "Importa immagini"
@@ -688,45 +410,6 @@ msgid "Select your products list file"
 msgstr "Seleziona l'elenco dei tuoi prodotti"
 
 #: admin/wcifd-import-products-template.php:325
-=======
-#: admin/wcifd-import-products-template.php:456
-msgid "Import images"
-msgstr "Importa immagini"
-
-#: admin/wcifd-import-products-template.php:460
-msgid "Import products images from Danea."
-msgstr "Importa immagini prodotti da Danea."
-
-#: admin/wcifd-import-products-template.php:477
-msgid "Import products from a file"
-msgstr "Importa prodotti attraverso un file"
-
-#: admin/wcifd-import-products-template.php:481
-msgid "File type"
-msgstr "Tipo di file"
-
-#: admin/wcifd-import-products-template.php:484
-msgid "xml"
-msgstr ""
-
-#: admin/wcifd-import-products-template.php:485
-msgid "csv"
-msgstr ""
-
-#: admin/wcifd-import-products-template.php:487
-msgid "Select the file type to be imported"
-msgstr "Seleziona il tipo di file da importare"
-
-#: admin/wcifd-import-products-template.php:493
-msgid "Add products"
-msgstr "Aggiungi i prodotti"
-
-#: admin/wcifd-import-products-template.php:496
-msgid "Select your products list file"
-msgstr "Seleziona l'elenco dei tuoi prodotti"
-
-#: admin/wcifd-import-products-template.php:500
->>>>>>> master
 msgid "Import Products"
 msgstr "Importa i Prodotti"
 
@@ -924,6 +607,9 @@ msgstr "Importati %d di %d contatti"
 
 #~ msgid "Products update"
 #~ msgstr "Aggiornamento prodotti"
+
+#~ msgid "Update products"
+#~ msgstr "Aggiorna i prodotti"
 
 #~ msgid "Don't update products"
 #~ msgstr "Non aggiornare i prodotti"
