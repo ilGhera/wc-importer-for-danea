@@ -1,10 +1,30 @@
 <?php
 
+use Action_Scheduler\Tests\DataStores\AbstractStoreTest;
+
 /**
  * Class ActionScheduler_DBStore_Test
  * @group tables
  */
-class ActionScheduler_DBStore_Test extends ActionScheduler_UnitTestCase {
+class ActionScheduler_DBStore_Test extends AbstractStoreTest {
+
+	public function setUp() {
+		global $wpdb;
+
+		// Delete all actions before each test.
+		$wpdb->query( "DELETE FROM {$wpdb->actionscheduler_actions}" );
+
+		parent::setUp();
+	}
+
+	/**
+	 * Get data store for tests.
+	 *
+	 * @return ActionScheduler_DBStore
+	 */
+	protected function get_store() {
+		return new ActionScheduler_DBStore();
+	}
 
 	public function test_create_action() {
 		$time      = as_get_datetime_object();
@@ -286,6 +306,54 @@ class ActionScheduler_DBStore_Test extends ActionScheduler_UnitTestCase {
 		$this->assertEqualSets( array_slice( $created_actions_by_hook[ $unique_hook_two ][ $unique_group_two ], 3, 3 ), $claim->get_actions() );
 	}
 
+	/**
+	 * The query used to claim actions explicitly ignores future pending actions, but it
+	 * is still possible under unusual conditions (such as if MySQL runs out of temporary
+	 * storage space) for such actions to be returned.
+	 *
+	 * When this happens, we still expect the store to filter them out, otherwise there is
+	 * a risk that actions will be unexpectedly processed ahead of time.
+	 *
+	 * @see https://github.com/woocommerce/action-scheduler/issues/634
+	 */
+	public function test_claim_filters_out_unexpected_future_actions() {
+		$group = __METHOD__;
+		$store = new ActionScheduler_DBStore();
+
+		// Create 4 actions: 2 that are already due (-3hrs and -1hrs) and 2 that are not yet due (+1hr and +3hrs).
+		for ( $i = -3; $i <= 3; $i += 2 ) {
+			$schedule     = new ActionScheduler_SimpleSchedule( as_get_datetime_object( $i . ' hours' ) );
+			$action_ids[] = $store->save_action( new ActionScheduler_Action( 'test_' . $i, array(), $schedule, $group ) );
+		}
+
+		// This callback is used to simulate the unusual conditions whereby MySQL might unexpectedly return future
+		// actions, contrary to the conditions used by the store object when staking its claim.
+		$simulate_unexpected_db_behavior = function( $sql ) use ( $action_ids ) {
+			global $wpdb;
+
+			// Look out for the claim update query, ignore all others.
+			if (
+				0 !== strpos( $sql, "UPDATE $wpdb->actionscheduler_actions" )
+				|| ! preg_match( "/claim_id = 0 AND scheduled_date_gmt <= '([0-9:\-\s]{19})'/", $sql, $matches )
+				|| count( $matches ) !== 2
+			) {
+				return $sql;
+			}
+
+			// Now modify the query, forcing it to also return the future actions we created.
+			return str_replace( $matches[1], as_get_datetime_object( '+4 hours' )->format( 'Y-m-d H:i:s' ), $sql );
+		};
+
+		add_filter( 'query', $simulate_unexpected_db_behavior );
+		$claim = $store->stake_claim( 10, null, array(), $group );
+		$claimed_actions = $claim->get_actions();
+		$this->assertCount( 2, $claimed_actions );
+
+		// Cleanup.
+		remove_filter( 'query', $simulate_unexpected_db_behavior );
+		$store->release_claim( $claim );
+	}
+
 	public function test_duplicate_claim() {
 		$created_actions = [];
 		$store           = new ActionScheduler_DBStore();
@@ -378,19 +446,4 @@ class ActionScheduler_DBStore_Test extends ActionScheduler_UnitTestCase {
 		$this->assertEquals( (int) ( $now->format( 'U' ) ) + HOUR_IN_SECONDS, $store->get_date( $new_action_id )->format( 'U' ) );
 	}
 
-	public function test_get_status() {
-		$time = as_get_datetime_object('-10 minutes');
-		$schedule = new ActionScheduler_IntervalSchedule($time, HOUR_IN_SECONDS);
-		$action = new ActionScheduler_Action('my_hook', array(), $schedule);
-		$store = new ActionScheduler_DBStore();
-		$action_id = $store->save_action($action);
-
-		$this->assertEquals( ActionScheduler_Store::STATUS_PENDING, $store->get_status( $action_id ) );
-
-		$store->mark_complete( $action_id );
-		$this->assertEquals( ActionScheduler_Store::STATUS_COMPLETE, $store->get_status( $action_id ) );
-
-		$store->mark_failure( $action_id );
-		$this->assertEquals( ActionScheduler_Store::STATUS_FAILED, $store->get_status( $action_id ) );
-	}
 }
