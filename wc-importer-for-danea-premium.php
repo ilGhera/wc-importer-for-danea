@@ -8,7 +8,7 @@
  * Version: 1.5.0
  * Author URI: https://ilghera.com
  * Requires at least: 4.0
- * Tested up to: 5.7
+ * Tested up to: 5.8
  * WC tested up to: 5
  * Text Domain: wcifd
  */
@@ -85,3 +85,4 @@ function wcifd_secure_update_check( $queryArgs ) {
 	}
 	return $queryArgs;
 }
+
