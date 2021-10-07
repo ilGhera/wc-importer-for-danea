@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.1.3
+ * @since 1.2.0
  */
 
 /*No accesso diretto*/
@@ -311,7 +311,7 @@ function wcifd_get_tax_rate_class( $name, $value = '' ) {
 
 		/*Crea una nuova classe di tassazione solo con il valore numerico*/
 		if ( '' != $value ) {
-			$tax_rate_class = 22 != $name ? $name : '';
+			$tax_rate_class = 22 !== $name ? $name : '';
 
 			if ( $tax_rate_class ) {
 				$tax_classes = explode( "\n", get_option( 'woocommerce_tax_classes' ) );
@@ -815,3 +815,4 @@ function wcifd_update_message( $message = '', $status = '' ) {
 
 }
 add_filter( 'puc_manual_check_message-wc-importer-for-danea-premium', 'wcifd_update_message', 10, 2 );
+

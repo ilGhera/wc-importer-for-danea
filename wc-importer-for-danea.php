@@ -2,14 +2,14 @@
 /**
  * Plugin Name: WC Importer for Danea
  * Plugin URI: https://www.ilghera.com/product/woocommerce-importer-for-danea/
- * Description: If you've built your online store with Woocommerce and you're using Danea Easyfatt as management software, you definitely need Woocommerce Importer for Danea.
+ * Description: If you've built your online store with WooCommerce and you're using Danea Easyfatt as management software, you definitely need WooCommerce Importer for Danea.
  * You'll be able to import suppliers, clients and products.
  * Author: ilGhera
- * Version: 1.1.3
+ * Version: 1.2.0
  * Author URI: https://ilghera.com
  * Requires at least: 4.0
- * Tested up to: 5.6
- * WC tested up to: 4
+ * Tested up to: 5.8
+ * WC tested up to: 5
  * Text Domain: wcifd
  */
 

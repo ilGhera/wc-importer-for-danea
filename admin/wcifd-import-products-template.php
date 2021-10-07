@@ -3,7 +3,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @since 1.1.3
+ * @since 1.2.0
  */
 ?>
 
@@ -83,6 +83,14 @@
 				</td>
 			</tr>
 			<tr>
+				<th scope="row"><?php esc_html_e( 'Notes as description', 'wcifd' ); ?></th>
+				<td>
+					<input type="hidden" name="notes-as-description" value="0">
+					<input type="checkbox" name="notes-as-description" value="1"<?php echo $notes_as_description == 1 ? ' checked="checked"' : ''; ?>>
+					<p class="description"><?php esc_html_e( 'Use the Notes field content if HTML description is empty.', 'wcifd' ); ?></p>
+				</td>
+			</tr>
+			<tr>
 				<th scope="row"><?php esc_html_e( 'Short description', 'wcifd' ); ?></th>
 				<td>
 					<input type="hidden" name="short-description" value="0">
@@ -128,6 +136,14 @@
 					<input type="hidden" name="deleted-products" value="0">
 					<input type="checkbox" name="deleted-products" value="1">
 					<p class="description"><?php esc_html_e( 'Avoid updating products in trash.', 'wcifd' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Replace products', 'wcifd' ); ?></th>
+				<td>
+					<input type="hidden" name="replace-products" value="0">
+					<input type="checkbox" name="replace-products" value="1"<?php echo $replace_products == 1 ? ' checked="checked"' : ''; ?>>
+					<p class="description"><?php esc_html_e( 'Replace all WC products with a full update coming from Danea Easyfatt ', 'wcifd' ); ?></p>
 				</td>
 			</tr>
 			<tr>
