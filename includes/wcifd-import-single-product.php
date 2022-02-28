@@ -27,7 +27,6 @@ function wcifd_import_single_product( $hash ) {
 
     $sku                 = isset( $product['Code'] ) ? $product['Code'] : '';
     $sku                 = str_replace( '\\', '\\\\', $sku );
-    error_log( 'SKU: ' . $sku );
 	$title               = isset( $product['Description'] ) ? htmlentities( $product['Description'] ) : '';
 	$category            = isset( $product['Category'] ) ? $product['Category'] : '';
 	$sub_category        = isset( $product['Subcategory'] ) ? $product['Subcategory'] : '';
@@ -57,11 +56,11 @@ function wcifd_import_single_product( $hash ) {
 
     if ( isset( $product['DescriptionHtml'] ) && is_string( $product['DescriptionHtml'] ) ) {
 
-        $description = htmlentities( $product['DescriptionHtml'] );
+        $description = wp_filter_post_kses( $product['DescriptionHtml'] );
 
     } elseif ( $notes_as_descriptions && isset( $product['Notes'] ) && is_string( $product['Notes'] ) ) {
 
-        $description = htmlentities( $product['Notes'] );
+        $description = wp_filter_post_kses( $product['Notes'] );
 
     } else {
 
@@ -186,8 +185,6 @@ function wcifd_import_single_product( $hash ) {
 			return;
 		}
 
-        error_log( 'DESCRIPTION: ' . $description );
-
 		$args = array(
 			'post_author'      => $author,
 			'post_title'       => $title,
@@ -248,8 +245,6 @@ function wcifd_import_single_product( $hash ) {
 
 		/*Inserimento nuovo prodotto*/
 		$product_id = wp_insert_post( $args );
-        error_log( 'ARGS: ' . print_r( $args, true ) );
-        error_log( 'PRODUCT ID: ' . print_r( $product_id, true ) );
 
 		if ( 0 == $product_id ) {
 
