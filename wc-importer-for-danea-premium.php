@@ -70,7 +70,8 @@ add_action( 'after_setup_theme', 'load_wc_importer_for_danea_premium' );
 
 /*Richiamo "Update-Checker"*/
 require( plugin_dir_path( __FILE__ ) . 'plugin-update-checker/plugin-update-checker.php' );
-$wcifdUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+$wcifdUpdateChecker = PucFactory::buildUpdateChecker(
 	'https://www.ilghera.com/wp-update-server-2/?action=get_metadata&slug=wc-importer-for-danea-premium',
 	__FILE__,
 	'wc-importer-for-danea-premium'
