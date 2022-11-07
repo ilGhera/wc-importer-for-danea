@@ -3,7 +3,7 @@ Contributors: ghera74
 Tags: Fattura elettronica, WooCommerce, Danea Easyfatt, ecommerce, exporter, csv, shop, orders, products, gestionale
 Version: 1.2.0
 Requires at least: 4.0
-Tested up to: 5.8
+Tested up to: 6.1
 Stable tag: 1.2.0
 
 
