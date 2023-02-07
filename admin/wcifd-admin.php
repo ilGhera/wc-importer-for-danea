@@ -71,15 +71,16 @@ function wcifd_options() {
 
 		/*Plugin premium key*/
 		$key = sanitize_text_field( get_option( 'wcifd-premium-key' ) );
-	if ( isset( $_POST['wcifd-premium-key'] ) ) {
-		$key = sanitize_text_field( $_POST['wcifd-premium-key'] );
-		update_option( 'wcifd-premium-key', $key );
-	}
+        if ( isset( $_POST['wcifd-premium-key'], $_POST['wcifd-premium-key-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wcifd-premium-key-nonce'] ), 'wcifd-premium-key' ) ) {
+            $key = sanitize_text_field( $_POST['wcifd-premium-key'] );
+            update_option( 'wcifd-premium-key', $key );
+        }
 		echo '<form id="wcifd-options" method="post" action="">';
 		echo '<label>' . __( 'Premium Key', 'wcifd' ) . '</label>';
 		echo '<input type="text" class="regular-text" name="wcifd-premium-key" id="wcifd-premium-key" placeholder="' . __( 'Add your Premium Key', 'wcifd' ) . '" value="' . $key . '" />';
 		echo '<p class="description">' . __( 'Add your Premium Key and keep update your copy of <strong>Woocommerce Importer for Danea - Premium</strong>.', 'wcifd' ) . '</p>';
 		echo '<input type="hidden" name="done" value="1" />';
+		wp_nonce_field( 'wcifd-premium-key', 'wcifd-premium-key-nonce' );
 		echo '<input type="submit" class="button button-primary" value="' . __( 'Save ', 'wcifd' ) . '" />';
 		echo '</form>';
 	?>
