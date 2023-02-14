@@ -48,9 +48,9 @@ You'll be able to import suppliers, clients and products.
 
 
 = 1.5.5 =
-Release Date: xxxx February 2023
+Release Date: 14 February 2023
 
-* Enhancement: 
+* Enhancement: New license notice 
 * Update: Action Scheduler 
 
 
