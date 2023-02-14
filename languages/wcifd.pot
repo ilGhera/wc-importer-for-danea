@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WIFD\n"
-"POT-Creation-Date: 2022-11-09 11:00+0100\n"
+"POT-Creation-Date: 2023-02-14 19:10+0100\n"
 "PO-Revision-Date: 2016-05-26 13:25+0200\n"
 "Last-Translator: ilGhera <info@ilghera.com>\n"
 "Language-Team: ilGhera <info@ilghera.com>\n"
@@ -18,6 +18,28 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: plugin-update-checker\n"
 "X-Poedit-SearchPathExcluded-1: libraries\n"
+
+#: admin/ilghera-notice/class-ilghera-notice.php:52
+msgid "Renew now"
+msgstr ""
+
+#: admin/ilghera-notice/class-ilghera-notice.php:52
+msgid "Get a license"
+msgstr ""
+
+#: admin/ilghera-notice/class-ilghera-notice.php:93
+msgid "Your license is <u>expired</u> and you're unable to receive updates."
+msgstr ""
+
+#: admin/ilghera-notice/class-ilghera-notice.php:109
+msgid ""
+"It seems like your license is <u>not valid</u> and you're unable to "
+"receive updates."
+msgstr ""
+
+#: admin/ilghera-notice/class-ilghera-notice.php:125
+msgid "You have not set up a license key and you cannot receive updates."
+msgstr ""
 
 #: admin/wcifd-admin.php:47
 msgid "It seems like you don't have permission to see this page"
@@ -45,27 +67,27 @@ msgid ""
 "Importer for Danea - Premium</strong>."
 msgstr ""
 
-#: admin/wcifd-admin.php:83
+#: admin/wcifd-admin.php:84
 msgid "Save "
 msgstr ""
 
-#: admin/wcifd-admin.php:90
+#: admin/wcifd-admin.php:91
 msgid "Suppliers"
 msgstr ""
 
-#: admin/wcifd-admin.php:91
+#: admin/wcifd-admin.php:92
 msgid "Products"
 msgstr ""
 
-#: admin/wcifd-admin.php:92
+#: admin/wcifd-admin.php:93
 msgid "Clients"
 msgstr ""
 
-#: admin/wcifd-admin.php:93
+#: admin/wcifd-admin.php:94
 msgid "Orders"
 msgstr ""
 
-#: admin/wcifd-admin.php:95
+#: admin/wcifd-admin.php:96
 msgid "WooCommerce Role Based Price"
 msgstr ""
 
