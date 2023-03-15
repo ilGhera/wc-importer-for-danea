@@ -50,6 +50,7 @@ You'll be able to import suppliers, clients and products.
 = 1.5.6 =
 Release Date: 15 March 2023
 
+* Enhancement: Plugin Update Checker 
 * Bug fix: Error importing users by CSV file with contents in multiple lines  
 
 
