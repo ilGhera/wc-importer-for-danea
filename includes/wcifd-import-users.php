@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.2.0
+ * @since 1.5.6
  *
  * @param  string $type il ruolo da assegnare agli utenti importati.
  */
