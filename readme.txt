@@ -52,6 +52,7 @@ Release Date: 15 March 2023
 
 * Update: Action Scheduler 
 * Update: Plugin Update Checker 
+* Update: License notice 
 * Bug fix: Error importing users by CSV file with contents in multiple lines  
 
 
