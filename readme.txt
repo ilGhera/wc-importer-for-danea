@@ -96,7 +96,7 @@ From WordPress.org
 == Changelog ==
 
 = 1.2.1 =
-Release Date: 15 March 2023
+Release Date: 16 March 2023
 
 * Update: (Premium) Action Scheduler 
 * Update: (Premium) Plugin Update Checker 
