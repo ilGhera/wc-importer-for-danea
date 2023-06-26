@@ -356,6 +356,38 @@ class ActionScheduler_DBStore_Test extends AbstractStoreTest {
 	}
 
 	/**
+	 * Confirm that priorities are respected when claiming actions.
+	 *
+	 * @return void
+	 */
+	public function test_claim_actions_respecting_priority() {
+		$store = new ActionScheduler_DBStore();
+
+		$schedule = new ActionScheduler_SimpleSchedule( as_get_datetime_object( '-2 hours' ) );
+		$routine_action_1 = $store->save_action( new ActionScheduler_Action( 'routine_past_due', array(), $schedule, '' ) );
+
+		$schedule = new ActionScheduler_SimpleSchedule( as_get_datetime_object( '-1 hour' ) );
+		$action   = new ActionScheduler_Action( 'high_priority_past_due', array(), $schedule, '' );
+		$action->set_priority( 5 );
+		$priority_action = $store->save_action( $action );
+
+		$schedule = new ActionScheduler_SimpleSchedule( as_get_datetime_object( '-4 hours' ) );
+		$routine_action_2 = $store->save_action( new ActionScheduler_Action( 'routine_past_due', array(), $schedule, '' ) );
+
+		$schedule = new ActionScheduler_SimpleSchedule( as_get_datetime_object( '+1 hour' ) );
+		$action   = new ActionScheduler_Action( 'high_priority_future', array(), $schedule, '' );
+		$action->set_priority( 2 );
+		$priority_future_action = $store->save_action( $action );
+
+		$claim = $store->stake_claim();
+		$this->assertEquals(
+			array( $priority_action, $routine_action_2, $routine_action_1 ),
+			$claim->get_actions(),
+			'High priority actions take precedence over older but lower priority actions.'
+		);
+	}
+
+	/**
 	 * The query used to claim actions explicitly ignores future pending actions, but it
 	 * is still possible under unusual conditions (such as if MySQL runs out of temporary
 	 * storage space) for such actions to be returned.
@@ -606,5 +638,80 @@ class ActionScheduler_DBStore_Test extends AbstractStoreTest {
 		$action_with_diff_args = new ActionScheduler_Action( $hook, array( 'foo' => 'bazz' ), $schedule );
 		$action_id_duplicate = $store->save_unique_action( $action_with_diff_args );
 		$this->assertEquals( 0, $action_id_duplicate );
+	}
+
+	/**
+	 * When a set of claimed actions are processed, they should be executed in the expected order (by priority,
+	 * then by least number of attempts, then by scheduled date, then finally by action ID).
+	 *
+	 * @return void
+	 */
+	public function test_actions_are_processed_in_correct_order() {
+		global $wpdb;
+
+		$now          = time();
+		$actual_order = array();
+
+		// When `foo` actions are processed, record the sequence number they supply.
+		$watcher = function ( $number ) use ( &$actual_order ) {
+			$actual_order[] = $number;
+		};
+
+		as_schedule_single_action( $now - 10, 'foo', array( 4 ), '', false, 10 );
+		as_schedule_single_action( $now - 20, 'foo', array( 3 ), '', false, 10 );
+		as_schedule_single_action( $now - 5, 'foo', array( 2 ), '', false, 5 );
+		as_schedule_single_action( $now - 20, 'foo', array( 1 ), '', false, 5 );
+		$reattempted = as_schedule_single_action( $now - 40, 'foo', array( 7 ), '', false, 20 );
+		as_schedule_single_action( $now - 40, 'foo', array( 5 ), '', false, 20 );
+		as_schedule_single_action( $now - 40, 'foo', array( 6 ), '', false, 20 );
+
+		// Modify the `attempt` count on one of our test actions, to change expectations about its execution order.
+		$wpdb->update(
+			$wpdb->actionscheduler_actions,
+			array( 'attempts' => 5 ),
+			array( 'action_id' => $reattempted )
+		);
+
+		add_action( 'foo', $watcher );
+		ActionScheduler_Mocker::get_queue_runner( ActionScheduler::store() )->run();
+		remove_action( 'foo', $watcher );
+
+		$this->assertEquals( range( 1, 7 ), $actual_order, 'When a claim is processed, individual actions execute in the expected order.' );
+	}
+
+	/**
+	 * When a set of claimed actions are processed, they should be executed in the expected order (by priority,
+	 * then by least number of attempts, then by scheduled date, then finally by action ID). This should be true
+	 * even if actions are scheduled from within other scheduled actions.
+	 *
+	 * This test is a variation of `test_actions_are_processed_in_correct_order`, see discussion in
+	 * https://github.com/woocommerce/action-scheduler/issues/951 to see why this specific nuance is tested.
+	 *
+	 * @return void
+	 */
+	public function test_child_actions_are_processed_in_correct_order() {
+		$time         = time() - 10;
+		$actual_order = array();
+		$watcher      = function ( $number ) use ( &$actual_order ) {
+			$actual_order[] = $number;
+		};
+		$parent_action = function () use ( $time ) {
+			// We generate 20 test actions because this is optimal for reproducing the conditions in the
+			// linked bug report. With fewer actions, the error condition is less likely to surface.
+			for ( $i = 1; $i <= 20; $i++ ) {
+				as_schedule_single_action( $time, 'foo', array( $i ) );
+			}
+		};
+
+		add_action( 'foo', $watcher );
+		add_action( 'parent', $parent_action );
+
+		as_schedule_single_action( $time, 'parent' );
+		ActionScheduler_Mocker::get_queue_runner( ActionScheduler::store() )->run();
+
+		remove_action( 'foo', $watcher );
+		add_action( 'parent', $parent_action );
+
+		$this->assertEquals( range( 1, 20 ), $actual_order, 'Once claimed, scheduled actions are executed in the exepcted order, including if "child actions" are scheduled from within another action.' );
 	}
 }
