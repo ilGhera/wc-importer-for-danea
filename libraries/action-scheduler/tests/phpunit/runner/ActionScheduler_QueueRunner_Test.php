@@ -182,7 +182,15 @@ class ActionScheduler_QueueRunner_Test extends ActionScheduler_UnitTestCase {
 		// Create an action to recur every 24 hours, with the first instance scheduled to run 12 hours ago
 		$random    = md5( rand() );
 		$date      = as_get_datetime_object( '12 hours ago' );
-		$action_id = ActionScheduler::factory()->recurring( $random, array(), $date->getTimestamp(), DAY_IN_SECONDS );
+		$action_id = ActionScheduler::factory()->create(
+			array(
+				'type'     => 'recurring',
+				'hook'     => $random,
+				'when'     => $date->getTimestamp(),
+				'pattern'  => DAY_IN_SECONDS,
+				'priority' => 2,
+			)
+		);
 		$store     = ActionScheduler::store();
 		$runner    = ActionScheduler_Mocker::get_queue_runner( $store );
 
@@ -214,7 +222,7 @@ class ActionScheduler_QueueRunner_Test extends ActionScheduler_UnitTestCase {
 		$this->assertNotEquals( $fetched_action_id, $action_id );
 		$this->assertEquals( $random, $fetched_action->get_hook() );
 		$this->assertEquals( $date->getTimestamp(), $fetched_action->get_schedule()->get_date()->getTimestamp(), '', 1 );
-
+		$this->assertEquals( 2, $fetched_action->get_priority(), 'The replacement action should inherit the same priority as the original action.' );
 		$store->release_claim( $claim );
 
 		// Make sure the 3rd instance of the cron action is scheduled for 24 hours from now, as the action was run early, ahead of schedule
@@ -532,5 +540,76 @@ class ActionScheduler_QueueRunner_Test extends ActionScheduler_UnitTestCase {
 			),
 			$execution_order
 		);
+	}
+
+	/**
+	 * Tests the ability of the queue runner to accommodate a range of error conditions (raised recoverable errors
+	 * under PHP 5.6, thrown errors under PHP 7.0 upwards, and exceptions under all supported versions).
+	 *
+	 * @return void
+	 */
+	public function test_recoverable_errors_do_not_break_queue_runner() {
+		$executed = 0;
+		as_enqueue_async_action( 'foo' );
+		as_enqueue_async_action( 'bar' );
+		as_enqueue_async_action( 'baz' );
+		as_enqueue_async_action( 'foobar' );
+
+		/**
+		 * Trigger a custom user error.
+		 *
+		 * @return void
+		 */
+		$foo = function () use ( &$executed ) {
+			$executed++;
+			trigger_error( 'Trouble.', E_USER_ERROR );
+		};
+
+		/**
+		 * Throw an exception.
+		 *
+		 * @throws Exception Intentionally raised for testing purposes.
+		 *
+		 * @return void
+		 */
+		$bar = function () use ( &$executed ) {
+			$executed++;
+			throw new Exception( 'More trouble.' );
+		};
+
+		/**
+		 * Trigger a recoverable fatal error. Under PHP 5.6 the error will be raised, and under PHP 7.0 and higher the
+		 * error will be thrown (different mechanisms are needed to support this difference).
+		 *
+		 * @throws Throwable Intentionally raised for testing purposes.
+		 *
+		 * @return void
+		 */
+		$baz = function () use ( &$executed ) {
+			$executed++;
+			(string) (object) array();
+		};
+
+		/**
+		 * A problem-free callback.
+		 *
+		 * @return void
+		 */
+		$foobar = function () use ( &$executed ) {
+			$executed++;
+		};
+
+		add_action( 'foo', $foo );
+		add_action( 'bar', $bar );
+		add_action( 'baz', $baz );
+		add_action( 'foobar', $foobar );
+
+		ActionScheduler_Mocker::get_queue_runner( ActionScheduler::store() )->run();
+		$this->assertEquals( 4, $executed, 'All enqueued actions ran as expected despite errors and exceptions being raised by the first actions in the set.' );
+
+		remove_action( 'foo', $foo );
+		remove_action( 'bar', $bar );
+		remove_action( 'baz', $baz );
+		remove_action( 'foobar', $foobar );
 	}
 }
