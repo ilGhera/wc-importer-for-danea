@@ -206,19 +206,23 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 				</td>
 			</tr>
 			<tr>
+				<th scope="row"><?php esc_html_e( 'Short description', 'wcifd' ); ?></th>
+				<td>
+					<input type="hidden" name="short-description" value="0">
+					<select name="short-description">
+                        <option value=""><?php esc_html_e( 'None', 'wcifd' ); ?></option>
+                        <option value="excerpt"<?php echo ( 'excerpt' === $short_description ) ? ' selected' : null; ?>><?php esc_html_e( 'Use part of the full description', 'wcifd' ); ?></option>
+                        <option value="notes"<?php echo ( 'notes' === $short_description ) ? ' selected' : null; ?>><?php esc_html_e( 'Use the content of the Note field', 'wcifd' ); ?></option>
+                    </select>
+					<p class="description"><?php esc_html_e( 'Select the content to use for the short description of the product.', 'wcifd' ); ?></p>
+				</td>
+			</tr>
+			<tr>
 				<th scope="row"><?php esc_html_e( 'Notes as description', 'wcifd' ); ?></th>
 				<td>
 					<input type="hidden" name="notes-as-description" value="0">
 					<input type="checkbox" name="notes-as-description" value="1"<?php echo $notes_as_description == 1 ? ' checked="checked"' : ''; ?>>
 					<p class="description"><?php esc_html_e( 'Use the Notes field content if HTML description is empty.', 'wcifd' ); ?></p>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><?php esc_html_e( 'Short description', 'wcifd' ); ?></th>
-				<td>
-					<input type="hidden" name="short-description" value="0">
-					<input type="checkbox" name="short-description" value="1"<?php echo $short_description == 1 ? ' checked="checked"' : ''; ?>>
-					<p class="description"><?php esc_html_e( 'Use the excerpt as short product description.', 'wcifd' ); ?></p>
 				</td>
 			</tr>
 			<tr>

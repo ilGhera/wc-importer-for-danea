@@ -14,6 +14,7 @@ function wcifd_import_single_product( $hash ) {
 	$data                  = $temp->wcifd_get_temporary_data( $hash );
 	$product               = isset( $data['product'] ) ? $data['product'] : '';
     $notes_as_descriptions = get_option( 'wcifd-notes-as-description' );
+    $short_description_opt = get_option( 'wcifd-short-description' ); 
 
 	/*Termina se il prodotto non esiste*/
 	if ( ! $product ) {
@@ -68,7 +69,22 @@ function wcifd_import_single_product( $hash ) {
 
     }
 
-	if ( ! $notes_as_descriptions && isset( $product['Notes'] ) && is_string( $product['Notes'] ) ) {
+    /* Descrizione breve prodotto */
+    $short_description = '';
+
+    if ( 'excerpt' === $short_description_opt ) {
+
+        $short_description = wcifd_get_short_description( $description );
+
+    } elseif ( 'notes' === $short_description_opt && isset( $product['Notes'] ) && is_string( $product['Notes'] ) ) {
+
+        $short_description = wp_filter_post_kses( $product['Notes'] );
+
+
+    }
+
+    /* Prodotti variabili precedentemente esportati */
+	if ( ! $notes_as_descriptions && 'notes' !== $short_description_opt && isset( $product['Notes'] ) && is_string( $product['Notes'] ) ) {
 
         $notes = json_decode( $product['Notes'], true );
 
@@ -191,6 +207,7 @@ function wcifd_import_single_product( $hash ) {
 			'post_type'        => $type,
 			'post_parent'      => $parent_product_id,
 			'post_content'     => $description,
+			'post_excerpt'     => $short_description,
 			'post_status'      => $status,
 			'meta_input'       => array(
 				'_sku'                => $sku,
@@ -236,11 +253,6 @@ function wcifd_import_single_product( $hash ) {
 				}
 			}
 
-		}
-
-		/*Descrizione breve*/
-		if ( get_option( 'wcifd-short-description' ) ) {
-			$args['post_excerpt'] = wcifd_get_short_description( $description );
 		}
 
 		/*Inserimento nuovo prodotto*/
@@ -445,11 +457,7 @@ function wcifd_import_single_product( $hash ) {
 			/*Descrizione prodotto*/
 			if ( ! get_option( 'wcifd-exclude-description' ) ) {
 				$args['post_content'] = $description;
-
-				/*Descrizione breve*/
-				if ( get_option( 'wcifd-short-description' ) ) {
-					$args['post_excerpt'] = wcifd_get_short_description( $description );
-				}
+                $args['post_excerpt'] = $short_description; 
 			}
 
 			if ( $variants ) {
