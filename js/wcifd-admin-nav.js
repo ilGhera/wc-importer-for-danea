@@ -81,45 +81,38 @@ jQuery(document).ready(function ($) {
      */
     var custom_fields_options = function() {
 
-    	var field;
-    	var fieldImport;
-    	var fieldDisplay;
-    	var fieldName;
-
     	$('.wcifd-custom-field').each(function(){
 
-    		fieldDisplay = $('.field-display', $(this));
-    		fieldName    = $('.field-name', $(this));
+            var field        = this;
+    		var fieldDisplay = $('.field-display', field);
+    		var fieldName    = $('.field-name', field);
 
-    		if( ! $('.field-import .tzCheckBox', $(this)).hasClass('checked') ) {
+    		console.log( 'VAL: ' +  $('select', field).val() );
+
+    		if( 'attribute' != $('select', field).val() ) {
 
     			$(fieldDisplay).hide();
     			$(fieldName).hide();
 
     		}
 
-    	})
+    		$('select', field).on('change', function(){
 
+                if ( 'attribute' == $(this).val() ) {
 
-    	$('.field-import .tzCheckBox').on('click', function(){
-    	
-    		fieldImport  = $(this).parent();
-    		field        = (fieldImport).parent();
-    		fieldDisplay = $('.field-display', field);
-    		fieldName    = $('.field-name', field);
+                    console.log('NEW VAL 2: ' + $(this).val());
+                    $(fieldDisplay).show('slow');
+                    $(fieldName).show('slow');
+                
+                } else {
 
-    		if ($(this).hasClass('checked')) {
+                    $(fieldDisplay).hide('slow');
+                    $(fieldName).hide('slow');
 
-    			$(fieldDisplay).show('slow');
-    			$(fieldName).show('slow');
-    		
-    		} else {
+                }
 
-    			$(fieldDisplay).hide('slow');
-    			$(fieldName).hide('slow');
-
-    		}
-
+            })
+            
     	})
 
 	}

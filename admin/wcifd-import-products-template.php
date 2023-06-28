@@ -387,7 +387,11 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 
 						echo '<div class="field-import">';
 							echo '<input type="hidden" name="import-custom-field-' . esc_attr( $i ) . '" value="0">';
-							echo '<input type="checkbox" name="import-custom-field-' . esc_attr( $i ) . '" value="1"' . ( $import_field == 1 ? ' checked="checked"' : '' ) . '>';
+                            echo '<select name="import-custom-field-' . esc_attr( $i ) . '" class="wcifd-select">';
+                                echo '<option value="">' . esc_html__( 'Don\'t import', 'wcifd' ) .  '</option>';
+                                echo '<option value="attribute"' . ( 'attribute' === $import_field ? ' selected' : null ) . '>' . esc_html__( 'Attribute', 'wcifd' ) .  '</option>';
+                                echo '<option value="tag"' . ( 'tag' === $import_field ? ' selected' : null ) . '>' . esc_html__( 'Tag', 'wcifd' ) .  '</option>';
+                            echo '</select>';
 							echo '<p class="description bottom">' . sprintf( esc_html__( 'Import Danea Custom Field %d', 'wcifd' ), $i ) . '</p>';
 						echo '</div>';
 
