@@ -561,34 +561,51 @@ function wcifd_import_single_product( $hash ) {
 
     foreach ( $more_attributes as $key => $value ) {
 
-		$is_visible = get_option( 'wcifd-display-' . $key ) ? get_option( 'wcifd-display-' . $key ) : '0';
+        if ( $value ) {
 
-		wp_set_object_terms( $product_id, array( $value ), 'pa_' . $key );
+            $is_visible = get_option( 'wcifd-display-' . $key ) ? get_option( 'wcifd-display-' . $key ) : '0';
 
-		$attributes[ 'pa_' . $key ] = array(
-			'name'         => 'pa_' . $key,
-			'value'        => '',
-			'is_visible'   => $is_visible,
-			'is_variation' => '0',
-			'is_taxonomy'  => '1',
-		);
+            wp_set_object_terms( $product_id, array( $value ), 'pa_' . $key );
+
+            $attributes[ 'pa_' . $key ] = array(
+                'name'         => 'pa_' . $key,
+                'value'        => '',
+                'is_visible'   => $is_visible,
+                'is_variation' => '0',
+                'is_taxonomy'  => '1',
+            );
+
+        } else {
+
+            unset( $attributes[ 'pa_' . $key ] );
+
+        }
+
     }
 
 	/*Custom fields*/
 	for ( $i = 1; $i < 5; $i++ ) {
 
 		$field_name   = 'CustomField' . $i;
-		$pa_name      = 'pa_' . strtolower( $field_name );
+        $pa_name      = 'pa_' . strtolower( $field_name );
 		$custom_field = isset( $product[ $field_name ] ) ? $product[ $field_name ] : '';
 
 		if ( $custom_field ) {
 
 			$fields_options = get_option( 'wcifd-custom-fields' );
 			$import         = isset( $fields_options[ $i ]['import'] ) ? $fields_options[ $i ]['import'] : '0';
+			$split          = isset( $fields_options[ $i ]['split'] ) ? $fields_options[ $i ]['split'] : '0';
 			$is_visible     = isset( $fields_options[ $i ]['display'] ) ? $fields_options[ $i ]['display'] : '0';
 
-			if ( $import ) {
+            error_log( 'CUSTOM ' . $i . ': ' . $custom_field );
+            error_log( 'IMPORT ' . $i . ': ' . $import );
 
+			if ( 'attribute' === $import ) {
+
+                /* Remove tag */
+				wp_remove_object_terms( $product_id, array( $custom_field ), 'product_tag' );
+
+                /* Set attribute */
 				wp_set_object_terms( $product_id, array( $custom_field ), $pa_name );
 
 				$attributes[ $pa_name ] = array(
@@ -599,13 +616,32 @@ function wcifd_import_single_product( $hash ) {
 					'is_taxonomy'  => '1',
 				);
 
-			} else {
+			} elseif ( 'tag' === $import ) {
 
+                /* Remove attribute */
 				unset( $attributes[ $pa_name ] );
+                wp_remove_object_terms( $product_id, array( $custom_field ), $pa_name );
 
-			}
+                /* Set tag */
+                wp_set_object_terms( $product_id, array( $custom_field ), 'product_tag', true );
 
-		}
+            } else {
+
+                /* Remove all */
+                unset( $attributes[ $pa_name ] );
+                wp_remove_object_terms( $product_id, array( $custom_field ), $pa_name );
+                wp_remove_object_terms( $product_id, array( $custom_field ), 'product_tag' );
+
+            }
+
+        } else {
+
+            /* Remove all */
+            unset( $attributes[ $pa_name ] );
+            wp_remove_object_terms( $product_id, array( $custom_field ), $pa_name );
+            wp_remove_object_terms( $product_id, array( $custom_field ), 'product_tag' );
+
+        }
 
 	}
 
