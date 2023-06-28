@@ -351,7 +351,8 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 			for ( $i = 1; $i < 5; $i++) { 
 		
 				$import_field  = isset( $custom_fields[ $i ]['import'] ) ? $custom_fields[ $i ]['import'] : 0; 
-				$split_field  = isset( $custom_fields[ $i ]['split'] ) ? $custom_fields[ $i ]['split'] : 0; 
+				$tag_append    = isset( $custom_fields[ $i ]['append'] ) ? $custom_fields[ $i ]['append'] : 0; 
+				$split_field   = isset( $custom_fields[ $i ]['split'] ) ? $custom_fields[ $i ]['split'] : 0; 
 				$display_field = isset( $custom_fields[ $i ]['display'] ) ? $custom_fields[ $i ]['display'] : 0;
 				$field_name    = isset( $custom_fields[ $i ]['name'] ) ? $custom_fields[ $i ]['name'] : '';
 
@@ -361,6 +362,13 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 
 						$import_field = $_POST[ 'import-custom-field-' . $i ] ? $_POST[ 'import-custom-field-' . $i ] : 0;
 						$custom_fields[ $i ]['import'] = $import_field;
+
+					}
+
+					if ( isset( $_POST[ 'custom-field-tag-append-' . $i ] ) ) {
+
+						$tag_append = $_POST[ 'custom-field-tag-append-' . $i ] ? $_POST[ 'custom-field-tag-append-' . $i ] : 0;
+						$custom_fields[ $i ]['append'] = $tag_append;
 
 					}
 
@@ -403,10 +411,16 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 							echo '<p class="description bottom">' . sprintf( esc_html__( 'Import Danea Custom Field %d', 'wcifd' ), $i ) . '</p>';
 						echo '</div>';
 
+						echo '<div class="field-tag-append">';
+							echo '<input type="hidden" name="custom-field-tag-append-' . esc_attr( $i ) . '" value="0">';
+							echo '<input type="checkbox" name="custom-field-tag-append-' . esc_attr( $i ) . '" value="1"' . ( $tag_append == 1 ? ' checked="checked"' : '' ) . '>';
+							echo '<p class="description bottom">' . esc_html__( 'Add to other product tags present', 'wcifd' ) . '</p>';
+						echo '</div>';
+
 						echo '<div class="field-split">';
 							echo '<input type="hidden" name="split-custom-field-' . esc_attr( $i ) . '" value="0">';
 							echo '<input type="checkbox" name="split-custom-field-' . esc_attr( $i ) . '" value="1"' . ( $split_field == 1 ? ' checked="checked"' : '' ) . '>';
-							echo '<p class="description bottom">' . sprintf( esc_html__( 'Create multiple %ss using comma as separator', 'wcifd' ), $import_field ) . '</p>';
+							echo '<p class="description bottom">' . esc_html__( 'Create multiple attributes/tags using comma as separator', 'wcifd' ) . '</p>';
 						echo '</div>';
 
 						echo '<div class="field-display">';

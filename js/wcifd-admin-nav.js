@@ -83,10 +83,11 @@ jQuery(document).ready(function ($) {
 
     	$('.wcifd-custom-field').each(function(){
 
-            var field        = this;
-    		var fieldSplit   = $('.field-split', field);
-    		var fieldDisplay = $('.field-display', field);
-    		var fieldName    = $('.field-name', field);
+            var field          = this;
+    		var fieldTagAppend = $('.field-tag-append', field);
+    		var fieldSplit     = $('.field-split', field);
+    		var fieldDisplay   = $('.field-display', field);
+    		var fieldName      = $('.field-name', field);
 
     		if( $('select', field).val() ) {
 
@@ -95,10 +96,15 @@ jQuery(document).ready(function ($) {
                     $(fieldDisplay).hide();
                     $(fieldName).hide();
 
+                } else {
+
+                    $(fieldTagAppend).hide();
+
                 }
 
             } else {
 
+                $(fieldTagAppend).hide();
                 $(fieldSplit).hide();
                 $(fieldDisplay).hide();
                 $(fieldName).hide();
@@ -114,11 +120,13 @@ jQuery(document).ready(function ($) {
 
                     if ( 'attribute' == $(this).val() ) {
 
+                        $(fieldTagAppend).hide('slow');
                         $(fieldDisplay).show('slow');
                         $(fieldName).show('slow');
                     
                     } else {
 
+                        $(fieldTagAppend).show('slow');
                         $(fieldDisplay).hide('slow');
                         $(fieldName).hide('slow');
 
@@ -126,6 +134,7 @@ jQuery(document).ready(function ($) {
 
                 } else {
 
+                    $(fieldTagAppend).hide('slow');
                     $(fieldSplit).hide('slow');
                     $(fieldDisplay).hide('slow');
                     $(fieldName).hide('slow');
