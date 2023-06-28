@@ -4,7 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @since 1.5.0
+ * @since 1.6.0
  */
 
 $tax_included = get_option( 'wcifd-tax-included' );
@@ -150,7 +150,7 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Prices imported with tax', 'wcifd' ); ?></th>
 				<td>
-					<select name="tax-included" class="wcifd">
+					<select name="tax-included" class="wcifd-select">
 						<option value="1" <?php echo( $tax_included == 1 ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Yes, I will import prices inclusive of tax', 'wcifd' ); ?></option>
 						<option value="0" <?php echo( $tax_included == 0 ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'No, I will import prices exclusive of tax', 'wcifd' ); ?></option>
 					</select>
@@ -160,7 +160,7 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Regular price', 'wcifd' ); ?></th>
 				<td>
-					<select name="regular-price-list" class="wcifd">
+					<select name="regular-price-list" class="wcifd-select">
 						<?php
 						for ( $n = 1; $n <= 9; $n++ ) {
 							echo '<option value="' . $n . '"' . ( $regular_price_list == $n ? 'selected="selected"' : '' ) . '>' . __( 'Price list ', 'wcifd' ) . $n . '</option>';
@@ -173,7 +173,7 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Sale price', 'wcifd' ); ?></th>
 				<td>
-					<select name="sale-price-list" class="wcifd">
+					<select name="sale-price-list" class="wcifd-select">
 						<?php
 						echo '<option>' . __( 'Select a price list', 'wcifd' ) . '</option>';
 						for ( $n = 1; $n <= 9; $n++ ) {
@@ -187,7 +187,7 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Product size type', 'wcifd' ); ?></th>
 				<td>
-					<select name="wcifd-size-type" class="wcifd">
+					<select name="wcifd-size-type" class="wcifd-select">
 						<option value="gross-size"<?php echo( $size_type == 'gross-size' ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Gross size', 'wcifd' ); ?></option>
 						<option value="net-size"<?php echo( $size_type == 'net-size' ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Net size', 'wcifd' ); ?></option>
 					</select>
@@ -198,7 +198,7 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Product weight type', 'wcifd' ); ?></th>
 				<td>
-					<select name="wcifd-weight-type" class="wcifd">
+					<select name="wcifd-weight-type" class="wcifd-select">
 						<option value="gross-weight"<?php echo( $weight_type == 'gross-weight' ) ? 'selected="selected"' : ''; ?>><?php esc_html_e( 'Gross weight', 'wcifd' ); ?></option>
 						<option value="net-weight"<?php echo( $weight_type == 'net-weight' ) ? 'selected="selected"' : ''; ?>><?php esc_html_e( 'Net weight', 'wcifd' ); ?></option>
 					</select>
@@ -209,7 +209,7 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 				<th scope="row"><?php esc_html_e( 'Short description', 'wcifd' ); ?></th>
 				<td>
 					<input type="hidden" name="short-description" value="0">
-					<select name="short-description">
+					<select name="short-description" class="wcifd-select">
                         <option value=""><?php esc_html_e( 'None', 'wcifd' ); ?></option>
                         <option value="excerpt"<?php echo ( 'excerpt' === $short_description ) ? ' selected' : null; ?>><?php esc_html_e( 'Use part of the full description', 'wcifd' ); ?></option>
                         <option value="notes"<?php echo ( 'notes' === $short_description ) ? ' selected' : null; ?>><?php esc_html_e( 'Use the content of the Note field', 'wcifd' ); ?></option>
@@ -484,7 +484,7 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 			<tr>
 				<th scoper="row"><?php esc_html_e( 'File type', 'wcifd' ); ?></th>
 				<td>
-					<select name="file-type" class="wcifd">
+					<select name="file-type" class="wcifd-select">
 							<option value="xml" <?php echo( 'xml' === $file_type ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'xml', 'wcifd' ); ?></option>
 							<option value="csv" <?php echo( 'csv' === $file_type ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'csv', 'wcifd' ); ?></option>
 					</select>

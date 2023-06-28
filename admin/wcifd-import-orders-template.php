@@ -3,7 +3,7 @@
  * Importazione ordini
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @since 1.1.0
+ * @since 1.6.0
  */
 ?>
 
@@ -15,7 +15,7 @@
 		<tr>
 			<th scope="row"><?php _e( 'New customers', 'wcifd' ); ?></th>
 			<td>
-				<select name="wcifd-orders-add-users">
+				<select name="wcifd-orders-add-users" class="wcifd-select">
 					<option name="" value="0"<?php echo( $wcifd_orders_add_users == 0 ) ? ' selected="selected"' : ''; ?>><?php _e( 'Don\'t create users', 'wcifd' ); ?></option>
 					<option name="" value="1"<?php echo( $wcifd_orders_add_users == 1 ) ? ' selected="selected"' : ''; ?>><?php _e( 'Create users', 'wcifd' ); ?></option>
 				</select>
@@ -34,7 +34,7 @@
 		<tr>
 			<th scope="row"><?php echo __( 'Orders status', 'wcifd' ); ?></th>
 			<td>
-				<select name="wcifd-orders-status">
+				<select name="wcifd-orders-status" class="wcifd-select">
 					<?php
 					$statuses = wc_get_order_statuses();
 					foreach ( $statuses as $status ) {

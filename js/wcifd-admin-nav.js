@@ -2,7 +2,7 @@
  * Script menu di navigazione
  * @author ilGhera
  * @package wc-importer-for-danea-premium/js
- * @since 1.2.0
+ * @since 1.6.0
  */
 jQuery(document).ready(function ($) {
 
@@ -73,8 +73,11 @@ jQuery(document).ready(function ($) {
     wcifd_pagination();
     wcifd_pagination(true);
 
+
     /**
      * Visualizzazione dei campi liberi di Danea
+     *
+     * @return void
      */
     var custom_fields_options = function() {
 
@@ -122,5 +125,28 @@ jQuery(document).ready(function ($) {
 	}
 
     custom_fields_options();
+
+    
+    /**
+	 * Esegue Chosen
+     *
+     * @return void
+	 */
+	var wcifdChosen = function() {
+
+		jQuery(function($){
+
+			$('.wcifd-select').chosen({
+		
+				disable_search_threshold: 10,
+				width: '200px'
+			
+			});
+
+		})
+
+	}
+
+    wcifdChosen();
 
 });
