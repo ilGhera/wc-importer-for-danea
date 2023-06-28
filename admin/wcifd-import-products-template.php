@@ -351,6 +351,7 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 			for ( $i = 1; $i < 5; $i++) { 
 		
 				$import_field  = isset( $custom_fields[ $i ]['import'] ) ? $custom_fields[ $i ]['import'] : 0; 
+				$split_field  = isset( $custom_fields[ $i ]['split'] ) ? $custom_fields[ $i ]['split'] : 0; 
 				$display_field = isset( $custom_fields[ $i ]['display'] ) ? $custom_fields[ $i ]['display'] : 0;
 				$field_name    = isset( $custom_fields[ $i ]['name'] ) ? $custom_fields[ $i ]['name'] : '';
 
@@ -360,6 +361,13 @@ if ( isset( $_POST['publish-new-products'] ) ) {
 
 						$import_field = $_POST[ 'import-custom-field-' . $i ] ? $_POST[ 'import-custom-field-' . $i ] : 0;
 						$custom_fields[ $i ]['import'] = $import_field;
+
+					}
+
+					if ( isset( $_POST[ 'split-custom-field-' . $i ] ) ) {
+
+						$split_field = $_POST[ 'split-custom-field-' . $i ] ? $_POST[ 'split-custom-field-' . $i ] : 0;
+						$custom_fields[ $i ]['split'] = $split_field;
 
 					}
 
@@ -393,6 +401,12 @@ if ( isset( $_POST['publish-new-products'] ) ) {
                                 echo '<option value="tag"' . ( 'tag' === $import_field ? ' selected' : null ) . '>' . esc_html__( 'Tag', 'wcifd' ) .  '</option>';
                             echo '</select>';
 							echo '<p class="description bottom">' . sprintf( esc_html__( 'Import Danea Custom Field %d', 'wcifd' ), $i ) . '</p>';
+						echo '</div>';
+
+						echo '<div class="field-split">';
+							echo '<input type="hidden" name="split-custom-field-' . esc_attr( $i ) . '" value="0">';
+							echo '<input type="checkbox" name="split-custom-field-' . esc_attr( $i ) . '" value="1"' . ( $split_field == 1 ? ' checked="checked"' : '' ) . '>';
+							echo '<p class="description bottom">' . sprintf( esc_html__( 'Create multiple %ss using comma as separator', 'wcifd' ), $import_field ) . '</p>';
 						echo '</div>';
 
 						echo '<div class="field-display">';

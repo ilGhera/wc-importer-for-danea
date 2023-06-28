@@ -84,28 +84,49 @@ jQuery(document).ready(function ($) {
     	$('.wcifd-custom-field').each(function(){
 
             var field        = this;
+    		var fieldSplit   = $('.field-split', field);
     		var fieldDisplay = $('.field-display', field);
     		var fieldName    = $('.field-name', field);
 
-    		console.log( 'VAL: ' +  $('select', field).val() );
+    		if( $('select', field).val() ) {
 
-    		if( 'attribute' != $('select', field).val() ) {
+                if( 'tag' == $('select', field).val() ) {
 
-    			$(fieldDisplay).hide();
-    			$(fieldName).hide();
+                    $(fieldDisplay).hide();
+                    $(fieldName).hide();
 
-    		}
+                }
+
+            } else {
+
+                $(fieldSplit).hide();
+                $(fieldDisplay).hide();
+                $(fieldName).hide();
+
+            }
 
     		$('select', field).on('change', function(){
 
-                if ( 'attribute' == $(this).val() ) {
+                if ( $(this).val() ) {
 
                     console.log('NEW VAL 2: ' + $(this).val());
-                    $(fieldDisplay).show('slow');
-                    $(fieldName).show('slow');
-                
+                    $(fieldSplit).show('slow');
+
+                    if ( 'attribute' == $(this).val() ) {
+
+                        $(fieldDisplay).show('slow');
+                        $(fieldName).show('slow');
+                    
+                    } else {
+
+                        $(fieldDisplay).hide('slow');
+                        $(fieldName).hide('slow');
+
+                    }
+
                 } else {
 
+                    $(fieldSplit).hide('slow');
                     $(fieldDisplay).hide('slow');
                     $(fieldName).hide('slow');
 
