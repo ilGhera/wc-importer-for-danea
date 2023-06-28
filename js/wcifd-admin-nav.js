@@ -81,6 +81,21 @@ jQuery(document).ready(function ($) {
      */
     var custom_fields_options = function() {
 
+        // Opzione uguale per ogni custom field
+        $('.field-tag-append .tzCheckBox').on('click', function(){
+
+            if ( $(this).hasClass('checked') ) {
+
+                $('.field-tag-append .tzCheckBox').not(this).addClass('checked');
+
+            } else {
+
+                $('.field-tag-append .tzCheckBox').not(this).removeClass('checked');
+
+            }
+
+        })
+
     	$('.wcifd-custom-field').each(function(){
 
             var field          = this;

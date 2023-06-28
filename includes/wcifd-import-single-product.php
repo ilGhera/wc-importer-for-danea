@@ -593,12 +593,14 @@ function wcifd_import_single_product( $hash ) {
 		if ( $custom_field ) {
 
 			$fields_options = get_option( 'wcifd-custom-fields' );
-			$import         = isset( $fields_options[ $i ]['import'] ) ? $fields_options[ $i ]['import'] : '0';
-			$split          = isset( $fields_options[ $i ]['split'] ) ? $fields_options[ $i ]['split'] : '0';
+			$import         = isset( $fields_options[ $i ]['import'] ) ? $fields_options[ $i ]['import'] : false;
+			$append         = isset( $fields_options[ $i ]['append'] ) ? $fields_options[ $i ]['append'] : false;
+			$split          = isset( $fields_options[ $i ]['split'] ) ? $fields_options[ $i ]['split'] : false;
 			$is_visible     = isset( $fields_options[ $i ]['display'] ) ? $fields_options[ $i ]['display'] : '0';
 
             error_log( 'CUSTOM ' . $i . ': ' . $custom_field );
             error_log( 'IMPORT ' . $i . ': ' . $import );
+            error_log( 'APPEND: ' . $append );
 
 			if ( 'attribute' === $import ) {
 
@@ -619,16 +621,22 @@ function wcifd_import_single_product( $hash ) {
 			} elseif ( 'tag' === $import ) {
 
                 /* Remove attribute */
-				unset( $attributes[ $pa_name ] );
+                if ( isset( $attributes[ $pa_name ] ) ) {
+                    unset( $attributes[ $pa_name ] );
+                }
+
                 wp_remove_object_terms( $product_id, array( $custom_field ), $pa_name );
 
                 /* Set tag */
-                wp_set_object_terms( $product_id, array( $custom_field ), 'product_tag', true );
+                wp_set_object_terms( $product_id, array( $custom_field ), 'product_tag', $append );
 
             } else {
 
                 /* Remove all */
-                unset( $attributes[ $pa_name ] );
+                if ( isset( $attributes[ $pa_name ] ) ) {
+                    unset( $attributes[ $pa_name ] );
+                }
+
                 wp_remove_object_terms( $product_id, array( $custom_field ), $pa_name );
                 wp_remove_object_terms( $product_id, array( $custom_field ), 'product_tag' );
 
