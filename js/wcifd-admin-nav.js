@@ -87,10 +87,14 @@ jQuery(document).ready(function ($) {
             if ( $(this).hasClass('checked') ) {
 
                 $('.field-tag-append .tzCheckBox').not(this).addClass('checked');
+                $('.field-tag-append .tzCBContent').not(this).text('On');
+                $('.field-tag-append input[type="checkbox"]').not(this).attr('checked', 'checked');
 
             } else {
 
                 $('.field-tag-append .tzCheckBox').not(this).removeClass('checked');
+                $('.field-tag-append .tzCBContent').not(this).text('Off');
+                $('.field-tag-append input[type="checkbox"]').not(this).removeAttr('checked');
 
             }
 
@@ -130,7 +134,6 @@ jQuery(document).ready(function ($) {
 
                 if ( $(this).val() ) {
 
-                    console.log('NEW VAL 2: ' + $(this).val());
                     $(fieldSplit).show('slow');
 
                     if ( 'attribute' == $(this).val() ) {

@@ -584,6 +584,8 @@ function wcifd_import_single_product( $hash ) {
     }
 
 	/*Custom fields*/
+    $tags = array();
+
 	for ( $i = 1; $i < 5; $i++ ) {
 
 		$field_name   = 'CustomField' . $i;
@@ -597,10 +599,6 @@ function wcifd_import_single_product( $hash ) {
 			$append         = isset( $fields_options[ $i ]['append'] ) ? $fields_options[ $i ]['append'] : false;
 			$split          = isset( $fields_options[ $i ]['split'] ) ? $fields_options[ $i ]['split'] : false;
 			$is_visible     = isset( $fields_options[ $i ]['display'] ) ? $fields_options[ $i ]['display'] : '0';
-
-            error_log( 'CUSTOM ' . $i . ': ' . $custom_field );
-            error_log( 'IMPORT ' . $i . ': ' . $import );
-            error_log( 'APPEND: ' . $append );
 
 			if ( 'attribute' === $import ) {
 
@@ -628,7 +626,7 @@ function wcifd_import_single_product( $hash ) {
                 wp_remove_object_terms( $product_id, array( $custom_field ), $pa_name );
 
                 /* Set tag */
-                wp_set_object_terms( $product_id, array( $custom_field ), 'product_tag', $append );
+                $tags[] = $custom_field; 
 
             } else {
 
@@ -652,6 +650,13 @@ function wcifd_import_single_product( $hash ) {
         }
 
 	}
+
+    /* Update tags */
+    if ( ! empty( $tags ) ) {
+
+        wp_set_object_terms( $product_id, $tags, 'product_tag', $append );
+
+    }
 
 	update_post_meta( $product_id, '_product_attributes', $attributes );
 
