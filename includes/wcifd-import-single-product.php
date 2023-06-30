@@ -605,8 +605,23 @@ function wcifd_import_single_product( $hash ) {
                 /* Remove tag */
 				wp_remove_object_terms( $product_id, array( $custom_field ), 'product_tag' );
 
-                /* Set attribute */
-				wp_set_object_terms( $product_id, array( $custom_field ), $pa_name );
+                if ( $split ) {
+
+                    $values = explode( ',', $custom_field );
+
+                    if ( is_array( $values ) ) {
+
+                        /* Set attribute */
+                        wp_set_object_terms( $product_id, $values, $pa_name );
+
+                    }
+
+                } else {
+
+                    /* Set attribute */
+                    wp_set_object_terms( $product_id, array( $custom_field ), $pa_name );
+
+                }
 
 				$attributes[ $pa_name ] = array(
 					'name'         => $pa_name,
