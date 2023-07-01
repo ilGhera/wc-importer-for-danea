@@ -595,7 +595,10 @@ function wcifd_import_single_product( $hash ) {
 		if ( $custom_field ) {
 
 			$fields_options = get_option( 'wcifd-custom-fields' );
+            error_log( 'FIELDS OPTIONS: ' . print_r( $fields_options, true ) );
+
 			$import         = isset( $fields_options[ $i ]['import'] ) ? $fields_options[ $i ]['import'] : false;
+			$cf_name        = isset( $fields_options[ $i ]['name'] ) ? $fields_options[ $i ]['name'] : false;
 			$append         = isset( $fields_options[ $i ]['append'] ) ? $fields_options[ $i ]['append'] : false;
 			$split          = isset( $fields_options[ $i ]['split'] ) ? $fields_options[ $i ]['split'] : false;
 			$is_visible     = isset( $fields_options[ $i ]['display'] ) ? $fields_options[ $i ]['display'] : '0';
@@ -604,6 +607,13 @@ function wcifd_import_single_product( $hash ) {
 
                 /* Remove tag */
 				wp_remove_object_terms( $product_id, array( $custom_field ), 'product_tag' );
+
+                /* Custom name */
+                if ( $cf_name ) {
+
+                    $pa_name = 'pa_' . strtolower( $cf_name );
+
+                }
 
                 if ( $split ) {
 
