@@ -595,7 +595,7 @@ function wcifd_import_single_product( $hash ) {
 		if ( $custom_field ) {
 
 			$fields_options = get_option( 'wcifd-custom-fields' );
-            error_log( 'FIELDS OPTIONS: ' . print_r( $fields_options, true ) );
+            /* error_log( 'FIELDS OPTIONS: ' . print_r( $fields_options, true ) ); */
 
 			$import         = isset( $fields_options[ $i ]['import'] ) ? $fields_options[ $i ]['import'] : false;
 			$cf_name        = isset( $fields_options[ $i ]['name'] ) ? $fields_options[ $i ]['name'] : false;
@@ -606,12 +606,12 @@ function wcifd_import_single_product( $hash ) {
 			if ( 'attribute' === $import ) {
 
                 /* Remove tag */
-				wp_remove_object_terms( $product_id, array( $custom_field ), 'product_tag' );
+				/* wp_remove_object_terms( $product_id, array( $custom_field ), 'product_tag' ); */
 
                 /* Custom name */
                 if ( $cf_name ) {
 
-                    $pa_name = 'pa_' . strtolower( $cf_name );
+                    $pa_name = 'pa_' . str_replace( ' ', '', strtolower( $cf_name ) );
 
                 }
 
@@ -622,14 +622,16 @@ function wcifd_import_single_product( $hash ) {
                     if ( is_array( $values ) ) {
 
                         /* Set attribute */
-                        wp_set_object_terms( $product_id, $values, $pa_name );
+                        $set_attr2 = wp_set_object_terms( $product_id, $values, $pa_name );
+                        error_log( 'SET ATTR 2: ' . print_r( $set_attr2, true ) );
 
                     }
 
                 } else {
 
                     /* Set attribute */
-                    wp_set_object_terms( $product_id, array( $custom_field ), $pa_name );
+                    $set_attr = wp_set_object_terms( $product_id, array( $custom_field ), $pa_name );
+                    error_log( 'SET ATTR: ' . print_r( $set_attr, true ) );
 
                 }
 
@@ -640,6 +642,7 @@ function wcifd_import_single_product( $hash ) {
 					'is_variation' => '0',
 					'is_taxonomy'  => '1',
 				);
+                error_log( 'ATTR. ' . $pa_name . ': ' . print_r( $attributes[ $pa_name ], true ) );
 
 			} elseif ( 'tag' === $import ) {
 
