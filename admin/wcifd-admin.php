@@ -1,6 +1,7 @@
 <?php
 /**
  * Pagina opzioni/ strumenti
+ *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
  * @since 1.6.0
@@ -12,17 +13,17 @@
 function wcifd_register_scripts() {
 
 	$screen = get_current_screen();
-	if ( $screen->id === 'woocommerce_page_wc-importer-for-danea' ) {
+	if ( 'woocommerce_page_wc-importer-for-danea' === $screen->id ) {
 
 		wp_enqueue_style( 'wcifd-style', WCIFD_URI . 'css/wc-importer-for-danea.css', array(), WCIFD_VERSION );
 		wp_enqueue_script( 'wcifd-admin-nav', WCIFD_URI . 'js/wcifd-admin-nav.js', array( 'jquery' ), WCIFD_VERSION, true );
 
-        wp_enqueue_style( 'chosen-style', WCIFD_URI . '/vendor/harvesthq/chosen/chosen.min.css', array(), WCIFD_VERSION );
-        wp_enqueue_script( 'chosen', WCIFD_URI . '/vendor/harvesthq/chosen/chosen.jquery.min.js', array( 'jquery' ), WCIFD_VERSION, false );
+		wp_enqueue_style( 'chosen-style', WCIFD_URI . '/vendor/harvesthq/chosen/chosen.min.css', array(), WCIFD_VERSION );
+		wp_enqueue_script( 'chosen', WCIFD_URI . '/vendor/harvesthq/chosen/chosen.jquery.min.js', array( 'jquery' ), WCIFD_VERSION, false );
 
 		wp_enqueue_style( 'tzcheckbox-style', WCIFD_URI . 'js/tzCheckbox/jquery.tzCheckbox/jquery.tzCheckbox.css', array(), WCIFD_VERSION );
-		wp_enqueue_script( 'tzcheckbox', WCIFD_URI . 'js/tzCheckbox/jquery.tzCheckbox/jquery.tzCheckbox.js', array( 'jquery' ), WCIFD_VERSION );
-		wp_enqueue_script( 'tzcheckbox-script', WCIFD_URI . 'js/tzCheckbox/js/script.js', array( 'jquery' ), WCIFD_VERSION );
+		wp_enqueue_script( 'tzcheckbox', WCIFD_URI . 'js/tzCheckbox/jquery.tzCheckbox/jquery.tzCheckbox.js', array( 'jquery' ), WCIFD_VERSION, false );
+		wp_enqueue_script( 'tzcheckbox-script', WCIFD_URI . 'js/tzCheckbox/js/script.js', array( 'jquery' ), WCIFD_VERSION, false );
 	}
 
 }
@@ -47,7 +48,7 @@ function wcifd_options() {
 
 	/*Controllo se l'utente ha i diritti d'accessso necessari*/
 	if ( ! current_user_can( 'manage_woocommerce' ) ) {
-		wp_die( __( 'It seems like you don\'t have permission to see this page', 'wcifd' ) );
+		wp_die( esc_html__( 'It seems like you don\'t have permission to see this page', 'wcifd' ) );
 	}
 
 	/*Inizio template di pagina*/
@@ -58,109 +59,108 @@ function wcifd_options() {
 	if ( ! class_exists( 'WooCommerce' ) ) { ?>
 
 		<div id="message" class="error"><p><strong>
-			<?php echo __( 'ATTENTION! It seems like Woocommerce is not installed.', 'wcifd' ); ?>
+			<?php esc_html_e( 'ATTENTION! It seems like Woocommerce is not installed.', 'wcifd' ); ?>
 		</strong></p></div>
 
 		<?php
 		exit;
 	}
 	?>
-		
 
 	<div id="wcifd-generale">
 	<?php
 		/*Header*/
-		echo '<h1 class="wcifd main">' . __( 'Woocommmerce Importer for Danea - Premium', 'wcifd' ) . '</h1>';
+		echo '<h1 class="wcifd main">' . esc_html__( 'Woocommmerce Importer for Danea - Premium', 'wcifd' ) . '</h1>';
 
 		/*Plugin premium key*/
 		$key = sanitize_text_field( get_option( 'wcifd-premium-key' ) );
-        if ( isset( $_POST['wcifd-premium-key'], $_POST['wcifd-premium-key-nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['wcifd-premium-key-nonce'] ), 'wcifd-premium-key' ) ) {
-            $key = sanitize_text_field( $_POST['wcifd-premium-key'] );
-            update_option( 'wcifd-premium-key', $key );
-        }
+	if ( isset( $_POST['wcifd-premium-key'], $_POST['wcifd-premium-key-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wcifd-premium-key-nonce'] ) ), 'wcifd-premium-key' ) ) {
+		$key = sanitize_text_field( wp_unslash( $_POST['wcifd-premium-key'] ) );
+		update_option( 'wcifd-premium-key', $key );
+	}
 		echo '<form id="wcifd-options" method="post" action="">';
-		echo '<label>' . __( 'Premium Key', 'wcifd' ) . '</label>';
-		echo '<input type="text" class="regular-text" name="wcifd-premium-key" id="wcifd-premium-key" placeholder="' . __( 'Add your Premium Key', 'wcifd' ) . '" value="' . $key . '" />';
-		echo '<p class="description">' . __( 'Add your Premium Key and keep update your copy of <strong>Woocommerce Importer for Danea - Premium</strong>.', 'wcifd' ) . '</p>';
+		echo '<label>' . esc_html__( 'Premium Key', 'wcifd' ) . '</label>';
+		echo '<input type="text" class="regular-text" name="wcifd-premium-key" id="wcifd-premium-key" placeholder="' . esc_html__( 'Add your Premium Key', 'wcifd' ) . '" value="' . esc_attr( $key ) . '" />';
+		echo '<p class="description">' . esc_html__( 'Add your Premium Key and keep update your copy of <strong>Woocommerce Importer for Danea - Premium</strong>.', 'wcifd' ) . '</p>';
 		echo '<input type="hidden" name="done" value="1" />';
 		wp_nonce_field( 'wcifd-premium-key', 'wcifd-premium-key-nonce' );
-		echo '<input type="submit" class="button button-primary" value="' . __( 'Save ', 'wcifd' ) . '" />';
+		echo '<input type="submit" class="button button-primary" value="' . esc_attr__( 'Save ', 'wcifd' ) . '" />';
 		echo '</form>';
 	?>
 	</div>
-			
+
 	<div class="icon32 icon32-woocommerce-settings" id="icon-woocommerce"><br /></div>
+
 	<h2 id="wcifd-admin-menu" class="nav-tab-wrapper woo-nav-tab-wrapper">
-		<a href="#" data-link="wcifd-suppliers" class="nav-tab nav-tab-active" onclick="return false;"><?php echo __( 'Suppliers', 'wcifd' ); ?></a>
-		<a href="#" data-link="wcifd-products" class="nav-tab" onclick="return false;"><?php echo __( 'Products', 'wcifd' ); ?></a>
-		<a href="#" data-link="wcifd-clients" class="nav-tab" onclick="return false;"><?php echo __( 'Clients', 'wcifd' ); ?></a>    
-		<a href="#" data-link="wcifd-orders" class="nav-tab" onclick="return false;"><?php echo __( 'Orders', 'wcifd' ); ?></a>
-		<?php if ( function_exists( 'woocommerce_role_based_price' ) && get_option( 'wc_rbp_general') ) { ?>
-			<a href="#" data-link="wcifd-rbp" class="nav-tab" onclick="return false;"><?php echo __( 'WooCommerce Role Based Price', 'wcifd' ); ?></a>
+		<a href="#" data-link="wcifd-suppliers" class="nav-tab nav-tab-active" onclick="return false;"><?php esc_html_e( 'Suppliers', 'wcifd' ); ?></a>
+		<a href="#" data-link="wcifd-products" class="nav-tab" onclick="return false;"><?php esc_html_e( 'Products', 'wcifd' ); ?></a>
+		<a href="#" data-link="wcifd-clients" class="nav-tab" onclick="return false;"><?php esc_html_e( 'Clients', 'wcifd' ); ?></a>    
+		<a href="#" data-link="wcifd-orders" class="nav-tab" onclick="return false;"><?php esc_html_e( 'Orders', 'wcifd' ); ?></a>
+		<?php if ( function_exists( 'woocommerce_role_based_price' ) && get_option( 'wc_rbp_general' ) ) { ?>
+			<a href="#" data-link="wcifd-rbp" class="nav-tab" onclick="return false;"><?php esc_html_e( 'WooCommerce Role Based Price', 'wcifd' ); ?></a>
 		<?php } ?>
 	</h2>
-	  
-	  
+
 	<!-- IMPORTAZIONE RIVENDITORI -->     	  
 	<div id="wcifd-suppliers" class="wcifd-admin" style="display: block;">
 
-		<?php include( WCIFD_ADMIN . 'wcifd-import-supplier-template.php' ); ?>
-	 
-	</div>
+		<?php include WCIFD_ADMIN . 'wcifd-import-supplier-template.php'; ?>
 
+	</div>
 
 	<!-- IMPORTAZIONE PRODOTTI -->
 	<div id="wcifd-products" class="wcifd-admin">
-	 
-		<?php include( WCIFD_ADMIN . 'wcifd-import-products-template.php' ); ?>		
+
+		<?php include WCIFD_ADMIN . 'wcifd-import-products-template.php'; ?>		
 
 	</div>
-	
 
-	<!-- IMPORT CLIENTS AS WORDPRESS USERS -->     
+	<!-- IMPORT CLIENTS AS WordPress USERS -->     
 	<div id="wcifd-clients" class="wcifd-admin">
 
-		<?php include( WCIFD_ADMIN . 'wcifd-import-clients-template.php' ); ?>
+		<?php include WCIFD_ADMIN . 'wcifd-import-clients-template.php'; ?>
 
 	</div>
-
 
 	<!-- IMPORT ORDERS AS WOOCOMMERCE ORDERS -->
 	<div id="wcifd-orders" class="wcifd-admin">
-	 
-		<?php include( WCIFD_ADMIN . 'wcifd-import-orders-template.php' ); ?>	
+
+		<?php include WCIFD_ADMIN . 'wcifd-import-orders-template.php'; ?>	
 
 	</div>
 
 	<!-- WOOCOMMERCE ROLE BASED PRICE -->
 	<div id="wcifd-rbp" class="wcifd-admin">
-	 
-		<?php include( WCIFD_ADMIN . 'wcifd-role-based-price.php' ); ?>	
+
+		<?php include WCIFD_ADMIN . 'wcifd-role-based-price.php'; ?>	
 
 	</div>
 
-
 	</div><!--WRAP-LEFT-->
-	
+
 	<div class="wrap-right">
 		<iframe width="300" height="900" scrolling="no" src="https://www.ilghera.com/images/wcifd-premium-iframe.html"></iframe>
 	</div>
 	<div class="clear"></div>
-	
- </div><!--WRAP-->
-	
-	
+
+</div><!--WRAP-->
+
 	<?php
 
 }
 
 /**
  * Messaggio aggiornamento
+ *
+ * @param array  $plugin_data i dati del plugin.
+ * @param string $response    response.
+ *
+ * @return void
  */
 function wcifd_update_message2( $plugin_data, $response ) {
 
 	$message = null;
-	$key = get_option( 'wcifd-premium-key' );
+	$key     = get_option( 'wcifd-premium-key' );
 
 	$message = null;
 
@@ -172,16 +172,17 @@ function wcifd_update_message2( $plugin_data, $response ) {
 
 		$decoded_key = explode( '|', base64_decode( $key ) );
 		$bought_date = date( 'd-m-Y', strtotime( $decoded_key[1] ) );
-		$limit = strtotime( $bought_date . ' + 365 day' );
-		$now = strtotime( 'today' );
+		$limit       = strtotime( $bought_date . ' + 365 day' );
+		$now         = strtotime( 'today' );
 
 		if ( $limit < $now ) {
 			$message = 'It seems like your <strong>Premium Key</strong> is expired. Please, click <a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">here</a> for prices and details.';
-		} elseif ( ! in_array( $decoded_key[2], array( 1572, 1582 ) ) ) {
+		} elseif ( ! in_array( $decoded_key[2], array( 1572, 1582 ), true ) ) {
 			$message = 'It seems like your <strong>Premium Key</strong> is not valid. Please, click <a href="https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/" target="_blank">here</a> for prices and details.';
 		}
 	}
-	echo ( $message ) ? '<br><span class="wcifd-alert">' . $message . '</span>' : '';
+	echo ( $message ) ? '<br><span class="wcifd-alert">' . wp_kses_post( $message ) . '</span>' : '';
 
 }
 add_action( 'in_plugin_update_message-wc-importer-for-danea-premium/wc-importer-for-danea-premium.php', 'wcifd_update_message2', 10, 2 );
+
