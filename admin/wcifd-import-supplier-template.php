@@ -3,7 +3,7 @@
  * Importazione fornitori
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @since 1.1.0
+ * @since 1.6.0
  */
 
 global $wp_roles;
@@ -18,7 +18,7 @@ $users_val = ( isset( $_POST['wcifd-users'] ) ) ? sanitize_text_field( $_POST['w
 		<tr>
 			<th scope="row"><?php _e( 'User role', 'wcifd' ); ?></th>
 			<td>
-			<select class="wcifd-users-suppliers" name="wcifd-users-suppliers">
+			<select class="wcifd-users-suppliers wcifd-select" name="wcifd-users-suppliers">
 				<?php
 				if ( $users_val ) {
 					echo '<option value=" ' . $users_val . ' " selected="selected"> ' . $users_val . '</option>';

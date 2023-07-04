@@ -3,7 +3,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @since 1.2.0
+ * @since 1.3.0
  */
 ?>
 
@@ -27,7 +27,7 @@
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Prices imported with tax', 'wcifd' ); ?></th>
 				<td>
-					<select name="tax-included" class="wcifd">
+					<select name="tax-included" class="wcifd-select">
 						<option value="1"><?php esc_html_e( 'Yes, I will import prices inclusive of tax', 'wcifd' ); ?></option>
 						<option value="0"><?php esc_html_e( 'No, I will import prices exclusive of tax', 'wcifd' ); ?></option>
 					</select>
@@ -37,7 +37,7 @@
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Regular price', 'wcifd' ); ?></th>
 				<td>
-					<select name="regular-price-list" class="wcifd">
+					<select name="regular-price-list" class="wcifd-select">
 						<?php
 						for ( $n = 1; $n <= 9; $n++ ) {
 							echo '<option value="' . $n . '">' . __( 'Price list ', 'wcifd' ) . $n . '</option>';
@@ -50,7 +50,7 @@
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Sale price', 'wcifd' ); ?></th>
 				<td>
-					<select name="sale-price-list" class="wcifd">
+					<select name="sale-price-list" class="wcifd-select">
 						<?php
 						echo '<option>' . __( 'Select a price list', 'wcifd' ) . '</option>';
 						for ( $n = 1; $n <= 9; $n++ ) {
@@ -64,7 +64,7 @@
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Product size type', 'wcifd' ); ?></th>
 				<td>
-					<select name="wcifd-size-type" class="wcifd">
+					<select name="wcifd-size-type" class="wcifd-select">
 						<option value="gross-size"><?php esc_html_e( 'Gross size', 'wcifd' ); ?></option>
 						<option value="net-size"><?php esc_html_e( 'Net size', 'wcifd' ); ?></option>
 					</select>
@@ -75,11 +75,23 @@
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Product weight type', 'wcifd' ); ?></th>
 				<td>
-					<select name="wcifd-weight-type" class="wcifd">
+					<select name="wcifd-weight-type" class="wcifd-select">
 						<option value="gross-weight"><?php esc_html_e( 'Gross weight', 'wcifd' ); ?></option>
 						<option value="net-weight"><?php esc_html_e( 'Net weight', 'wcifd' ); ?></option>
 					</select>
 					<p class="description"><?php esc_html_e( 'Chose if import gross or net product weight.', 'wcifd' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th scope="row"><?php esc_html_e( 'Short description', 'wcifd' ); ?></th>
+				<td>
+					<input type="hidden" name="short-description" value="0">
+					<select name="short-description" class="wcifd-select" disabled>
+                        <option value=""><?php esc_html_e( 'None', 'wcifd' ); ?></option>
+                        <option value="excerpt"><?php esc_html_e( 'Use part of the full description', 'wcifd' ); ?></option>
+                        <option value="notes"><?php esc_html_e( 'Use the content of the Note field', 'wcifd' ); ?></option>
+                    </select>
+					<p class="description"><?php esc_html_e( 'Select the content to use for the short description of the product.', 'wcifd' ); ?></p>
 				</td>
 			</tr>
 			<tr>
@@ -88,14 +100,6 @@
 					<input type="hidden" name="notes-as-description" value="0">
 					<input type="checkbox" name="notes-as-description" value="1"<?php echo $notes_as_description == 1 ? ' checked="checked"' : ''; ?>>
 					<p class="description"><?php esc_html_e( 'Use the Notes field content if HTML description is empty.', 'wcifd' ); ?></p>
-				</td>
-			</tr>
-			<tr>
-				<th scope="row"><?php esc_html_e( 'Short description', 'wcifd' ); ?></th>
-				<td>
-					<input type="hidden" name="short-description" value="0">
-					<input type="checkbox" name="short-description" value="1">
-					<p class="description"><?php esc_html_e( 'Use the excerpt as short product description.', 'wcifd' ); ?></p>
 				</td>
 			</tr>
 			<tr>
@@ -233,8 +237,24 @@
 
 						echo '<div class="field-import">';
 							echo '<input type="hidden" name="import-custom-field-' . esc_attr( $i ) . '" value="0">';
-							echo '<input type="checkbox" name="import-custom-field-' . esc_attr( $i ) . '" value="1">';
+                            echo '<select name="import-custom-field-' . esc_attr( $i ) . '" class="wcifd-select">';
+                                echo '<option value="">' . esc_html__( 'Don\'t import', 'wcifd' ) .  '</option>';
+                                echo '<option value="attribute">' . esc_html__( 'Attribute', 'wcifd' ) .  '</option>';
+                                echo '<option value="tag">' . esc_html__( 'Tag', 'wcifd' ) .  '</option>';
+                            echo '</select>';
 							echo '<p class="description bottom">' . sprintf( esc_html__( 'Import Danea Custom Field %d', 'wcifd' ), $i ) . '</p>';
+						echo '</div>';
+
+						echo '<div class="field-tag-append">';
+							echo '<input type="hidden" name="custom-field-tag-append-' . esc_attr( $i ) . '" value="0">';
+							echo '<input type="checkbox" name="custom-field-tag-append-' . esc_attr( $i ) . '" value="1"' . ( $tag_append == 1 ? ' checked="checked"' : '' ) . '>';
+							echo '<p class="description bottom">' . esc_html__( 'Add to other product tags present', 'wcifd' ) . '</p>';
+						echo '</div>';
+
+						echo '<div class="field-split">';
+							echo '<input type="hidden" name="split-custom-field-' . esc_attr( $i ) . '" value="0">';
+							echo '<input type="checkbox" name="split-custom-field-' . esc_attr( $i ) . '" value="1"' . ( $split_field == 1 ? ' checked="checked"' : '' ) . '>';
+							echo '<p class="description bottom">' . esc_html__( 'Create multiple attributes/tags using comma as separator', 'wcifd' ) . '</p>';
 						echo '</div>';
 
 						echo '<div class="field-display">';
@@ -317,7 +337,7 @@
 			<tr>
 				<th scoper="row"><?php esc_html_e( 'File type', 'wcifd' ); ?></th>
 				<td>
-					<select name="file-type" class="wcifd">
+					<select name="file-type" class="wcifd-select">
 							<option value="xml" ><?php esc_html_e( 'xml', 'wcifd' ); ?></option>
 							<option value="csv" ><?php esc_html_e( 'csv', 'wcifd' ); ?></option>
 					</select>

@@ -3,7 +3,7 @@
  * WooCommerce role Based Price
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @since 1.1.0
+ * @since 1.3.0
  */
 ?>
 
@@ -37,7 +37,7 @@
 						?>
 							<th scope="row"><?php echo __( $price_label, 'wcifd' ) . ' ' . ucfirst( __( $role, 'woocommerce' ) )  ?></th>
 							<td>
-								<select name="<?php echo $field_name; ?>" class="wcifd">
+								<select name="<?php echo $field_name; ?>" class="wcifd wcifd-select">
 									<?php
 									for ( $n = 1; $n <= 9; $n++ ) {
 										echo '<option value="' . $n . '">' . __( 'Price list ', 'wcifd' ) . $n . '</option>';

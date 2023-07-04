@@ -2,7 +2,7 @@
  * Script menu di navigazione
  * @author ilGhera
  * @package wc-importer-for-danea-premium/js
- * @since 1.1.0
+ * @since 1.3.0
  */
 jQuery(document).ready(function ($) {
 
@@ -73,54 +73,121 @@ jQuery(document).ready(function ($) {
     wcifd_pagination();
     wcifd_pagination(true);
 
+
     /**
      * Visualizzazione dei campi liberi di Danea
+     *
+     * @return void
      */
     var custom_fields_options = function() {
 
-    	var field;
-    	var fieldImport;
-    	var fieldDisplay;
-    	var fieldName;
+        // Opzione uguale per ogni custom field
+        $('.field-tag-append .tzCheckBox').on('click', function(){
+
+            if ( $(this).hasClass('checked') ) {
+
+                $('.field-tag-append .tzCheckBox').not(this).addClass('checked');
+                $('.field-tag-append .tzCBContent').not(this).text('On');
+                $('.field-tag-append input[type="checkbox"]').not(this).attr('checked', 'checked');
+
+            } else {
+
+                $('.field-tag-append .tzCheckBox').not(this).removeClass('checked');
+                $('.field-tag-append .tzCBContent').not(this).text('Off');
+                $('.field-tag-append input[type="checkbox"]').not(this).removeAttr('checked');
+
+            }
+
+        })
 
     	$('.wcifd-custom-field').each(function(){
 
-    		fieldDisplay = $('.field-display', $(this));
-    		fieldName    = $('.field-name', $(this));
+            var field          = this;
+    		var fieldTagAppend = $('.field-tag-append', field);
+    		var fieldSplit     = $('.field-split', field);
+    		var fieldDisplay   = $('.field-display', field);
+    		var fieldName      = $('.field-name', field);
 
-    		if( ! $('.field-import .tzCheckBox', $(this)).hasClass('checked') ) {
+    		if( $('select', field).val() ) {
 
-    			$(fieldDisplay).hide();
-    			$(fieldName).hide();
+                if( 'tag' == $('select', field).val() ) {
 
-    		}
+                    $(fieldDisplay).hide();
+                    $(fieldName).hide();
 
-    	})
+                } else {
 
+                    $(fieldTagAppend).hide();
 
-    	$('.field-import .tzCheckBox').on('click', function(){
-    	
-    		fieldImport  = $(this).parent();
-    		field        = (fieldImport).parent();
-    		fieldDisplay = $('.field-display', field);
-    		fieldName    = $('.field-name', field);
+                }
 
-    		if ($(this).hasClass('checked')) {
+            } else {
 
-    			$(fieldDisplay).show('slow');
-    			$(fieldName).show('slow');
-    		
-    		} else {
+                $(fieldTagAppend).hide();
+                $(fieldSplit).hide();
+                $(fieldDisplay).hide();
+                $(fieldName).hide();
 
-    			$(fieldDisplay).hide('slow');
-    			$(fieldName).hide('slow');
+            }
 
-    		}
+    		$('select', field).on('change', function(){
 
+                if ( $(this).val() ) {
+
+                    $(fieldSplit).show('slow');
+
+                    if ( 'attribute' == $(this).val() ) {
+
+                        $(fieldTagAppend).hide('slow');
+                        $(fieldDisplay).show('slow');
+                        $(fieldName).show('slow');
+                    
+                    } else {
+
+                        $(fieldTagAppend).show('slow');
+                        $(fieldDisplay).hide('slow');
+                        $(fieldName).hide('slow');
+
+                    }
+
+                } else {
+
+                    $(fieldTagAppend).hide('slow');
+                    $(fieldSplit).hide('slow');
+                    $(fieldDisplay).hide('slow');
+                    $(fieldName).hide('slow');
+
+                }
+
+            })
+            
     	})
 
 	}
 
     custom_fields_options();
+
+    
+    /**
+	 * Esegue Chosen
+     *
+     * @return void
+	 */
+	var wcifdChosen = function() {
+
+		jQuery(function($){
+
+			$('.wcifd-select').chosen({
+		
+				disable_search_threshold: 10,
+				width: '200px'
+			
+			});
+
+		})
+
+	}
+
+    wcifdChosen();
 
 });
