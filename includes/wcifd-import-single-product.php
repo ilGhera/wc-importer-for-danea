@@ -595,8 +595,6 @@ function wcifd_import_single_product( $hash ) {
 		if ( $custom_field ) {
 
 			$fields_options = get_option( 'wcifd-custom-fields' );
-            /* error_log( 'FIELDS OPTIONS: ' . print_r( $fields_options, true ) ); */
-
 			$import         = isset( $fields_options[ $i ]['import'] ) ? $fields_options[ $i ]['import'] : false;
 			$cf_name        = isset( $fields_options[ $i ]['name'] ) ? $fields_options[ $i ]['name'] : false;
 			$append         = isset( $fields_options[ $i ]['append'] ) ? $fields_options[ $i ]['append'] : false;
@@ -620,7 +618,6 @@ function wcifd_import_single_product( $hash ) {
 
                         /* Set attribute */
                         $set_attr2 = wp_set_object_terms( $product_id, $values, $pa_name );
-                        error_log( 'SET ATTR 2: ' . print_r( $set_attr2, true ) );
 
                     }
 
@@ -628,7 +625,6 @@ function wcifd_import_single_product( $hash ) {
 
                     /* Set attribute */
                     $set_attr = wp_set_object_terms( $product_id, array( $custom_field ), $pa_name );
-                    error_log( 'SET ATTR: ' . print_r( $set_attr, true ) );
 
                 }
 
@@ -639,7 +635,6 @@ function wcifd_import_single_product( $hash ) {
 					'is_variation' => '0',
 					'is_taxonomy'  => '1',
 				);
-                error_log( 'ATTR. ' . $pa_name . ': ' . print_r( $attributes[ $pa_name ], true ) );
 
 			} elseif ( 'tag' === $import ) {
 

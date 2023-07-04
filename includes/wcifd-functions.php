@@ -452,7 +452,6 @@ function wcifd_update_transient_wc_attributes() {
 		$data[ $key ] = $value;
 	}
 
-    error_log( 'UPDATED!!!' );
 	update_option( '_transient_wc_attribute_taxonomies', $data );
 }
 
@@ -473,8 +472,6 @@ function wcifd_register_attributes() {
     $additional_attributes = array();
 
 	if ( isset( $_POST['wcifd-custom-fields-hidden'] ) ) {
-
-        error_log( 'POST: ' . print_r( $_POST, true  ) );
 
 		/*Recupero i campi liberi di Danea abilitati dall'admin*/
 		$custom_fields = get_option( 'wcifd-custom-fields' );
@@ -518,13 +515,6 @@ function wcifd_register_attributes() {
 			";
 
 		$results = $wpdb->get_results( $query, ARRAY_A );
-        if ( 'customfield1' === $key ) {
-
-            error_log( 'RESULTS: ' . print_r( $results, true ) );
-            error_log( 'ATTR. LABLE: ' . $results[0]['attribute_label'] ); 
-            error_log( 'VALUE: ' . $value );
-
-        }
 
         /* Inserimento record se non presente */
 		if ( null == $results ) {
@@ -548,7 +538,6 @@ function wcifd_register_attributes() {
                     '%d',
                 )
             );
-            error_log( 'INSERT: ' . print_r( $insert, true ) );
 
         /* Aggiornamento record in caso di nome modificato */
         } elseif ( isset( $results[0]['attribute_label'] ) && $results[0]['attribute_label'] !== $value ) {
@@ -570,7 +559,6 @@ function wcifd_register_attributes() {
                     '%s',
                 )
             );
-            error_log( 'UPDATE: ' . print_r( $update, true ) );
 
         }
 	}
