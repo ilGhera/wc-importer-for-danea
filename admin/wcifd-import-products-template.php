@@ -98,7 +98,7 @@
 				<th scope="row"><?php esc_html_e( 'Notes as description', 'wcifd' ); ?></th>
 				<td>
 					<input type="hidden" name="notes-as-description" value="0">
-					<input type="checkbox" name="notes-as-description" value="1"<?php echo $notes_as_description == 1 ? ' checked="checked"' : ''; ?>>
+					<input type="checkbox" name="notes-as-description" value="1">
 					<p class="description"><?php esc_html_e( 'Use the Notes field content if HTML description is empty.', 'wcifd' ); ?></p>
 				</td>
 			</tr>
@@ -146,7 +146,7 @@
 				<th scope="row"><?php esc_html_e( 'Replace products', 'wcifd' ); ?></th>
 				<td>
 					<input type="hidden" name="replace-products" value="0">
-					<input type="checkbox" name="replace-products" value="1"<?php echo $replace_products == 1 ? ' checked="checked"' : ''; ?>>
+					<input type="checkbox" name="replace-products" value="1">
 					<p class="description"><?php esc_html_e( 'Replace all WC products with a full update coming from Danea Easyfatt ', 'wcifd' ); ?></p>
 				</td>
 			</tr>
@@ -247,13 +247,13 @@
 
 						echo '<div class="field-tag-append">';
 							echo '<input type="hidden" name="custom-field-tag-append-' . esc_attr( $i ) . '" value="0">';
-							echo '<input type="checkbox" name="custom-field-tag-append-' . esc_attr( $i ) . '" value="1"' . ( $tag_append == 1 ? ' checked="checked"' : '' ) . '>';
+							echo '<input type="checkbox" name="custom-field-tag-append-' . esc_attr( $i ) . '" value="1">';
 							echo '<p class="description bottom">' . esc_html__( 'Add to other product tags present', 'wcifd' ) . '</p>';
 						echo '</div>';
 
 						echo '<div class="field-split">';
 							echo '<input type="hidden" name="split-custom-field-' . esc_attr( $i ) . '" value="0">';
-							echo '<input type="checkbox" name="split-custom-field-' . esc_attr( $i ) . '" value="1"' . ( $split_field == 1 ? ' checked="checked"' : '' ) . '>';
+							echo '<input type="checkbox" name="split-custom-field-' . esc_attr( $i ) . '" value="1">';
 							echo '<p class="description bottom">' . esc_html__( 'Create multiple attributes/tags using comma as separator', 'wcifd' ) . '</p>';
 						echo '</div>';
 
