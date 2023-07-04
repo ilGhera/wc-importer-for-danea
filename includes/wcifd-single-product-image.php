@@ -4,9 +4,10 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.1
+ * @since 1.6.0
  *
  * @param string $hash il codice del prodotto WooCommerce che identifica l'abbinamento da eseguire.
+ *
  * @return void
  */
 function wcifd_single_product_image( $hash ) {

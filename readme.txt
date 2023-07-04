@@ -48,16 +48,16 @@ You'll be able to import suppliers, clients and products.
 
 
 = 1.6.0 =
-Release Date: xxxxxxxxxxxx 
+Release Date: 4 July 2023 
 
-* Enhancement: xxxxxxxxxxxxxxxxx 
-* Enhancement: xxxxxxxxxxxxxxxxx 
-* Enhancement: xxxxxxxxxxxxxxxxx 
+* Enhancement: Danea Notes field as short product description 
+* Enhancement: Import Danea custom fields as product tags
+* Enhancement: Split Danea custom fields values by commas and create tags/attributes 
+* Enhancement: Option append tags on importing Danea custom fields 
+* Enhancement: Better user interface 
 * Update: Action Scheduler 
 * Update: Plugin Update Checker 
-* Bug fix: xxxxxxxxxxxxxxxx 
-* Bug fix: xxxxxxxxxxxxxxxx 
-* Bug fix: xxxxxxxxxxxxxxxx 
+* Bug fix: Custom label not assigned to Danea custom fields imported 
 
 
 = 1.5.6 =
