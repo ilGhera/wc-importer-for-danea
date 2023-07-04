@@ -379,11 +379,16 @@ function wcifd_delete_variations( $parent_id ) {
  * Registrazione tassonomie
  *
  * @param  string $name il nome della tassonomia da creare.
+ *
+ * @return void
  */
 function wcifd_register_taxonomy( $name ) {
+
 	$paname = 'pa_' . $name;
+
 	if ( ! get_taxonomy( $paname ) ) {
-		$permalinks = get_option( 'woocommerce_permalinks' );
+
+		$permalinks    = get_option( 'woocommerce_permalinks' );
 		$taxonomy_data = array(
 			'hierarchical'          => true,
 			'update_count_callback' => '_update_post_term_count',
@@ -424,8 +429,11 @@ function wcifd_register_taxonomy( $name ) {
 				'assign_terms' => 'assign_product_terms',
 			),
 		);
+
 		register_taxonomy( $paname, array( 'product' ), $taxonomy_data );
+
 	}
+
 }
 
 
@@ -444,6 +452,7 @@ function wcifd_update_transient_wc_attributes() {
 		$data[ $key ] = $value;
 	}
 
+    error_log( 'UPDATED!!!' );
 	update_option( '_transient_wc_attribute_taxonomies', $data );
 }
 
@@ -460,6 +469,8 @@ function wcifd_register_attributes() {
 		'supplier'         => __( 'Supplier', 'wcifd' ),
 		'sup-product-code' => __( 'Supplier product code', 'wcifd' ),
 	);
+
+    $additional_attributes = array();
 
 	if ( isset( $_POST['wcifd-custom-fields-hidden'] ) ) {
 
@@ -478,7 +489,7 @@ function wcifd_register_attributes() {
 					/* $name = isset( $custom_fields[ $i ]['name'] ) && $custom_fields[ $i ]['name'] ? $custom_fields[ $i ]['name'] : sprintf( __( 'Custom Field %d', 'wcifd' ), $i ); */
                     $name = isset( $_POST[ 'custom-field-name-' . $i ] ) && $_POST[ 'custom-field-name-' . $i ] ? $_POST[ 'custom-field-name-' . $i ] : sprintf( __( 'Custom Field %d', 'wcifd' ), $i );
  
-					$attributes[ 'customfield' . $i ] = $name;
+					$additional_attributes[ 'customfield' . $i ] = $name;
 
 				}
 
@@ -490,10 +501,17 @@ function wcifd_register_attributes() {
 
 	global $wpdb;
 
-	foreach ( $attributes as $key => $value ) {
+    /* Contiene il nome degli attributi modificati */
+    $changes = array();
 
+    /* Unisco gli attributi */
+    $all_attributes = array_merge( $attributes, $additional_attributes );
+
+	foreach ( $all_attributes as $key => $value ) {
+
+        /* Registrazione tassonomia */
 		wcifd_register_taxonomy( $key );
-		add_action( 'woocommerce_after_register_taxonomy', 'wcifd_register_taxonomy' );
+		/* add_action( 'woocommerce_after_register_taxonomy', 'wcifd_register_taxonomy' ); */
 
 		$query = '
 			SELECT * FROM ' . $wpdb->prefix . "woocommerce_attribute_taxonomies WHERE attribute_name = '$key'
@@ -508,11 +526,10 @@ function wcifd_register_attributes() {
 
         }
 
-		$changes = false;
-
+        /* Inserimento record se non presente */
 		if ( null == $results ) {
 
-            $changes = true;
+            $changes[] = $key;
 
             $insert = $wpdb->insert(
                 $wpdb->prefix . 'woocommerce_attribute_taxonomies',
@@ -533,9 +550,10 @@ function wcifd_register_attributes() {
             );
             error_log( 'INSERT: ' . print_r( $insert, true ) );
 
+        /* Aggiornamento record in caso di nome modificato */
         } elseif ( isset( $results[0]['attribute_label'] ) && $results[0]['attribute_label'] !== $value ) {
 
-            $changes = true;
+            $changes[] = $key;
 
             $update = $wpdb->update(
                 $wpdb->prefix . 'woocommerce_attribute_taxonomies',
@@ -557,7 +575,7 @@ function wcifd_register_attributes() {
         }
 	}
 
-	if ( $changes ) {
+	if ( ! empty( $changes ) ) {
 		wcifd_update_transient_wc_attributes();
 	}
 
