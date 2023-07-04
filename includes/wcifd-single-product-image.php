@@ -18,17 +18,35 @@ function wcifd_single_product_image( $hash ) {
 
 	if ( $product_id && $image_name ) {
 
-		$attachment = get_page_by_title( $image_name, OBJECT, 'attachment' );
+        /* Start - Recupero l'immagine attraverso il nome salvato nel db */
+        $attachment_id = null;
 
-		if ( $product_id && isset( $attachment->ID ) ) {
+        $args = array(
+            'post_type'   => 'attachment',
+            'post_status' => 'inherit',
+            'name'        => $image_name, 
+        );
+
+        $images = new WP_Query( $args );
+
+        if ( isset( $images->posts[0]->ID ) ) {
+
+            $attachment_id = $images->posts[0]->ID; 
+
+        }
+
+        wp_reset_query();
+        /* End */
+
+		if ( $product_id && $attachment_id ) {
 
 			/*Lego l'immagine al prodotto*/
-			set_post_thumbnail( $product_id, $attachment->ID );
+			set_post_thumbnail( $product_id, $attachment_id );
 
 			/*Assegno il prodotto come post_parent dell'immagine*/
 			$updated = wp_update_post(
 				array(
-					'ID'          => $attachment->ID,
+					'ID'          => $attachment_id,
 					'post_parent' => $product_id,
 				)
 			);
@@ -45,3 +63,4 @@ function wcifd_single_product_image( $hash ) {
 
 }
 add_action( 'wcifd_product_image_event', 'wcifd_single_product_image', 10, 3 );
+

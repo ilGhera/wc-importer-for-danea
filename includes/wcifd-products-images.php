@@ -15,11 +15,25 @@ function wcifd_products_images() {
 	$file = $_FILES['file'];
 
 	/*Elimino duplicato se presente*/
-	$old_attach = get_page_by_title( sanitize_title( $file['name'] ), OBJECT, 'attachment' );
+    $args = array(
+        'post_type'   => 'attachment',
+        'post_status' => 'inherit',
+        'name'        => sanitize_title( $file['name'] ),
+    );
 
-	if ( isset( $old_attach->ID ) ) {
-		$test = wp_delete_post( $old_attach->ID );
-	}
+    $images = new WP_Query( $args );
+
+    if ( $images->have_posts() ) {
+
+        foreach ( $images->posts as $old_attach ) {
+
+            wp_delete_post( $old_attach->ID );
+
+        }
+
+    }
+
+    wp_reset_query();
 
 	/*Caricamento immagine in WP Media*/
 	$wp_image = wp_handle_upload( $file, array( 'test_form' => false ) );
