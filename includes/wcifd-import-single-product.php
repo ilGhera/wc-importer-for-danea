@@ -606,18 +606,15 @@ function wcifd_import_single_product( $hash ) {
 			if ( 'attribute' === $import ) {
 
                 /* Remove tag */
-				/* wp_remove_object_terms( $product_id, array( $custom_field ), 'product_tag' ); */
+                if ( term_exists( $custom_field, 'product_tag' ) ) {
 
-                /* Custom name */
-                if ( $cf_name ) {
-
-                    $pa_name = 'pa_' . str_replace( ' ', '', strtolower( $cf_name ) );
+                    wp_remove_object_terms( $product_id, array( $custom_field ), 'product_tag' );
 
                 }
 
                 if ( $split ) {
 
-                    $values = explode( ',', $custom_field );
+                    $values = array_map( 'trim', explode( ',', $custom_field ) );
 
                     if ( is_array( $values ) ) {
 
