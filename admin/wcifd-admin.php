@@ -81,7 +81,7 @@ function wcifd_options() {
 		echo '<form id="wcifd-options" method="post" action="">';
 		echo '<label>' . esc_html__( 'Premium Key', 'wcifd' ) . '</label>';
 		echo '<input type="text" class="regular-text" name="wcifd-premium-key" id="wcifd-premium-key" placeholder="' . esc_html__( 'Add your Premium Key', 'wcifd' ) . '" value="' . esc_attr( $key ) . '" />';
-		echo '<p class="description">' . esc_html__( 'Add your Premium Key and keep update your copy of <strong>Woocommerce Importer for Danea - Premium</strong>.', 'wcifd' ) . '</p>';
+		echo '<p class="description">' . wp_kses_post( __( 'Add your Premium Key and keep update your copy of <strong>Woocommerce Importer for Danea - Premium</strong>.', 'wcifd' ) ) . '</p>';
 		echo '<input type="hidden" name="done" value="1" />';
 		wp_nonce_field( 'wcifd-premium-key', 'wcifd-premium-key-nonce' );
 		echo '<input type="submit" class="button button-primary" value="' . esc_attr__( 'Save ', 'wcifd' ) . '" />';
