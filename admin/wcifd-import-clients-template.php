@@ -4,6 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
+ *
  * @since 1.6.0
  */
 

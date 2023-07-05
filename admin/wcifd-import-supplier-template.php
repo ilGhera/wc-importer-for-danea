@@ -1,14 +1,22 @@
 <?php
 /**
  * Importazione fornitori
+ *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
+ *
  * @since 1.6.0
  */
 
 global $wp_roles;
-$roles = $wp_roles->get_names();
-$users_val = ( isset( $_POST['wcifd-users'] ) ) ? sanitize_text_field( $_POST['wcifd-users'] ) : get_option( 'wcifd-suppliers-role' );
+$roles     = $wp_roles->get_names();
+$users_val = get_option( 'wcifd-suppliers-role' );
+
+if ( isset( $_POST['wcifd-users'], $_POST['wcifd-suppliers-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wcifd-suppliers-nonce'] ) ), 'wcifd-suppliers-import' ) ) {
+
+	$users_val = sanitize_text_field( wp_unslash( $_POST['wcifd-users'] ) );
+
+}
 ?>
 
 <!--Form Fornitori-->
@@ -16,44 +24,44 @@ $users_val = ( isset( $_POST['wcifd-users'] ) ) ? sanitize_text_field( $_POST['w
 
 	<table class="form-table">
 		<tr>
-			<th scope="row"><?php _e( 'User role', 'wcifd' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'User role', 'wcifd' ); ?></th>
 			<td>
 			<select class="wcifd-users-suppliers wcifd-select" name="wcifd-users-suppliers">
 				<?php
 				if ( $users_val ) {
-					echo '<option value=" ' . $users_val . ' " selected="selected"> ' . $users_val . '</option>';
+					echo '<option value=" ' . esc_attr( $users_val ) . ' " selected="selected"> ' . esc_html( $users_val ) . '</option>';
 					foreach ( $roles as $key => $value ) {
-						if ( $key != $users_val ) {
-							echo '<option value=" ' . $key . ' "> ' . $key . '</option>';
+						if ( $key !== $users_val ) {
+							echo '<option value=" ' . esc_attr( $key ) . ' "> ' . esc_html( $key ) . '</option>';
 						}
 					}
 				} else {
 					echo '<option value="Subscriber" selected="selected">Subscriber</option>';
 					foreach ( $roles as $key => $value ) {
-						if ( $key != 'Subscriber' ) {
-							echo '<option value=" ' . $key . ' "> ' . $key . '</option>';
+						if ( 'Subscriber' !== $key ) {
+							echo '<option value=" ' . esc_attr( $key ) . ' "> ' . esc_html( $key ) . '</option>';
 						}
 					}
 				}
 				?>
 			</select>
-			<p class="description"><?php _e( 'Select a Wordpress user role for your suppliers.', 'wcifd' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Select a WordPress user role for your suppliers.', 'wcifd' ); ?></p>
 		</tr>
 
-		<?php wp_nonce_field( 'wcifd-suppliers-import', 'wcifd-suppliers-nonce' ); ?>
 		<input type="hidden" name="suppliers-import" value="1">
 
 		<tr>
-			<th scope="row"><?php _e( 'Add suppliers', 'wcifd' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Add suppliers', 'wcifd' ); ?></th>
 			<td>
 				<input type="file" name="suppliers-list">
-				<p class="description"><?php _e( 'Select your suppliers list file (.csv)', 'wcifd' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Select your suppliers list file (.csv)', 'wcifd' ); ?></p>
 			</td>
 		</tr>
 
 	</table>
 
-	<input type="submit" class="button-primary" value="<?php _e( 'Import Suppliers', 'wcifd' ); ?>">
+	<?php wp_nonce_field( 'wcifd-suppliers-import', 'wcifd-suppliers-nonce' ); ?>
+	<input type="submit" class="button-primary" value="<?php esc_html_e( 'Import Suppliers', 'wcifd' ); ?>">
 
 </form>
 
