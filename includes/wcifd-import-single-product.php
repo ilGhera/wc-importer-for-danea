@@ -256,7 +256,7 @@ function wcifd_import_single_product( $hash ) {
 		}
 
 		/*Inserimento nuovo prodotto*/
-		$product_id = wp_insert_post( $args );
+		$product_id = wp_insert_post( $args, true );
 
 		if ( 0 == $product_id ) {
 
@@ -466,7 +466,7 @@ function wcifd_import_single_product( $hash ) {
 			}
 
 			/*Aggiornamento prodotto*/
-			$product_id = wp_update_post( $args );
+			$product_id = wp_update_post( $args, true );
 
 			if ( 0 == $product_id ) {
 
