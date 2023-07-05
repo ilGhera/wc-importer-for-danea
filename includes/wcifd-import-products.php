@@ -1,6 +1,6 @@
 <?php
 /**
- * Importazione prodotti da file csv
+ * Importazione prodotti da file XML/CSV
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
