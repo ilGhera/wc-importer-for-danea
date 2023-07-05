@@ -1,27 +1,35 @@
 <?php
 /**
  * Importazione ordini da Danea Easyfatt
+ *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.1.0
+ *
+ * @since 1.6.0
+ */
+
+/**
+ * Importazione ordini
+ *
+ * @return void
  */
 function wcifd_orders() {
 
-	if ( isset( $_POST['orders-import'] ) && wp_verify_nonce( $_POST['wcifd-orders-nonce'], 'wcifd-orders-import' ) ) {
+	if ( isset( $_POST['orders-import'], $_POST['wcifd-orders-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wcifd-orders-nonce'] ) ), 'wcifd-orders-import' ) ) {
 
 		/*Impostazioni admin*/
-		$wcifd_orders_add_users = sanitize_text_field( $_POST['wcifd-orders-add-users'] );
-		$wcifd_orders_status = strtolower( str_replace( ' ', '-', sanitize_text_field( $_POST['wcifd-orders-status'] ) ) );
+		$wcifd_orders_add_users = isset( $_POST['wcifd-orders-add-users'] ) ? sanitize_text_field( wp_unslash( $_POST['wcifd-orders-add-users'] ) ) : null;
+		$wcifd_orders_status    = isset( $_POST['wcifd-orders-status'] ) ? strtolower( str_replace( ' ', '-', sanitize_text_field( wp_unslash( $_POST['wcifd-orders-status'] ) ) ) ) : null;
 		update_option( 'wcifd-orders-add-users', $wcifd_orders_add_users );
 		update_option( 'wcifd-orders-status', $wcifd_orders_status );
 
-		$file = $_FILES['orders-list']['tmp_name'];
-		$data = simplexml_load_file( $file );
+		$file   = isset( $_FILES['orders-list']['tmp_name'] ) ? sanitize_text_field( wp_unslash( $_FILES['orders-list']['tmp_name'] ) ) : null;
+		$data   = simplexml_load_file( $file );
 		$orders = $data->Documents;
 
-		$o = 0; //Orders
-		$u = 0; //Users
-		$p = 0; //Products
+		$o = 0; // Orders.
+		$u = 0; // Users.
+		$p = 0; // Products.
 		foreach ( $orders->Document as $order ) {
 
 			/*L'id ordine Danea, utile a cui verrà legato quello WooCommerce*/
@@ -32,17 +40,17 @@ function wcifd_orders() {
 				$o++;
 
 				/*Dettagli ordine*/
-				$order_date = wcifd_json_decode( $order->Date );
-				$order_comment = wcifd_json_decode( $order->InternalComment );
+				$order_date     = wcifd_json_decode( $order->Date );
+				$order_comment  = wcifd_json_decode( $order->InternalComment );
 				$payment_method = wcifd_json_decode( $order->PaymentName );
 
 				/*Dettagli cliente*/
 				if ( $order->CustomerReference ) {
 					$user_name = strtolower( str_replace( ' ', '-', $order->CustomerReference ) );
-					$name = explode( ' ', $order->CustomerReference );
+					$name      = explode( ' ', $order->CustomerReference );
 				} else {
 					$user_name = strtolower( str_replace( ' ', '-', $order->CustomerName ) );
-					$name = explode( ' ', $order->CustomerName );
+					$name      = explode( ' ', $order->CustomerName );
 				}
 
 				/*Nomi dei campi fiscali*/
@@ -50,19 +58,19 @@ function wcifd_orders() {
 				$pi_name = wcifd_get_italian_tax_fields_names( 'pi_name' );
 
 				/*Dettagli ordine*/
-				$billing_company   = wcifd_json_decode( $order->CustomerName );
-				$billing_address   = wcifd_json_decode( $order->CustomerAddress );
-				$billing_city      = wcifd_json_decode( $order->CustomerCity );
-				$billing_postcode  = wcifd_json_decode( $order->CustomerPostcode );
-				$billing_state     = wcifd_json_decode( $order->CustomerProvince );
-				$billing_country   = wcifd_get_state_code( wcifd_json_decode( $order->CustomerCountry ) );
-				$billing_phone     = wcifd_json_decode( $order->CustomerTel );
-				$billing_email     = wcifd_json_decode( $order->CustomerEmail );
-				$fiscal_code       = wcifd_json_decode( $order->CustomerFiscalCode );
-				$p_iva             = wcifd_json_decode( $order->CustomerVatCode );
+				$billing_company  = wcifd_json_decode( $order->CustomerName );
+				$billing_address  = wcifd_json_decode( $order->CustomerAddress );
+				$billing_city     = wcifd_json_decode( $order->CustomerCity );
+				$billing_postcode = wcifd_json_decode( $order->CustomerPostcode );
+				$billing_state    = wcifd_json_decode( $order->CustomerProvince );
+				$billing_country  = wcifd_get_state_code( wcifd_json_decode( $order->CustomerCountry ) );
+				$billing_phone    = wcifd_json_decode( $order->CustomerTel );
+				$billing_email    = wcifd_json_decode( $order->CustomerEmail );
+				$fiscal_code      = wcifd_json_decode( $order->CustomerFiscalCode );
+				$p_iva            = wcifd_json_decode( $order->CustomerVatCode );
 
 				/*Dettagli spedizione*/
-				$shipping_name    = wcifd_json_decode( $order->DeliveryName );
+				$shipping_name     = wcifd_json_decode( $order->DeliveryName );
 				$shipping_address  = wcifd_json_decode( $order->DeliveryAddress );
 				$shipping_city     = wcifd_json_decode( $order->DeliveryCity );
 				$shipping_postcode = wcifd_json_decode( $order->DeliveryPostcode );
@@ -70,14 +78,14 @@ function wcifd_orders() {
 				$shipping_country  = wcifd_get_state_code( wcifd_json_decode( $order->DeliveryCountry ) );
 
 				/*Creazione utente se necessario*/
-				if ( ! email_exists( $order->CustomerEmail ) && ! check_tax_code( $order->CustomerVatCode ) && ! check_tax_code( $order->CustomerFiscalCode ) && $wcifd_orders_add_users == 1 ) {
+				if ( ! email_exists( $order->CustomerEmail ) && ! check_tax_code( $order->CustomerVatCode ) && ! check_tax_code( $order->CustomerFiscalCode ) && 1 === intval( $wcifd_orders_add_users ) ) {
 
 					$u++;
-					$random_password = wp_generate_password( $length = 12, $include_standard_special_chars = false );
-					$role = ( get_option( 'wcifd-clients-role' ) ) ? get_option( 'wcifd-clients-role' ) : 'customer';
+					$random_password = wp_generate_password( 12, false );
+					$role            = ( get_option( 'wcifd-clients-role' ) ) ? get_option( 'wcifd-clients-role' ) : 'customer';
 
 					$userdata = array(
-						'role' => $role,
+						'role'         => $role,
 						'user_login'   => $user_name,
 						'first_name'   => $name[0],
 						'last_name'    => $name[1],
@@ -92,7 +100,7 @@ function wcifd_orders() {
 						add_user_meta( $user_id, 'billing_company', $billing_company );
 					}
 
-					// Dettagli ordine
+					/* Dettagli ordine */
 					add_user_meta( $user_id, 'billing_first_name', $name[0] );
 					add_user_meta( $user_id, 'billing_last_name', $name[1] );
 					add_user_meta( $user_id, 'billing_address_1', $billing_address );
@@ -119,32 +127,32 @@ function wcifd_orders() {
 					add_user_meta( $user_id, 'shipping_country', $shipping_country );
 
 				} else {
-					$user = get_user_by( 'email', $billing_email );
+					$user    = get_user_by( 'email', $billing_email );
 					$user_id = $user->ID;
 				}
 
 				/*Dettagli ordine*/
 				$billing_address = array(
-					'first_name'    => $name[0],
-					'last_name'     => $name[1],
-					'company'       => $billing_company,
-					'email'         => $billing_email,
-					'phone'         => $billing_phone,
-					'address_1'     => $billing_address,
-					'city'          => $billing_city,
-					'state'         => $billing_state,
-					'postcode'      => $billing_postcode,
-					'country'       => $billing_country,
+					'first_name' => $name[0],
+					'last_name'  => $name[1],
+					'company'    => $billing_company,
+					'email'      => $billing_email,
+					'phone'      => $billing_phone,
+					'address_1'  => $billing_address,
+					'city'       => $billing_city,
+					'state'      => $billing_state,
+					'postcode'   => $billing_postcode,
+					'country'    => $billing_country,
 				);
 
 				/*Dettagli spedizione*/
 				$shipping_address = array(
-					'first_name'    => $shipping_name,
-					'address_1'     => $shipping_address,
-					'city'          => $shipping_city,
-					'state'         => $shipping_state,
-					'postcode'      => $shipping_postcode,
-					'country'       => $shipping_country,
+					'first_name' => $shipping_name,
+					'address_1'  => $shipping_address,
+					'city'       => $shipping_city,
+					'state'      => $shipping_state,
+					'postcode'   => $shipping_postcode,
+					'country'    => $shipping_country,
 				);
 
 				$args = array(
@@ -160,7 +168,7 @@ function wcifd_orders() {
 				add_post_meta( $wc_order->id, 'wcifd-order-number', $order_number );
 				wp_update_post(
 					array(
-						'ID' => $wc_order->id,
+						'ID'        => $wc_order->id,
 						'post_date' => $order_date,
 					)
 				);
@@ -176,10 +184,10 @@ function wcifd_orders() {
 				/*Dettagli prodotti*/
 				foreach ( $order->Rows->Row as $item ) {
 
-					$sku = wcifd_json_decode( $item->Code );
-					$title = wcifd_json_decode( $item->Description );
-					$tax  = wcifd_json_decode( $item->VatCode );
-					$price = wcifd_json_decode( $item->Price );
+					$sku         = wcifd_json_decode( $item->Code );
+					$title       = wcifd_json_decode( $item->Description );
+					$tax         = wcifd_json_decode( $item->VatCode );
+					$price       = wcifd_json_decode( $item->Price );
 					$total_sales = wcifd_json_decode( $item->Qty );
 
 					/*Verifica presenza prodotto*/
@@ -195,20 +203,20 @@ function wcifd_orders() {
 
 						/*Verifica classe di imposta*/
 						$tax_status = 'none';
-						$tax_class = '';
-						$perc = wcifd_json_decode( $tax['Perc'] );
-						$class = wcifd_json_decode( $tax['Class'] );
-						if ( $perc != 0 || $class != 'Escluso' ) {
+						$tax_class  = '';
+						$perc       = wcifd_json_decode( $tax['Perc'] );
+						$class      = wcifd_json_decode( $tax['Class'] );
+						if ( 0 !== intval( $perc ) || 'Escluso' !== $class ) {
 							$tax_status = 'taxable';
-							$tax_class = wcifd_get_tax_rate_class( wcifd_json_decode( $tax ), strval( $perc ) );
+							$tax_class  = wcifd_get_tax_rate_class( wcifd_json_decode( $tax ), strval( $perc ) );
 						}
 
 						$args = array(
-							'post_author'      => get_current_user_id(), //Al momento non viene recuperato l'ID del fornitore
-							'post_title'       => $title,
-							'post_type'        => 'product',
-							'post_status'      => 'publish',
-							'meta_input'       => array(
+							'post_author' => get_current_user_id(), // Al momento non viene recuperato l'ID del fornitore.
+							'post_title'  => $title,
+							'post_type'   => 'product',
+							'post_status' => 'publish',
+							'meta_input'  => array(
 								'_sku'           => $sku,
 								'_tax_status'    => $tax_status,
 								'_tax_class'     => $tax_class,
@@ -231,9 +239,12 @@ function wcifd_orders() {
 
 		$output  = '<div id="message" class="updated"><p>';
 		$output .= '<strong>Woocommerce Importer for Danea - Premium</strong><br>';
+
+		/* Translators: 1 numero di ordini, 2 numero di utenti, 3 numero di prodotti */
 		$output .= sprintf( __( 'Imported %1$d orders, %2$d users and %3$d products.', 'wcifd' ), $o, $u, $p );
 		$output .= '</p></div>';
-		echo $output;
+
+		echo wp_kses_post( $output );
 
 	}
 
