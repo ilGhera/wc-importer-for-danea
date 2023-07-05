@@ -4,9 +4,16 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.5.0
+ *
+ * @since 1.6.0
+ */
+
+/**
+ * Aggiornamento prodotti
  *
  * @param file $file l'xml proveniente da Danea Easyfatt.
+ *
+ * @return void
  */
 function wcifd_catalog_update( $file ) {
 
@@ -16,19 +23,19 @@ function wcifd_catalog_update( $file ) {
 	$size_type          = get_option( 'wcifd-size-type' );
 	$weight_type        = get_option( 'wcifd-weight-type' );
 	$deleted_products   = get_option( 'wcifd-deleted-products' );
-    $replace_products   = get_option( 'wcifd-replace-products' );
+	$replace_products   = get_option( 'wcifd-replace-products' );
 
 	/*WooCommerce Role Based Price*/
 	$wc_rbp = get_wc_rbp();
 
 	$results = simplexml_load_file( $file );
 
-    /*Cancellazione prodotti esistenti*/
-    if ( $replace_products && 'full' == $results->attributes()->Mode[0] ) {
+	/*Cancellazione prodotti esistenti*/
+	if ( $replace_products && 'full' === $results->attributes()->Mode[0] ) {
 
-        wcifd_delete_all_products();
+		wcifd_delete_all_products();
 
-    }
+	}
 
 	/*Verifica che si tratti di un aggiornamento o dell'intero catalogo prodotti*/
 	$products = $results->Products ? $results->Products : $results->UpdatedProducts;
@@ -87,9 +94,7 @@ function wcifd_catalog_update( $file ) {
 					'wcifd-delete-product'
 				);
 			}
-
 		}
-
 	}
 
 }
