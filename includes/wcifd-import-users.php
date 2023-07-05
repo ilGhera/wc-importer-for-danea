@@ -4,20 +4,27 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.5.6
+ *
+ * @since 1.6.0
+ */
+
+/**
+ * Importazione utenti
  *
  * @param  string $type il ruolo da assegnare agli utenti importati.
+ *
+ * @return void
  */
 function wcifd_users( $type ) {
 
-	if ( isset( $_POST[ $type . '-import' ], $_POST[ 'wcifd-' . $type . '-nonce' ] ) && wp_verify_nonce( wp_unslash( $_POST[ 'wcifd-' . $type . '-nonce' ] ), 'wcifd-' . $type . '-import' ) ) {
+	if ( isset( $_POST[ $type . '-import' ], $_POST[ 'wcifd-' . $type . '-nonce' ] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST[ 'wcifd-' . $type . '-nonce' ] ) ), 'wcifd-' . $type . '-import' ) ) {
 
 		if ( isset( $_POST[ 'wcifd-users-' . $type ] ) ) {
 			$role = sanitize_text_field( wp_unslash( $_POST[ 'wcifd-users-' . $type ] ) );
 			update_option( 'wcifd-' . $type . '-role', $role );
 		}
 
-		$file = isset( $_FILES[ $type . '-list' ]['tmp_name'] ) ? $_FILES[ $type . '-list' ]['tmp_name'] : '';
+		$file = isset( $_FILES[ $type . '-list' ]['tmp_name'] ) ? sanitize_text_field( wp_unslash( $_FILES[ $type . '-list' ]['tmp_name'] ) ) : '';
 
 		if ( $file ) {
 
