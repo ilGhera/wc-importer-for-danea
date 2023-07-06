@@ -4,7 +4,14 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.1
+ *
+ * @since 1.6.0
+ */
+
+/**
+ * Abbinamento immagini
+ *
+ * @return void
  */
 function wcifd_orphan_images() {
 
@@ -25,7 +32,6 @@ function wcifd_orphan_images() {
 			);
 
 		}
-
 	}
 
 	/*Interrompo se tutti i prodotti sono stati trasferiti e le immagini gestite*/
@@ -47,7 +53,6 @@ function wcifd_orphan_images() {
 			);
 
 		}
-
 	}
 
 }
