@@ -4,17 +4,24 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
+ *
  * @since 1.6.0
+ */
+
+/**
+ * Importazione prodotto
  *
  * @param  string $hash il codice identificativo del prodotto.
+ *
+ * @return void
  */
 function wcifd_import_single_product( $hash ) {
 
 	$temp                  = new WCIFD_Temporary_Data();
 	$data                  = $temp->wcifd_get_temporary_data( $hash );
 	$product               = isset( $data['product'] ) ? $data['product'] : '';
-    $notes_as_descriptions = get_option( 'wcifd-notes-as-description' );
-    $short_description_opt = get_option( 'wcifd-short-description' ); 
+	$notes_as_descriptions = get_option( 'wcifd-notes-as-description' );
+	$short_description_opt = get_option( 'wcifd-short-description' );
 
 	/*Termina se il prodotto non esiste*/
 	if ( ! $product ) {
@@ -26,102 +33,99 @@ function wcifd_import_single_product( $hash ) {
 
 	}
 
-    $sku                 = isset( $product['Code'] ) ? $product['Code'] : '';
-    $sku                 = str_replace( '\\', '\\\\', $sku );
-	$title               = isset( $product['Description'] ) ? htmlentities( $product['Description'] ) : '';
-	$category            = isset( $product['Category'] ) ? $product['Category'] : '';
-	$sub_category        = isset( $product['Subcategory'] ) ? $product['Subcategory'] : '';
-	$producer_name       = isset( $product['ProducerName'] ) ? $product['ProducerName'] : '';
-	$supplier_name       = isset( $product['SupplierName'] ) ? $product['SupplierName'] : '';
-	$sup_product_code    = isset( $product['SupplierProductCode'] ) ? $product['SupplierProductCode'] : '';
-	$get_tax             = isset( $product['Vat'] ) ? $product['Vat'] : '';
-	$tax                 = ( is_array( $get_tax ) && isset( $get_tax[0] ) ) ? $get_tax[0] : $get_tax;
-	$stock               = isset( $product['AvailableQty'] ) ? $product['AvailableQty'] : '';
-	$size_um             = isset( $product['SizeUm'] ) ? $product['SizeUm'] : '';
-	$weight_um           = isset( $product['WeightUm'] ) ? $product['WeightUm'] : '';
-	$image_file_name     = isset( $product['ImageFileName'] ) ? sanitize_title( $product['ImageFileName'] ) : '';
-	$regular_price_list  = isset( $data['regular_price_list'] ) ? $data['regular_price_list'] : '';
-	$sale_price_list     = isset( $data['sale_price_list'] ) ? $data['sale_price_list'] : '';
-	$size_type           = isset( $data['size_type'] ) ? $data['size_type'] : '';
-	$weight_type         = isset( $data['weight_type'] ) ? $data['weight_type'] : '';
-	$tax_attributes      = isset( $data['tax_attributes'] ) ? $data['tax_attributes'] : '';
-	$deleted_products    = isset( $data['deleted_products'] ) ? $data['deleted_products'] : '';
-	$wc_rbp              = isset( $data['wc_rbp'] ) ? $data['wc_rbp'] : '';
-	$parent_sku          = null;
-	$var_attributes      = null;
-	$variable_product    = null;
-    $parent_product_id   = null;
+	$sku                = isset( $product['Code'] ) ? $product['Code'] : '';
+	$sku                = str_replace( '\\', '\\\\', $sku );
+	$title              = isset( $product['Description'] ) ? htmlentities( $product['Description'] ) : '';
+	$category           = isset( $product['Category'] ) ? $product['Category'] : '';
+	$sub_category       = isset( $product['Subcategory'] ) ? $product['Subcategory'] : '';
+	$producer_name      = isset( $product['ProducerName'] ) ? $product['ProducerName'] : '';
+	$supplier_name      = isset( $product['SupplierName'] ) ? $product['SupplierName'] : '';
+	$sup_product_code   = isset( $product['SupplierProductCode'] ) ? $product['SupplierProductCode'] : '';
+	$get_tax            = isset( $product['Vat'] ) ? $product['Vat'] : '';
+	$tax                = ( is_array( $get_tax ) && isset( $get_tax[0] ) ) ? $get_tax[0] : $get_tax;
+	$stock              = isset( $product['AvailableQty'] ) ? $product['AvailableQty'] : '';
+	$size_um            = isset( $product['SizeUm'] ) ? $product['SizeUm'] : '';
+	$weight_um          = isset( $product['WeightUm'] ) ? $product['WeightUm'] : '';
+	$image_file_name    = isset( $product['ImageFileName'] ) ? sanitize_title( $product['ImageFileName'] ) : '';
+	$regular_price_list = isset( $data['regular_price_list'] ) ? $data['regular_price_list'] : '';
+	$sale_price_list    = isset( $data['sale_price_list'] ) ? $data['sale_price_list'] : '';
+	$size_type          = isset( $data['size_type'] ) ? $data['size_type'] : '';
+	$weight_type        = isset( $data['weight_type'] ) ? $data['weight_type'] : '';
+	$tax_attributes     = isset( $data['tax_attributes'] ) ? $data['tax_attributes'] : '';
+	$deleted_products   = isset( $data['deleted_products'] ) ? $data['deleted_products'] : '';
+	$wc_rbp             = isset( $data['wc_rbp'] ) ? $data['wc_rbp'] : '';
+	$parent_sku         = null;
+	$var_attributes     = null;
+	$variable_product   = null;
+	$parent_product_id  = null;
 
-    /* Descrizione prodotto */
-    $description = null;
+	/* Descrizione prodotto */
+	$description = null;
 
-    if ( isset( $product['DescriptionHtml'] ) && is_string( $product['DescriptionHtml'] ) ) {
+	if ( isset( $product['DescriptionHtml'] ) && is_string( $product['DescriptionHtml'] ) ) {
 
-        $description = wp_filter_post_kses( $product['DescriptionHtml'] );
+		$description = wp_filter_post_kses( $product['DescriptionHtml'] );
 
-    } elseif ( $notes_as_descriptions && isset( $product['Notes'] ) && is_string( $product['Notes'] ) ) {
+	} elseif ( $notes_as_descriptions && isset( $product['Notes'] ) && is_string( $product['Notes'] ) ) {
 
-        $description = wp_filter_post_kses( $product['Notes'] );
+		$description = wp_filter_post_kses( $product['Notes'] );
 
-    } else {
+	} else {
 
-        $description = $title;
+		$description = $title;
 
-    }
+	}
 
-    /* Descrizione breve prodotto */
-    $short_description = '';
+	/* Descrizione breve prodotto */
+	$short_description = '';
 
-    if ( 'excerpt' === $short_description_opt ) {
+	if ( 'excerpt' === $short_description_opt ) {
 
-        $short_description = wcifd_get_short_description( $description );
+		$short_description = wcifd_get_short_description( $description );
 
-    } elseif ( 'notes' === $short_description_opt && isset( $product['Notes'] ) && is_string( $product['Notes'] ) ) {
+	} elseif ( 'notes' === $short_description_opt && isset( $product['Notes'] ) && is_string( $product['Notes'] ) ) {
 
-        $short_description = wp_filter_post_kses( $product['Notes'] );
+		$short_description = wp_filter_post_kses( $product['Notes'] );
 
+	}
 
-    }
-
-    /* Prodotti variabili precedentemente esportati */
+	/* Prodotti variabili precedentemente esportati */
 	if ( ! $notes_as_descriptions && 'notes' !== $short_description_opt && isset( $product['Notes'] ) && is_string( $product['Notes'] ) ) {
 
-        $notes = json_decode( $product['Notes'], true );
+		$notes = json_decode( $product['Notes'], true );
 
-        if ( is_array( $notes ) ) {
+		if ( is_array( $notes ) ) {
 
-            /*Parent sku*/
-            if ( isset( $notes['parent_sku'] ) && '' !== $notes['parent_sku'] ) {
+			/*Parent sku*/
+			if ( isset( $notes['parent_sku'] ) && '' !== $notes['parent_sku'] ) {
 
-                $parent_sku = $notes['parent_sku'];
+				$parent_sku = $notes['parent_sku'];
 
-            } elseif ( isset( $notes['parent_id'] ) && '' !== $notes['parent_id'] ) {
+			} elseif ( isset( $notes['parent_id'] ) && '' !== $notes['parent_id'] ) {
 
-                $parent_product_id = $notes['parent_id'];	
+				$parent_product_id = $notes['parent_id'];
 
-            }
+			}
 
-            if ( $parent_sku ) {
-                $parent_product_id = wcifd_search_product( $parent_sku );
-            }
+			if ( $parent_sku ) {
+				$parent_product_id = wcifd_search_product( $parent_sku );
+			}
 
-            $var_attributes = isset( $notes['var_attributes'] ) ? $notes['var_attributes'] : null;
+			$var_attributes = isset( $notes['var_attributes'] ) ? $notes['var_attributes'] : null;
 
-            /*Prodotto variabile*/
-            if ( isset( $notes['product_type'] ) && 'variable' === $notes['product_type'] ) {
-                if ( isset( $notes['attributes'] ) ) {
-                    $variable_product = true;
-                    $imported_attributes = $notes['attributes'];
-                }
-            }
-
-        }
-
+			/*Prodotto variabile*/
+			if ( isset( $notes['product_type'] ) && 'variable' === $notes['product_type'] ) {
+				if ( isset( $notes['attributes'] ) ) {
+					$variable_product    = true;
+					$imported_attributes = $notes['attributes'];
+				}
+			}
+		}
 	}
 
 	/*Post status - Le variazioni devono essere pubblicate*/
 	$new_products_status = get_option( 'wcifd-publish-new-products' ) ? 'publish' : 'draft';
-	$status = ( $var_attributes ) ? 'publish' : $new_products_status;
+	$status              = ( $var_attributes ) ? 'publish' : $new_products_status;
 
 	/*Verifico la presenza del prodotto*/
 	$id   = wcifd_search_product( $sku, $parent_product_id );
@@ -131,7 +135,7 @@ function wcifd_import_single_product( $hash ) {
 	$manage_stock = get_option( 'woocommerce_manage_stock' ); // WC option.
 
 	if ( 'yes' === $manage_stock ) {
-		$manage_stock = ( isset( $product['ManageWarehouse'] ) && 'true' == $product['ManageWarehouse'] ) ? 'yes' : 'no'; // Single product from Danea.
+		$manage_stock = ( isset( $product['ManageWarehouse'] ) && 'true' === $product['ManageWarehouse'] ) ? 'yes' : 'no'; // Single product from Danea.
 	}
 
 	$stock_status = 'instock';
@@ -153,7 +157,7 @@ function wcifd_import_single_product( $hash ) {
 	}
 
 	/*Autore del post come fornitore*/
-	$author = ( get_option( 'wcifd-use-suppliers' ) == 1 && isset( $product['SupplierCode'] ) ) ? $product['SupplierCode'] : get_option( 'wcifd-current-user' );
+	$author = ( 1 === intval( get_option( 'wcifd-use-suppliers' ) ) && isset( $product['SupplierCode'] ) ) ? $product['SupplierCode'] : get_option( 'wcifd-current-user' );
 
 	/*Imposte incluse*/
 	$tax_included = get_option( 'wcifd-tax-included' );
@@ -181,16 +185,16 @@ function wcifd_import_single_product( $hash ) {
 
 	/*Verifica classe di tassazione*/
 	$tax_status = 'none';
-	$tax_class = '';
-	$perc = isset( $tax_attributes['@attributes']['Perc'] ) ? $tax_attributes['@attributes']['Perc'] : '';
-	$class = isset( $tax_attributes['@attributes']['Class'] ) ? $tax_attributes['@attributes']['Class'] : '';
+	$tax_class  = '';
+	$perc       = isset( $tax_attributes['@attributes']['Perc'] ) ? $tax_attributes['@attributes']['Perc'] : '';
+	$class      = isset( $tax_attributes['@attributes']['Class'] ) ? $tax_attributes['@attributes']['Class'] : '';
 
 	if ( '0' !== $perc || ( 'Escluso' !== $class && 'NonSoggetto' !== $class ) ) {
 		$tax_status = 'taxable';
-		$tax_class = wcifd_get_tax_rate_class( $tax, strval( $perc ) );
+		$tax_class  = wcifd_get_tax_rate_class( $tax, strval( $perc ) );
 	}
 
-	/* Opzione evita creazione nuovi prodotti se non disponibili a magazzino */	
+	/* Opzione evita creazione nuovi prodotti se non disponibili a magazzino */
 	$products_not_available = get_option( 'wcifd-products-not-available' );
 
 	/*Inizio aggiornamento prodotto o creazione se non presente*/
@@ -202,28 +206,28 @@ function wcifd_import_single_product( $hash ) {
 		}
 
 		$args = array(
-			'post_author'      => $author,
-			'post_title'       => $title,
-			'post_type'        => $type,
-			'post_parent'      => $parent_product_id,
-			'post_content'     => $description,
-			'post_excerpt'     => $short_description,
-			'post_status'      => $status,
-			'meta_input'       => array(
-				'_sku'                => $sku,
-				'_tax_status'         => $tax_status,
-				'_tax_class'          => $tax_class,
-				'_stock'              => $stock,
-				'_manage_stock'       => $manage_stock,
-				'_stock_status'       => $stock_status,
-				'_visibility'         => 'visible',
-				'_regular_price'      => $regular_price,
-				'_price'              => $regular_price,
-				'_sell_price'         => $regular_price,
-				'_width'              => $width,
-				'_height'             => $height,
-				'_length'             => $length,
-				'_weight'             => $weight,
+			'post_author'  => $author,
+			'post_title'   => $title,
+			'post_type'    => $type,
+			'post_parent'  => $parent_product_id,
+			'post_content' => $description,
+			'post_excerpt' => $short_description,
+			'post_status'  => $status,
+			'meta_input'   => array(
+				'_sku'           => $sku,
+				'_tax_status'    => $tax_status,
+				'_tax_class'     => $tax_class,
+				'_stock'         => $stock,
+				'_manage_stock'  => $manage_stock,
+				'_stock_status'  => $stock_status,
+				'_visibility'    => 'visible',
+				'_regular_price' => $regular_price,
+				'_price'         => $regular_price,
+				'_sell_price'    => $regular_price,
+				'_width'         => $width,
+				'_height'        => $height,
+				'_length'        => $length,
+				'_weight'        => $weight,
 
 			),
 		);
@@ -231,7 +235,7 @@ function wcifd_import_single_product( $hash ) {
 		if ( $sale_price ) {
 			$args['meta_input']['_sale_price'] = $sale_price;
 			$args['meta_input']['_sell_price'] = $sale_price;
-			$args['meta_input']['_price'] = $sale_price;
+			$args['meta_input']['_price']      = $sale_price;
 		} else {
 			$args['meta_input']['_sale_price'] = '';
 		}
@@ -246,27 +250,20 @@ function wcifd_import_single_product( $hash ) {
 
 					if ( $wc_rbp_price ) {
 
-						$args['meta_input']['_enable_role_based_price'] = 1;
+						$args['meta_input']['_enable_role_based_price']           = 1;
 						$args['meta_input']['_role_based_price'][ $role ][ $key ] = $wc_rbp_price;
 
 					}
 				}
 			}
-
 		}
 
 		/*Inserimento nuovo prodotto*/
 		$product_id = wp_insert_post( $args, true );
 
-		if ( 0 == $product_id ) {
+		if ( is_wp_error( $product_id ) ) {
 
-			error_log( 'WCIFD ERROR | Nuovo prodotto | Sku: ' . $sku );
-
-			return;
-
-		} elseif ( is_wp_error( $product_id ) ) {
-
-			error_log( 'WCIFD ERROR | Nuovo prodotto | Sku: ' . $sku . ' | ' . print_r( $product_id->get_error_message(), true ) );
+			error_log( 'WCIFD ERROR | Inserimento prodotto | Sku: ' . $sku . ' | ' . print_r( $product_id->get_error_message(), true ) );
 
 			return;
 
@@ -281,9 +278,9 @@ function wcifd_import_single_product( $hash ) {
 
 					foreach ( $imported_attributes as $key => $value ) {
 
-                        $is_taxonomy = false === strpos( $key, 'pa_' ) ? false : true;
-                        $attr_value  = $is_taxonomy ? null : $value;
-                        $attr_value  = is_array( $attr_value ) ? implode( ' | ', $attr_value ) : $attr_value;
+						$is_taxonomy = false === strpos( $key, 'pa_' ) ? false : true;
+						$attr_value  = $is_taxonomy ? null : $value;
+						$attr_value  = is_array( $attr_value ) ? implode( ' | ', $attr_value ) : $attr_value;
 
 						$attr = array(
 							$key => array(
@@ -304,47 +301,43 @@ function wcifd_import_single_product( $hash ) {
 						$metas[ $key ] = $attr[ $key ];
 						update_post_meta( $product_id, '_product_attributes', $metas );
 
-                        if ( $is_taxonomy ) {
+						if ( $is_taxonomy ) {
 
-                            wp_set_object_terms( $product_id, $value, $key );
+							wp_set_object_terms( $product_id, $value, $key );
 
-                        }
-
+						}
 					}
 				}
-
 			} elseif ( $parent_product_id && $var_attributes ) {
 
 				foreach ( $var_attributes as $key => $value ) {
 
 					update_post_meta( $product_id, 'attribute_' . $key, $value );
 
-                    $is_taxonomy = false === strpos( $key, 'pa_' ) ? false : true;
+					$is_taxonomy = false === strpos( $key, 'pa_' ) ? false : true;
 
-                    if ( $is_taxonomy ) {
+					if ( $is_taxonomy ) {
 
-                        $attr = array(
-                            $key => array(
-                                'name'         => $value,
-                                'value'        => '',
-                                'is_visible'   => 1,
-                                'is_variation' => 1,
-                                'is_taxonomy'  => 1,
-                            ),
-                        );
+						$attr = array(
+							$key => array(
+								'name'         => $value,
+								'value'        => '',
+								'is_visible'   => 1,
+								'is_variation' => 1,
+								'is_taxonomy'  => 1,
+							),
+						);
 
+						if ( get_post_meta( $product_id, '_product_attributes', true ) ) {
+							$metas = get_post_meta( $product_id, '_product_attributes', true );
+						} else {
+							$metas = array();
+						}
 
-                        if ( get_post_meta( $product_id, '_product_attributes', true ) ) {
-                            $metas = get_post_meta( $product_id, '_product_attributes', true );
-                        } else {
-                            $metas = array();
-                        }
+						$metas[ $key ] = $attr[ $key ];
+						update_post_meta( $product_id, '_product_attributes', $metas );
 
-                        $metas[ $key ] = $attr[ $key ];
-                        update_post_meta( $product_id, '_product_attributes', $metas );
-
-                    }
-
+					}
 				}
 			}
 
@@ -368,7 +361,6 @@ function wcifd_import_single_product( $hash ) {
 			new wcifdProductMetaLookup( $lookup_data );
 
 		}
-
 	} else {
 
 		/*Non aggiornare il prodotto se nel cestino*/
@@ -385,25 +377,25 @@ function wcifd_import_single_product( $hash ) {
 			}
 
 			$args = array(
-				'ID'               => $id,
-				'post_status'      => get_post_status( $id ),
-				'post_author'      => $author,
-				'post_type'        => $type,
-				'meta_input'       => array(
-					'_sku'                => $sku,
-					'_tax_status'         => $tax_status,
-					'_tax_class'          => $tax_class,
-					'_stock'              => $stock,
-					'_manage_stock'       => $manage_stock,
-					'_stock_status'       => $stock_status,
-					'_visibility'         => 'visible',
-					'_regular_price'      => $regular_price,
-					'_price'              => $regular_price,
-					'_sell_price'         => $regular_price,
-					'_width'              => $width,
-					'_height'             => $height,
-					'_length'             => $length,
-					'_weight'             => $weight,
+				'ID'          => $id,
+				'post_status' => get_post_status( $id ),
+				'post_author' => $author,
+				'post_type'   => $type,
+				'meta_input'  => array(
+					'_sku'           => $sku,
+					'_tax_status'    => $tax_status,
+					'_tax_class'     => $tax_class,
+					'_stock'         => $stock,
+					'_manage_stock'  => $manage_stock,
+					'_stock_status'  => $stock_status,
+					'_visibility'    => 'visible',
+					'_regular_price' => $regular_price,
+					'_price'         => $regular_price,
+					'_sell_price'    => $regular_price,
+					'_width'         => $width,
+					'_height'        => $height,
+					'_length'        => $length,
+					'_weight'        => $weight,
 				),
 
 			);
@@ -411,7 +403,7 @@ function wcifd_import_single_product( $hash ) {
 			if ( $sale_price ) {
 				$args['meta_input']['_sale_price'] = $sale_price;
 				$args['meta_input']['_sell_price'] = $sale_price;
-				$args['meta_input']['_price'] = $sale_price;
+				$args['meta_input']['_price']      = $sale_price;
 			} else {
 				$args['meta_input']['_sale_price'] = '';
 			}
@@ -427,11 +419,10 @@ function wcifd_import_single_product( $hash ) {
 
 						if ( $wc_rbp_price ) {
 
-							$args['meta_input']['_enable_role_based_price'] = 1;
+							$args['meta_input']['_enable_role_based_price']           = 1;
 							$args['meta_input']['_role_based_price'][ $role ][ $key ] = $wc_rbp_price;
 
 						}
-
 					}
 
 					if ( $variants && function_exists( 'wc_rbp_delete_variation_data' ) ) {
@@ -439,9 +430,7 @@ function wcifd_import_single_product( $hash ) {
 						wc_rbp_delete_variation_data( $id, $role );
 
 					}
-
 				}
-
 			}
 
 			/*Nome prodotto*/
@@ -451,13 +440,13 @@ function wcifd_import_single_product( $hash ) {
 
 			/*URL prodotto*/
 			if ( ! get_option( 'wcifd-exclude-url' ) ) {
-				$args['post_name']  = sanitize_title_with_dashes( wp_strip_all_tags( $title ) );
+				$args['post_name'] = sanitize_title_with_dashes( wp_strip_all_tags( $title ) );
 			}
 
 			/*Descrizione prodotto*/
 			if ( ! get_option( 'wcifd-exclude-description' ) ) {
 				$args['post_content'] = $description;
-                $args['post_excerpt'] = $short_description; 
+				$args['post_excerpt'] = $short_description;
 			}
 
 			if ( $variants ) {
@@ -468,13 +457,7 @@ function wcifd_import_single_product( $hash ) {
 			/*Aggiornamento prodotto*/
 			$product_id = wp_update_post( $args, true );
 
-			if ( 0 == $product_id ) {
-
-				error_log( 'WCIFD ERROR | Aggiornamento prodotto | Sku: ' . $sku );
-
-				return;
-
-			} elseif ( is_wp_error( $product_id ) ) {
+			if ( is_wp_error( $product_id ) ) {
 
 				error_log( 'WCIFD ERROR | Aggiornamento prodotto | Sku: ' . $sku . ' | ' . print_r( $product_id->get_error_message(), true ) );
 
@@ -496,7 +479,6 @@ function wcifd_import_single_product( $hash ) {
 				new wcifdProductMetaLookup( $lookup_data, 'update' );
 
 			}
-
 		} else {
 
 			return;
@@ -544,52 +526,49 @@ function wcifd_import_single_product( $hash ) {
 				$attachment_id = get_post_thumbnail_id( $product_id );
 				wp_delete_attachment( $attachment_id, true );
 			}
-
 		}
-
 	}
 
 	/*Attributi disponibili per il prodotto*/
 	$attributes = get_post_meta( $product_id, '_product_attributes', true ) ? get_post_meta( $product_id, '_product_attributes', true ) : array();
 
-    /*Attributi aggiuntivi*/
-    $more_attributes = array(
-        'producer'         => $producer_name,
-        'supplier'         => $supplier_name,
-        'sup-product-code' => $sup_product_code,
-    );
+	/*Attributi aggiuntivi*/
+	$more_attributes = array(
+		'producer'         => $producer_name,
+		'supplier'         => $supplier_name,
+		'sup-product-code' => $sup_product_code,
+	);
 
-    foreach ( $more_attributes as $key => $value ) {
+	foreach ( $more_attributes as $key => $value ) {
 
-        if ( $value ) {
+		if ( $value ) {
 
-            $is_visible = get_option( 'wcifd-display-' . $key ) ? get_option( 'wcifd-display-' . $key ) : '0';
+			$is_visible = get_option( 'wcifd-display-' . $key ) ? get_option( 'wcifd-display-' . $key ) : '0';
 
-            wp_set_object_terms( $product_id, array( $value ), 'pa_' . $key );
+			wp_set_object_terms( $product_id, array( $value ), 'pa_' . $key );
 
-            $attributes[ 'pa_' . $key ] = array(
-                'name'         => 'pa_' . $key,
-                'value'        => '',
-                'is_visible'   => $is_visible,
-                'is_variation' => '0',
-                'is_taxonomy'  => '1',
-            );
+			$attributes[ 'pa_' . $key ] = array(
+				'name'         => 'pa_' . $key,
+				'value'        => '',
+				'is_visible'   => $is_visible,
+				'is_variation' => '0',
+				'is_taxonomy'  => '1',
+			);
 
-        } else {
+		} else {
 
-            unset( $attributes[ 'pa_' . $key ] );
+			unset( $attributes[ 'pa_' . $key ] );
 
-        }
-
-    }
+		}
+	}
 
 	/*Custom fields*/
-    $tags = array();
+	$tags = array();
 
 	for ( $i = 1; $i < 5; $i++ ) {
 
 		$field_name   = 'CustomField' . $i;
-        $pa_name      = 'pa_' . strtolower( $field_name );
+		$pa_name      = 'pa_' . strtolower( $field_name );
 		$custom_field = isset( $product[ $field_name ] ) ? $product[ $field_name ] : '';
 
 		if ( $custom_field ) {
@@ -603,30 +582,29 @@ function wcifd_import_single_product( $hash ) {
 
 			if ( 'attribute' === $import ) {
 
-                /* Remove tag */
-                if ( term_exists( $custom_field, 'product_tag' ) ) {
+				/* Remove tag */
+				if ( term_exists( $custom_field, 'product_tag' ) ) {
 
-                    wp_remove_object_terms( $product_id, array( $custom_field ), 'product_tag' );
+					wp_remove_object_terms( $product_id, array( $custom_field ), 'product_tag' );
 
-                }
+				}
 
-                if ( $split ) {
+				if ( $split ) {
 
-                    $values = array_map( 'trim', explode( ',', $custom_field ) );
+					$values = array_map( 'trim', explode( ',', $custom_field ) );
 
-                    if ( is_array( $values ) ) {
+					if ( is_array( $values ) ) {
 
-                        /* Set attribute */
-                        $set_attr2 = wp_set_object_terms( $product_id, $values, $pa_name );
+						/* Set attribute */
+						$set_attr2 = wp_set_object_terms( $product_id, $values, $pa_name );
 
-                    }
+					}
+				} else {
 
-                } else {
+					/* Set attribute */
+					$set_attr = wp_set_object_terms( $product_id, array( $custom_field ), $pa_name );
 
-                    /* Set attribute */
-                    $set_attr = wp_set_object_terms( $product_id, array( $custom_field ), $pa_name );
-
-                }
+				}
 
 				$attributes[ $pa_name ] = array(
 					'name'         => $pa_name,
@@ -638,45 +616,43 @@ function wcifd_import_single_product( $hash ) {
 
 			} elseif ( 'tag' === $import ) {
 
-                /* Remove attribute */
-                if ( isset( $attributes[ $pa_name ] ) ) {
-                    unset( $attributes[ $pa_name ] );
-                }
+				/* Remove attribute */
+				if ( isset( $attributes[ $pa_name ] ) ) {
+					unset( $attributes[ $pa_name ] );
+				}
 
-                wp_remove_object_terms( $product_id, array( $custom_field ), $pa_name );
+				wp_remove_object_terms( $product_id, array( $custom_field ), $pa_name );
 
-                /* Set tag */
-                $tags[] = $custom_field; 
+				/* Set tag */
+				$tags[] = $custom_field;
 
-            } else {
+			} else {
 
-                /* Remove all */
-                if ( isset( $attributes[ $pa_name ] ) ) {
-                    unset( $attributes[ $pa_name ] );
-                }
+				/* Remove all */
+				if ( isset( $attributes[ $pa_name ] ) ) {
+					unset( $attributes[ $pa_name ] );
+				}
 
-                wp_remove_object_terms( $product_id, array( $custom_field ), $pa_name );
-                wp_remove_object_terms( $product_id, array( $custom_field ), 'product_tag' );
+				wp_remove_object_terms( $product_id, array( $custom_field ), $pa_name );
+				wp_remove_object_terms( $product_id, array( $custom_field ), 'product_tag' );
 
-            }
+			}
+		} else {
 
-        } else {
+			/* Remove all */
+			unset( $attributes[ $pa_name ] );
+			wp_remove_object_terms( $product_id, array( $custom_field ), $pa_name );
+			wp_remove_object_terms( $product_id, array( $custom_field ), 'product_tag' );
 
-            /* Remove all */
-            unset( $attributes[ $pa_name ] );
-            wp_remove_object_terms( $product_id, array( $custom_field ), $pa_name );
-            wp_remove_object_terms( $product_id, array( $custom_field ), 'product_tag' );
-
-        }
-
+		}
 	}
 
-    /* Update tags */
-    if ( ! empty( $tags ) ) {
+	/* Update tags */
+	if ( ! empty( $tags ) ) {
 
-        wp_set_object_terms( $product_id, $tags, 'product_tag', $append );
+		wp_set_object_terms( $product_id, $tags, 'product_tag', $append );
 
-    }
+	}
 
 	update_post_meta( $product_id, '_product_attributes', $attributes );
 
@@ -687,7 +663,7 @@ function wcifd_import_single_product( $hash ) {
 		wp_set_object_terms( $product_id, 'variable', 'product_type' );
 
 		$avail_colors = array();
-		$avail_sizes = array();
+		$avail_sizes  = array();
 
 		$v = 1;
 
@@ -697,8 +673,8 @@ function wcifd_import_single_product( $hash ) {
 			$variants_array = $variants['Variant'];
 		}
 
-        /* Verifico opzione aggiornamento prezzi delle variazioni di prodotto */
-        $exclude_variations_prices = get_option( 'wcifd-products-variations-prices' );
+		/* Verifico opzione aggiornamento prezzi delle variazioni di prodotto */
+		$exclude_variations_prices = get_option( 'wcifd-products-variations-prices' );
 
 		foreach ( $variants_array as $variant ) {
 
@@ -721,57 +697,55 @@ function wcifd_import_single_product( $hash ) {
 			$color = isset( $variant['Color'] ) ? $variant['Color'] : '-';
 
 			/*Aggiunta nuova taglia*/
-			if ( '-' != $size && ! in_array( $size, $avail_sizes ) ) {
+			if ( '-' !== $size && ! in_array( $size, $avail_sizes, true ) ) {
 				$avail_sizes[] = $size;
 			}
 
 			/*Aggiunta nuovo colore*/
-			if ( '-' != $color && ! in_array( $color, $avail_colors ) ) {
+			if ( '-' !== $color && ! in_array( $color, $avail_colors, true ) ) {
 				$avail_colors[] = $color;
 			}
 
 			/*Post_meta della variazione di prodotto*/
 			$meta_input = array(
-				'_sku'               => $barcode,
-				'_stock'             => $in_stock,
-				'_stock_status'      => $stock_status,
-				'_manage_stock'      => $man_stock,
-            );
+				'_sku'          => $barcode,
+				'_stock'        => $in_stock,
+				'_stock_status' => $stock_status,
+				'_manage_stock' => $man_stock,
+			);
 
-            if ( ! $var_id || ( $var_id && ! $exclude_variations_prices ) ) {
+			if ( ! $var_id || ( $var_id && ! $exclude_variations_prices ) ) {
 
-                $meta_input['_regular_price'] = $regular_price;
+				$meta_input['_regular_price'] = $regular_price;
 
-                if ( $sale_price ) {
-                    $meta_input['_sale_price'] = $sale_price;
-                    $meta_input['_sell_price'] = $sale_price;
-                    $meta_input['_price']      = $sale_price;
-                } else {
-                    $meta_input['_sale_price'] = '';
-                    $meta_input['_sell_price'] = $regular_price;
-                    $meta_input['_price']      = $regular_price;
-                }
+				if ( $sale_price ) {
+					$meta_input['_sale_price'] = $sale_price;
+					$meta_input['_sell_price'] = $sale_price;
+					$meta_input['_price']      = $sale_price;
+				} else {
+					$meta_input['_sale_price'] = '';
+					$meta_input['_sell_price'] = $regular_price;
+					$meta_input['_price']      = $regular_price;
+				}
 
-                /*WooCommerce Role Based Price*/
-                if ( is_array( $wc_rbp ) && ! empty( $wc_rbp ) ) {
+				/*WooCommerce Role Based Price*/
+				if ( is_array( $wc_rbp ) && ! empty( $wc_rbp ) ) {
 
-                    foreach ( $wc_rbp as $role => $price_types ) {
-                        foreach ( $price_types as $key => $value ) {
+					foreach ( $wc_rbp as $role => $price_types ) {
+						foreach ( $price_types as $key => $value ) {
 
-                            $wc_rbp_price = wcifd_get_list_price( $product, $value, $tax_included );
+							$wc_rbp_price = wcifd_get_list_price( $product, $value, $tax_included );
 
-                            if ( $wc_rbp_price ) {
+							if ( $wc_rbp_price ) {
 
-                                $meta_input['_enable_role_based_price'] = 1;
-                                $meta_input['_role_based_price'][ $role ][ $key ] = $wc_rbp_price;
+								$meta_input['_enable_role_based_price']           = 1;
+								$meta_input['_role_based_price'][ $role ][ $key ] = $wc_rbp_price;
 
-                            }
-
-                        }
-                    }
-                }
-
-            }
+							}
+						}
+					}
+				}
+			}
 
 			/*Aggiunta attributo ai post_meta della variazione*/
 			if ( $avail_colors ) {
@@ -807,17 +781,26 @@ function wcifd_import_single_product( $hash ) {
 
 				/*Aggiunta nuova variazione*/
 				$var_args = array(
-					'post_author'      => $author,
-					'post_name'        => 'danea-product-' . $product_id . '-variation-' . ( $v++ ),
-					'post_type'        => 'product_variation',
-					'post_parent'      => $product_id,
-					'post_content'     => $description,
-					'post_status'      => 'publish',
-					'meta_input'       => $meta_input,
+					'post_author'  => $author,
+					'post_name'    => 'danea-product-' . $product_id . '-variation-' . ( $v++ ),
+					'post_type'    => 'product_variation',
+					'post_parent'  => $product_id,
+					'post_content' => $description,
+					'post_status'  => 'publish',
+					'meta_input'   => $meta_input,
 
 				);
 
-				$var_id = wp_insert_post( $var_args );
+				/* Inserimento nuova variazione */
+				$var_id = wp_insert_post( $var_args, true );
+
+				if ( is_wp_error( $var_id ) ) {
+
+					error_log( 'WCIFD ERROR | Inserimento variazione prodotto | Sku: ' . $barcode . ' | ' . print_r( $var_id->get_error_message(), true ) );
+
+					return;
+
+				}
 
 				/*Aggiornamento meta lookup table*/
 				$lookup_data = array(
@@ -835,21 +818,30 @@ function wcifd_import_single_product( $hash ) {
 			} else {
 
 				/*Aggiornamento variazione*/
-				if ( get_post_status( $var_id ) != 'trash' ) {
+				if ( 'trash' !== get_post_status( $var_id ) ) {
 
 					$var_args = array(
-						'ID'               => $var_id,
-						'post_author'      => $author,
-						'post_name'        => 'danea-product-' . $product_id . '-variation-' . ( $v++ ),
-						'post_type'        => 'product_variation',
-						'post_parent'      => $product_id,
-						'post_content'     => $description,
-						'post_status'      => 'publish',
-						'meta_input'       => $meta_input,
+						'ID'           => $var_id,
+						'post_author'  => $author,
+						'post_name'    => 'danea-product-' . $product_id . '-variation-' . ( $v++ ),
+						'post_type'    => 'product_variation',
+						'post_parent'  => $product_id,
+						'post_content' => $description,
+						'post_status'  => 'publish',
+						'meta_input'   => $meta_input,
 
 					);
 
+					/* Aggiornamento variazione */
 					$var_id = wp_update_post( $var_args );
+
+					if ( is_wp_error( $var_id ) ) {
+
+						error_log( 'WCIFD ERROR | Aggiornamento variazione prodotto | Sku: ' . $barcode . ' | ' . print_r( $var_id->get_error_message(), true ) );
+
+						return;
+
+					}
 
 					/*Aggiornamento meta lookup table*/
 					$lookup_data = array(
@@ -860,11 +852,11 @@ function wcifd_import_single_product( $hash ) {
 						'stock_status'   => $stock_status,
 					);
 
-                    /* Solo se non attivata l'esclusione dei prezzi della variazioni */
-                    if ( ! $exclude_variations_prices ) {
+					/* Solo se non attivata l'esclusione dei prezzi della variazioni */
+					if ( ! $exclude_variations_prices ) {
 						$lookup_data['min_price'] = $meta_input['_price'];
 						$lookup_data['max_price'] = $meta_input['_price'];
-                    }
+					}
 
 					new wcifdProductMetaLookup( $lookup_data, 'update' );
 
@@ -907,9 +899,7 @@ function wcifd_import_single_product( $hash ) {
 				if ( $attr ) {
 					update_post_meta( $var_id, '_product_attributes', $attr );
 				}
-
 			}
-
 		}
 
 		/*Attributi disponibili per il prodotto padre*/
