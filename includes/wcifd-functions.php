@@ -754,8 +754,8 @@ function wcifd_products_update_request() {
 
 		if ( $key === $premium_key && $code === $url_code ) {
 
-			$images_send_url        = home_url() . '?key=' . $key . '&code=' . $code . '&mode=images';
-			$images_send_finish_url = $images_send_url . '-send-finish';
+			$images_send_url        = sprintf( '%1$s?key=%2$s&code=%3$s&mode=images', home_url(), $key, $code );
+			$images_send_finish_url = sprintf( '%s-send-finish', $images_send_url );
 
 			/*Importazione prodotti*/
 			if ( 'data' === $mode ) {
@@ -768,8 +768,8 @@ function wcifd_products_update_request() {
 
 					if ( 1 === intval( $import_images ) ) {
 
-						printf( "ImageSendURL=%s\n", esc_url( $images_send_url ) );
-						printf( "ImageSendFinishURL=%s\n", esc_url( $images_send_finish_url ) );
+						printf( "ImageSendURL=%s\n", esc_url_raw( $images_send_url ) );
+						printf( "ImageSendFinishURL=%s\n", esc_url_raw( $images_send_finish_url ) );
 
 					}
 				} else {
