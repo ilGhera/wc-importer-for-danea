@@ -48,15 +48,18 @@ You'll be able to import suppliers, clients and products.
 
 
 = 1.6.0 =
-Release Date: 4 July 2023 
+Release Date: 7 July 2023 
 
 * Enhancement: Danea Notes field as short product description 
 * Enhancement: Import Danea custom fields as product tags
 * Enhancement: Split Danea custom fields values by commas and create tags/attributes 
 * Enhancement: Option append tags on importing Danea custom fields 
 * Enhancement: Better user interface 
+* Enhancement: WordPress Coding Standard 
+* Enhancement: More details in log file in case of products/variations not imported/updated 
 * Update: Action Scheduler 
 * Update: Plugin Update Checker 
+* Update: Translations
 * Bug fix: Custom label not assigned to Danea custom fields imported 
 
 

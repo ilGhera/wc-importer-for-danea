@@ -540,8 +540,8 @@ if ( isset( $_POST['wcifd-products-general-nonce'] ) && wp_verify_nonce( sanitiz
 				<th scoper="row"><?php esc_html_e( 'File type', 'wcifd' ); ?></th>
 				<td>
 					<select name="file-type" class="wcifd-select">
-							<option value="xml" <?php echo( 'xml' === $file_type ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'xml', 'wcifd' ); ?></option>
-							<option value="csv" <?php echo( 'csv' === $file_type ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'csv', 'wcifd' ); ?></option>
+							<option value="xml" <?php echo( 'xml' === $file_type ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'XML', 'wcifd' ); ?></option>
+							<option value="csv" <?php echo( 'csv' === $file_type ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'CSV', 'wcifd' ); ?></option>
 					</select>
 					<p class="description"><?php esc_html_e( 'Select the file type to be imported', 'wcifd' ); ?></p>
 				</td>
