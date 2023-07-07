@@ -358,7 +358,7 @@ function wcifd_import_single_product( $hash ) {
 
 			);
 
-			new wcifdProductMetaLookup( $lookup_data );
+			new WCIFD_Product_Meta_Lookup( $lookup_data );
 
 		}
 	} else {
@@ -476,7 +476,7 @@ function wcifd_import_single_product( $hash ) {
 					'stock_status'   => $stock_status,
 				);
 
-				new wcifdProductMetaLookup( $lookup_data, 'update' );
+				new WCIFD_Product_Meta_Lookup( $lookup_data, 'update' );
 
 			}
 		} else {
@@ -813,7 +813,7 @@ function wcifd_import_single_product( $hash ) {
 					'stock_status'   => $stock_status,
 				);
 
-				new wcifdProductMetaLookup( $lookup_data );
+				new WCIFD_Product_Meta_Lookup( $lookup_data );
 
 			} else {
 
@@ -858,7 +858,7 @@ function wcifd_import_single_product( $hash ) {
 						$lookup_data['max_price'] = $meta_input['_price'];
 					}
 
-					new wcifdProductMetaLookup( $lookup_data, 'update' );
+					new WCIFD_Product_Meta_Lookup( $lookup_data, 'update' );
 
 				}
 			}
