@@ -4,36 +4,42 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
+ *
  * @since 1.6.0
+ */
+
+/**
+ * Importazione immagine
+ *
+ * @return void
  */
 function wcifd_products_images() {
 
 	if ( ! function_exists( 'wp_handle_upload' ) ) {
-		require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		require_once ABSPATH . 'wp-admin/includes/file.php';
 	}
 
-	$file = $_FILES['file'];
+	$file = isset( $_FILES['file'] ) ? $_FILES['file'] : null;
 
 	/*Elimino duplicato se presente*/
-    $args = array(
-        'post_type'   => 'attachment',
-        'post_status' => 'inherit',
-        'name'        => sanitize_title( $file['name'] ),
-    );
+	$args = array(
+		'post_type'   => 'attachment',
+		'post_status' => 'inherit',
+		'name'        => sanitize_title( $file['name'] ),
+	);
 
-    $images = new WP_Query( $args );
+	$images = new WP_Query( $args );
 
-    if ( $images->have_posts() ) {
+	if ( $images->have_posts() ) {
 
-        foreach ( $images->posts as $old_attach ) {
+		foreach ( $images->posts as $old_attach ) {
 
-            wp_delete_post( $old_attach->ID );
+			wp_delete_post( $old_attach->ID );
 
-        }
+		}
+	}
 
-    }
-
-    wp_reset_query();
+	wp_reset_postdata();
 
 	/*Caricamento immagine in WP Media*/
 	$wp_image = wp_handle_upload( $file, array( 'test_form' => false ) );
@@ -45,7 +51,6 @@ function wcifd_products_images() {
 		echo 'OK';
 
 		return;
-
 
 	} elseif ( ! $wp_image ) {
 
@@ -77,7 +82,7 @@ function wcifd_products_images() {
 	$attach_id = wp_insert_attachment( $attachment, $wp_image['file'] );
 
 	/*Richiesto da wp_generate_attachment_metadata()*/
-	require_once( ABSPATH . 'wp-admin/includes/image.php' );
+	require_once ABSPATH . 'wp-admin/includes/image.php';
 
 	/*Generazione e aggiornamento metadati*/
 	$attach_data = wp_generate_attachment_metadata( $attach_id, $wp_image['file'] );
