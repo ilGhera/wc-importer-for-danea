@@ -372,7 +372,7 @@ function wcifd_delete_variations( $parent_id ) {
 			wp_delete_post( $var['ID'] );
 
 			/*Aggiornamento meta lookup table*/
-			new wcifdProductMetaLookup( array( 'product_id' => $var['ID'] ), 'delete' );
+			new WCIFD_Product_Meta_Lookup( array( 'product_id' => $var['ID'] ), 'delete' );
 
 		}
 	}
