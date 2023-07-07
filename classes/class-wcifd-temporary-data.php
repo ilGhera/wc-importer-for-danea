@@ -6,14 +6,19 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/classes
+ *
  * @since 1.3.6
+ */
+
+/**
+ * Class WCIFD_Temporary_Data
  */
 class WCIFD_Temporary_Data {
 
 	/**
 	 * The constructor
 	 *
-	 * @param boolean $init true per eseguire hooks iniziali
+	 * @param boolean $init true per eseguire hooks iniziali.
 	 */
 	public function __construct( $init = false ) {
 
@@ -37,7 +42,7 @@ class WCIFD_Temporary_Data {
 		$temporary_data   = $wpdb->prefix . 'wcifd_temporary_data';
 		$temporary_images = $wpdb->prefix . 'wcifd_temporary_images';
 
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '$temporary_data'" ) != $temporary_data ) {
+		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $temporary_data ) ) !== $temporary_data ) {
 
 			$charset_collate = $wpdb->get_charset_collate();
 
@@ -48,13 +53,13 @@ class WCIFD_Temporary_Data {
 				UNIQUE KEY id (id)
 			) $charset_collate;";
 
-			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 			dbDelta( $sql );
 
 		}
 
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '$temporary_images'" ) != $temporary_images ) {
+		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $temporary_images ) ) !== $temporary_images ) {
 
 			$charset_collate = $wpdb->get_charset_collate();
 
@@ -66,7 +71,7 @@ class WCIFD_Temporary_Data {
 				UNIQUE KEY id (id)
 			) $charset_collate;";
 
-			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 			dbDelta( $sql );
 
@@ -87,10 +92,16 @@ class WCIFD_Temporary_Data {
 		global $wpdb;
 
 		$table = $image ? 'wcifd_temporary_images' : 'wcifd_temporary_data';
+		$table = "{$wpdb->prefix}$table";
 
-		$query = 'SELECT * FROM ' . $wpdb->prefix . $table . " WHERE hash = '$hash'";
-
-		$results = $wpdb->get_results( $query, ARRAY_A );
+		$results = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT * FROM %1$s WHERE `hash` = \'%2$s\'',
+				$table,
+				$hash
+			),
+			ARRAY_A
+		);
 
 		if ( $image && isset( $results[0] ) ) {
 
@@ -114,9 +125,7 @@ class WCIFD_Temporary_Data {
 
 		global $wpdb;
 
-		$query = 'SELECT * FROM ' . $wpdb->prefix . 'wcifd_temporary_images';
-
-		$results = $wpdb->get_results( $query, ARRAY_A );
+		$results = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}wcifd_temporary_images", ARRAY_A );
 
 		return $results;
 
@@ -136,7 +145,7 @@ class WCIFD_Temporary_Data {
 
 		$results = $this->wcifd_get_temporary_data( $hash );
 
-		if ( null == $results ) {
+		if ( null === $results ) {
 
 			$wpdb->insert(
 				$wpdb->prefix . 'wcifd_temporary_data',
@@ -169,12 +178,12 @@ class WCIFD_Temporary_Data {
 
 		$results = $this->wcifd_get_temporary_data( $hash, true );
 
-		if ( null == $results ) {
+		if ( null === $results ) {
 
 			$wpdb->insert(
 				$wpdb->prefix . 'wcifd_temporary_images',
 				array(
-					'hash' => $hash,
+					'hash'       => $hash,
 					'product_id' => $product_id,
 					'image_name' => $image_name,
 				),
