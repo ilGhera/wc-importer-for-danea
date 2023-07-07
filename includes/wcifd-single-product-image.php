@@ -4,7 +4,12 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
+ *
  * @since 1.6.0
+ */
+
+/**
+ * Abbinmaneot immagine prodotto
  *
  * @param string $hash il codice del prodotto WooCommerce che identifica l'abbinamento da eseguire.
  *
@@ -19,25 +24,25 @@ function wcifd_single_product_image( $hash ) {
 
 	if ( $product_id && $image_name ) {
 
-        /* Start - Recupero l'immagine attraverso il nome salvato nel db */
-        $attachment_id = null;
+		/* Start - Recupero l'immagine attraverso il nome salvato nel db */
+		$attachment_id = null;
 
-        $args = array(
-            'post_type'   => 'attachment',
-            'post_status' => 'inherit',
-            'name'        => $image_name, 
-        );
+		$args = array(
+			'post_type'   => 'attachment',
+			'post_status' => 'inherit',
+			'name'        => $image_name,
+		);
 
-        $images = new WP_Query( $args );
+		$images = new WP_Query( $args );
 
-        if ( isset( $images->posts[0]->ID ) ) {
+		if ( isset( $images->posts[0]->ID ) ) {
 
-            $attachment_id = $images->posts[0]->ID; 
+			$attachment_id = $images->posts[0]->ID;
 
-        }
+		}
 
-        wp_reset_query();
-        /* End */
+		wp_reset_postdata();
+		/* End */
 
 		if ( $product_id && $attachment_id ) {
 
@@ -57,9 +62,7 @@ function wcifd_single_product_image( $hash ) {
 				$temp->wcifd_delete_temporary_data( $hash, true );
 
 			}
-
 		}
-
 	}
 
 }
