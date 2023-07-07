@@ -29,7 +29,7 @@ function wcifd_delete_single_product( $product_sku ) {
 			wp_delete_post( $product_id, true );
 
 			/*Aggiornamento meta lookup table*/
-			new wcifdProductMetaLookup( array( 'product_id' => $product_id ), 'delete' );
+			new WCIFD_Product_Meta_Lookup( array( 'product_id' => $product_id ), 'delete' );
 
 			/*Se presenti elimino le variazionid i prodotto*/
 			wcifd_delete_variations( $product_id );
