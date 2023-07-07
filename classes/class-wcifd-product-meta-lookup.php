@@ -80,11 +80,12 @@ class WCIFD_Product_Meta_Lookup {
 	 */
 	private function product_exists() {
 
+		global $wpdb;
+
 		/* Translators: 1 the db prefix, 2 the product ID */
-		$response = $this->wpdb->get_row(
-			$this->wpdb->prepare(
-				'SELECT * FROM %s wc_product_meta_lookup WHERE product_id = %d',
-				$this->wpdb->prefix,
+		$response = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM {$wpdb->prefix}wc_product_meta_lookup WHERE `product_id` = %d",
 				$this->product_id
 			)
 		);
