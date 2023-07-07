@@ -49,7 +49,7 @@
 
 						}
 						?>
-							<th scope="row"><?php esc_html_e( $price_label, 'wcifd' ) . ' ' . ucfirst( esc_html__( $urole, 'woocommerce' ) ); ?></th>
+							<th scope="row"><?php echo esc_html__( $price_label, 'wcifd' ) . ' ' . ucfirst( esc_html__( $urole, 'woocommerce' ) ); ?></th>
 							<td>
 								<select name="<?php echo esc_html( $field_name ); ?>" class="wcifd wcifd-select">
 									<?php
