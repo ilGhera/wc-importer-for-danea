@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string
  */
 function wcifd_rand_md5( $length ) {
-	$max = ceil( $length / 32 );
+	$max    = ceil( $length / 32 );
 	$random = '';
 	for ( $i = 0; $i < $max; $i ++ ) {
 		$random .= md5( microtime( true ) . mt_rand( 10000, 90000 ) );
@@ -79,22 +79,17 @@ function wcifd_get_italian_tax_fields_names( $field ) {
 			$cf_name = 'billing_CF';
 			$pi_name = 'billing_iva';
 		}
-
 	}
 
 	switch ( $field ) {
 		case 'cf_name':
 			return $cf_name;
-			break;
 		case 'pi_name':
 			return $pi_name;
-			break;
 		case 'pec_name':
 			return $pec_name;
-			break;
 		case 'pa_code_name':
 			return $pa_code_name;
-			break;
 	}
 
 }
@@ -108,7 +103,7 @@ function wcifd_get_italian_tax_fields_names( $field ) {
  */
 function check_tax_code( $tax_code ) {
 	global $wpdb;
-	$query = "
+	$query  = "
 		SELECT user_id FROM $wpdb->usermeta WHERE meta_value = '$tax_code'
 	";
 	$result = $wpdb->get_results( $query, ARRAY_A );
@@ -125,9 +120,9 @@ function check_tax_code( $tax_code ) {
 function wcifd_get_state_code( $state_name ) {
 	$countries = WC()->countries->countries;
 	foreach ( $countries as $key => $value ) {
-		if ( $value == $state_name ) {
+		if ( $value === $state_name ) {
 			return $key;
-		} elseif ( $key == $state_name ) {
+		} elseif ( $key === $state_name ) {
 			return $state_name;
 		}
 	}
@@ -142,7 +137,7 @@ function wcifd_get_state_code( $state_name ) {
  */
 function wcifd_json_decode( $field = '' ) {
 	$decoded = json_decode( json_encode( $field ), true );
-	$output = $decoded ? $decoded[0] : '';
+	$output  = $decoded ? $decoded[0] : '';
 	return $output;
 }
 
@@ -155,7 +150,7 @@ function wcifd_json_decode( $field = '' ) {
  */
 function get_order_by_number( $number ) {
 	global $wpdb;
-	$query = "
+	$query   = "
 		SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'wcifd-order-number' AND meta_value = '$number'
 	";
 	$results = $wpdb->get_results( $query, ARRAY_A );
@@ -174,25 +169,21 @@ function wcifd_payment_gateway( $method ) {
 		case 'Paypal':
 		case 'Carta di credito':
 			return array(
-				'id' => 'paypal',
+				'id'    => 'paypal',
 				'title' => 'PayPal',
 			);
-			break;
 		case 'Contrassegno':
 			return array(
-				'id' => 'cod',
+				'id'    => 'cod',
 				'title' => 'Cash on Delivery',
 			);
-			break;
 		case 'Bonifico bancario':
 			return array(
-				'id' => 'bacs',
+				'id'    => 'bacs',
 				'title' => 'Direct Bank Transfer',
 			);
-			break;
 		default:
 			return null;
-			break;
 	}
 }
 
@@ -212,19 +203,18 @@ function wcifd_search_product( $sku, $parent_product_id = null ) {
 	";
 
 	$results = $wpdb->get_results( $query, ARRAY_A );
-    $post_id = isset( $results[0] ) ? $results[0]['post_id'] : '';
+	$post_id = isset( $results[0] ) ? $results[0]['post_id'] : '';
 
-    if ( ! $post_id && $parent_product_id && is_numeric( $sku ) ) {
+	if ( ! $post_id && $parent_product_id && is_numeric( $sku ) ) {
 
-        $product = wc_get_product( $sku );
+		$product = wc_get_product( $sku );
 
-        if ( $product && ! is_wp_error( $product ) ) {
+		if ( $product && ! is_wp_error( $product ) ) {
 
-            $post_id = intval( $parent_product_id ) === $product->get_parent_id() ? $product->get_id() : null;
+			$post_id = intval( $parent_product_id ) === $product->get_parent_id() ? $product->get_id() : null;
 
-        }
-
-    }
+		}
+	}
 
 	return $post_id;
 }
@@ -259,7 +249,7 @@ function wcifd_add_taxonomy_term( $product_id, $category, $parent_id = 0, $appen
 
 /**
  * Aggiunge una nuova tax class WooCommerce
- * 
+ *
  * @param  string $tax_name il nome dell'aliquota.
  * @return void
  */
@@ -292,7 +282,7 @@ function wcifd_add_tax_rate_class( $tax_name ) {
 function wcifd_get_tax_rate_class( $name, $value = '' ) {
 
 	/*Se non viene passato un valore, utilizza il nome dell'imposta se numerico*/
-	if ( '' == $value ) {
+	if ( '' === $value ) {
 		$value = ( is_numeric( $name ) ) ? $name : '';
 	}
 
@@ -310,11 +300,11 @@ function wcifd_get_tax_rate_class( $name, $value = '' ) {
 	} else {
 
 		/*Crea una nuova classe di tassazione solo con il valore numerico*/
-		if ( '' != $value ) {
+		if ( '' !== $value ) {
 			$tax_rate_class = 22 !== $name ? $name : '';
 
 			if ( $tax_rate_class ) {
-				$tax_classes = explode( "\n", get_option( 'woocommerce_tax_classes' ) );
+				$tax_classes   = explode( "\n", get_option( 'woocommerce_tax_classes' ) );
 				$tax_classes[] = $tax_rate_class;
 				update_option( 'woocommerce_tax_classes', implode( "\n", $tax_classes ) );
 			}
@@ -327,12 +317,12 @@ function wcifd_get_tax_rate_class( $name, $value = '' ) {
 			$response = $wpdb->insert(
 				$wpdb->prefix . 'woocommerce_tax_rates',
 				array(
-					'tax_rate_country' => 'IT',
-					'tax_rate'       => number_format( $value, 4 ),
-					'tax_rate_name'  => $name,
+					'tax_rate_country'  => 'IT',
+					'tax_rate'          => number_format( $value, 4 ),
+					'tax_rate_name'     => $name,
 					'tax_rate_priority' => 1,
 					'tax_rate_shipping' => 0,
-					'tax_rate_class' => $tax_rate_class,
+					'tax_rate_class'    => $tax_rate_class,
 				),
 				array(
 					'%s',
@@ -359,7 +349,7 @@ function wcifd_get_tax_rate_class( $name, $value = '' ) {
  */
 function wcifd_delete_variations( $parent_id ) {
 	$args = array(
-		'post_type' => 'product_variation',
+		'post_type'   => 'product_variation',
 		'post_parent' => $parent_id,
 	);
 	$vars = get_children( $args, ARRAY_A );
@@ -412,17 +402,17 @@ function wcifd_register_taxonomy( $name ) {
 				/* Translators: the taxonomy name */
 				'new_item_name'     => sprintf( __( 'New %s', 'woocommerce' ), $name ),
 			),
-			'show_ui'           => false,
-			'query_var'         => true,
-			'rewrite'           => array(
+			'show_ui'               => false,
+			'query_var'             => true,
+			'rewrite'               => array(
 				'slug'         => empty( $permalinks['attribute_base'] ) ? '' : trailingslashit( $permalinks['attribute_base'] ) . sanitize_title( $name ),
 				'with_front'   => false,
 				'hierarchical' => true,
 			),
-			'sort'              => false,
-			'public'            => true,
-			'show_in_nav_menus' => false,
-			'capabilities'      => array(
+			'sort'                  => false,
+			'public'                => true,
+			'show_in_nav_menus'     => false,
+			'capabilities'          => array(
 				'manage_terms' => 'manage_product_terms',
 				'edit_terms'   => 'edit_product_terms',
 				'delete_terms' => 'delete_product_terms',
@@ -442,7 +432,7 @@ function wcifd_register_taxonomy( $name ) {
  */
 function wcifd_update_transient_wc_attributes() {
 	global $wpdb;
-	$query = '
+	$query   = '
 		SELECT * FROM ' . $wpdb->prefix . 'woocommerce_attribute_taxonomies
 	';
 	$results = $wpdb->get_results( $query );
@@ -469,7 +459,7 @@ function wcifd_register_attributes() {
 		'sup-product-code' => __( 'Supplier product code', 'wcifd' ),
 	);
 
-    $additional_attributes = array();
+	$additional_attributes = array();
 
 	if ( isset( $_POST['wcifd-custom-fields-hidden'] ) ) {
 
@@ -478,37 +468,34 @@ function wcifd_register_attributes() {
 
 		if ( $custom_fields && is_array( $custom_fields ) ) {
 
-			for ( $i = 1; $i <= count( $custom_fields ); $i++ ) {
+			$custom_fields_count = count( $custom_fields );
 
-				if ( isset( $custom_fields[ $i ]['import'] ) && 'attribute' == $custom_fields[ $i ]['import'] ) {
+			for ( $i = 1; $i <= $custom_fields_count; $i++ ) {
+
+				if ( isset( $custom_fields[ $i ]['import'] ) && 'attribute' === $custom_fields[ $i ]['import'] ) {
 
 					/* Translators: the custom field number */
-					/* $name = isset( $custom_fields[ $i ]['name'] ) && $custom_fields[ $i ]['name'] ? $custom_fields[ $i ]['name'] : sprintf( __( 'Custom Field %d', 'wcifd' ), $i ); */
-                    $name = isset( $_POST[ 'custom-field-name-' . $i ] ) && $_POST[ 'custom-field-name-' . $i ] ? $_POST[ 'custom-field-name-' . $i ] : sprintf( __( 'Custom Field %d', 'wcifd' ), $i );
- 
+					$name = isset( $_POST[ 'custom-field-name-' . $i ] ) && $_POST[ 'custom-field-name-' . $i ] ? $_POST[ 'custom-field-name-' . $i ] : sprintf( __( 'Custom Field %d', 'wcifd' ), $i );
+
 					$additional_attributes[ 'customfield' . $i ] = $name;
 
 				}
-
 			}
-
 		}
-
 	}
 
 	global $wpdb;
 
-    /* Contiene il nome degli attributi modificati */
-    $changes = array();
+	/* Contiene il nome degli attributi modificati */
+	$changes = array();
 
-    /* Unisco gli attributi */
-    $all_attributes = array_merge( $attributes, $additional_attributes );
+	/* Unisco gli attributi */
+	$all_attributes = array_merge( $attributes, $additional_attributes );
 
 	foreach ( $all_attributes as $key => $value ) {
 
-        /* Registrazione tassonomia */
+		/* Registrazione tassonomia */
 		wcifd_register_taxonomy( $key );
-		/* add_action( 'woocommerce_after_register_taxonomy', 'wcifd_register_taxonomy' ); */
 
 		$query = '
 			SELECT * FROM ' . $wpdb->prefix . "woocommerce_attribute_taxonomies WHERE attribute_name = '$key'
@@ -516,51 +503,51 @@ function wcifd_register_attributes() {
 
 		$results = $wpdb->get_results( $query, ARRAY_A );
 
-        /* Inserimento record se non presente */
-		if ( null == $results ) {
+		/* Inserimento record se non presente */
+		if ( null === $results ) {
 
-            $changes[] = $key;
+			$changes[] = $key;
 
-            $insert = $wpdb->insert(
-                $wpdb->prefix . 'woocommerce_attribute_taxonomies',
-                array(
-                    'attribute_name'    => sanitize_title( $key ),
-                    'attribute_label'   => $value,
-                    'attribute_type'    => 'select',
-                    'attribute_orderby' => 'menu_order',
-                    'attribute_public'  => 0,
-                ),
-                array(
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%s',
-                    '%d',
-                )
-            );
+			$insert = $wpdb->insert(
+				$wpdb->prefix . 'woocommerce_attribute_taxonomies',
+				array(
+					'attribute_name'    => sanitize_title( $key ),
+					'attribute_label'   => $value,
+					'attribute_type'    => 'select',
+					'attribute_orderby' => 'menu_order',
+					'attribute_public'  => 0,
+				),
+				array(
+					'%s',
+					'%s',
+					'%s',
+					'%s',
+					'%d',
+				)
+			);
 
-        /* Aggiornamento record in caso di nome modificato */
-        } elseif ( isset( $results[0]['attribute_label'] ) && $results[0]['attribute_label'] !== $value ) {
+			/* Aggiornamento record in caso di nome modificato */
+		} elseif ( isset( $results[0]['attribute_label'] ) && $results[0]['attribute_label'] !== $value ) {
 
-            $changes[] = $key;
+			$changes[] = $key;
 
-            $update = $wpdb->update(
-                $wpdb->prefix . 'woocommerce_attribute_taxonomies',
-                array(
-                    'attribute_label' => $value,
-                ),
-                array(
-                    'attribute_name' => sanitize_title( $key ),
-                ),
-                array(
-                    '%s',
-                ),
-                array(
-                    '%s',
-                )
-            );
+			$update = $wpdb->update(
+				$wpdb->prefix . 'woocommerce_attribute_taxonomies',
+				array(
+					'attribute_label' => $value,
+				),
+				array(
+					'attribute_name' => sanitize_title( $key ),
+				),
+				array(
+					'%s',
+				),
+				array(
+					'%s',
+				)
+			);
 
-        }
+		}
 	}
 
 	if ( ! empty( $changes ) ) {
@@ -709,7 +696,7 @@ function wcifd_get_short_description( $description ) {
  */
 function wcifd_get_guid( $guid ) {
 	global $wpdb;
-	$query = "
+	$query   = "
 		SELECT ID FROM $wpdb->posts WHERE guid = '" . $guid . "'
 	";
 	$results = $wpdb->get_results( $query, ARRAY_A );
@@ -726,7 +713,7 @@ function wcifd_get_guid( $guid ) {
  */
 function wcifd_get_id_by_img( $img_name ) {
 	global $wpdb;
-	$query = "
+	$query   = "
 		SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'danea_img_name' AND meta_value = '$img_name'
 	";
 	$results = $wpdb->get_results( $query, ARRAY_A );
@@ -749,13 +736,13 @@ function wcifd_products_update_request() {
 
 	if ( $key && $code ) {
 
-		if ( $key == $premium_key && $code == $url_code ) {
+		if ( $key === $premium_key && $code === $url_code ) {
 
-			$imagesSendURL       = home_url() . '?key=' . $key . '&code=' . $code . '&mode=images';
-			$imagesSendFinishURL = $imagesSendURL . '-send-finish';
+			$images_send_url        = home_url() . '?key=' . $key . '&code=' . $code . '&mode=images';
+			$images_send_finish_url = $images_send_url . '-send-finish';
 
 			/*Importazione prodotti*/
-			if ( 'data' == $mode ) {
+			if ( 'data' === $mode ) {
 
 				if ( move_uploaded_file( $_FILES['file']['tmp_name'], 'wcifd-prodotti.xml' ) ) {
 
@@ -763,25 +750,23 @@ function wcifd_products_update_request() {
 
 					echo "OK\n";
 
-					if ( 1 == $import_images ) {
+					if ( 1 === intval( $import_images ) ) {
 
-						echo "ImageSendURL=$imagesSendURL\n";
-						echo "ImageSendFinishURL=$imagesSendFinishURL\n";
-				
+						echo "ImageSendURL=$images_send_url\n";
+						echo "ImageSendFinishURL=$images_send_finish_url\n";
+
 					}
-
 				} else {
 
 					esc_html_e( 'WCIFD ERROR | An error accourred while receiving data from Danea Easyfatt', 'wcifd' );
 
 				}
-
-			} elseif ( 'images' == $mode && 1 == $import_images ) {
+			} elseif ( 'images' === $mode && 1 === intval( $import_images ) ) {
 
 				/*Aggiornamento immagini*/
 				wcifd_products_images();
 
-			} elseif ( 'images-send-finish' == $mode && 1 == $import_images ) {
+			} elseif ( 'images-send-finish' === $mode && 1 === intval( $import_images ) ) {
 
 				echo "OK\n";
 
@@ -803,9 +788,7 @@ function wcifd_products_update_request() {
 					);
 
 				}
-
 			}
-
 		} else {
 
 			esc_html_e( 'WCIFD ERROR | It seems like the URL entered in Danea Easyfatt is not correct', 'wcifd' );
@@ -844,7 +827,7 @@ function wcifd_update_message( $message = '', $status = '' ) {
 
 		$message = __( '<strong>Woocommerce Importer for Danea - Premium</strong> is up to date.', 'wcifd' );
 
-	} else if ( 'update_available' === $status ) {
+	} elseif ( 'update_available' === $status ) {
 
 		$message = __( 'A new version of <strong>Woocommerce Importer for Danea - Premium</strong> is available.', 'wcifd' );
 
