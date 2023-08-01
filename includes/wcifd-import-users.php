@@ -5,12 +5,18 @@
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
  * @since 1.2.1
+ */
+
+/**
+ * WCIFD users
  *
  * @param  string $type il ruolo da assegnare agli utenti importati.
+ *
+ * @return void
  */
 function wcifd_users( $type ) {
 
-	if ( isset( $_POST[ $type . '-import' ], $_POST[ 'wcifd-' . $type . '-nonce' ] ) && wp_verify_nonce( wp_unslash( $_POST[ 'wcifd-' . $type . '-nonce' ] ), 'wcifd-' . $type . '-import' ) ) {
+	if ( isset( $_POST[ $type . '-import' ], $_POST[ 'wcifd-' . $type . '-nonce' ] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST[ 'wcifd-' . $type . '-nonce' ] ) ), 'wcifd-' . $type . '-import' ) ) {
 
 		if ( isset( $_POST[ 'wcifd-users-' . $type ] ) ) {
 			$role = sanitize_text_field( wp_unslash( $_POST[ 'wcifd-users-' . $type ] ) );
