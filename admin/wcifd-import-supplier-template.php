@@ -4,6 +4,7 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
+ *
  * @since 1.6.0
  */
 
@@ -47,7 +48,6 @@ if ( isset( $_POST['wcifd-users'], $_POST['wcifd-suppliers-nonce'] ) && wp_verif
 			<p class="description"><?php esc_html_e( 'Select a WordPress user role for your suppliers.', 'wcifd' ); ?></p>
 		</tr>
 
-		<?php wp_nonce_field( 'wcifd-suppliers-import', 'wcifd-suppliers-nonce' ); ?>
 		<input type="hidden" name="suppliers-import" value="1">
 
 		<tr>

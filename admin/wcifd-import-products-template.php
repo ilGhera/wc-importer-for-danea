@@ -288,6 +288,7 @@
 				<td><?php go_premium(); ?></td>
 			</tr>
 		</table>
+		<?php wp_nonce_field( 'wcifd-products-fields', 'wcifd-products-fields-nonce' ); ?>
 		<input type="hidden" name="wcifd-custom-fields-hidden" value="1">
 		<input type="submit" class="button-primary" style="margin-top: 1.5rem;" value="<?php esc_attr_e( 'Save Changes', 'wcifd' ); ?>" disabled>
 	</form>
@@ -354,7 +355,6 @@
 					<p class="description"><?php esc_html_e( 'Select the file type to be imported', 'wcifd' ); ?></p>
 				</td>
 			</tr>
-			<?php wp_nonce_field( 'wcifd-products-import', 'wcifd-products-nonce' ); ?>
 			<input type="hidden" name="products-import" value="1">
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Add products', 'wcifd' ); ?></th>

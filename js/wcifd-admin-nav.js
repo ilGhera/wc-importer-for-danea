@@ -2,6 +2,7 @@
  * Script menu di navigazione
  * @author ilGhera
  * @package wc-importer-for-danea-premium/js
+ *
  * @since 1.3.0
  */
 jQuery(document).ready(function ($) {
@@ -59,6 +60,13 @@ jQuery(document).ready(function ($) {
 	        $(contents).hide();
 
 	        $("#" + $(this).data("link")).fadeIn(200);
+
+            if ( 'wcifd-products' == $(this).data("link") ) {
+                $('.subsubsub.wcifd a').removeClass('current');
+                $('#wcifd-products .subsubsub.wcifd li:first-child a').addClass('current');
+			    $('#wcifd-products-general').fadeIn(200);	
+            }
+
 	        $(toggle + '.' + active).removeClass(active);
 	        $(this).addClass(active);
 

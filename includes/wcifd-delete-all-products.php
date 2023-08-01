@@ -4,13 +4,14 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
+ *
  * @since 1.2.1
  */
 
 /**
- * WCIFD delete all products
+ * Eliminazione prodotti
  *
- * @retur void
+ * @return void
  */
 function wcifd_delete_all_products() {
 

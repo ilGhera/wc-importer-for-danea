@@ -16,15 +16,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Generazione stringa random
  *
- * @param  int $length lunghezza della stringa.
+ * @param int $length lunghezza della stringa.
+ *
  * @return string
  */
 function wcifd_rand_md5( $length ) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 	$max    = ceil( $length / 32 );
 	$random = '';
 	for ( $i = 0; $i < $max; $i ++ ) {
 		$random .= md5( microtime( true ) . mt_rand( 10000, 90000 ) );
 	}
+
 	return substr( $random, 0, $length );
 }
 
@@ -58,24 +64,21 @@ function wcifd_get_italian_tax_fields_names( $field ) {
 		if ( class_exists( 'WC_BrazilianCheckoutFields' ) ) {
 			$cf_name = 'billing_cpf';
 			$pi_name = 'billing_cnpj';
-		}
 
-		/*WooCommerce P.IVA e Codice Fiscale per Italia*/
-		elseif ( class_exists( 'WooCommerce_Piva_Cf_Invoice_Ita' ) || class_exists( 'WC_Piva_Cf_Invoice_Ita' ) ) {
+			/*WooCommerce P.IVA e Codice Fiscale per Italia*/
+		} elseif ( class_exists( 'WooCommerce_Piva_Cf_Invoice_Ita' ) || class_exists( 'WC_Piva_Cf_Invoice_Ita' ) ) {
 			$cf_name      = 'billing_cf';
 			$pi_name      = 'billing_piva';
 			$pec_name     = 'billing_pec';
 			$pa_code_name = 'billing_pa_code';
-		}
 
-		/*YITH WooCommerce Checkout Manager*/
-		elseif ( function_exists( 'ywccp_init' ) ) {
+			/*YITH WooCommerce Checkout Manager*/
+		} elseif ( function_exists( 'ywccp_init' ) ) {
 			$cf_name = 'billing_Codice_Fiscale';
 			$pi_name = 'billing_Partita_IVA';
-		}
 
-		/*WOO Codice Fiscale*/
-		elseif ( function_exists( 'woocf_on_checkout' ) ) {
+			/*WOO Codice Fiscale*/
+		} elseif ( function_exists( 'woocf_on_checkout' ) ) {
 			$cf_name = 'billing_CF';
 			$pi_name = 'billing_iva';
 		}
@@ -98,34 +101,53 @@ function wcifd_get_italian_tax_fields_names( $field ) {
 /**
  * Verifica la presenza di un codice di tassazione, utilizzato per la ricerca degli utenti
  *
- * @param  string $tax_code il codice.
- * @return int              l'id dell'utente legato al codice
+ * @param string $tax_code il codice.
+ *
+ * @return int l'id dell'utente legato al codice
  */
 function check_tax_code( $tax_code ) {
+
 	global $wpdb;
 	$query  = "
 		SELECT user_id FROM $wpdb->usermeta WHERE meta_value = '$tax_code'
 	";
 	$result = $wpdb->get_results( $query, ARRAY_A );
+
 	return $result[0]['user_id'];
+
 }
 
 
 /**
  * Restituisce il codice di statto a due lettere, partendo dal nome completo
  *
- * @param  string $state_name lo stato.
- * @return string             il codice dello stato
+ * @param string $state_name lo stato.
+ *
+ * @return string il codice dello stato
  */
 function wcifd_get_state_code( $state_name ) {
+
 	$countries = WC()->countries->countries;
+
 	foreach ( $countries as $key => $value ) {
+<<<<<<< HEAD
 		if ( $value === $state_name ) {
 			return $key;
 		} elseif ( $key === $state_name ) {
+=======
+
+		if ( $value === $state_name ) {
+
+			return $key;
+
+		} elseif ( $key === $state_name ) {
+
+>>>>>>> master
 			return $state_name;
+
 		}
 	}
+
 }
 
 
@@ -358,7 +380,7 @@ function wcifd_delete_variations( $parent_id ) {
 			wp_delete_post( $var['ID'] );
 
 			/*Aggiornamento meta lookup table*/
-			new wcifdProductMetaLookup( array( 'product_id' => $var['ID'] ), 'delete' );
+			new WCIFD_Product_Meta_Lookup( array( 'product_id' => $var['ID'] ), 'delete' );
 
 		}
 	}
@@ -461,13 +483,14 @@ function wcifd_register_attributes() {
 
 	$additional_attributes = array();
 
-	if ( isset( $_POST['wcifd-custom-fields-hidden'] ) ) {
+	if ( isset( $_POST['wcifd-custom-fields-hidden'], $_POST['wcifd-products-fields-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wcifd-products-fields-nonce'] ) ), 'wcifd-products-fields' ) ) {
 
 		/*Recupero i campi liberi di Danea abilitati dall'admin*/
 		$custom_fields = get_option( 'wcifd-custom-fields' );
 
 		if ( $custom_fields && is_array( $custom_fields ) ) {
 
+<<<<<<< HEAD
 			$custom_fields_count = count( $custom_fields );
 
 			for ( $i = 1; $i <= $custom_fields_count; $i++ ) {
@@ -476,6 +499,18 @@ function wcifd_register_attributes() {
 
 					/* Translators: the custom field number */
 					$name = isset( $_POST[ 'custom-field-name-' . $i ] ) && $_POST[ 'custom-field-name-' . $i ] ? $_POST[ 'custom-field-name-' . $i ] : sprintf( __( 'Custom Field %d', 'wcifd' ), $i );
+=======
+			$count_custom_fields = count( $custom_fields );
+
+			for ( $i = 1; $i <= $count_custom_fields; $i++ ) {
+
+				if ( isset( $custom_fields[ $i ]['import'] ) && 'attribute' === $custom_fields[ $i ]['import'] ) {
+
+					$custom_field_name = isset( $_POST[ 'custom-field-name-' . $i ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'custom-field-name-' . $i ] ) ) : null;
+
+					/* Translators: the custom field number */
+					$name = $custom_field_name ? $custom_field_name : sprintf( __( 'Custom Field %d', 'wcifd' ), $i );
+>>>>>>> master
 
 					$additional_attributes[ 'customfield' . $i ] = $name;
 
@@ -730,21 +765,26 @@ function wcifd_products_update_request() {
 	$premium_key   = strtolower( get_option( 'wcifd-premium-key' ) );
 	$url_code      = strtolower( get_option( 'wcifd-url-code' ) );
 	$import_images = get_option( 'wcifd-import-images' );
-	$key           = isset( $_GET['key'] ) ? $_GET['key'] : '';
-	$code          = isset( $_GET['code'] ) ? $_GET['code'] : '';
-	$mode          = isset( $_GET['mode'] ) ? $_GET['mode'] : '';
+	$key           = isset( $_GET['key'] ) ? sanitize_text_field( wp_unslash( $_GET['key'] ) ) : '';
+	$code          = isset( $_GET['code'] ) ? sanitize_text_field( wp_unslash( $_GET['code'] ) ) : '';
+	$mode          = isset( $_GET['mode'] ) ? sanitize_text_field( wp_unslash( $_GET['mode'] ) ) : '';
 
 	if ( $key && $code ) {
 
 		if ( $key === $premium_key && $code === $url_code ) {
 
+<<<<<<< HEAD
 			$images_send_url        = home_url() . '?key=' . $key . '&code=' . $code . '&mode=images';
 			$images_send_finish_url = $images_send_url . '-send-finish';
+=======
+			$images_send_url        = sprintf( '%1$s?key=%2$s&code=%3$s&mode=images', home_url(), $key, $code );
+			$images_send_finish_url = sprintf( '%s-send-finish', $images_send_url );
+>>>>>>> master
 
 			/*Importazione prodotti*/
 			if ( 'data' === $mode ) {
 
-				if ( move_uploaded_file( $_FILES['file']['tmp_name'], 'wcifd-prodotti.xml' ) ) {
+				if ( isset( $_FILES['file']['tmp_name'] ) && move_uploaded_file( sanitize_text_field( wp_unslash( $_FILES['file']['tmp_name'] ) ), 'wcifd-prodotti.xml' ) ) {
 
 					wcifd_catalog_update( 'wcifd-prodotti.xml' );
 
@@ -752,8 +792,13 @@ function wcifd_products_update_request() {
 
 					if ( 1 === intval( $import_images ) ) {
 
+<<<<<<< HEAD
 						echo "ImageSendURL=$images_send_url\n";
 						echo "ImageSendFinishURL=$images_send_finish_url\n";
+=======
+						printf( "ImageSendURL=%s\n", esc_url_raw( $images_send_url ) );
+						printf( "ImageSendFinishURL=%s\n", esc_url_raw( $images_send_finish_url ) );
+>>>>>>> master
 
 					}
 				} else {
@@ -809,7 +854,9 @@ add_action( 'init', 'wcifd_products_update_request' );
  * @return string
  */
 function wcifd_check_update() {
+
 	return __( 'Check for updates', 'wcifd' );
+
 }
 add_filter( 'puc_manual_check_link-wc-importer-for-danea-premium', 'wcifd_check_update' );
 

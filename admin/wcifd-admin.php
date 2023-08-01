@@ -101,6 +101,7 @@ function wcifd_options() {
 	</div>
 
 	<div class="icon32 icon32-woocommerce-settings" id="icon-woocommerce"><br /></div>
+
 	<h2 id="wcifd-admin-menu" class="nav-tab-wrapper woo-nav-tab-wrapper">
 		<a href="#" data-link="wcifd-suppliers" class="nav-tab nav-tab-active" onclick="return false;"><?php esc_html_e( 'Suppliers', 'wcifd' ); ?></a>
 		<a href="#" data-link="wcifd-products" class="nav-tab" onclick="return false;"><?php esc_html_e( 'Products', 'wcifd' ); ?></a>

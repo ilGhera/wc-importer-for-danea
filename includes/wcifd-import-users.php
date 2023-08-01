@@ -4,11 +4,20 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
+<<<<<<< HEAD
  * @since 1.2.1
  */
 
 /**
  * WCIFD users
+=======
+ *
+ * @since 1.6.0
+ */
+
+/**
+ * Importazione utenti
+>>>>>>> master
  *
  * @param  string $type il ruolo da assegnare agli utenti importati.
  *
@@ -23,7 +32,7 @@ function wcifd_users( $type ) {
 			update_option( 'wcifd-' . $type . '-role', $role );
 		}
 
-		$file = isset( $_FILES[ $type . '-list' ]['tmp_name'] ) ? $_FILES[ $type . '-list' ]['tmp_name'] : '';
+		$file = isset( $_FILES[ $type . '-list' ]['tmp_name'] ) ? sanitize_text_field( wp_unslash( $_FILES[ $type . '-list' ]['tmp_name'] ) ) : '';
 
 		if ( $file ) {
 

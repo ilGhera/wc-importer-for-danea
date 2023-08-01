@@ -93,18 +93,22 @@ From WordPress.org
 7. Import orders in WooCommerce
 8. WooCommerce Role Based Price support
 
+
 == Changelog ==
 
 = 1.3.0 =
-Release Date: 4 July 2023 
+Release Date: 1 August 2023 
 
 * Enhancement: (Premium) Danea Notes field as short product description 
 * Enhancement: (Premium) Import Danea custom fields as product tags
 * Enhancement: (Premium) Split Danea custom fields values by commas and create tags/attributes 
 * Enhancement: (Premium) Option append tags on importing Danea custom fields 
 * Enhancement: Better user interface 
+* Enhancement: WordPress Coding Standard 
+* Enhancement: (Premium) More details in log file in case of products/variations not imported/updated 
 * Update: (Premium) Action Scheduler 
 * Update: (Premium) Plugin Update Checker 
+* Update: Translations
 * Bug fix: (Premium) Custom label not assigned to Danea custom fields imported 
 
 
