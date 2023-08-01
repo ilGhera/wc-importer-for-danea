@@ -1,10 +1,12 @@
-<?php /**
+<?php
+/**
  * Importazione prodotti
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
  * @since 1.3.0
  */
+
 ?>
 
 <ul class="subsubsub wcifd">
@@ -22,7 +24,7 @@
 	<form name="wcifd-products-settings" class="wcifd-form" method="post" action="">
 
 		<h2 class="title"><?php esc_html_e( 'Generall settings', 'wcifd' ); ?></h2>
-				
+
 		<table class="form-table">
 			<tr>
 				<th scope="row"><?php esc_html_e( 'Prices imported with tax', 'wcifd' ); ?></th>
@@ -40,7 +42,7 @@
 					<select name="regular-price-list" class="wcifd-select">
 						<?php
 						for ( $n = 1; $n <= 9; $n++ ) {
-							echo '<option value="' . $n . '">' . __( 'Price list ', 'wcifd' ) . $n . '</option>';
+							echo '<option value="' . esc_attr( $n ) . '">' . esc_html__( 'Price list ', 'wcifd' ) . esc_html( $n ) . '</option>';
 						}
 						?>
 					</select>
@@ -52,9 +54,9 @@
 				<td>
 					<select name="sale-price-list" class="wcifd-select">
 						<?php
-						echo '<option>' . __( 'Select a price list', 'wcifd' ) . '</option>';
+						echo '<option>' . esc_html__( 'Select a price list', 'wcifd' ) . '</option>';
 						for ( $n = 1; $n <= 9; $n++ ) {
-							echo '<option value="' . $n . '">' . __( 'Price list ', 'wcifd' ) . $n . '</option>';
+							echo '<option value="' . esc_attr( $n ) . '">' . esc_html__( 'Price list ', 'wcifd' ) . esc_html( $n ) . '</option>';
 						}
 						?>
 					</select>
@@ -87,10 +89,10 @@
 				<td>
 					<input type="hidden" name="short-description" value="0">
 					<select name="short-description" class="wcifd-select" disabled>
-                        <option value=""><?php esc_html_e( 'None', 'wcifd' ); ?></option>
-                        <option value="excerpt"><?php esc_html_e( 'Use part of the full description', 'wcifd' ); ?></option>
-                        <option value="notes"><?php esc_html_e( 'Use the content of the Note field', 'wcifd' ); ?></option>
-                    </select>
+						<option value=""><?php esc_html_e( 'None', 'wcifd' ); ?></option>
+						<option value="excerpt"><?php esc_html_e( 'Use part of the full description', 'wcifd' ); ?></option>
+						<option value="notes"><?php esc_html_e( 'Use the content of the Note field', 'wcifd' ); ?></option>
+					</select>
 					<p class="description"><?php esc_html_e( 'Select the content to use for the short description of the product.', 'wcifd' ); ?></p>
 				</td>
 			</tr>
@@ -211,7 +213,7 @@
 				<td><?php go_premium(); ?></td>
 			</tr>
 		</table>
-		<input type="submit" class="button-primary" style="margin-top: 1.5rem;" value="<?php _e( 'Save Changes', 'wcifd' ); ?>" disabled>
+		<input type="submit" class="button-primary" style="margin-top: 1.5rem;" value="<?php esc_html_e( 'Save Changes', 'wcifd' ); ?>" disabled>
 	</form>
 
 </div>
@@ -222,27 +224,31 @@
 	<form name="wcifd-products-fields" class="wcifd-form" method="post" action="">
 
 		<h2 class="title"><?php esc_html_e( 'Import Danea Custom Fields', 'wcifd' ); ?></h2>
-				
+
 		<table class="form-table">
 
 			<?php
 
 			$custom_fields = get_option( 'wcifd-custom-fields' ) ? get_option( 'wcifd-custom-fields' ) : array();
 
-			for ( $i = 1; $i < 5; $i++) { 
+			for ( $i = 1; $i < 5; $i++ ) {
 
 				echo '<tr class="one-of wcifd-custom-field">';
-					echo '<th scope="row">' . sprintf( esc_html__( 'Custom Field %d', 'wcifd' ), $i ) . '</th>';
+
+					/* Translators: Il numero del campo personalizzato */
+					echo '<th scope="row">' . sprintf( esc_html__( 'Custom Field %d', 'wcifd' ), intval( $i ) ) . '</th>';
 					echo '<td>';
 
 						echo '<div class="field-import">';
 							echo '<input type="hidden" name="import-custom-field-' . esc_attr( $i ) . '" value="0">';
-                            echo '<select name="import-custom-field-' . esc_attr( $i ) . '" class="wcifd-select">';
-                                echo '<option value="">' . esc_html__( 'Don\'t import', 'wcifd' ) .  '</option>';
-                                echo '<option value="attribute">' . esc_html__( 'Attribute', 'wcifd' ) .  '</option>';
-                                echo '<option value="tag">' . esc_html__( 'Tag', 'wcifd' ) .  '</option>';
-                            echo '</select>';
-							echo '<p class="description bottom">' . sprintf( esc_html__( 'Import Danea Custom Field %d', 'wcifd' ), $i ) . '</p>';
+							echo '<select name="import-custom-field-' . esc_attr( $i ) . '" class="wcifd-select">';
+								echo '<option value="">' . esc_html__( 'Don\'t import', 'wcifd' ) . '</option>';
+								echo '<option value="attribute">' . esc_html__( 'Attribute', 'wcifd' ) . '</option>';
+								echo '<option value="tag">' . esc_html__( 'Tag', 'wcifd' ) . '</option>';
+							echo '</select>';
+
+							/* Translators: Il numero del campo personalizzato */
+							echo '<p class="description bottom">' . sprintf( esc_html__( 'Import Danea Custom Field %d', 'wcifd' ), intval( $i ) ) . '</p>';
 						echo '</div>';
 
 						echo '<div class="field-tag-append">';
@@ -260,12 +266,16 @@
 						echo '<div class="field-display">';
 							echo '<input type="hidden" name="display-custom-field-' . esc_attr( $i ) . '" value="0">';
 							echo '<input type="checkbox" name="display-custom-field-' . esc_attr( $i ) . '" value="1">';
-							echo '<p class="description bottom">' . sprintf( esc_html__( 'Make Custom Field %d visible in front-end', 'wcifd' ), $i ) . '</p>';
+
+							/* Translators: Il numero del campo personalizzato */
+							echo '<p class="description bottom">' . sprintf( esc_html__( 'Make Custom Field %d visible in front-end', 'wcifd' ), intval( $i ) ) . '</p>';
 						echo '</div>';
 
 						echo '<div class="field-name">';
 							echo '<input type="text" class="custom-field-name" name="custom-field-name-' . esc_attr( $i ) . '" value="" placeholder="' . esc_html__( 'My custom field', 'wcifd' ) . '">';
-							echo '<p class="description bottom">' . sprintf( esc_html__( 'Add a name to Custom Field %d', 'wcifd' ), $i ) . '</p>';
+
+							/* Translators: Il numero del campo personalizzato */
+							echo '<p class="description bottom">' . sprintf( esc_html__( 'Add a name to Custom Field %d', 'wcifd' ), intval( $i ) ) . '</p>';
 						echo '</div>';
 
 					echo '</td>';
@@ -279,7 +289,7 @@
 			</tr>
 		</table>
 		<input type="hidden" name="wcifd-custom-fields-hidden" value="1">
-		<input type="submit" class="button-primary" style="margin-top: 1.5rem;" value="<?php _e( 'Save Changes', 'wcifd' ); ?>" disabled>
+		<input type="submit" class="button-primary" style="margin-top: 1.5rem;" value="<?php esc_attr_e( 'Save Changes', 'wcifd' ); ?>" disabled>
 	</form>
 
 </div>
@@ -288,7 +298,7 @@
 <div id="wcifd-products-remote" class="wcifd-products-sub">
 
 	<form name="wcifd-receive-products" id="wcifd-receive-products" class="wcifd-form" method="post" action="">
-		
+
 		<h2 class="title"><?php esc_html_e( 'Receive products from Danea', 'wcifd' ); ?></h2>
 
 		<p>
@@ -298,13 +308,13 @@
 		</p>
 
 		<table class="form-table">
-			
+
 			<?php $receive_orders_url = __( 'Please insert your <strong>Premium Key</strong>', 'wcifd' ); ?>
-				
+
 			<tr>
 				<th scope="row"><?php esc_html_e( 'URL', 'wcifd' ); ?></th>
 				<td>
-					<div class="wcifd-copy-url"><span class="wcifd-red"><?php echo $receive_orders_url; ?></span></div>
+					<div class="wcifd-copy-url"><span class="wcifd-red"><?php echo esc_html( $receive_orders_url ); ?></span></div>
 					<p class="description"><?php esc_html_e( 'Add this URL to the Settings tab of the Products update function in Danea.', 'wcifd' ); ?></p>
 				</td>
 			</tr>
@@ -321,7 +331,7 @@
 				<td><?php go_premium(); ?></td>
 			</tr>
 		</table>
-		<input type="submit" class="button-primary" style="margin-top: 1.5rem;" value="<?php _e( 'Save Changes', 'wcifd' ); ?>" disabled>
+		<input type="submit" class="button-primary" style="margin-top: 1.5rem;" value="<?php esc_html_e( 'Save Changes', 'wcifd' ); ?>" disabled>
 	</form>
 
 </div>
@@ -347,10 +357,10 @@
 			<?php wp_nonce_field( 'wcifd-products-import', 'wcifd-products-nonce' ); ?>
 			<input type="hidden" name="products-import" value="1">
 			<tr>
-				<th scope="row"><?php _e( 'Add products', 'wcifd' ); ?></th>
+				<th scope="row"><?php esc_html_e( 'Add products', 'wcifd' ); ?></th>
 				<td>
 					<input type="file" name="products-list" disabled>
-					<p class="description"><?php _e( 'Select your products list file', 'wcifd' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Select your products list file', 'wcifd' ); ?></p>
 				</td>
 			</tr>
 			<tr>
@@ -358,7 +368,7 @@
 				<td><?php go_premium(); ?></td>
 			</tr>
 		</table>
-		<input type="submit" class="button-primary" value="<?php _e( 'Import Products', 'wcifd' ); ?>" disabled>
+		<input type="submit" class="button-primary" value="<?php esc_html_e( 'Import Products', 'wcifd' ); ?>" disabled>
 	</form>
 
 </div>
