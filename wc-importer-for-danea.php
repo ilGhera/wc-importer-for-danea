@@ -11,8 +11,9 @@
  * Tested up to: 6.2
  * WC tested up to: 7
  * Text Domain: wcifd
+ *
+ * @package wc-importer-for-danea
  */
-
 
 /*Evito accesso diretto*/
 if ( ! defined( 'ABSPATH' ) ) {
@@ -27,7 +28,7 @@ function load_wc_importer_for_danea() {
 
 	/*Function check */
 	if ( ! function_exists( 'is_plugin_active' ) ) {
-		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+		require_once ABSPATH . '/wp-admin/includes/plugin.php';
 	}
 
 	/*Dichiarazioni costanti*/
@@ -41,9 +42,9 @@ function load_wc_importer_for_danea() {
 	load_plugin_textdomain( 'wcifd', false, basename( dirname( __FILE__ ) ) . '/languages' );
 
 	/*Richiamo file necessari*/
-	require_once( WCIFD_ADMIN . 'wcifd-admin.php' );
-	require_once( WCIFD_INCLUDES . 'wcifd-functions.php' );
-	require_once( WCIFD_INCLUDES . 'wcifd-import-users.php' );
+	require_once WCIFD_ADMIN . 'wcifd-admin.php';
+	require_once WCIFD_INCLUDES . 'wcifd-functions.php';
+	require_once WCIFD_INCLUDES . 'wcifd-import-users.php';
 
 }
 add_action( 'plugins_loaded', 'load_wc_importer_for_danea', 100 );
