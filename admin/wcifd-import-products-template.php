@@ -88,7 +88,7 @@
 				<th scope="row"><?php esc_html_e( 'Short description', 'wcifd' ); ?></th>
 				<td>
 					<input type="hidden" name="short-description" value="0">
-					<select name="short-description" class="wcifd-select" disabled>
+					<select name="short-description" class="wcifd-select">
 						<option value=""><?php esc_html_e( 'None', 'wcifd' ); ?></option>
 						<option value="excerpt"><?php esc_html_e( 'Use part of the full description', 'wcifd' ); ?></option>
 						<option value="notes"><?php esc_html_e( 'Use the content of the Note field', 'wcifd' ); ?></option>
@@ -315,7 +315,7 @@
 			<tr>
 				<th scope="row"><?php esc_html_e( 'URL', 'wcifd' ); ?></th>
 				<td>
-					<div class="wcifd-copy-url"><span class="wcifd-red"><?php echo esc_html( $receive_orders_url ); ?></span></div>
+					<div class="wcifd-copy-url"><span class="wcifd-red"><?php echo wp_kses_post( $receive_orders_url ); ?></span></div>
 					<p class="description"><?php esc_html_e( 'Add this URL to the Settings tab of the Products update function in Danea.', 'wcifd' ); ?></p>
 				</td>
 			</tr>
