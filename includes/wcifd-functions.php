@@ -21,10 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string
  */
 function wcifd_rand_md5( $length ) {
-<<<<<<< HEAD
-=======
 
->>>>>>> master
 	$max    = ceil( $length / 32 );
 	$random = '';
 	for ( $i = 0; $i < $max; $i ++ ) {
@@ -130,11 +127,6 @@ function wcifd_get_state_code( $state_name ) {
 	$countries = WC()->countries->countries;
 
 	foreach ( $countries as $key => $value ) {
-<<<<<<< HEAD
-		if ( $value === $state_name ) {
-			return $key;
-		} elseif ( $key === $state_name ) {
-=======
 
 		if ( $value === $state_name ) {
 
@@ -142,7 +134,6 @@ function wcifd_get_state_code( $state_name ) {
 
 		} elseif ( $key === $state_name ) {
 
->>>>>>> master
 			return $state_name;
 
 		}
@@ -490,27 +481,14 @@ function wcifd_register_attributes() {
 
 		if ( $custom_fields && is_array( $custom_fields ) ) {
 
-<<<<<<< HEAD
-			$custom_fields_count = count( $custom_fields );
-
-			for ( $i = 1; $i <= $custom_fields_count; $i++ ) {
-
-				if ( isset( $custom_fields[ $i ]['import'] ) && 'attribute' === $custom_fields[ $i ]['import'] ) {
-
-					/* Translators: the custom field number */
-					$name = isset( $_POST[ 'custom-field-name-' . $i ] ) && $_POST[ 'custom-field-name-' . $i ] ? $_POST[ 'custom-field-name-' . $i ] : sprintf( __( 'Custom Field %d', 'wcifd' ), $i );
-=======
 			$count_custom_fields = count( $custom_fields );
 
 			for ( $i = 1; $i <= $count_custom_fields; $i++ ) {
 
 				if ( isset( $custom_fields[ $i ]['import'] ) && 'attribute' === $custom_fields[ $i ]['import'] ) {
 
-					$custom_field_name = isset( $_POST[ 'custom-field-name-' . $i ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'custom-field-name-' . $i ] ) ) : null;
-
 					/* Translators: the custom field number */
-					$name = $custom_field_name ? $custom_field_name : sprintf( __( 'Custom Field %d', 'wcifd' ), $i );
->>>>>>> master
+					$name = isset( $_POST[ 'custom-field-name-' . $i ] ) && $_POST[ 'custom-field-name-' . $i ] ? $_POST[ 'custom-field-name-' . $i ] : sprintf( __( 'Custom Field %d', 'wcifd' ), $i );
 
 					$additional_attributes[ 'customfield' . $i ] = $name;
 
@@ -773,13 +751,8 @@ function wcifd_products_update_request() {
 
 		if ( $key === $premium_key && $code === $url_code ) {
 
-<<<<<<< HEAD
-			$images_send_url        = home_url() . '?key=' . $key . '&code=' . $code . '&mode=images';
-			$images_send_finish_url = $images_send_url . '-send-finish';
-=======
 			$images_send_url        = sprintf( '%1$s?key=%2$s&code=%3$s&mode=images', home_url(), $key, $code );
 			$images_send_finish_url = sprintf( '%s-send-finish', $images_send_url );
->>>>>>> master
 
 			/*Importazione prodotti*/
 			if ( 'data' === $mode ) {
@@ -792,13 +765,8 @@ function wcifd_products_update_request() {
 
 					if ( 1 === intval( $import_images ) ) {
 
-<<<<<<< HEAD
-						echo "ImageSendURL=$images_send_url\n";
-						echo "ImageSendFinishURL=$images_send_finish_url\n";
-=======
 						printf( "ImageSendURL=%s\n", esc_url_raw( $images_send_url ) );
 						printf( "ImageSendFinishURL=%s\n", esc_url_raw( $images_send_finish_url ) );
->>>>>>> master
 
 					}
 				} else {
@@ -846,46 +814,4 @@ function wcifd_products_update_request() {
 
 }
 add_action( 'init', 'wcifd_products_update_request' );
-
-
-/**
- * Personalizzazione messaggio di controllo aggiornamenti
- *
- * @return string
- */
-function wcifd_check_update() {
-
-	return __( 'Check for updates', 'wcifd' );
-
-}
-add_filter( 'puc_manual_check_link-wc-importer-for-danea-premium', 'wcifd_check_update' );
-
-
-/**
- * Personalizzazione messaggi di aggiornamento
- *
- * @param  string $message il testo messaggio.
- * @param  string $status  lo status della risposta.
- * @return string
- */
-function wcifd_update_message( $message = '', $status = '' ) {
-
-	if ( 'no_update' === $status ) {
-
-		$message = __( '<strong>Woocommerce Importer for Danea - Premium</strong> is up to date.', 'wcifd' );
-
-	} elseif ( 'update_available' === $status ) {
-
-		$message = __( 'A new version of <strong>Woocommerce Importer for Danea - Premium</strong> is available.', 'wcifd' );
-
-	} else {
-
-		$message = __( 'There was an error trying to update. Please try again later.', 'wcifd' );
-
-	}
-
-	return $message;
-
-}
-add_filter( 'puc_manual_check_message-wc-importer-for-danea-premium', 'wcifd_update_message', 10, 2 );
 

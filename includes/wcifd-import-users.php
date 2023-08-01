@@ -4,20 +4,12 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
-<<<<<<< HEAD
- * @since 1.2.1
- */
-
-/**
- * WCIFD users
-=======
  *
- * @since 1.6.0
+ * @since 1.3.0
  */
 
 /**
  * Importazione utenti
->>>>>>> master
  *
  * @param  string $type il ruolo da assegnare agli utenti importati.
  *
