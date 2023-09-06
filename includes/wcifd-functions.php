@@ -807,7 +807,7 @@ function wcifd_products_update_request() {
 			}
 		} else {
 
-			esc_html_e( 'WCIFD ERROR | It seems like the URL entered in Danea Easyfatt is not correct', 'wcifd' );
+			echo wp_kses_post( __( 'WCIFD ERROR | It seems like the URL entered in Danea Easyfatt is not correct', 'wcifd' ) );
 
 		}
 
