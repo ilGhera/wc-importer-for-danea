@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WIFD\n"
-"POT-Creation-Date: 2023-09-12 18:51+0200\n"
+"POT-Creation-Date: 2023-09-12 19:28+0200\n"
 "PO-Revision-Date: 2016-05-26 13:25+0200\n"
 "Last-Translator: ilGhera <info@ilghera.com>\n"
 "Language-Team: ilGhera <info@ilghera.com>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "X-Generator: Poedit 3.2.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;esc_html__;esc_html_e\n"
+"X-Poedit-KeywordsList: __;_e;esc_html__;esc_html_e;esc_attr__;esc_attr_e\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: plugin-update-checker\n"
 "X-Poedit-SearchPathExcluded-1: libraries\n"
@@ -65,6 +65,10 @@ msgstr ""
 msgid ""
 "Add your Premium Key and keep update your copy of <strong>Woocommerce "
 "Importer for Danea - Premium</strong>."
+msgstr ""
+
+#: admin/wcifd-admin.php:87
+msgid "Save "
 msgstr ""
 
 #: admin/wcifd-admin.php:95

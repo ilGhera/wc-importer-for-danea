@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WED\n"
-"POT-Creation-Date: 2023-09-12 18:51+0200\n"
-"PO-Revision-Date: 2023-09-12 18:51+0200\n"
+"POT-Creation-Date: 2023-09-12 19:25+0200\n"
+"PO-Revision-Date: 2023-09-12 19:27+0200\n"
 "Last-Translator: \n"
 "Language-Team: ilGhera <info@ilghera.com>\n"
 "Language: it_IT\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-Generator: Poedit 3.2.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;esc_html__;esc_html_e\n"
+"X-Poedit-KeywordsList: __;_e;esc_html__;esc_html_e;esc_attr__;esc_attr_e\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: plugin-update-checker\n"
 "X-Poedit-SearchPathExcluded-1: libraries\n"
@@ -74,6 +74,10 @@ msgid ""
 msgstr ""
 "Inserisci la tua Premium Key e mantieni aggiornato <strong>Woocommerce "
 "Importer for Danea - Premium</strong>."
+
+#: admin/wcifd-admin.php:87
+msgid "Save "
+msgstr "Salva "
 
 #: admin/wcifd-admin.php:95
 msgid "Suppliers"
@@ -328,7 +332,7 @@ msgstr "Sostituzione  prodotti"
 msgid "Replace all WC products with a full update coming from Danea Easyfatt "
 msgstr ""
 "Sostituisci tutti i prodotti WooCommerce in caso di ricezione dell'intero "
-"catalogo da Danea Easyfatt."
+"catalogo da Danea Easyfatt. "
 
 #: admin/wcifd-import-products-template.php:280
 msgid "Variations prices"
@@ -455,7 +459,7 @@ msgstr "Ricevi i prodotti da un XML inviato da Danea in HTTP post."
 
 #: admin/wcifd-import-products-template.php:485
 msgid "Please insert your <strong>Premium Key</strong>"
-msgstr "È necessaria la tua <strong>Premium Key</strong>"
+msgstr "È necessario inserire la <strong>Premium Key</strong>"
 
 #: admin/wcifd-import-products-template.php:499
 msgid "URL"
@@ -642,9 +646,6 @@ msgstr "Importati %d di %d contatti<br>"
 #, php-format
 msgid "Updated %1$d of %2$d contacts"
 msgstr "Aggiornati %d di %d contatti"
-
-#~ msgid "Save "
-#~ msgstr "Salva "
 
 #~ msgid "Use the excerpt as short product description."
 #~ msgstr "Usa parte della descrizione prodotto come descrizione breve."
