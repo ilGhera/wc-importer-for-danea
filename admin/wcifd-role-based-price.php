@@ -49,16 +49,16 @@
 
 						}
 						?>
-							<th scope="row"><?php echo esc_html__( $price_label, 'wp-importer-for-danea' ) . ' ' . ucfirst( esc_html__( $urole, 'woocommerce' ) ); ?></th>
+							<th scope="row"><?php echo esc_html__( $price_label, 'wc-importer-for-danea' ) . ' ' . ucfirst( esc_html__( $urole, 'woocommerce' ) ); ?></th>
 							<td>
 								<select name="<?php echo esc_html( $field_name ); ?>" class="wcifd wcifd-select">
 									<?php
 									for ( $n = 1; $n <= 9; $n++ ) {
-										echo '<option value="' . esc_attr( $n ) . '"' . ( intval( $price_list ) === $n ? 'selected="selected"' : '' ) . '>' . esc_html__( 'Price list ', 'wp-importer-for-danea' ) . esc_html( $n ) . '</option>';
+										echo '<option value="' . esc_attr( $n ) . '"' . ( intval( $price_list ) === $n ? 'selected="selected"' : '' ) . '>' . esc_html__( 'Price list ', 'wc-importer-for-danea' ) . esc_html( $n ) . '</option>';
 									}
 									?>
 								</select>
-								<p class="description"><?php esc_html_e( 'The Danea price list to use', 'wp-importer-for-danea' ); ?></p>
+								<p class="description"><?php esc_html_e( 'The Danea price list to use', 'wc-importer-for-danea' ); ?></p>
 							</td>
 						</tr>
 						<?php
@@ -69,5 +69,5 @@
 		?>
 	</table>
 	<?php wp_nonce_field( 'wcifd-role-based-price', 'wcifd-role-based-price-nonce' ); ?>
-	<input type="submit" class="button-primary" style="margin-top: 1.5rem;" value="<?php esc_html_e( 'Save Changes', 'wp-importer-for-danea' ); ?>">
+	<input type="submit" class="button-primary" style="margin-top: 1.5rem;" value="<?php esc_html_e( 'Save Changes', 'wc-importer-for-danea' ); ?>">
 </form>

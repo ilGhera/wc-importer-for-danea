@@ -21,13 +21,13 @@ if ( isset( $_POST['wcifd-orders-add-users'], $_POST['wcifd-orders-nonce'] ) && 
 	<table class="form-table">
 
 		<tr>
-			<th scope="row"><?php esc_html_e( 'New customers', 'wp-importer-for-danea' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'New customers', 'wc-importer-for-danea' ); ?></th>
 			<td>
 				<select name="wcifd-orders-add-users" class="wcifd-select">
-					<option name="" value="0"<?php echo( 0 === intval( $wcifd_orders_add_users ) ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Don\'t create users', 'wp-importer-for-danea' ); ?></option>
-					<option name="" value="1"<?php echo( 1 === intval( $wcifd_orders_add_users ) ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Create users', 'wp-importer-for-danea' ); ?></option>
+					<option name="" value="0"<?php echo( 0 === intval( $wcifd_orders_add_users ) ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Don\'t create users', 'wc-importer-for-danea' ); ?></option>
+					<option name="" value="1"<?php echo( 1 === intval( $wcifd_orders_add_users ) ) ? ' selected="selected"' : ''; ?>><?php esc_html_e( 'Create users', 'wc-importer-for-danea' ); ?></option>
 				</select>
-				<p class="description"><?php esc_html_e( 'Add new customers as WordPress users', 'wp-importer-for-danea' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Add new customers as WordPress users', 'wc-importer-for-danea' ); ?></p>
 			</td>
 		</tr>
 
@@ -40,7 +40,7 @@ if ( isset( $_POST['wcifd-orders-add-users'], $_POST['wcifd-orders-nonce'] ) && 
 		?>
 
 		<tr>
-			<th scope="row"><?php esc_html_e( 'Orders status', 'wp-importer-for-danea' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Orders status', 'wc-importer-for-danea' ); ?></th>
 			<td>
 				<select name="wcifd-orders-status" class="wcifd-select">
 					<?php
@@ -48,25 +48,25 @@ if ( isset( $_POST['wcifd-orders-add-users'], $_POST['wcifd-orders-nonce'] ) && 
 					foreach ( $statuses as $stat ) {
 						echo '<option name="' . esc_attr( $stat ) . '" value="' . esc_attr( $stat ) . '"';
 						echo ( strtolower( str_replace( ' ', '-', $stat ) ) === $wcifd_orders_status ) ? ' selected="selected">' : '>';
-						echo esc_html__( $stat, 'wp-importer-for-danea' ) . '</option>';
+						echo esc_html__( $stat, 'wc-importer-for-danea' ) . '</option>';
 					}
 					?>
 				</select>
-				<p class="description"><?php esc_html_e( 'Select the status that you want to assign to the imported orders.', 'wp-importer-for-danea' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Select the status that you want to assign to the imported orders.', 'wc-importer-for-danea' ); ?></p>
 			</td>
 		</tr>
 
 		<?php wp_nonce_field( 'wcifd-orders-import', 'wcifd-orders-nonce' ); ?>
 		<input type="hidden" name="orders-import" value="1">
 		<tr>
-			<th scope="row"><?php esc_html_e( 'Add orders', 'wp-importer-for-danea' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Add orders', 'wc-importer-for-danea' ); ?></th>
 			<td>
 				<input type="file" name="orders-list">
-				<p class="description"><?php esc_html_e( 'Select your orders list file (.xml)', 'wp-importer-for-danea' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Select your orders list file (.xml)', 'wc-importer-for-danea' ); ?></p>
 			</td>
 		</tr>
 	</table>
-	<input type="submit" class="button-primary" value="<?php esc_html_e( 'Import Orders', 'wp-importer-for-danea' ); ?>">
+	<input type="submit" class="button-primary" value="<?php esc_html_e( 'Import Orders', 'wc-importer-for-danea' ); ?>">
 </form>
 
 <?php wcifd_orders(); ?>

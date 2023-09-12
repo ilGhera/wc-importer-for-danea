@@ -241,7 +241,7 @@ function wcifd_orders() {
 		$output .= '<strong>Woocommerce Importer for Danea - Premium</strong><br>';
 
 		/* Translators: 1 numero di ordini, 2 numero di utenti, 3 numero di prodotti */
-		$output .= sprintf( __( 'Imported %1$d orders, %2$d users and %3$d products.', 'wp-importer-for-danea' ), $o, $u, $p );
+		$output .= sprintf( __( 'Imported %1$d orders, %2$d users and %3$d products.', 'wc-importer-for-danea' ), $o, $u, $p );
 		$output .= '</p></div>';
 
 		echo wp_kses_post( $output );

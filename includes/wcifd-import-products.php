@@ -27,7 +27,7 @@ function wcifd_products() {
 
 			$output  = '<div id="message" class="updated"><p>';
 			$output .= '<strong>Woocommerce Importer for Danea - Premium</strong><br>';
-			$output .= __( 'The import process has started and is running in the background', 'wp-importer-for-danea' );
+			$output .= __( 'The import process has started and is running in the background', 'wc-importer-for-danea' );
 			$output .= '</p></div>';
 
 			echo wp_kses_post( $output );
@@ -405,7 +405,7 @@ function wcifd_products() {
 			$output    .= '<strong>Woocommerce Importer for Danea - Premium</strong><br>';
 
 			/* Translators: 1 numero prodotti, 2 numero variazioni, 3 numero aggiornamenti */
-			$output .= sprintf( __( 'New products imported: %1$d<br>New variations imported: %2$d<br>Items updated: %3$d', 'wp-importer-for-danea' ), $p_imported, $v, $u );
+			$output .= sprintf( __( 'New products imported: %1$d<br>New variations imported: %2$d<br>Items updated: %3$d', 'wc-importer-for-danea' ), $p_imported, $v, $u );
 			$output .= '</p></div>';
 
 			echo wp_kses_post( $output );
