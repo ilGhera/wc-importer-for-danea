@@ -24,7 +24,7 @@ if ( isset( $_POST['wcifd-users'], $_POST['wcifd-clients-nonce'] ) && wp_verify_
 
 	<table class="form-table">
 		<tr>
-			<th scope="row"><?php esc_html_e( 'User role', 'wcifd' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'User role', 'wp-importer-for-danea' ); ?></th>
 			<td>
 			<select class="wcifd-users-clients wcifd-select" name="wcifd-users-clients">
 				<?php
@@ -45,23 +45,23 @@ if ( isset( $_POST['wcifd-users'], $_POST['wcifd-clients-nonce'] ) && wp_verify_
 				}
 				?>
 			</select>
-			<p class="description"><?php esc_html_e( 'Select a WordPress user role for your clients.', 'wcifd' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Select a WordPress user role for your clients.', 'wp-importer-for-danea' ); ?></p>
 		</tr>
 
 		<?php wp_nonce_field( 'wcifd-clients-import', 'wcifd-clients-nonce' ); ?>
 		<input type="hidden" name="clients-import" value="1">
 
 		<tr>
-			<th scope="row"><?php esc_html_e( 'Add clients', 'wcifd' ); ?></th>
+			<th scope="row"><?php esc_html_e( 'Add clients', 'wp-importer-for-danea' ); ?></th>
 			<td>
 				<input type="file" name="clients-list">
-				<p class="description"><?php esc_html_e( 'Select your clients list file (.csv)', 'wcifd' ); ?></p>
+				<p class="description"><?php esc_html_e( 'Select your clients list file (.csv)', 'wp-importer-for-danea' ); ?></p>
 			</td>
 		</tr>
 
 	</table>
 
-	<input type="submit" class="button-primary" value="<?php esc_html_e( 'Import Clients', 'wcifd' ); ?>">
+	<input type="submit" class="button-primary" value="<?php esc_html_e( 'Import Clients', 'wp-importer-for-danea' ); ?>">
 
 </form>
 

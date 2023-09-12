@@ -48,7 +48,7 @@ function wcifd_options() {
 
 	/*Controllo se l'utente ha i diritti d'accessso necessari*/
 	if ( ! current_user_can( 'manage_woocommerce' ) ) {
-		wp_die( esc_html__( 'It seems like you don\'t have permission to see this page', 'wcifd' ) );
+		wp_die( esc_html__( 'It seems like you don\'t have permission to see this page', 'wp-importer-for-danea' ) );
 	}
 
 	/*Inizio template di pagina*/
@@ -59,7 +59,7 @@ function wcifd_options() {
 	if ( ! class_exists( 'WooCommerce' ) ) { ?>
 
 		<div id="message" class="error"><p><strong>
-			<?php esc_html_e( 'ATTENTION! It seems like Woocommerce is not installed.', 'wcifd' ); ?>
+			<?php esc_html_e( 'ATTENTION! It seems like Woocommerce is not installed.', 'wp-importer-for-danea' ); ?>
 		</strong></p></div>
 
 		<?php
@@ -70,7 +70,7 @@ function wcifd_options() {
 	<div id="wcifd-generale">
 	<?php
 		/*Header*/
-		echo '<h1 class="wcifd main">' . esc_html__( 'Woocommmerce Importer for Danea - Premium', 'wcifd' ) . '</h1>';
+		echo '<h1 class="wcifd main">' . esc_html__( 'Woocommmerce Importer for Danea - Premium', 'wp-importer-for-danea' ) . '</h1>';
 
 		/*Plugin premium key*/
 		$key = sanitize_text_field( get_option( 'wcifd-premium-key' ) );
@@ -79,12 +79,12 @@ function wcifd_options() {
 		update_option( 'wcifd-premium-key', $key );
 	}
 		echo '<form id="wcifd-options" method="post" action="">';
-		echo '<label>' . esc_html__( 'Premium Key', 'wcifd' ) . '</label>';
-		echo '<input type="text" class="regular-text" name="wcifd-premium-key" id="wcifd-premium-key" placeholder="' . esc_html__( 'Add your Premium Key', 'wcifd' ) . '" value="' . esc_attr( $key ) . '" />';
-		echo '<p class="description">' . wp_kses_post( __( 'Add your Premium Key and keep update your copy of <strong>Woocommerce Importer for Danea - Premium</strong>.', 'wcifd' ) ) . '</p>';
+		echo '<label>' . esc_html__( 'Premium Key', 'wp-importer-for-danea' ) . '</label>';
+		echo '<input type="text" class="regular-text" name="wcifd-premium-key" id="wcifd-premium-key" placeholder="' . esc_html__( 'Add your Premium Key', 'wp-importer-for-danea' ) . '" value="' . esc_attr( $key ) . '" />';
+		echo '<p class="description">' . wp_kses_post( __( 'Add your Premium Key and keep update your copy of <strong>Woocommerce Importer for Danea - Premium</strong>.', 'wp-importer-for-danea' ) ) . '</p>';
 		echo '<input type="hidden" name="done" value="1" />';
 		wp_nonce_field( 'wcifd-premium-key', 'wcifd-premium-key-nonce' );
-		echo '<input type="submit" class="button button-primary" value="' . esc_attr__( 'Save ', 'wcifd' ) . '" />';
+		echo '<input type="submit" class="button button-primary" value="' . esc_attr__( 'Save ', 'wp-importer-for-danea' ) . '" />';
 		echo '</form>';
 	?>
 	</div>
@@ -92,12 +92,12 @@ function wcifd_options() {
 	<div class="icon32 icon32-woocommerce-settings" id="icon-woocommerce"><br /></div>
 
 	<h2 id="wcifd-admin-menu" class="nav-tab-wrapper woo-nav-tab-wrapper">
-		<a href="#" data-link="wcifd-suppliers" class="nav-tab nav-tab-active" onclick="return false;"><?php esc_html_e( 'Suppliers', 'wcifd' ); ?></a>
-		<a href="#" data-link="wcifd-products" class="nav-tab" onclick="return false;"><?php esc_html_e( 'Products', 'wcifd' ); ?></a>
-		<a href="#" data-link="wcifd-clients" class="nav-tab" onclick="return false;"><?php esc_html_e( 'Clients', 'wcifd' ); ?></a>    
-		<a href="#" data-link="wcifd-orders" class="nav-tab" onclick="return false;"><?php esc_html_e( 'Orders', 'wcifd' ); ?></a>
+		<a href="#" data-link="wcifd-suppliers" class="nav-tab nav-tab-active" onclick="return false;"><?php esc_html_e( 'Suppliers', 'wp-importer-for-danea' ); ?></a>
+		<a href="#" data-link="wcifd-products" class="nav-tab" onclick="return false;"><?php esc_html_e( 'Products', 'wp-importer-for-danea' ); ?></a>
+		<a href="#" data-link="wcifd-clients" class="nav-tab" onclick="return false;"><?php esc_html_e( 'Clients', 'wp-importer-for-danea' ); ?></a>    
+		<a href="#" data-link="wcifd-orders" class="nav-tab" onclick="return false;"><?php esc_html_e( 'Orders', 'wp-importer-for-danea' ); ?></a>
 		<?php if ( function_exists( 'woocommerce_role_based_price' ) && get_option( 'wc_rbp_general' ) ) { ?>
-			<a href="#" data-link="wcifd-rbp" class="nav-tab" onclick="return false;"><?php esc_html_e( 'WooCommerce Role Based Price', 'wcifd' ); ?></a>
+			<a href="#" data-link="wcifd-rbp" class="nav-tab" onclick="return false;"><?php esc_html_e( 'WooCommerce Role Based Price', 'wp-importer-for-danea' ); ?></a>
 		<?php } ?>
 	</h2>
 

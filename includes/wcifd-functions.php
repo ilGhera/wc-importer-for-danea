@@ -466,11 +466,11 @@ function wcifd_update_transient_wc_attributes() {
 function wcifd_register_attributes() {
 
 	$attributes = array(
-		'size'             => __( 'Size', 'wcifd' ),
-		'color'            => __( 'Color', 'wcifd' ),
-		'producer'         => __( 'Producer', 'wcifd' ),
-		'supplier'         => __( 'Supplier', 'wcifd' ),
-		'sup-product-code' => __( 'Supplier product code', 'wcifd' ),
+		'size'             => __( 'Size', 'wp-importer-for-danea' ),
+		'color'            => __( 'Color', 'wp-importer-for-danea' ),
+		'producer'         => __( 'Producer', 'wp-importer-for-danea' ),
+		'supplier'         => __( 'Supplier', 'wp-importer-for-danea' ),
+		'sup-product-code' => __( 'Supplier product code', 'wp-importer-for-danea' ),
 	);
 
 	$additional_attributes = array();
@@ -491,7 +491,7 @@ function wcifd_register_attributes() {
 					$custom_field_name = isset( $_POST[ 'custom-field-name-' . $i ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'custom-field-name-' . $i ] ) ) : null;
 
 					/* Translators: the custom field number */
-					$name = $custom_field_name ? $custom_field_name : sprintf( __( 'Custom Field %d', 'wcifd' ), $i );
+					$name = $custom_field_name ? $custom_field_name : sprintf( __( 'Custom Field %d', 'wp-importer-for-danea' ), $i );
 
 					$additional_attributes[ 'customfield' . $i ] = $name;
 
@@ -774,7 +774,7 @@ function wcifd_products_update_request() {
 					}
 				} else {
 
-					esc_html_e( 'WCIFD ERROR | An error accourred while receiving data from Danea Easyfatt', 'wcifd' );
+					esc_html_e( 'WCIFD ERROR | An error accourred while receiving data from Danea Easyfatt', 'wp-importer-for-danea' );
 
 				}
 			} elseif ( 'images' === $mode && 1 === intval( $import_images ) ) {
@@ -807,7 +807,7 @@ function wcifd_products_update_request() {
 			}
 		} else {
 
-			echo wp_kses_post( __( 'WCIFD ERROR | It seems like the URL entered in Danea Easyfatt is not correct', 'wcifd' ) );
+			echo wp_kses_post( __( 'WCIFD ERROR | It seems like the URL entered in Danea Easyfatt is not correct', 'wp-importer-for-danea' ) );
 
 		}
 
@@ -826,7 +826,7 @@ add_action( 'init', 'wcifd_products_update_request' );
  */
 function wcifd_check_update() {
 
-	return __( 'Check for updates', 'wcifd' );
+	return __( 'Check for updates', 'wp-importer-for-danea' );
 
 }
 add_filter( 'puc_manual_check_link-wc-importer-for-danea-premium', 'wcifd_check_update' );
@@ -843,15 +843,15 @@ function wcifd_update_message( $message = '', $status = '' ) {
 
 	if ( 'no_update' === $status ) {
 
-		$message = __( '<strong>Woocommerce Importer for Danea - Premium</strong> is up to date.', 'wcifd' );
+		$message = __( '<strong>Woocommerce Importer for Danea - Premium</strong> is up to date.', 'wp-importer-for-danea' );
 
 	} elseif ( 'update_available' === $status ) {
 
-		$message = __( 'A new version of <strong>Woocommerce Importer for Danea - Premium</strong> is available.', 'wcifd' );
+		$message = __( 'A new version of <strong>Woocommerce Importer for Danea - Premium</strong> is available.', 'wp-importer-for-danea' );
 
 	} else {
 
-		$message = __( 'There was an error trying to update. Please try again later.', 'wcifd' );
+		$message = __( 'There was an error trying to update. Please try again later.', 'wp-importer-for-danea' );
 
 	}
 

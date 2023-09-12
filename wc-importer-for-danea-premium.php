@@ -10,7 +10,7 @@
  * Requires at least: 4.0
  * Tested up to: 6.2
  * WC tested up to: 7
- * Text Domain: wcifd
+ * Text Domain: wc-importer-for-danea
  *
  * @package wc-importer-for-danea-premium
  */
@@ -47,7 +47,7 @@ function load_wc_importer_for_danea_premium() {
 	define( 'WCIFD_VERSION', '1.6.0' );
 
 	/*Internationalization*/
-	load_plugin_textdomain( 'wcifd', false, basename( dirname( __FILE__ ) ) . '/languages' );
+	load_plugin_textdomain( 'wp-importer-for-danea', false, basename( dirname( __FILE__ ) ) . '/languages' );
 
 	/*Richiamo file necessari*/
 	require_once WCIFD_DIR . 'libraries/action-scheduler/action-scheduler.php';
