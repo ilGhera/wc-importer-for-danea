@@ -31,7 +31,7 @@ function load_wc_importer_for_danea_premium() {
 	}
 
 	/*Disattiva il plugin free se presente*/
-	if ( is_plugin_active( 'wc-importer-for-danea/wc-importer-for-danea.php' ) || function_exists( 'load_wc_importer_for_danea' ) ) {
+	if ( function_exists( 'load_wc_importer_for_danea' ) ) {
 		deactivate_plugins( 'wc-importer-for-danea/wc-importer-for-danea.php' );
 		remove_action( 'plugins_loaded', 'load_wc_importer_for_danea' );
 		wp_safe_redirect( admin_url( 'plugins.php?plugin_status=all&paged=1&s' ) );
