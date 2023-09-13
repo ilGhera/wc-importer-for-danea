@@ -520,7 +520,7 @@ function wcifd_register_attributes() {
 		$results = $wpdb->get_results( $query, ARRAY_A );
 
 		/* Inserimento record se non presente */
-		if ( null === $results ) {
+		if ( ! $results ) {
 
 			$changes[] = $key;
 
