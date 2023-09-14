@@ -98,3 +98,4 @@ function wcifd_catalog_update( $file ) {
 	}
 
 }
+

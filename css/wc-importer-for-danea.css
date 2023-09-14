@@ -210,3 +210,12 @@ ul.wcifd.subsubsub li a {
 input.custom-field-name {
 	width: 260px;
 }
+
+#wcifd-bar {
+  width: 10%;
+  height: 30px;
+  background-color: #04AA6D;
+  text-align: center; /* To center it horizontally (if you want) */
+  line-height: 30px; /* To center it vertically */
+  color: white;
+}

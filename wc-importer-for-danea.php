@@ -56,6 +56,7 @@ function load_wc_importer_for_danea_premium() {
 	require_once WCIFD_INCLUDES . 'wcifd-functions.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-temporary-data.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-product-meta-lookup.php';
+	require_once WCIFD_CLASSES . 'class-wcifd-progress-bar.php';
 	require_once WCIFD_INCLUDES . 'wcifd-products-images.php';
 	require_once WCIFD_INCLUDES . 'wcifd-single-product-image.php';
 	require_once WCIFD_INCLUDES . 'wcifd-orphan-images.php';

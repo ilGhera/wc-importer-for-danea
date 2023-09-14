@@ -198,4 +198,62 @@ jQuery(document).ready(function ($) {
 
     wcifdChosen();
 
+    var wcifdProgressBar = function() {
+
+		jQuery(function($){
+
+            var i    = 0;
+            var data = {
+                'action': 'get-scheduled-actions'
+            };
+
+            console.log( 'AJAXURL: ' + ajaxurl );
+            $.post(ajaxurl, data, function(response){
+
+                console.log( 'RESPONSE: ' + response );
+
+            })
+
+            $('.start-bar').on('click', function(){
+
+              console.log('test');
+
+              if (i == 0) {
+
+                i = 1;
+                var elem = $('#wcifd-bar');
+                var width = 10;
+                var id = setInterval(frame, 10);
+
+                  console.log( 'ID: ' + id );
+
+                function frame() {
+
+                  if (width >= 100) {
+
+                    clearInterval(id);
+                    i = 0;
+
+                  } else {
+
+                    width++;
+                    // elem.style.width = width + "%";
+                    $(elem).css( 'width', width + '%' );
+                    // elem.innerHTML = width + "%";
+                    $(elem).html( width + '%' );
+
+                  }
+
+                }
+
+              }
+
+            })
+
+        })
+
+    }
+
+    wcifdProgressBar();
+
 });
