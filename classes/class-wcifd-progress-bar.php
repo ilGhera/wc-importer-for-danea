@@ -1,6 +1,6 @@
 <?php
 /**
- * Mostra una progress bar al ricevimento dei prodotti 
+ * Progress bar products import 
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/classes
@@ -13,6 +13,12 @@
  */
 class WCIFD_Progress_Bar {
 
+
+    /**
+     * The constructor
+     *
+     * @return void 
+     */
     public function __construct() {
 
         add_action( 'admin_notices', array( $this, 'catalog_update_admin_notice' ) );
@@ -22,6 +28,12 @@ class WCIFD_Progress_Bar {
 
     }
 
+
+    /**
+     * Pass data to the JS script 
+     *
+     * @return void 
+     */
     public function data_to_script() {
 
         $options = array(
@@ -33,6 +45,11 @@ class WCIFD_Progress_Bar {
     }
 
 
+    /**
+     * Get the total number of actions scheduled
+     *
+     * @return void
+     */
     public function get_total_actions() {
 
         $transient = get_transient( 'wcifd-total-actions' );
@@ -44,6 +61,11 @@ class WCIFD_Progress_Bar {
     }
 
 
+    /**
+     * Get the actions pending
+     *
+     * @return void
+     */
     public function get_scheduled_actions() {
 
         $actions = as_get_scheduled_actions(
@@ -72,6 +94,11 @@ class WCIFD_Progress_Bar {
     }
 
 
+    /**
+     * The progress bar as admin notice
+     *
+     * @return void
+     */
     public function catalog_update_admin_notice() {
 
         $output      = '<div class="update-nag notice notice-warning ilghera-notice-warning catalog-update is-dismissible">';
