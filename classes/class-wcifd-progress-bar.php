@@ -16,22 +16,54 @@ class WCIFD_Progress_Bar {
     public function __construct() {
 
         add_action( 'admin_notices', array( $this, 'catalog_update_admin_notice' ) );
+        add_action( 'wp_ajax_get-total-actions', array( $this, 'get_total_actions' ) );
         add_action( 'wp_ajax_get-scheduled-actions', array( $this, 'get_scheduled_actions' ) );
+        add_action( 'admin_enqueue_scripts', array( $this, 'data_to_script' ) );
 
     }
+
+    public function data_to_script() {
+
+        $options = array(
+            'completedMessage' => __( 'Products import was completed!', 'wc-importer-for-danea' ),
+        );
+
+        wp_localize_script( 'wcifd-admin-nav', 'options', $options );
+
+    }
+
+
+    public function get_total_actions() {
+
+        $transient = get_transient( 'wcifd-total-actions' );
+
+        echo intval( $transient );
+
+        exit;
+
+    }
+
 
     public function get_scheduled_actions() {
 
         $actions = as_get_scheduled_actions(
             array(
-                'hook'  => 'wcifd_import_product_event',
-                'group' => 'wcifd-import-product',
-                'status' => 'ActionScheduler_Store::STATUS_PENDING',
+                'hook'     => 'wcifd_import_product_event',
+                'group'    => 'wcifd-import-product',
+                'status'   => ActionScheduler_Store::STATUS_PENDING,
+                'per_page' => -1,
             ),
             'ids'
         );
 
-        error_log( 'ACTIONS: ' . print_r( $actions, true ) );
+        if ( 0 === count( $actions ) ) {
+
+            error_log( 'DELETE TRANSIENT' );
+            delete_transient( 'wcifd-total-actions' );
+
+        }
+
+        /* error_log( 'ACTIONS: ' . print_r( $actions, true ) ); */
 
         echo intval( count( $actions ) );
 
@@ -39,16 +71,21 @@ class WCIFD_Progress_Bar {
 
     }
 
+
     public function catalog_update_admin_notice() {
 
-        /* $output      = '<div class="update-nag notice notice-warning ilghera-notice-warning is-dismissible">'; */
-        /* $output     .= '<div class="ilghera-notice__content">'; */
-        $output      = '<div id="wcifd-progress">';
-        $output     .= '<div id="wcifd-bar">10%</div>';
-        /* $output     .= '</div>'; */
-        $output     .= '<a href="#" class="start-bar">Start</a>';
+        $output      = '<div class="update-nag notice notice-warning ilghera-notice-warning catalog-update is-dismissible">';
+            $output     .= '<div class="ilghera-notice__content">';
+                $output      .= '<div class="ilghera-notice__message">';
+                $output      .= '<b>' . esc_html__( 'WC Importer for Danea', 'wc-importer-for-danea' ) . '</b> - '; 
+                $output      .= '<span class="wcifd-progress-bar-text">' . esc_html( 'Products import is running.', 'wc-importer-for-danea' ) . '</span>'; 
+                $output      .= '</div>';
+                $output      .= '<div id="wcifd-progress-bar">';
+                    $output     .= '<div id="wcifd-progress"></div>';
+                    $output     .= '<span class="precentage">0%</span>';
+                $output     .= '</div>';
+            $output     .= '</div>';
         $output     .= '</div>';
-        /* $output     .= '</div>'; */
 
         echo wp_kses_post( $output );
 
