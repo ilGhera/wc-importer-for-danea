@@ -267,6 +267,7 @@ jQuery(document).ready(function ($) {
 
                             } else {
 
+                                run = 1;
                                 clearInterval( updateData );
                                 currentWidth = 100;
 
