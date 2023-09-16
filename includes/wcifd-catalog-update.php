@@ -40,6 +40,10 @@ function wcifd_catalog_update( $file ) {
 	/*Verifica che si tratti di un aggiornamento o dell'intero catalogo prodotti*/
 	$products = $results->Products ? $results->Products : $results->UpdatedProducts;
 
+    error_log( 'COUNT: ' . count( $products->children() ) );
+    error_log( 'SET TRANSIENT' );
+    set_transient( 'wcifd-total-actions', count( $products->children() ), DAY_IN_SECONDS );
+
 	foreach ( $products->children() as $product ) {
 
 		/*Gestione iva*/
