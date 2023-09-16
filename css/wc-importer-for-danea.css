@@ -235,8 +235,6 @@ input.custom-field-name {
   height: 10px;
   border-radius: 5px;
   background-color: #04AA6D;
-  /* text-align: center; /1* To center it horizontally (if you want) *1/ */
-  /* line-height: 30px; /1* To center it vertically *1/ */
   background-image: repeating-linear-gradient(
     to right,
     #4cd038,
