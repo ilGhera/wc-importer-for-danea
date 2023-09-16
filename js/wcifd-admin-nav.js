@@ -198,55 +198,104 @@ jQuery(document).ready(function ($) {
 
     wcifdChosen();
 
+    /**
+     *
+     */
+    var getScheduledActions = function( startProcess = null ) {
+
+        var data = {
+            'action': 'get-scheduled-actions',
+            'start': startProcess
+        };
+
+        $.post(ajaxurl, data, function(response){
+
+            console.log( 'RESPONSE: ' + response );
+
+            return response;
+
+        })
+
+    }
+
+
+    /**
+     *
+     */
     var wcifdProgressBar = function() {
 
 		jQuery(function($){
 
-            var i    = 0;
+            var i = 0;
             var data = {
-                'action': 'get-scheduled-actions'
+                'action': 'get-total-actions',
             };
 
-            console.log( 'AJAXURL: ' + ajaxurl );
             $.post(ajaxurl, data, function(response){
 
                 console.log( 'RESPONSE: ' + response );
 
-            })
+                var totActions = response;
+                console.log( 'TOT. ACTIONS: ' + totActions );
 
-            $('.start-bar').on('click', function(){
+                if ( totActions > 0 ) {
 
-              console.log('test');
+                    console.log('TRASFERIMENTO IN CORSO!');
 
-              if (i == 0) {
+                    $('.ilghera-notice-warning.catalog-update').show('slow');
 
-                i = 1;
-                var elem = $('#wcifd-bar');
-                var width = 10;
-                var id = setInterval(frame, 10);
+                    var run = 0;
+                    var width = 0;
+                    var data2, currentWidth, diff;
+                    var updateData = setInterval( function(){
 
-                  console.log( 'ID: ' + id );
+                        data2 = {
+                            'action': 'get-scheduled-actions'
+                        }
 
-                function frame() {
+                        $.post(ajaxurl, data2, function(resp){
 
-                  if (width >= 100) {
+                            if ( resp == totActions ) {
+                                run = 1;
+                            }
 
-                    clearInterval(id);
-                    i = 0;
+                            if ( resp > 0 ) {
 
-                  } else {
+                                diff         = totActions - resp;
+                                currentWidth = ( diff / totActions ) * 100;
+                                // var id = setInterval(frame, 30);
 
-                    width++;
-                    // elem.style.width = width + "%";
-                    $(elem).css( 'width', width + '%' );
-                    // elem.innerHTML = width + "%";
-                    $(elem).html( width + '%' );
+                            } else {
 
-                  }
+                                clearInterval( updateData );
+                                currentWidth = 100;
+
+                            }
+
+                            console.log( 'RESP', resp );
+                            console.log( 'TOT ACTIONS', totActions );
+                            console.log( 'CURRENT WIDTH', currentWidth );
+
+                            if ( 1 == run ) {
+
+                                $('#wcifd-progress').css( 'width', currentWidth + '%' );
+                                $('#wcifd-progress-bar span').html( Math.ceil( currentWidth ) + '%' );
+
+                                if ( resp == 0) {
+
+                                    $('.wcifd-progress-bar-text').html( options.completedMessage );
+
+                                    run = 0;
+
+                                }
+
+                            }
+
+                        })
+
+                    }, 500 );
 
                 }
-
-              }
 
             })
 
