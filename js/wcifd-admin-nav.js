@@ -198,29 +198,11 @@ jQuery(document).ready(function ($) {
 
     wcifdChosen();
 
-    /**
-     *
-     */
-    var getScheduledActions = function( startProcess = null ) {
-
-        var data = {
-            'action': 'get-scheduled-actions',
-            'start': startProcess
-        };
-
-        $.post(ajaxurl, data, function(response){
-
-            console.log( 'RESPONSE: ' + response );
-
-            return response;
-
-        })
-
-    }
-
 
     /**
+     * The progress bar
      *
+     * @return void
      */
     var wcifdProgressBar = function() {
 
