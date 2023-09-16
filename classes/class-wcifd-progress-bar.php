@@ -80,12 +80,9 @@ class WCIFD_Progress_Bar {
 
         if ( 0 === count( $actions ) ) {
 
-            error_log( 'DELETE TRANSIENT' );
             delete_transient( 'wcifd-total-actions' );
 
         }
-
-        /* error_log( 'ACTIONS: ' . print_r( $actions, true ) ); */
 
         echo intval( count( $actions ) );
 
