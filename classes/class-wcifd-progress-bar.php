@@ -24,23 +24,31 @@ class WCIFD_Progress_Bar {
         add_action( 'admin_notices', array( $this, 'catalog_update_admin_notice' ) );
         add_action( 'wp_ajax_get-total-actions', array( $this, 'get_total_actions' ) );
         add_action( 'wp_ajax_get-scheduled-actions', array( $this, 'get_scheduled_actions' ) );
-        add_action( 'admin_enqueue_scripts', array( $this, 'data_to_script' ) );
+        add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
     }
 
 
     /**
-     * Pass data to the JS script 
+     * Enqueue scripts
      *
      * @return void 
      */
-    public function data_to_script() {
+    public function enqueue_scripts() {
 
-        $options = array(
-            'completedMessage' => __( 'Products import was completed!', 'wc-importer-for-danea' ),
-        );
+        $screen = get_current_screen();
 
-        wp_localize_script( 'wcifd-admin-nav', 'options', $options );
+        if ( 'woocommerce_page_wc-importer-for-danea' === $screen->id ) {
+
+            wp_enqueue_script( 'wcifd-progress-bar', WCIFD_URI . 'js/wcifd-progress-bar.js', array( 'jquery' ), WCIFD_VERSION, true );
+
+            $options = array(
+                'completedMessage' => __( 'Products import was completed!', 'wc-importer-for-danea' ),
+            );
+
+            wp_localize_script( 'wcifd-progress-bar', 'options', $options );
+
+        }
 
     }
 
@@ -98,20 +106,26 @@ class WCIFD_Progress_Bar {
      */
     public function catalog_update_admin_notice() {
 
-        $output      = '<div class="update-nag notice notice-warning ilghera-notice-warning catalog-update is-dismissible">';
-            $output     .= '<div class="ilghera-notice__content">';
-                $output      .= '<div class="ilghera-notice__message">';
-                $output      .= '<b>' . esc_html__( 'WC Importer for Danea', 'wc-importer-for-danea' ) . '</b> - '; 
-                $output      .= '<span class="wcifd-progress-bar-text">' . esc_html( 'Products import is running.', 'wc-importer-for-danea' ) . '</span>'; 
-                $output      .= '</div>';
-                $output      .= '<div id="wcifd-progress-bar">';
-                    $output     .= '<div id="wcifd-progress"></div>';
-                    $output     .= '<span class="precentage">0%</span>';
+        $screen = get_current_screen();
+
+        if ( 'woocommerce_page_wc-importer-for-danea' === $screen->id ) {
+
+            $output      = '<div class="update-nag notice notice-warning ilghera-notice-warning catalog-update is-dismissible">';
+                $output     .= '<div class="ilghera-notice__content">';
+                    $output      .= '<div class="ilghera-notice__message">';
+                    $output      .= '<b>' . esc_html__( 'WC Importer for Danea', 'wc-importer-for-danea' ) . '</b> - '; 
+                    $output      .= '<span class="wcifd-progress-bar-text">' . esc_html( 'Products import is running.', 'wc-importer-for-danea' ) . '</span>'; 
+                    $output      .= '</div>';
+                    $output      .= '<div id="wcifd-progress-bar">';
+                        $output     .= '<div id="wcifd-progress"></div>';
+                        $output     .= '<span class="precentage">0%</span>';
+                    $output     .= '</div>';
                 $output     .= '</div>';
             $output     .= '</div>';
-        $output     .= '</div>';
 
-        echo wp_kses_post( $output );
+            echo wp_kses_post( $output );
+
+        }
 
     }
 }
