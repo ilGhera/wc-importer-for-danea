@@ -114,7 +114,7 @@ class WCIFD_Progress_Bar {
                 $output     .= '<div class="ilghera-notice__content">';
                     $output      .= '<div class="ilghera-notice__message">';
                     $output      .= '<b>' . esc_html__( 'WC Importer for Danea', 'wc-importer-for-danea' ) . '</b> - '; 
-                    $output      .= '<span class="wcifd-progress-bar-text">' . esc_html( 'Products import is running.', 'wc-importer-for-danea' ) . '</span>'; 
+                    $output      .= '<span class="wcifd-progress-bar-text">' . esc_html__( 'Products import is running.', 'wc-importer-for-danea' ) . '</span>'; 
                     $output      .= '</div>';
                     $output      .= '<div id="wcifd-progress-bar">';
                         $output     .= '<div id="wcifd-progress"></div>';
