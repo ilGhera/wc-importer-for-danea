@@ -4,7 +4,7 @@
  * @author ilGhera
  * @package wc-importer-for-danea-premium/js
  *
- * @since 1.6.0
+ * @since 1.6.1
  */
 jQuery(document).ready(function ($) {
 
