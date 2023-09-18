@@ -4,7 +4,8 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
- * @since 1.3.0
+ *
+ * @since 1.3.1
  */
 
 /**
@@ -74,7 +75,7 @@ function wcifd_options() {
 
 	/*Controllo se l'utente ha i diritti d'accessso necessari*/
 	if ( ! current_user_can( 'manage_woocommerce' ) ) {
-		wp_die( esc_html__( 'It seems like you don\'t have permission to see this page', 'wcifd' ) );
+		wp_die( esc_html__( 'It seems like you don\'t have permission to see this page', 'wc-importer-for-danea' ) );
 	}
 
 	/*Inizio template di pagina*/
@@ -85,7 +86,7 @@ function wcifd_options() {
 	if ( ! class_exists( 'WooCommerce' ) ) { ?>
 
 		<div id="message" class="error"><p><strong>
-			<?php esc_html_e( 'ATTENTION! It seems like Woocommerce is not installed.', 'wcifd' ); ?>
+			<?php esc_html_e( 'ATTENTION! It seems like Woocommerce is not installed.', 'wc-importer-for-danea' ); ?>
 		</strong></p></div>
 
 		<?php
@@ -96,19 +97,19 @@ function wcifd_options() {
 	<div id="wcifd-generale">
 		<?php
 		/*Header*/
-		echo '<h1 class="wcifd main">' . esc_html__( 'Woocommmerce Importer for Danea', 'wcifd' ) . '</h1>';
+		echo '<h1 class="wcifd main">' . esc_html__( 'Woocommmerce Importer for Danea', 'wc-importer-for-danea' ) . '</h1>';
 		?>
 	</div>
 
 	<div class="icon32 icon32-woocommerce-settings" id="icon-woocommerce"><br /></div>
 
 	<h2 id="wcifd-admin-menu" class="nav-tab-wrapper woo-nav-tab-wrapper">
-		<a href="#" data-link="wcifd-suppliers" class="nav-tab nav-tab-active" onclick="return false;"><?php esc_html_e( 'Suppliers', 'wcifd' ); ?></a>
-		<a href="#" data-link="wcifd-products" class="nav-tab" onclick="return false;"><?php esc_html_e( 'Products', 'wcifd' ); ?></a>
-		<a href="#" data-link="wcifd-clients" class="nav-tab" onclick="return false;"><?php esc_html_e( 'Clients', 'wcifd' ); ?></a>    
-		<a href="#" data-link="wcifd-orders" class="nav-tab" onclick="return false;"><?php esc_html_e( 'Orders', 'wcifd' ); ?></a>
+		<a href="#" data-link="wcifd-suppliers" class="nav-tab nav-tab-active" onclick="return false;"><?php esc_html_e( 'Suppliers', 'wc-importer-for-danea' ); ?></a>
+		<a href="#" data-link="wcifd-products" class="nav-tab" onclick="return false;"><?php esc_html_e( 'Products', 'wc-importer-for-danea' ); ?></a>
+		<a href="#" data-link="wcifd-clients" class="nav-tab" onclick="return false;"><?php esc_html_e( 'Clients', 'wc-importer-for-danea' ); ?></a>    
+		<a href="#" data-link="wcifd-orders" class="nav-tab" onclick="return false;"><?php esc_html_e( 'Orders', 'wc-importer-for-danea' ); ?></a>
 		<?php if ( function_exists( 'woocommerce_role_based_price' ) && get_option( 'wc_rbp_general' ) ) { ?>
-			<a href="#" data-link="wcifd-rbp" class="nav-tab" onclick="return false;"><?php esc_html_e( 'WooCommerce Role Based Price', 'wcifd' ); ?></a>
+			<a href="#" data-link="wcifd-rbp" class="nav-tab" onclick="return false;"><?php esc_html_e( 'WooCommerce Role Based Price', 'wc-importer-for-danea' ); ?></a>
 		<?php } ?>
 	</h2>
 

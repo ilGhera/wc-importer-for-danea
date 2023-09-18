@@ -5,7 +5,7 @@
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
  *
- * @since 1.3.0
+ * @since 1.3.1
  */
 
 ?>
@@ -40,16 +40,16 @@
 
 						}
 						?>
-							<th scope="row"><?php esc_html_e( $price_label, 'wcifd' ) . ' ' . esc_html_e( ucfirst( $urole ), 'woocommerce' ); ?></th>
+							<th scope="row"><?php esc_html_e( $price_label, 'wc-importer-for-danea' ) . ' ' . esc_html_e( ucfirst( $urole ), 'woocommerce' ); ?></th>
 							<td>
 								<select name="<?php echo esc_attr( $field_name ); ?>" class="wcifd wcifd-select">
 									<?php
 									for ( $n = 1; $n <= 9; $n++ ) {
-										echo '<option value="' . esc_attr( $n ) . '">' . esc_html__( 'Price list ', 'wcifd' ) . intval( $n ) . '</option>';
+										echo '<option value="' . esc_attr( $n ) . '">' . esc_html__( 'Price list ', 'wc-importer-for-danea' ) . intval( $n ) . '</option>';
 									}
 									?>
 								</select>
-								<p class="description"><?php esc_html_e( 'The Danea price list to use', 'wcifd' ); ?></p>
+								<p class="description"><?php esc_html_e( 'The Danea price list to use', 'wc-importer-for-danea' ); ?></p>
 							</td>
 						</tr>
 						<?php
@@ -63,5 +63,5 @@
 			<td><?php go_premium(); ?></td>
 		</tr>
 	</table>
-	<input type="submit" class="button-primary" style="margin-top: 1.5rem;" value="<?php esc_html_e( 'Save Changes', 'wcifd' ); ?>" disabled>
+	<input type="submit" class="button-primary" style="margin-top: 1.5rem;" value="<?php esc_html_e( 'Save Changes', 'wc-importer-for-danea' ); ?>" disabled>
 </form>

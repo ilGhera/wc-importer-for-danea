@@ -1,9 +1,10 @@
 /**
  * Script menu di navigazione
+ *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/js
  *
- * @since 1.3.0
+ * @since 1.3.1
  */
 jQuery(document).ready(function ($) {
 

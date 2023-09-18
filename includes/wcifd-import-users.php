@@ -5,7 +5,7 @@
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
  *
- * @since 1.3.0
+ * @since 1.3.1
  */
 
 /**
@@ -165,10 +165,10 @@ function wcifd_users( $type ) {
 			$output .= '<strong>Woocommerce Importer for Danea - Premium</strong><br>';
 
 			/* Translators: 1 the users imported, 2 the total rows */
-			$output .= sprintf( __( 'Imported %1$d of %2$d contacts<br>', 'wcifd' ), $i, ( $row - 1 ) );
+			$output .= sprintf( __( 'Imported %1$d of %2$d contacts<br>', 'wc-importer-for-danea' ), $i, ( $row - 1 ) );
 
 			/* Translators: 1 the users updated, 2 the total rows */
-			$output .= sprintf( __( 'Updated %1$d of %2$d contacts', 'wcifd' ), $n, ( $row - 1 ) );
+			$output .= sprintf( __( 'Updated %1$d of %2$d contacts', 'wc-importer-for-danea' ), $n, ( $row - 1 ) );
 
 			$output .= '</p></div>';
 

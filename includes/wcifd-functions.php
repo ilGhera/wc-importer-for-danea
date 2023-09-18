@@ -4,7 +4,8 @@
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
- * @since 1.3.0
+ *
+ * @since 1.3.1
  */
 
 /*No accesso diretto*/
@@ -465,11 +466,11 @@ function wcifd_update_transient_wc_attributes() {
 function wcifd_register_attributes() {
 
 	$attributes = array(
-		'size'             => __( 'Size', 'wcifd' ),
-		'color'            => __( 'Color', 'wcifd' ),
-		'producer'         => __( 'Producer', 'wcifd' ),
-		'supplier'         => __( 'Supplier', 'wcifd' ),
-		'sup-product-code' => __( 'Supplier product code', 'wcifd' ),
+		'size'             => __( 'Size', 'wc-importer-for-danea' ),
+		'color'            => __( 'Color', 'wc-importer-for-danea' ),
+		'producer'         => __( 'Producer', 'wc-importer-for-danea' ),
+		'supplier'         => __( 'Supplier', 'wc-importer-for-danea' ),
+		'sup-product-code' => __( 'Supplier product code', 'wc-importer-for-danea' ),
 	);
 
 	$additional_attributes = array();
@@ -488,7 +489,7 @@ function wcifd_register_attributes() {
 				if ( isset( $custom_fields[ $i ]['import'] ) && 'attribute' === $custom_fields[ $i ]['import'] ) {
 
 					/* Translators: the custom field number */
-					$name = isset( $_POST[ 'custom-field-name-' . $i ] ) && $_POST[ 'custom-field-name-' . $i ] ? $_POST[ 'custom-field-name-' . $i ] : sprintf( __( 'Custom Field %d', 'wcifd' ), $i );
+					$name = isset( $_POST[ 'custom-field-name-' . $i ] ) && $_POST[ 'custom-field-name-' . $i ] ? $_POST[ 'custom-field-name-' . $i ] : sprintf( __( 'Custom Field %d', 'wc-importer-for-danea' ), $i );
 
 					$additional_attributes[ 'customfield' . $i ] = $name;
 
@@ -517,7 +518,7 @@ function wcifd_register_attributes() {
 		$results = $wpdb->get_results( $query, ARRAY_A );
 
 		/* Inserimento record se non presente */
-		if ( null === $results ) {
+		if ( ! $results ) {
 
 			$changes[] = $key;
 
@@ -733,85 +734,4 @@ function wcifd_get_id_by_img( $img_name ) {
 
 	return $results[0]['post_id'];
 }
-
-
-/**
- * Ricezione chiamata http post proveniente da Danea Easyfatt
- */
-function wcifd_products_update_request() {
-
-	$premium_key   = strtolower( get_option( 'wcifd-premium-key' ) );
-	$url_code      = strtolower( get_option( 'wcifd-url-code' ) );
-	$import_images = get_option( 'wcifd-import-images' );
-	$key           = isset( $_GET['key'] ) ? sanitize_text_field( wp_unslash( $_GET['key'] ) ) : '';
-	$code          = isset( $_GET['code'] ) ? sanitize_text_field( wp_unslash( $_GET['code'] ) ) : '';
-	$mode          = isset( $_GET['mode'] ) ? sanitize_text_field( wp_unslash( $_GET['mode'] ) ) : '';
-
-	if ( $key && $code ) {
-
-		if ( $key === $premium_key && $code === $url_code ) {
-
-			$images_send_url        = sprintf( '%1$s?key=%2$s&code=%3$s&mode=images', home_url(), $key, $code );
-			$images_send_finish_url = sprintf( '%s-send-finish', $images_send_url );
-
-			/*Importazione prodotti*/
-			if ( 'data' === $mode ) {
-
-				if ( isset( $_FILES['file']['tmp_name'] ) && move_uploaded_file( sanitize_text_field( wp_unslash( $_FILES['file']['tmp_name'] ) ), 'wcifd-prodotti.xml' ) ) {
-
-					wcifd_catalog_update( 'wcifd-prodotti.xml' );
-
-					echo "OK\n";
-
-					if ( 1 === intval( $import_images ) ) {
-
-						printf( "ImageSendURL=%s\n", esc_url_raw( $images_send_url ) );
-						printf( "ImageSendFinishURL=%s\n", esc_url_raw( $images_send_finish_url ) );
-
-					}
-				} else {
-
-					esc_html_e( 'WCIFD ERROR | An error accourred while receiving data from Danea Easyfatt', 'wcifd' );
-
-				}
-			} elseif ( 'images' === $mode && 1 === intval( $import_images ) ) {
-
-				/*Aggiornamento immagini*/
-				wcifd_products_images();
-
-			} elseif ( 'images-send-finish' === $mode && 1 === intval( $import_images ) ) {
-
-				echo "OK\n";
-
-				/*Gestione delle immaigni orfane a ricezione immagini completata*/
-				$next = as_next_scheduled_action(
-					'wcifd_orphan_images_event',
-					array(),
-					'wcifd-orphan-images'
-				);
-
-				if ( ! $next ) {
-
-					as_schedule_recurring_action(
-						time(),
-						60,
-						'wcifd_orphan_images_event',
-						array(),
-						'wcifd-orphan-images'
-					);
-
-				}
-			}
-		} else {
-
-			esc_html_e( 'WCIFD ERROR | It seems like the URL entered in Danea Easyfatt is not correct', 'wcifd' );
-
-		}
-
-		exit;
-
-	}
-
-}
-add_action( 'init', 'wcifd_products_update_request' );
 
