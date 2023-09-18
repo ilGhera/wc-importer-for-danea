@@ -24,10 +24,8 @@ jQuery(document).ready(function ($) {
 
             $.post(ajaxurl, data, function(response){
 
-                console.log( 'RESPONSE: ' + response );
-
                 var totActions = response;
-                console.log( 'TOT. ACTIONS: ' + totActions );
+                console.log( 'TOT. PRODOTTI', totActions );
 
                 if ( totActions > 0 ) {
 
@@ -64,9 +62,9 @@ jQuery(document).ready(function ($) {
 
                             }
 
-                            console.log( 'RESP', resp );
-                            console.log( 'TOT ACTIONS', totActions );
-                            console.log( 'CURRENT WIDTH', currentWidth );
+                            console.log( 'PRODOTTI RIMANENTI', resp );
+                            console.log( 'TOT. PRODOTTI', totActions );
+                            console.log( 'PERC. COMPLETAMENTO', currentWidth );
 
                             if ( 1 == run ) {
 
