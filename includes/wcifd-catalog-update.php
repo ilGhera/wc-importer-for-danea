@@ -31,7 +31,7 @@ function wcifd_catalog_update( $file ) {
 	$results = simplexml_load_file( $file );
 
 	/*Cancellazione prodotti esistenti*/
-	if ( $replace_products && 'full' === $results->attributes()->Mode[0] ) {
+	if ( $replace_products && 'full' === strval( $results->attributes()->Mode[0] ) ) {
 
 		wcifd_delete_all_products();
 
