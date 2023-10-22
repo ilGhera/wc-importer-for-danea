@@ -366,50 +366,64 @@ function wcifd_import_single_product( $hash ) {
 		/*Non aggiornare il prodotto se nel cestino*/
 		$status = 1 === intval( $deleted_products ) ? 'trash' : '';
 
-		if ( get_post_status( $id ) !== $status ) {
+        $wc_product = wc_get_product( $id );
+
+		if ( $wc_product->get_status() !== $status ) {
 
 			/*Verifico se i backorders sono attivati*/
 			if ( 'outofstock' === $stock_status ) {
-				$backorders = get_post_meta( $id, '_backorders', true );
-				if ( 'yes' === $backorders || 'notify' === $backorders ) {
+				if ( in_array( $wc_product->get_backorders(), array( 'yes', 'notify' ) ) ) {
 					$stock_status = 'onbackorder';
 				}
 			}
 
-			$args = array(
-				'ID'          => $id,
-				'post_status' => get_post_status( $id ),
-				'post_author' => $author,
-				'post_type'   => $type,
-				'meta_input'  => array(
-					'_sku'           => $sku,
-					'_tax_status'    => $tax_status,
-					'_tax_class'     => $tax_class,
-					'_stock'         => $stock,
-					'_manage_stock'  => $manage_stock,
-					'_stock_status'  => $stock_status,
-					'_visibility'    => 'visible',
-					'_regular_price' => $regular_price,
-					'_price'         => $regular_price,
-					'_sell_price'    => $regular_price,
-					'_width'         => $width,
-					'_height'        => $height,
-					'_length'        => $length,
-					'_weight'        => $weight,
-				),
-
-			);
+            $wc_product->set_sku( $sku );
+            $wc_product->set_tax_status( $tax_status );
+            $wc_product->set_tax_class( $tax_class );
+            $wc_product->set_stock_quantity( $stock );
+            $wc_product->set_manage_stock( $manage_stock );
+            $wc_product->set_stock_status( $stock_status );
+            $wc_product->set_catalog_visibility( 'visible' );
+            $wc_product->set_regular_price( $regular_price );
+            $wc_product->set_price( $regular_price );
+            $wc_product->set_width( $width );
+            $wc_product->set_height( $height );
+            $wc_product->set_length( $length );
+            $wc_product->set_weight( $weight );
 
 			if ( $sale_price ) {
-				$args['meta_input']['_sale_price'] = $sale_price;
-				$args['meta_input']['_sell_price'] = $sale_price;
-				$args['meta_input']['_price']      = $sale_price;
+                $wc_product->set_sale_price( $sale_price );
+                $wc_product->set_price( $sale_price );
+				/* $args['_sell_price'] = $sale_price; */
 			} else {
-				$args['meta_input']['_sale_price'] = '';
+                $wc_product->set_sale_price( '' );
+			}
+
+			/*Nome prodotto*/
+			if ( ! get_option( 'wcifd-exclude-title' ) ) {
+                $wc_product->set_name( $title );
+			}
+
+			/*URL prodotto*/
+			if ( ! get_option( 'wcifd-exclude-url' ) ) {
+				$wc_product->set_slug( sanitize_title_with_dashes( wp_strip_all_tags( $title ) ) );
+			}
+
+			/*Descrizione prodotto*/
+			if ( ! get_option( 'wcifd-exclude-description' ) ) {
+				$wc_product->set_description( $description );
+				$wc_product->set_short_description( $short_description );
+			}
+
+			if ( $variants ) {
+				wc_delete_product_transients( $id );
+				wp_cache_delete( 'alloptions', 'options' );
 			}
 
 			/*WooCommerce Role Based Price*/
 			if ( is_array( $wc_rbp ) && ! empty( $wc_rbp ) ) {
+
+                $role_based_price = array();
 
 				foreach ( $wc_rbp as $role => $price_types ) {
 
@@ -419,11 +433,16 @@ function wcifd_import_single_product( $hash ) {
 
 						if ( $wc_rbp_price ) {
 
-							$args['meta_input']['_enable_role_based_price']           = 1;
-							$args['meta_input']['_role_based_price'][ $role ][ $key ] = $wc_rbp_price;
+							update_post_meta( $id, '_enable_role_based_price', 1 );
+
+                            /* Add the single role price to the array */
+                            $role_based_price[ $role ][ $key ] = $wc_rbp_price;
 
 						}
 					}
+
+                    /* Update role based price */
+                    update_post_meta( $id, '_role_based_price', $role_based_price );
 
 					if ( $variants && function_exists( 'wc_rbp_delete_variation_data' ) ) {
 
@@ -433,52 +452,18 @@ function wcifd_import_single_product( $hash ) {
 				}
 			}
 
-			/*Nome prodotto*/
-			if ( ! get_option( 'wcifd-exclude-title' ) ) {
-				$args['post_title'] = $title;
-			}
-
-			/*URL prodotto*/
-			if ( ! get_option( 'wcifd-exclude-url' ) ) {
-				$args['post_name'] = sanitize_title_with_dashes( wp_strip_all_tags( $title ) );
-			}
-
-			/*Descrizione prodotto*/
-			if ( ! get_option( 'wcifd-exclude-description' ) ) {
-				$args['post_content'] = $description;
-				$args['post_excerpt'] = $short_description;
-			}
-
-			if ( $variants ) {
-				wc_delete_product_transients( $id );
-				wp_cache_delete( 'alloptions', 'options' );
-			}
+			/* $product_id = wp_update_post( $args, true ); */
 
 			/*Aggiornamento prodotto*/
-			$product_id = wp_update_post( $args, true );
+            $product_id = $wc_product->save();
 
 			if ( is_wp_error( $product_id ) ) {
 
 				error_log( 'WCIFD ERROR | Aggiornamento prodotto | Sku: ' . $sku . ' | ' . print_r( $product_id->get_error_message(), true ) );
 
 				return;
+            }
 
-			} else {
-
-				/*Aggiornamento meta lookup table*/
-				$lookup_data = array(
-					'product_id'     => $product_id,
-					'sku'            => $sku,
-					'min_price'      => $args['meta_input']['_price'],
-					'max_price'      => $args['meta_input']['_price'],
-					'onsale'         => $on_sale,
-					'stock_quantity' => $stock,
-					'stock_status'   => $stock_status,
-				);
-
-				new WCIFD_Product_Meta_Lookup( $lookup_data, 'update' );
-
-			}
 		} else {
 
 			return;
