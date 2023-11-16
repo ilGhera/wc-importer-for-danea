@@ -44,6 +44,7 @@ function wcifd_import_single_product( $hash ) {
 	$get_tax            = isset( $product['Vat'] ) ? $product['Vat'] : '';
 	$tax                = ( is_array( $get_tax ) && isset( $get_tax[0] ) ) ? $get_tax[0] : $get_tax;
 	$stock              = isset( $product['AvailableQty'] ) ? $product['AvailableQty'] : '';
+	$um                 = isset( $product['Um'] ) ? $product['Um'] : '';
 	$size_um            = isset( $product['SizeUm'] ) ? $product['SizeUm'] : '';
 	$weight_um          = isset( $product['WeightUm'] ) ? $product['WeightUm'] : '';
 	$image_file_name    = isset( $product['ImageFileName'] ) ? sanitize_title( $product['ImageFileName'] ) : '';
@@ -228,6 +229,7 @@ function wcifd_import_single_product( $hash ) {
 				'_height'        => $height,
 				'_length'        => $length,
 				'_weight'        => $weight,
+                '_wcifd-um'      => $um,
 
 			),
 		);
@@ -390,6 +392,7 @@ function wcifd_import_single_product( $hash ) {
             $wc_product->set_height( $height );
             $wc_product->set_length( $length );
             $wc_product->set_weight( $weight );
+            $wc_product->update_meta_data( '_wcifd-um', $um );
 
 			if ( $sale_price ) {
                 $wc_product->set_sale_price( $sale_price );
