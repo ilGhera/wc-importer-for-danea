@@ -51,6 +51,7 @@ Release Date: 16 January 2024
 
 * Enhancement: Auto deletion of orphan SKUs 
 * Enhancement: Management of the single product unit of measurement 
+* Update: Plugin Update Checker 
 * Bug fix: Creation of dynamic property deprecated in PHP 8.2
 
 
