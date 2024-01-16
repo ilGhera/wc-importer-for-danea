@@ -14,6 +14,105 @@
 class WCIFD_Product_Meta_Lookup {
 
 	/**
+	 * The constant variable defined in the constructor 
+	 *
+	 * @var object
+	 */
+	public $wpdb;
+
+	/**
+	 * The WC product data 
+	 *
+	 * @var array
+	 */
+	public $data;
+
+    /**
+     * The WC product ID
+     *
+     * @var int
+     */
+    public $product_id;
+
+    /**
+     * The WC product SKU
+     *
+     * @var string
+     */
+	public $sku;
+
+    /**
+     * Define if the WC product is virtual or not
+     *
+     * @var bool
+     */
+	public $virtual;
+
+    /**
+     * Define if the WC product is downloadable or not
+     *
+     * @var bool
+     */
+	public $downloadable;
+
+    /**
+     * The max product price
+     *
+     * @var float
+     */
+	public $max_price;
+
+    /**
+     * The min product price
+     *
+     * @var float
+     */
+	public $min_price;
+
+    /**
+     * Define if the WC product is on sale or not
+     *
+     * @var bool
+     */
+	public $onsale;
+
+    /**
+     * The stock quantity
+     *
+     * @var int
+     */
+	public $stock_quantity;
+
+    /**
+     * The stock status
+     *
+     * @param string
+     */
+	public $stock_status;
+
+    /**
+     * The rating count
+     *
+     * @var int
+     */
+	public $rating_count;
+
+    /**
+     * The rating average
+     *
+     * @var float
+     */
+	public $average_rating;
+
+    /**
+     * The total sales
+     *
+     * @var int
+     */
+	public $total_sales;
+
+
+	/**
 	 * The constructor
 	 *
 	 * @param  array  $args i dati del prodotto.
