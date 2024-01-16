@@ -203,21 +203,75 @@ function wcifd_payment_gateway( $method ) {
 
 
 /**
+ * Elimina dalla tabella wp_postmeta gli SKU legati a prodotti inestistenti
+ *
+ * @param int    $product_id l'ID del prodotto WC.
+ * @param string $sku        lo SKU del prodotto WC.
+ *
+ * @return void
+ */
+function wcifd_delete_orphan_sku( $product_id, $sku ) {
+
+	global $wpdb;
+
+    $wpdb->delete(
+        $wpdb->postmeta,
+        array(
+            'post_id' => $product_id,
+            'meta_key' => '_sku',
+            'meta_value' => $sku,
+        )
+    );
+
+}
+
+
+/**
  * Verifica la presenza di un prodotto attraverso lo sku
  *
  * @param  string $sku               lo sku del prodotto.
  * @param  int    $parent_product_id l'id del prodotto padre se presente.
+ *
  * @return int l'id del prodotto corrispondente se trovato
  */
 function wcifd_search_product( $sku, $parent_product_id = null ) {
+
 	global $wpdb;
 
-	$query = "
-		SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_sku' AND meta_value = '$sku'
-	";
+    $result = $wpdb->get_var(
+        $wpdb->prepare(
+            "
+            SELECT post_id
+            FROM {$wpdb->postmeta}
+            WHERE meta_key = '_sku'
+            AND meta_value = %s
+            LIMIT 1
+            ",
+            $sku
+        )
+    );
 
-	$results = $wpdb->get_results( $query, ARRAY_A );
-	$post_id = isset( $results[0] ) ? $results[0]['post_id'] : '';
+	$post_id = isset( $result ) && wc_get_product( $result ) ? $result : null;
+
+    if ( isset( $result ) ) {
+
+        if ( wc_get_product( $result ) ) {
+
+            $post_id = $result;
+
+        } else {
+
+            /* Delete the orphan sku */
+            wcifd_delete_orphan_sku( $result, $sku );
+
+            $post_id = null;
+        }
+
+    } else {
+
+        $post_id = null;
+
+    }
 
 	if ( ! $post_id && $parent_product_id && is_numeric( $sku ) ) {
 
