@@ -5,7 +5,7 @@
  * @author ilGhera
  * @package wc-importer-for-danea-premium/classes
  *
- * @since 1.6.1
+ * @since 1.6.4
  */
 
 /**
