@@ -465,7 +465,23 @@ function wcifd_import_single_product( $hash ) {
 				error_log( 'WCIFD ERROR | Aggiornamento prodotto | Sku: ' . $sku . ' | ' . print_r( $product_id->get_error_message(), true ) );
 
 				return;
-            }
+
+			} else {
+
+				/*Aggiornamento meta lookup table*/
+				$lookup_data = array(
+					'product_id'     => $product_id,
+					'sku'            => $sku,
+					'min_price'      => $args['meta_input']['_price'],
+					'max_price'      => $args['meta_input']['_price'],
+					'onsale'         => $on_sale,
+					'stock_quantity' => $stock,
+					'stock_status'   => $stock_status,
+				);
+
+				new WCIFD_Product_Meta_Lookup( $lookup_data, 'update' );
+
+			}
 
 		} else {
 
