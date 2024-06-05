@@ -103,7 +103,7 @@ class WCIFD_Admin {
 
 				$this->tab_menu();
 
-				include WCIFD_ADMIN . 'wcifd-import-supplier-template.php';
+				include WCIFD_ADMIN . 'wcifd-import-suppliers-template.php';
 				include WCIFD_ADMIN . 'wcifd-import-products-template.php';
 				include WCIFD_ADMIN . 'wcifd-import-clients-template.php';
 				include WCIFD_ADMIN . 'wcifd-import-orders-template.php';
