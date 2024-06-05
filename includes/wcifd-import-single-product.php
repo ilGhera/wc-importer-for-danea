@@ -262,6 +262,7 @@ function wcifd_import_single_product( $hash ) {
 
 		/*Inserimento nuovo prodotto*/
 		$product_id = wp_insert_post( $args, true );
+        $wc_product = wc_get_product( $product_id );
 
 		if ( is_wp_error( $product_id ) ) {
 
@@ -466,21 +467,6 @@ function wcifd_import_single_product( $hash ) {
 
 				return;
 
-			} else {
-
-				/*Aggiornamento meta lookup table*/
-				$lookup_data = array(
-					'product_id'     => $product_id,
-					'sku'            => $sku,
-					'min_price'      => $args['meta_input']['_price'],
-					'max_price'      => $args['meta_input']['_price'],
-					'onsale'         => $on_sale,
-					'stock_quantity' => $stock,
-					'stock_status'   => $stock_status,
-				);
-
-				new WCIFD_Product_Meta_Lookup( $lookup_data, 'update' );
-
 			}
 
 		} else {
@@ -534,7 +520,8 @@ function wcifd_import_single_product( $hash ) {
 	}
 
 	/*Attributi disponibili per il prodotto*/
-	$attributes = get_post_meta( $product_id, '_product_attributes', true ) ? get_post_meta( $product_id, '_product_attributes', true ) : array();
+	/* $attributes = get_post_meta( $product_id, '_product_attributes', true ) ? get_post_meta( $product_id, '_product_attributes', true ) : array(); */
+    $attributes = $wc_product->get_attributes();
 
 	/*Attributi aggiuntivi*/
 	$more_attributes = array(
@@ -543,27 +530,54 @@ function wcifd_import_single_product( $hash ) {
 		'sup-product-code' => $sup_product_code,
 	);
 
+    /* error_log( 'NEW ATTRIBUTES 1: ' . print_r( $wc_product->get_attributes(), true ) ); */
+
+    /* error_log( 'ATTRIBUTES 1: ' . print_r( $attributes, true ) ); */
+    /* error_log( 'MORE ATTRIBUTES: ' . print_r( $attributes, true ) ); */
 	foreach ( $more_attributes as $key => $value ) {
 
 		if ( $value ) {
 
 			$is_visible = get_option( 'wcifd-display-' . $key ) ? get_option( 'wcifd-display-' . $key ) : '0';
 
-			wp_set_object_terms( $product_id, array( $value ), 'pa_' . $key );
+			/* wp_set_object_terms( $product_id, array( $value ), 'pa_' . $key ); */
 
-			$attributes[ 'pa_' . $key ] = array(
-				'name'         => 'pa_' . $key,
-				'value'        => '',
-				'is_visible'   => $is_visible,
-				'is_variation' => '0',
-				'is_taxonomy'  => '1',
-			);
+			/* $attributes[ 'pa_' . $key ] = array( */
+			/* 	'name'         => 'pa_' . $key, */
+			/* 	'value'        => '', */
+			/* 	'is_visible'   => $is_visible, */
+			/* 	'is_variation' => '0', */
+			/* 	'is_taxonomy'  => '1', */
+			/* ); */
+
+            $attribute = new WC_Product_Attribute();
+            $attribute->set_id( wc_attribute_taxonomy_id_by_name( 'pa_' . $key ) );
+            $attribute->set_name( 'pa_' . $key );
+            $attribute->set_options( array( 2591 ) );
+            $attribute->set_visible( $is_visible  );
+            $attribute->set_variation( false );
+            $attributes[] = $attribute;
 
 		} else {
 
-			unset( $attributes[ 'pa_' . $key ] );
+            if ( isset( $attributes[ 'pa_' . $key ] ) ) {
 
+                unset( $attributes[ 'pa_' . $key ] );
+
+                error_log( 'KEY: ' . 'pa_' . $key );
+
+                /* $test = wp_remove_object_terms( $product_id, array( $value ), 'pa_' . $key ); */
+                /* $test = $wc_product->delete_attribute( 'pa_' . $key ); */
+
+                /* error_log( 'TEST 1: ' . print_r( $test, true ) ); */
+
+            }
+
+            /* error_log( 'ATTRIBUTES 2: ' . print_r( $attributes, true ) ); */
 		}
+
+        $wc_product->set_attributes( $attributes );
+        error_log( 'NEW ATTRIBUTES 2: ' . print_r( $wc_product->get_attributes(), true ) );
 	}
 
 	/*Custom fields*/
