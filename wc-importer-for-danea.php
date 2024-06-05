@@ -49,7 +49,7 @@ function load_wc_importer_for_danea_premium() {
 	load_plugin_textdomain( 'wc-importer-for-danea', false, basename( dirname( __FILE__ ) ) . '/languages' );
 
 	require_once WCIFD_DIR . 'libraries/action-scheduler/action-scheduler.php';
-	require_once WCIFD_ADMIN . 'wcifd-admin.php';
+	require_once WCIFD_ADMIN . 'class-wcifd-admin.php';
 	require_once WCIFD_ADMIN . 'ilghera-notice/class-ilghera-notice.php';
 	require_once WCIFD_INCLUDES . 'wcifd-functions.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-temporary-data.php';
