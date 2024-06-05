@@ -3,7 +3,7 @@
  * Admin options page and functions
  *
  * @author ilGhera
- * @package wc-exporter-for-danea-premium/admin
+ * @package wc-importer-for-danea-premium/admin
  *
  * @since 1.6.0
  */
