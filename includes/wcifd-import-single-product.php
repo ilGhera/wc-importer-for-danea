@@ -386,7 +386,7 @@ function wcifd_import_single_product( $hash ) {
             $wc_product->set_stock_quantity( $stock );
             $wc_product->set_manage_stock( $manage_stock );
             $wc_product->set_stock_status( $stock_status );
-            $wc_product->set_catalog_visibility( 'visible' );
+            /* $wc_product->set_catalog_visibility( 'visible' ); */
             $wc_product->set_regular_price( $regular_price );
             $wc_product->set_price( $regular_price );
             $wc_product->set_width( $width );
