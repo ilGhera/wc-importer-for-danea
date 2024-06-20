@@ -21,7 +21,7 @@ function wcifd_delete_single_product( $product_sku ) {
 
 	if ( isset( $sku[0] ) ) {
 
-		$product_id = wcifd_search_product( $sku[0] );
+		$product_id = WCIFD_Functions::search_product( $sku[0] );
 
 		if ( $product_id ) {
 
@@ -32,7 +32,7 @@ function wcifd_delete_single_product( $product_sku ) {
 			new WCIFD_Product_Meta_Lookup( array( 'product_id' => $product_id ), 'delete' );
 
 			/*Se presenti elimino le variazionid i prodotto*/
-			wcifd_delete_variations( $product_id );
+            WCIFD_Functions::delete_variations( $product_id );
 
 		}
 	}

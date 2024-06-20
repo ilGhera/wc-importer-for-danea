@@ -27,7 +27,7 @@
 			$premium_key = strtolower( get_option( 'wcifd-premium-key' ) );
 			$url_code    = get_option( 'wcifd-url-code' );
 			if ( ! $url_code ) {
-				$url_code = wcifd_rand_md5( 6 );
+				$url_code = WCIFD_Functions::rand_md5( 6 );
 				add_option( 'wcifd-url-code', $url_code );
 			}
 

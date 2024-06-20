@@ -67,7 +67,7 @@ function wcifd_users( $type ) {
 						$cap         = $user['Cap'];
 						$city        = $user['Città'];
 						$state       = $user['Prov.'];
-						$country     = wcifd_get_state_code( $user['Nazione'] );
+						$country     = WCIFD_Functions::get_country_code( $user['Nazione'] );
 						$tel         = $user['Tel.'];
 						$fiscal_code = $user['Codice fiscale'];
 						$p_iva       = $user['Partita Iva'];
@@ -87,10 +87,10 @@ function wcifd_users( $type ) {
 						);
 
 						/*Definisco i campi fiscali*/
-						$cf_name      = wcifd_get_italian_tax_fields_names( 'cf_name' );
-						$pi_name      = wcifd_get_italian_tax_fields_names( 'pi_name' );
-						$pec_name     = wcifd_get_italian_tax_fields_names( 'pec_name' );
-						$pa_code_name = wcifd_get_italian_tax_fields_names( 'pa_code_name' );
+						$cf_name      = WCIFD_Functions::get_italian_tax_fields_names( 'cf_name' );
+						$pi_name      = WCIFD_Functions::get_italian_tax_fields_names( 'pi_name' );
+						$pec_name     = WCIFD_Functions::get_italian_tax_fields_names( 'pec_name' );
+						$pa_code_name = WCIFD_Functions::get_italian_tax_fields_names( 'pa_code_name' );
 
 						/*Verifico la presenza dell'utente*/
 						$user_id = username_exists( $user_name );

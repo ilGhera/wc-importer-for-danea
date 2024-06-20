@@ -96,7 +96,7 @@ function wcifd_products() {
 					}
 
 					if ( $parent_sku ) {
-						$parent_product_id = wcifd_search_product( $parent_sku );
+						$parent_product_id = WCIFD_Functions::search_product( $parent_sku );
 					}
 
 					$var_attributes = isset( $notes['var_attributes'] ) ? $notes['var_attributes'] : '';
@@ -114,7 +114,7 @@ function wcifd_products() {
 				$status              = ( $var_attributes ) ? 'publish' : $new_products_status;
 
 				/*Verifico la presenza del prodotto*/
-				$id   = wcifd_search_product( $sku );
+				$id   = WCIFD_Functions::search_product( $sku );
 				$type = ( wp_get_post_parent_id( $id ) || $parent_product_id ) ? 'product_variation' : 'product';
 
 				/*Gestione magazzino*/
@@ -147,7 +147,7 @@ function wcifd_products() {
 				$tax_class  = '';
 				if ( $tax ) {
 					$tax_status = 'taxable';
-					$tax_class  = wcifd_get_tax_rate_class( $tax );
+					$tax_class  = WCIFD_Functions::get_tax_rate_class( $tax );
 				}
 
 				/*Inizio aggiornamento prodotto o creazione se non presente*/
@@ -392,7 +392,7 @@ function wcifd_products() {
 							for ( $i = 0; $i < $subs_count; $i++ ) {
 
 								$parent_term      = 0 === $i ? $cat_term['term_id'] : $more_terms[ $i - 1 ]['term_id'];
-								$more_terms[ $i ] = wcifd_add_taxonomy_term( $product_id, $subs[ $i ], $parent_term, true );
+								$more_terms[ $i ] = WCIFD_Functions::add_taxonomy_term( $product_id, $subs[ $i ], $parent_term, true );
 
 							}
 						}

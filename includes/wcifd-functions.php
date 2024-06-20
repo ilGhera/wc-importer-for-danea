@@ -1,6 +1,6 @@
 <?php
 /**
- * Funzioni generali
+ * General functions class
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
@@ -8,429 +8,457 @@
  * @since 1.6.4
  */
 
-/*No accesso diretto*/
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
-
+defined( 'ABSPATH' ) || exit;
 
 /**
- * Generazione stringa random
+ * Class WCIFD_Functions
  *
- * @param int $length lunghezza della stringa.
- *
- * @return string
+ * @since 1.6.4
  */
-function wcifd_rand_md5( $length ) {
+class WCIFD_Functions {
 
-	$max    = ceil( $length / 32 );
-	$random = '';
-	for ( $i = 0; $i < $max; $i ++ ) {
-		$random .= md5( microtime( true ) . mt_rand( 10000, 90000 ) );
+	/**
+	 * The constructor
+	 *
+	 * @return void
+	 */
+	public function __construct() {
+
 	}
 
-	return substr( $random, 0, $length );
-}
 
+	/**
+	 * Generate random string
+	 *
+	 * @param int $length the string length.
+	 *
+	 * @return string
+	 */
+	public static function rand_md5( $length ) {
 
-/**
- * Definisce i nomi dei campi fiscali in uso, in particolare i post_meta da recuperare dal db
- *
- * @param  string $field il campo da definire.
- * @return string        il post_meta
- */
-function wcifd_get_italian_tax_fields_names( $field ) {
-
-	$cf_name      = null;
-	$pi_name      = null;
-	$pec_name     = null;
-	$pa_code_name = null;
-
-	/*Campi generati dal plugin*/
-	if ( get_option( 'wcexd_company_invoice' ) || get_option( 'wcexd_private_invoice' ) ) {
-
-		$cf_name      = 'billing_wcexd_cf';
-		$pi_name      = 'billing_wcexd_piva';
-		$pec_name     = 'billing_wcexd_pec';
-		$pa_code_name = 'billing_wcexd_pa_code';
-
-	} else {
-
-		/*Plugin supportati*/
-
-		/*WooCommerce Aggiungere CF e P.IVA*/
-		if ( class_exists( 'WC_BrazilianCheckoutFields' ) ) {
-			$cf_name = 'billing_cpf';
-			$pi_name = 'billing_cnpj';
-
-			/*WooCommerce P.IVA e Codice Fiscale per Italia*/
-		} elseif ( class_exists( 'WooCommerce_Piva_Cf_Invoice_Ita' ) || class_exists( 'WC_Piva_Cf_Invoice_Ita' ) ) {
-			$cf_name      = 'billing_cf';
-			$pi_name      = 'billing_piva';
-			$pec_name     = 'billing_pec';
-			$pa_code_name = 'billing_pa_code';
-
-			/*YITH WooCommerce Checkout Manager*/
-		} elseif ( function_exists( 'ywccp_init' ) ) {
-			$cf_name = 'billing_Codice_Fiscale';
-			$pi_name = 'billing_Partita_IVA';
-
-			/*WOO Codice Fiscale*/
-		} elseif ( function_exists( 'woocf_on_checkout' ) ) {
-			$cf_name = 'billing_CF';
-			$pi_name = 'billing_iva';
+		$max    = ceil( $length / 32 );
+		$random = '';
+		for ( $i = 0; $i < $max; $i ++ ) {
+			$random .= md5( microtime( true ) . mt_rand( 10000, 90000 ) );
 		}
+
+		return substr( $random, 0, $length );
 	}
 
-	switch ( $field ) {
-		case 'cf_name':
-			return $cf_name;
-		case 'pi_name':
-			return $pi_name;
-		case 'pec_name':
-			return $pec_name;
-		case 'pa_code_name':
-			return $pa_code_name;
-	}
 
-}
+	/**
+	 * Define the names of the fiscal checkout form fields
+	 *
+	 * @param  string $field the field to be defined.
+	 *
+	 * @return string
+	 */
+	public static function get_italian_tax_fields_names( $field ) {
 
+		$cf_name      = null;
+		$pi_name      = null;
+		$pec_name     = null;
+		$pa_code_name = null;
 
-/**
- * Verifica la presenza di un codice di tassazione, utilizzato per la ricerca degli utenti
- *
- * @param string $tax_code il codice.
- *
- * @return int l'id dell'utente legato al codice
- */
-function check_tax_code( $tax_code ) {
+		/*Campi generati dal plugin*/
+		if ( get_option( 'wcexd_company_invoice' ) || get_option( 'wcexd_private_invoice' ) ) {
 
-	global $wpdb;
-	$query  = "
-		SELECT user_id FROM $wpdb->usermeta WHERE meta_value = '$tax_code'
-	";
-	$result = $wpdb->get_results( $query, ARRAY_A );
+			$cf_name      = 'billing_wcexd_cf';
+			$pi_name      = 'billing_wcexd_piva';
+			$pec_name     = 'billing_wcexd_pec';
+			$pa_code_name = 'billing_wcexd_pa_code';
 
-	return $result[0]['user_id'];
+		} else {
 
-}
+			/*Plugin supportati*/
 
+			/*WooCommerce Aggiungere CF e P.IVA*/
+			if ( class_exists( 'WC_BrazilianCheckoutFields' ) ) {
+				$cf_name = 'billing_cpf';
+				$pi_name = 'billing_cnpj';
 
-/**
- * Restituisce il codice di statto a due lettere, partendo dal nome completo
- *
- * @param string $state_name lo stato.
- *
- * @return string il codice dello stato
- */
-function wcifd_get_state_code( $state_name ) {
+				/*WooCommerce P.IVA e Codice Fiscale per Italia*/
+			} elseif ( class_exists( 'WooCommerce_Piva_Cf_Invoice_Ita' ) || class_exists( 'WC_Piva_Cf_Invoice_Ita' ) ) {
+				$cf_name      = 'billing_cf';
+				$pi_name      = 'billing_piva';
+				$pec_name     = 'billing_pec';
+				$pa_code_name = 'billing_pa_code';
 
-	$countries = WC()->countries->countries;
+				/*YITH WooCommerce Checkout Manager*/
+			} elseif ( function_exists( 'ywccp_init' ) ) {
+				$cf_name = 'billing_Codice_Fiscale';
+				$pi_name = 'billing_Partita_IVA';
 
-	foreach ( $countries as $key => $value ) {
-
-		if ( $value === $state_name ) {
-
-			return $key;
-
-		} elseif ( $key === $state_name ) {
-
-			return $state_name;
-
+				/*WOO Codice Fiscale*/
+			} elseif ( function_exists( 'woocf_on_checkout' ) ) {
+				$cf_name = 'billing_CF';
+				$pi_name = 'billing_iva';
+			}
 		}
+
+		switch ( $field ) {
+			case 'cf_name':
+				return $cf_name;
+			case 'pi_name':
+				return $pi_name;
+			case 'pec_name':
+				return $pec_name;
+			case 'pa_code_name':
+				return $pa_code_name;
+		}
+
 	}
 
-}
 
+	/**
+	 * Get user ID by tax code
+	 *
+	 * @param string $tax_code the tax code.
+	 *
+	 * @return int
+	 */
+	public static function get_uder_id_by_tax_code( $tax_code ) {
 
-/**
- * Restituisce il valore di un dato campo del file xml
- *
- * @param  string $field il campo da recuperare.
- * @return string        il valore
- */
-function wcifd_json_decode( $field = '' ) {
-	$decoded = json_decode( json_encode( $field ), true );
-	$output  = $decoded ? $decoded[0] : '';
-	return $output;
-}
+		global $wpdb;
 
+		$result = $wpdb->get_results(
+			$wpdb->prepare(
+				"
+                SELECT user_id
+                FROM $wpdb->usermeta
+                WHERE meta_value = %s
+                ",
+				$tax_code
+			),
+			ARRAY_A
+		);
 
-/**
- * Recupera l'ordine WooCommerce generato dall'importazione precedente di un ordine di Danea Easyfatt
- *
- * @param  int $number l'id dell'ordine di Danea Easyfatt.
- * @return int         l'id dell'ordine WooCommerce
- */
-function get_order_by_number( $number ) {
-	global $wpdb;
-	$query   = "
-		SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'wcifd-order-number' AND meta_value = '$number'
-	";
-	$results = $wpdb->get_results( $query, ARRAY_A );
-	return $results[0];
-}
+		return $result[0]['user_id'];
 
-
-/**
- * Restituisce il metodo di pagamento utilizzato negli ordini importati da Danea Easyfatt
- *
- * @param  string $method il metodo proveniente da Danea.
- * @return string         il metodo WC equivalente
- */
-function wcifd_payment_gateway( $method ) {
-	switch ( $method ) {
-		case 'Paypal':
-		case 'Carta di credito':
-			return array(
-				'id'    => 'paypal',
-				'title' => 'PayPal',
-			);
-		case 'Contrassegno':
-			return array(
-				'id'    => 'cod',
-				'title' => 'Cash on Delivery',
-			);
-		case 'Bonifico bancario':
-			return array(
-				'id'    => 'bacs',
-				'title' => 'Direct Bank Transfer',
-			);
-		default:
-			return null;
 	}
-}
 
 
-/**
- * Elimina dalla tabella wp_postmeta gli SKU legati a prodotti inestistenti
- *
- * @param int    $product_id l'ID del prodotto WC.
- * @param string $sku        lo SKU del prodotto WC.
- *
- * @return void
- */
-function wcifd_delete_orphan_sku( $product_id, $sku ) {
+    /**
+     * Get country code 
+     *
+     * @param string $state_name the full country name.
+     *
+     * @return string
+     */
+    public static function get_country_code( $state_name ) {
 
-	global $wpdb;
+        $countries = WC()->countries->countries;
 
-    $wpdb->delete(
-        $wpdb->postmeta,
-        array(
-            'post_id' => $product_id,
-            'meta_key' => '_sku',
-            'meta_value' => $sku,
-        )
-    );
+        foreach ( $countries as $key => $value ) {
 
-}
+            if ( $value === $state_name ) {
 
+                return $key;
 
-/**
- * Verifica la presenza di un prodotto attraverso lo sku
- *
- * @param  string $sku               lo sku del prodotto.
- * @param  int    $parent_product_id l'id del prodotto padre se presente.
- *
- * @return int l'id del prodotto corrispondente se trovato
- */
-function wcifd_search_product( $sku, $parent_product_id = null ) {
+            } elseif ( $key === $state_name ) {
 
-	global $wpdb;
+                return $state_name;
 
-    $result = $wpdb->get_var(
-        $wpdb->prepare(
-            "
-            SELECT post_id
-            FROM {$wpdb->postmeta}
-            WHERE meta_key = '_sku'
-            AND meta_value = %s
-            LIMIT 1
-            ",
-            $sku
-        )
-    );
-
-	$post_id = isset( $result ) && wc_get_product( $result ) ? $result : null;
-
-    if ( isset( $result ) ) {
-
-        if ( wc_get_product( $result ) ) {
-
-            $post_id = $result;
-
-        } else {
-
-            /* Delete the orphan sku */
-            wcifd_delete_orphan_sku( $result, $sku );
-
-            $post_id = null;
+            }
         }
-
-    } else {
-
-        $post_id = null;
 
     }
 
-	if ( ! $post_id && $parent_product_id && is_numeric( $sku ) ) {
 
-		$product = wc_get_product( $sku );
+    /**
+     * Decode the XML values
+     *
+     * @param  string $field the XML field.
+     *
+     * @return string
+     */
+    function decode_xml_value( $field = null ) {
 
-		if ( $product && ! is_wp_error( $product ) ) {
+        $decoded = json_decode( json_encode( $field ), true );
+        $output  = $decoded ? $decoded[0] : null;
 
-			$post_id = intval( $parent_product_id ) === $product->get_parent_id() ? $product->get_id() : null;
+        return $output;
+    }
 
-		}
-	}
 
-	return $post_id;
+    /**
+     * Get the WC order (ID) previously imported from Danea Easyfatt
+     *
+     * @param  int $number The Danea Easyfatt order ID.
+     *
+     * @return int 
+     */
+    public static function get_order_by_number( $number ) {
+
+        $orders = wc_get_orders(
+            array(
+                'meta_key'   => 'wcifd-order-number',
+                'meta_value' => $number,
+                'return'     => 'ids',
+            )
+        
+        );
+
+        return isset( $orders[0] ) ? $orders[0] : null;
+
+    }
+
+
+    /**
+     * Get the WC payment gateway used in the order imported from Danea Easyfatt 
+     *
+     * @param  string $method the payment gateway coming from Danea Easyfatt.
+     *
+     * @return string
+     */
+    public static function get_wc_payment_gateway( $method ) {
+
+        switch ( $method ) {
+            case 'Paypal':
+            case 'Carta di credito':
+                return array(
+                    'id'    => 'paypal',
+                    'title' => 'PayPal',
+                );
+            case 'Contrassegno':
+                return array(
+                    'id'    => 'cod',
+                    'title' => 'Cash on Delivery',
+                );
+            case 'Bonifico bancario':
+                return array(
+                    'id'    => 'bacs',
+                    'title' => 'Direct Bank Transfer',
+                );
+            default:
+                return null;
+        }
+
+    }
+
+
+    /**
+     * Delete orphan SKUs from the database
+     *
+     * @param int    $product_id the WC product ID. 
+     * @param string $sku        the WC product SKU.
+     *
+     * @return void
+     */
+    public static function delete_orphan_sku( $product_id, $sku ) {
+
+        global $wpdb;
+
+        $wpdb->delete(
+            $wpdb->postmeta,
+            array(
+                'post_id'    => $product_id,
+                'meta_key'   => '_sku',
+                'meta_value' => $sku,
+            )
+        );
+
+    }
+
+
+    /**
+     * Search product by SKU
+     *
+     * @param  string $sku               the WC prodcut SKU. 
+     * @param  int    $parent_product_id the parent product ID.
+     *
+     * @return int 
+     */
+    public static function search_product( $sku, $parent_product_id = null ) {
+
+        $post_id = null;
+        $result  = wc_get_product_id_by_sku( $sku );
+        $product = wc_get_product( $post_id );
+
+        if ( $result ) {
+
+            if ( wc_get_product( $result ) ) {
+
+                $post_id = $result;
+
+            } else {
+
+                /* Delete the orphan sku */
+                self::delete_orphan_sku( $result, $sku );
+
+                $post_id = null;
+            }
+        } else {
+
+            $post_id = null;
+
+        }
+
+        if ( ! $post_id && $parent_product_id && is_numeric( $sku ) ) {
+
+            $product = wc_get_product( $sku );
+
+            if ( $product && ! is_wp_error( $product ) ) {
+
+                $post_id = intval( $parent_product_id ) === $product->get_parent_id() ? $product->get_id() : null;
+
+            }
+        }
+
+        return $post_id;
+
+    }
+
+
+    /**
+     * Add a tax term to the given product
+     *
+     * @param  int     $product_id the WC product ID. 
+     * @param  string  $category   the Danea cat to be added to the product. 
+     * @param  integer $parent_id  the parent tax term ID if exists. 
+     * @param  boolean $append     append to other terms with true, replace with false. 
+     *
+     * @return array
+     */
+    public static function add_taxonomy_term( $product_id, $category, $parent_id = 0, $append = false ) {
+
+        $append = '1' === get_option( 'wcifd-deleting-categories' ) ? true : $append;
+        $term   = term_exists( $category, 'product_cat', $parent_id );
+
+        if ( 0 === $term || null === $term ) {
+            $term = wp_insert_term( $category, 'product_cat', array( 'parent' => $parent_id ) );
+        }
+
+        if ( ! is_wp_error( $term ) ) {
+            $output = wp_set_object_terms( $product_id, intval( $term['term_id'] ), 'product_cat', $append );
+        }
+
+        return $term;
+
+    }
+
+
+    /**
+     * Add a new tax class in WC
+     *
+     * @param  string $tax_name the tax class name. 
+     *
+     * @return void
+     */
+    public static function add_tax_rate_class( $tax_name ) {
+
+        global $wpdb;
+
+        $response = $wpdb->insert(
+            $wpdb->prefix . 'wc_tax_rate_classes',
+            array(
+                'name' => $tax_name,
+                'slug' => sanitize_title_with_dashes( $tax_name ),
+            ),
+            array(
+                '%s',
+                '%s',
+            )
+        );
+
+    }
+
+
+    /**
+     * Get tax rate class
+     *
+     * @param  string $name  the tax rate name.
+     * @param  string $value the tax rate value.
+     * @return string
+     */
+    public static function get_tax_rate_class( $name, $value = '' ) {
+
+        /*Se non viene passato un valore, utilizza il nome dell'imposta se numerico*/
+        if ( '' === $value ) {
+            $value = ( is_numeric( $name ) ) ? $name : '';
+        }
+
+        global $wpdb;
+        $query = '
+            SELECT * FROM ' . $wpdb->prefix . "woocommerce_tax_rates WHERE tax_rate_name = '$name'
+        ";
+
+        $results = $wpdb->get_results( $query, ARRAY_A );
+
+        if ( $results ) {
+
+            $tax_rate_class = ( $results[0]['tax_rate_class'] ) ? $results[0]['tax_rate_class'] : '';
+
+        } else {
+
+            /*Crea una nuova classe di tassazione solo con il valore numerico*/
+            if ( '' !== $value ) {
+                $tax_rate_class = 22 !== $name ? $name : '';
+
+                if ( $tax_rate_class ) {
+                    $tax_classes   = explode( "\n", get_option( 'woocommerce_tax_classes' ) );
+                    $tax_classes[] = $tax_rate_class;
+                    update_option( 'woocommerce_tax_classes', implode( "\n", $tax_classes ) );
+                }
+
+                /* Nuova classe di tassazione */
+                if ( $tax_rate_class ) {
+                    self::add_tax_rate_class( $tax_rate_class );
+                }
+
+                $response = $wpdb->insert(
+                    $wpdb->prefix . 'woocommerce_tax_rates',
+                    array(
+                        'tax_rate_country'  => 'IT',
+                        'tax_rate'          => number_format( $value, 4 ),
+                        'tax_rate_name'     => $name,
+                        'tax_rate_priority' => 1,
+                        'tax_rate_shipping' => 0,
+                        'tax_rate_class'    => $tax_rate_class,
+                    ),
+                    array(
+                        '%s',
+                        '%s',
+                        '%s',
+                        '%d',
+                        '%d',
+                        '%s',
+                    )
+                );
+
+            }
+        }
+
+        return $tax_rate_class;
+
+    }
+
+
+    /**
+     * Delete the product variations
+     *
+     * @param  int $parent_id the parent product ID.
+     *
+     * @return void 
+     */
+    public static function delete_variations( $parent_id ) {
+        $args = array(
+            'post_type'   => 'product_variation',
+            'post_parent' => $parent_id,
+        );
+        $vars = get_children( $args, ARRAY_A );
+        if ( $vars ) {
+            foreach ( $vars as $var ) {
+                wp_delete_post( $var['ID'] );
+
+                /*Aggiornamento meta lookup table*/
+                new WCIFD_Product_Meta_Lookup( array( 'product_id' => $var['ID'] ), 'delete' );
+
+            }
+        }
+    }
 }
 
-
-/**
- * Aggiunge un termine di tassonimia al prodotto dato
- *
- * @param  int     $product_id l'id del prodotto.
- * @param  string  $category   la categoria proveniente da Danea da aggiungere al prodotto.
- * @param  integer $parent_id  id del termine di tassonomia padre se presente.
- * @param  boolean $append     determina se il termine di tassonomia debba aggiungersi a quelli presenti o sostituirli.
- * @return array              il termine di tassonomia
- */
-function wcifd_add_taxonomy_term( $product_id, $category, $parent_id = 0, $append = false ) {
-
-	$append = '1' === get_option( 'wcifd-deleting-categories' ) ? true : $append;
-
-	$term = term_exists( $category, 'product_cat', $parent_id );
-
-	if ( 0 === $term || null === $term ) {
-		$term = wp_insert_term( $category, 'product_cat', array( 'parent' => $parent_id ) );
-	}
-
-	if ( ! is_wp_error( $term ) ) {
-		$output = wp_set_object_terms( $product_id, intval( $term['term_id'] ), 'product_cat', $append );
-	}
-
-	return $term;
-}
-
-
-/**
- * Aggiunge una nuova tax class WooCommerce
- *
- * @param  string $tax_name il nome dell'aliquota.
- * @return void
- */
-function wcifd_add_tax_rate_class( $tax_name ) {
-
-	global $wpdb;
-
-	$response = $wpdb->insert(
-		$wpdb->prefix . 'wc_tax_rate_classes',
-		array(
-			'name' => $tax_name,
-			'slug' => sanitize_title_with_dashes( $tax_name ),
-		),
-		array(
-			'%s',
-			'%s',
-		)
-	);
-
-}
-
-
-/**
- * Recupera un'imposta in WooCommerce
- *
- * @param  string $name  il nome dell'imposta.
- * @param  string $value il valore.
- * @return string        la classe di imposta
- */
-function wcifd_get_tax_rate_class( $name, $value = '' ) {
-
-	/*Se non viene passato un valore, utilizza il nome dell'imposta se numerico*/
-	if ( '' === $value ) {
-		$value = ( is_numeric( $name ) ) ? $name : '';
-	}
-
-	global $wpdb;
-	$query = '
-		SELECT * FROM ' . $wpdb->prefix . "woocommerce_tax_rates WHERE tax_rate_name = '$name'
-	";
-
-	$results = $wpdb->get_results( $query, ARRAY_A );
-
-	if ( $results ) {
-
-		$tax_rate_class = ( $results[0]['tax_rate_class'] ) ? $results[0]['tax_rate_class'] : '';
-
-	} else {
-
-		/*Crea una nuova classe di tassazione solo con il valore numerico*/
-		if ( '' !== $value ) {
-			$tax_rate_class = 22 !== $name ? $name : '';
-
-			if ( $tax_rate_class ) {
-				$tax_classes   = explode( "\n", get_option( 'woocommerce_tax_classes' ) );
-				$tax_classes[] = $tax_rate_class;
-				update_option( 'woocommerce_tax_classes', implode( "\n", $tax_classes ) );
-			}
-
-			/* Nuova classe di tassazione */
-			if ( $tax_rate_class ) {
-				wcifd_add_tax_rate_class( $tax_rate_class );
-			}
-
-			$response = $wpdb->insert(
-				$wpdb->prefix . 'woocommerce_tax_rates',
-				array(
-					'tax_rate_country'  => 'IT',
-					'tax_rate'          => number_format( $value, 4 ),
-					'tax_rate_name'     => $name,
-					'tax_rate_priority' => 1,
-					'tax_rate_shipping' => 0,
-					'tax_rate_class'    => $tax_rate_class,
-				),
-				array(
-					'%s',
-					'%s',
-					'%s',
-					'%d',
-					'%d',
-					'%s',
-				)
-			);
-
-		}
-	}
-
-	return $tax_rate_class;
-
-}
-
-
-/**
- * Elimina le variazioni di un dato prodotto
- *
- * @param  int $parent_id l'id del prodotto padre.
- */
-function wcifd_delete_variations( $parent_id ) {
-	$args = array(
-		'post_type'   => 'product_variation',
-		'post_parent' => $parent_id,
-	);
-	$vars = get_children( $args, ARRAY_A );
-	if ( $vars ) {
-		foreach ( $vars as $var ) {
-			wp_delete_post( $var['ID'] );
-
-			/*Aggiornamento meta lookup table*/
-			new WCIFD_Product_Meta_Lookup( array( 'product_id' => $var['ID'] ), 'delete' );
-
-		}
-	}
-}
 
 
 /**

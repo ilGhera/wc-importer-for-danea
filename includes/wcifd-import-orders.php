@@ -33,16 +33,16 @@ function wcifd_orders() {
 		foreach ( $orders->Document as $order ) {
 
 			/*L'id ordine Danea, utile a cui verrà legato quello WooCommerce*/
-			$order_number = wcifd_json_decode( $order->Number );
+			$order_number = WCIFD_Functions::decode_xml_value( $order->Number );
 
-			if ( ! get_order_by_number( $order_number ) ) {
+			if ( ! WCIFD_Functions::get_order_by_number( $order_number ) ) {
 
 				$o++;
 
 				/*Dettagli ordine*/
-				$order_date     = wcifd_json_decode( $order->Date );
-				$order_comment  = wcifd_json_decode( $order->InternalComment );
-				$payment_method = wcifd_json_decode( $order->PaymentName );
+				$order_date     = WCIFD_Functions::decode_xml_value( $order->Date );
+				$order_comment  = WCIFD_Functions::decode_xml_value( $order->InternalComment );
+				$payment_method = WCIFD_Functions::decode_xml_value( $order->PaymentName );
 
 				/*Dettagli cliente*/
 				if ( $order->CustomerReference ) {
@@ -54,31 +54,31 @@ function wcifd_orders() {
 				}
 
 				/*Nomi dei campi fiscali*/
-				$cf_name = wcifd_get_italian_tax_fields_names( 'cf_name' );
-				$pi_name = wcifd_get_italian_tax_fields_names( 'pi_name' );
+				$cf_name = WCIFD_Functions::get_italian_tax_fields_names( 'cf_name' );
+				$pi_name = WCIFD_Functions::get_italian_tax_fields_names( 'pi_name' );
 
 				/*Dettagli ordine*/
-				$billing_company  = wcifd_json_decode( $order->CustomerName );
-				$billing_address  = wcifd_json_decode( $order->CustomerAddress );
-				$billing_city     = wcifd_json_decode( $order->CustomerCity );
-				$billing_postcode = wcifd_json_decode( $order->CustomerPostcode );
-				$billing_state    = wcifd_json_decode( $order->CustomerProvince );
-				$billing_country  = wcifd_get_state_code( wcifd_json_decode( $order->CustomerCountry ) );
-				$billing_phone    = wcifd_json_decode( $order->CustomerTel );
-				$billing_email    = wcifd_json_decode( $order->CustomerEmail );
-				$fiscal_code      = wcifd_json_decode( $order->CustomerFiscalCode );
-				$p_iva            = wcifd_json_decode( $order->CustomerVatCode );
+				$billing_company  = WCIFD_Functions::decode_xml_value( $order->CustomerName );
+				$billing_address  = WCIFD_Functions::decode_xml_value( $order->CustomerAddress );
+				$billing_city     = WCIFD_Functions::decode_xml_value( $order->CustomerCity );
+				$billing_postcode = WCIFD_Functions::decode_xml_value( $order->CustomerPostcode );
+				$billing_state    = WCIFD_Functions::decode_xml_value( $order->CustomerProvince );
+				$billing_country  = WCIFD_Functions::get_country_code( WCIFD_Functions::decode_xml_value( $order->CustomerCountry ) );
+				$billing_phone    = WCIFD_Functions::decode_xml_value( $order->CustomerTel );
+				$billing_email    = WCIFD_Functions::decode_xml_value( $order->CustomerEmail );
+				$fiscal_code      = WCIFD_Functions::decode_xml_value( $order->CustomerFiscalCode );
+				$p_iva            = WCIFD_Functions::decode_xml_value( $order->CustomerVatCode );
 
 				/*Dettagli spedizione*/
-				$shipping_name     = wcifd_json_decode( $order->DeliveryName );
-				$shipping_address  = wcifd_json_decode( $order->DeliveryAddress );
-				$shipping_city     = wcifd_json_decode( $order->DeliveryCity );
-				$shipping_postcode = wcifd_json_decode( $order->DeliveryPostcode );
-				$shipping_state    = wcifd_json_decode( $order->DeliveryProvince );
-				$shipping_country  = wcifd_get_state_code( wcifd_json_decode( $order->DeliveryCountry ) );
+				$shipping_name     = WCIFD_Functions::decode_xml_value( $order->DeliveryName );
+				$shipping_address  = WCIFD_Functions::decode_xml_value( $order->DeliveryAddress );
+				$shipping_city     = WCIFD_Functions::decode_xml_value( $order->DeliveryCity );
+				$shipping_postcode = WCIFD_Functions::decode_xml_value( $order->DeliveryPostcode );
+				$shipping_state    = WCIFD_Functions::decode_xml_value( $order->DeliveryProvince );
+				$shipping_country  = WCIFD_Functions::get_country_code( WCIFD_Functions::decode_xml_value( $order->DeliveryCountry ) );
 
 				/*Creazione utente se necessario*/
-				if ( ! email_exists( $order->CustomerEmail ) && ! check_tax_code( $order->CustomerVatCode ) && ! check_tax_code( $order->CustomerFiscalCode ) && 1 === intval( $wcifd_orders_add_users ) ) {
+				if ( ! email_exists( $order->CustomerEmail ) && ! WCIFD_Functions::get_user_id_by_tax_code( $order->CustomerVatCode ) && ! WCIFD_Functions::get_user_id_by_tax_code( $order->CustomerFiscalCode ) && 1 === intval( $wcifd_orders_add_users ) ) {
 
 					$u++;
 					$random_password = wp_generate_password( 12, false );
@@ -177,23 +177,23 @@ function wcifd_orders() {
 				$wc_order->set_address( $shipping_address, 'shipping' );
 
 				/*Impostazione metodo di pagamento*/
-				$payment_gateway = wcifd_payment_gateway( $payment_method );
+				$payment_gateway = WCIFD_Functions::get_wc_payment_gateway( $payment_method );
 				update_post_meta( $wc_order->id, '_payment_method', $payment_gateway['id'] );
 				update_post_meta( $wc_order->id, '_payment_method_title', $payment_gateway['title'] );
 
 				/*Dettagli prodotti*/
 				foreach ( $order->Rows->Row as $item ) {
 
-					$sku         = wcifd_json_decode( $item->Code );
-					$title       = wcifd_json_decode( $item->Description );
-					$tax         = wcifd_json_decode( $item->VatCode );
-					$price       = wcifd_json_decode( $item->Price );
-					$total_sales = wcifd_json_decode( $item->Qty );
+					$sku         = WCIFD_Functions::decode_xml_value( $item->Code );
+					$title       = WCIFD_Functions::decode_xml_value( $item->Description );
+					$tax         = WCIFD_Functions::decode_xml_value( $item->VatCode );
+					$price       = WCIFD_Functions::decode_xml_value( $item->Price );
+					$total_sales = WCIFD_Functions::decode_xml_value( $item->Qty );
 
 					/*Verifica presenza prodotto*/
-					if ( wcifd_search_product( $item->Code ) ) {
+					if ( WCIFD_Functions::search_product( $item->Code ) ) {
 
-						$product_id = wcifd_search_product( $sku );
+						$product_id = WCIFD_Functions::search_product( $sku );
 						$wc_order->add_product( get_product( $product_id ), $total_sales );
 
 					} else {
@@ -204,11 +204,11 @@ function wcifd_orders() {
 						/*Verifica classe di imposta*/
 						$tax_status = 'none';
 						$tax_class  = '';
-						$perc       = wcifd_json_decode( $tax['Perc'] );
-						$class      = wcifd_json_decode( $tax['Class'] );
+						$perc       = WCIFD_Functions::decode_xml_value( $tax['Perc'] );
+						$class      = WCIFD_Functions::decode_xml_value( $tax['Class'] );
 						if ( 0 !== intval( $perc ) || 'Escluso' !== $class ) {
 							$tax_status = 'taxable';
-							$tax_class  = wcifd_get_tax_rate_class( wcifd_json_decode( $tax ), strval( $perc ) );
+							$tax_class  = WCIFD_Functions::get_tax_rate_class( WCIFD_Functions::decode_xml_value( $tax ), strval( $perc ) );
 						}
 
 						$args = array(

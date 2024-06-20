@@ -109,7 +109,7 @@ function wcifd_import_single_product( $hash ) {
 			}
 
 			if ( $parent_sku ) {
-				$parent_product_id = wcifd_search_product( $parent_sku );
+				$parent_product_id = WCIFD_Functions::search_product( $parent_sku );
 			}
 
 			$var_attributes = isset( $notes['var_attributes'] ) ? $notes['var_attributes'] : null;
@@ -129,7 +129,7 @@ function wcifd_import_single_product( $hash ) {
 	$status              = ( $var_attributes ) ? 'publish' : $new_products_status;
 
 	/*Verifico la presenza del prodotto*/
-	$id   = wcifd_search_product( $sku, $parent_product_id );
+	$id   = WCIFD_Functions::search_product( $sku, $parent_product_id );
 	$type = ( wp_get_post_parent_id( $id ) || $parent_product_id ) ? 'product_variation' : 'product';
 
 	/*Gestione magazzino*/
@@ -192,7 +192,7 @@ function wcifd_import_single_product( $hash ) {
 
 	if ( '0' !== $perc || ( 'Escluso' !== $class && 'NonSoggetto' !== $class ) ) {
 		$tax_status = 'taxable';
-		$tax_class  = wcifd_get_tax_rate_class( $tax, strval( $perc ) );
+		$tax_class  = WCIFD_Functions::get_tax_rate_class( $tax, strval( $perc ) );
 	}
 
 	/* Opzione evita creazione nuovi prodotti se non disponibili a magazzino */
@@ -480,21 +480,21 @@ function wcifd_import_single_product( $hash ) {
 	if ( $category ) {
 
 		/*Categoria*/
-		$category_term = wcifd_add_taxonomy_term( $product_id, $category, 0 );
+		$category_term = WCIFD_Functions::add_taxonomy_term( $product_id, $category, 0 );
 
 		if ( $sub_category && ! is_wp_error( $category_term ) && isset( $category_term['term_id'] ) ) {
 
 			$more_terms = array();
 
 			/*Prima sottocategoria*/
-			$more_terms[1] = wcifd_add_taxonomy_term( $product_id, $sub_category, $category_term['term_id'], true );
+			$more_terms[1] = WCIFD_Functions::add_taxonomy_term( $product_id, $sub_category, $category_term['term_id'], true );
 
 			/*Sottocategorie successive*/
 			for ( $i = 2; $i < 10; $i++ ) {
 				$sub_name = 'Subcategory' . $i;
 				if ( isset( $product[ $sub_name ] ) ) {
 
-					$more_terms[ $i ] = wcifd_add_taxonomy_term( $product_id, $product[ $sub_name ], $more_terms[ $i - 1 ]['term_id'], true );
+					$more_terms[ $i ] = WCIFD_Functions::add_taxonomy_term( $product_id, $product[ $sub_name ], $more_terms[ $i - 1 ]['term_id'], true );
 
 				}
 			}
@@ -697,7 +697,7 @@ function wcifd_import_single_product( $hash ) {
 		foreach ( $variants_array as $variant ) {
 
 			$barcode      = isset( $variant['Barcode'] ) ? $variant['Barcode'] : '';
-			$var_id       = wcifd_search_product( $barcode );
+			$var_id       = WCIFD_Functions::search_product( $barcode );
 			$in_stock     = isset( $variant['AvailableQty'] ) ? $variant['AvailableQty'] : '';
 			$man_stock    = 'yes';
 			$stock_status = ( $in_stock ) ? 'instock' : 'outofstock';
