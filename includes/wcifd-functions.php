@@ -24,6 +24,8 @@ class WCIFD_Functions {
 	 */
 	public function __construct() {
 
+        add_action( 'init', array( $this, 'register_attributes' ) );
+
 	}
 
 
@@ -457,70 +459,196 @@ class WCIFD_Functions {
             }
         }
     }
+
+
+    /**
+     * Registe taxonomy 
+     *
+     * @param  string $name the taxonomy name. 
+     *
+     * @return void
+     */
+    public function register_taxonomy( $name ) {
+
+        $paname = 'pa_' . $name;
+
+        if ( ! get_taxonomy( $paname ) ) {
+
+            $permalinks    = get_option( 'woocommerce_permalinks' );
+            $taxonomy_data = array(
+                'hierarchical'          => true,
+                'update_count_callback' => '_update_post_term_count',
+                'labels'                => array(
+                    'name'              => $name,
+                    'singular_name'     => $name,
+                    /* Translators: the taxonomy name */
+                    'search_items'      => sprintf( __( 'Search %s', 'woocommerce' ), $name ),
+                    /* Translators: the taxonomy name */
+                    'all_items'         => sprintf( __( 'All %s', 'woocommerce' ), $name ),
+                    /* Translators: the taxonomy name */
+                    'parent_item'       => sprintf( __( 'Parent %s', 'woocommerce' ), $name ),
+                    /* Translators: the taxonomy name */
+                    'parent_item_colon' => sprintf( __( 'Parent %s:', 'woocommerce' ), $name ),
+                    /* Translators: the taxonomy name */
+                    'edit_item'         => sprintf( __( 'Edit %s', 'woocommerce' ), $name ),
+                    /* Translators: the taxonomy name */
+                    'update_item'       => sprintf( __( 'Update %s', 'woocommerce' ), $name ),
+                    /* Translators: the taxonomy name */
+                    'add_new_item'      => sprintf( __( 'Add New %s', 'woocommerce' ), $name ),
+                    /* Translators: the taxonomy name */
+                    'new_item_name'     => sprintf( __( 'New %s', 'woocommerce' ), $name ),
+                ),
+                'show_ui'               => false,
+                'query_var'             => true,
+                'rewrite'               => array(
+                    'slug'         => empty( $permalinks['attribute_base'] ) ? '' : trailingslashit( $permalinks['attribute_base'] ) . sanitize_title( $name ),
+                    'with_front'   => false,
+                    'hierarchical' => true,
+                ),
+                'sort'                  => false,
+                'public'                => true,
+                'show_in_nav_menus'     => false,
+                'capabilities'          => array(
+                    'manage_terms' => 'manage_product_terms',
+                    'edit_terms'   => 'edit_product_terms',
+                    'delete_terms' => 'delete_product_terms',
+                    'assign_terms' => 'assign_product_terms',
+                ),
+            );
+
+            register_taxonomy( $paname, array( 'product' ), $taxonomy_data );
+
+        }
+
+    }
+
+
+    /**
+     * Register attributes 
+     *
+     * @return void
+     */
+    public function register_attributes() {
+
+        $attributes = array(
+            'size'             => __( 'Size', 'wc-importer-for-danea' ),
+            'color'            => __( 'Color', 'wc-importer-for-danea' ),
+            'producer'         => __( 'Producer', 'wc-importer-for-danea' ),
+            'supplier'         => __( 'Supplier', 'wc-importer-for-danea' ),
+            'sup-product-code' => __( 'Supplier product code', 'wc-importer-for-danea' ),
+        );
+
+        $additional_attributes = array();
+
+        if ( isset( $_POST['wcifd-custom-fields-hidden'], $_POST['wcifd-products-fields-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wcifd-products-fields-nonce'] ) ), 'wcifd-products-fields' ) ) {
+
+            /*Recupero i campi liberi di Danea abilitati dall'admin*/
+            $custom_fields = get_option( 'wcifd-custom-fields' );
+
+            if ( $custom_fields && is_array( $custom_fields ) ) {
+
+                $count_custom_fields = count( $custom_fields );
+
+                for ( $i = 1; $i <= $count_custom_fields; $i++ ) {
+
+                    if ( isset( $custom_fields[ $i ]['import'] ) && 'attribute' === $custom_fields[ $i ]['import'] ) {
+
+                        $custom_field_name = isset( $_POST[ 'custom-field-name-' . $i ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'custom-field-name-' . $i ] ) ) : null;
+
+                        /* Translators: the custom field number */
+                        $name = $custom_field_name ? $custom_field_name : sprintf( __( 'Custom Field %d', 'wc-importer-for-danea' ), $i );
+
+                        $additional_attributes[ 'customfield' . $i ] = $name;
+
+                    }
+                }
+            }
+        }
+
+        global $wpdb;
+
+            /* Contiene il nome degli attributi modificati */
+        $changes = array();
+
+        /* Unisco gli attributi */
+        $all_attributes = array_merge( $attributes, $additional_attributes );
+
+        foreach ( $all_attributes as $key => $value ) {
+
+            /* Registrazione tassonomia */
+            $this->register_taxonomy( $key );
+
+            
+
+            $taxonomies       = wc_get_attribute_taxonomies();
+            $taxonomies_names = array_values( wp_list_pluck( $taxonomies, 'attribute_name' ) );
+            /* error_log( 'TAXONOMIES NAMES: ' . print_r( $taxonomies_names, true ) ); */
+
+
+
+            $query = '
+                SELECT * FROM ' . $wpdb->prefix . "woocommerce_attribute_taxonomies WHERE attribute_name = '$key'
+                ";
+
+            $results = $wpdb->get_results( $query, ARRAY_A );
+
+            /* Inserimento record se non presente */
+            if ( ! $results ) {
+
+                $changes[] = $key;
+
+                $insert = $wpdb->insert(
+                    $wpdb->prefix . 'woocommerce_attribute_taxonomies',
+                    array(
+                        'attribute_name'    => sanitize_title( $key ),
+                        'attribute_label'   => $value,
+                        'attribute_type'    => 'select',
+                        'attribute_orderby' => 'menu_order',
+                        'attribute_public'  => 0,
+                    ),
+                    array(
+                        '%s',
+                        '%s',
+                        '%s',
+                        '%s',
+                        '%d',
+                    )
+                );
+
+                /* Aggiornamento record in caso di nome modificato */
+            } elseif ( isset( $results[0]['attribute_label'] ) && $results[0]['attribute_label'] !== $value ) {
+
+                $changes[] = $key;
+
+                $update = $wpdb->update(
+                    $wpdb->prefix . 'woocommerce_attribute_taxonomies',
+                    array(
+                        'attribute_label' => $value,
+                    ),
+                    array(
+                        'attribute_name' => sanitize_title( $key ),
+                    ),
+                    array(
+                        '%s',
+                    ),
+                    array(
+                        '%s',
+                    )
+                );
+
+            }
+        }
+
+        if ( ! empty( $changes ) ) {
+            wcifd_update_transient_wc_attributes();
+        }
+
+    }
+
 }
 
 
 
-/**
- * Registrazione tassonomie
- *
- * @param  string $name il nome della tassonomia da creare.
- *
- * @return void
- */
-function wcifd_register_taxonomy( $name ) {
-
-	$paname = 'pa_' . $name;
-
-	if ( ! get_taxonomy( $paname ) ) {
-
-		$permalinks    = get_option( 'woocommerce_permalinks' );
-		$taxonomy_data = array(
-			'hierarchical'          => true,
-			'update_count_callback' => '_update_post_term_count',
-			'labels'                => array(
-				'name'              => $name,
-				'singular_name'     => $name,
-				/* Translators: the taxonomy name */
-				'search_items'      => sprintf( __( 'Search %s', 'woocommerce' ), $name ),
-				/* Translators: the taxonomy name */
-				'all_items'         => sprintf( __( 'All %s', 'woocommerce' ), $name ),
-				/* Translators: the taxonomy name */
-				'parent_item'       => sprintf( __( 'Parent %s', 'woocommerce' ), $name ),
-				/* Translators: the taxonomy name */
-				'parent_item_colon' => sprintf( __( 'Parent %s:', 'woocommerce' ), $name ),
-				/* Translators: the taxonomy name */
-				'edit_item'         => sprintf( __( 'Edit %s', 'woocommerce' ), $name ),
-				/* Translators: the taxonomy name */
-				'update_item'       => sprintf( __( 'Update %s', 'woocommerce' ), $name ),
-				/* Translators: the taxonomy name */
-				'add_new_item'      => sprintf( __( 'Add New %s', 'woocommerce' ), $name ),
-				/* Translators: the taxonomy name */
-				'new_item_name'     => sprintf( __( 'New %s', 'woocommerce' ), $name ),
-			),
-			'show_ui'               => false,
-			'query_var'             => true,
-			'rewrite'               => array(
-				'slug'         => empty( $permalinks['attribute_base'] ) ? '' : trailingslashit( $permalinks['attribute_base'] ) . sanitize_title( $name ),
-				'with_front'   => false,
-				'hierarchical' => true,
-			),
-			'sort'                  => false,
-			'public'                => true,
-			'show_in_nav_menus'     => false,
-			'capabilities'          => array(
-				'manage_terms' => 'manage_product_terms',
-				'edit_terms'   => 'edit_product_terms',
-				'delete_terms' => 'delete_product_terms',
-				'assign_terms' => 'assign_product_terms',
-			),
-		);
-
-		register_taxonomy( $paname, array( 'product' ), $taxonomy_data );
-
-	}
-
-}
 
 
 /**
@@ -542,118 +670,6 @@ function wcifd_update_transient_wc_attributes() {
 }
 
 
-/**
- * Registrazione degli attributi
- */
-function wcifd_register_attributes() {
-
-	$attributes = array(
-		'size'             => __( 'Size', 'wc-importer-for-danea' ),
-		'color'            => __( 'Color', 'wc-importer-for-danea' ),
-		'producer'         => __( 'Producer', 'wc-importer-for-danea' ),
-		'supplier'         => __( 'Supplier', 'wc-importer-for-danea' ),
-		'sup-product-code' => __( 'Supplier product code', 'wc-importer-for-danea' ),
-	);
-
-	$additional_attributes = array();
-
-	if ( isset( $_POST['wcifd-custom-fields-hidden'], $_POST['wcifd-products-fields-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wcifd-products-fields-nonce'] ) ), 'wcifd-products-fields' ) ) {
-
-		/*Recupero i campi liberi di Danea abilitati dall'admin*/
-		$custom_fields = get_option( 'wcifd-custom-fields' );
-
-		if ( $custom_fields && is_array( $custom_fields ) ) {
-
-			$count_custom_fields = count( $custom_fields );
-
-			for ( $i = 1; $i <= $count_custom_fields; $i++ ) {
-
-				if ( isset( $custom_fields[ $i ]['import'] ) && 'attribute' === $custom_fields[ $i ]['import'] ) {
-
-					$custom_field_name = isset( $_POST[ 'custom-field-name-' . $i ] ) ? sanitize_text_field( wp_unslash( $_POST[ 'custom-field-name-' . $i ] ) ) : null;
-
-					/* Translators: the custom field number */
-					$name = $custom_field_name ? $custom_field_name : sprintf( __( 'Custom Field %d', 'wc-importer-for-danea' ), $i );
-
-					$additional_attributes[ 'customfield' . $i ] = $name;
-
-				}
-			}
-		}
-	}
-
-	global $wpdb;
-
-	/* Contiene il nome degli attributi modificati */
-	$changes = array();
-
-	/* Unisco gli attributi */
-	$all_attributes = array_merge( $attributes, $additional_attributes );
-
-	foreach ( $all_attributes as $key => $value ) {
-
-		/* Registrazione tassonomia */
-		wcifd_register_taxonomy( $key );
-
-		$query = '
-			SELECT * FROM ' . $wpdb->prefix . "woocommerce_attribute_taxonomies WHERE attribute_name = '$key'
-			";
-
-		$results = $wpdb->get_results( $query, ARRAY_A );
-
-		/* Inserimento record se non presente */
-		if ( ! $results ) {
-
-			$changes[] = $key;
-
-			$insert = $wpdb->insert(
-				$wpdb->prefix . 'woocommerce_attribute_taxonomies',
-				array(
-					'attribute_name'    => sanitize_title( $key ),
-					'attribute_label'   => $value,
-					'attribute_type'    => 'select',
-					'attribute_orderby' => 'menu_order',
-					'attribute_public'  => 0,
-				),
-				array(
-					'%s',
-					'%s',
-					'%s',
-					'%s',
-					'%d',
-				)
-			);
-
-			/* Aggiornamento record in caso di nome modificato */
-		} elseif ( isset( $results[0]['attribute_label'] ) && $results[0]['attribute_label'] !== $value ) {
-
-			$changes[] = $key;
-
-			$update = $wpdb->update(
-				$wpdb->prefix . 'woocommerce_attribute_taxonomies',
-				array(
-					'attribute_label' => $value,
-				),
-				array(
-					'attribute_name' => sanitize_title( $key ),
-				),
-				array(
-					'%s',
-				),
-				array(
-					'%s',
-				)
-			);
-
-		}
-	}
-
-	if ( ! empty( $changes ) ) {
-		wcifd_update_transient_wc_attributes();
-	}
-
-}
-add_action( 'init', 'wcifd_register_attributes' );
 
 
 /**
@@ -941,4 +957,8 @@ function wcifd_update_message( $message = '', $status = '' ) {
 
 }
 add_filter( 'puc_manual_check_message-wc-importer-for-danea-premium', 'wcifd_update_message', 10, 2 );
+
+
+
+new WCIFD_Functions();
 
