@@ -640,145 +640,158 @@ class WCIFD_Functions {
         }
 
         if ( ! empty( $changes ) ) {
-            wcifd_update_transient_wc_attributes();
+            $this->update_transient_wc_attributes();
         }
 
     }
 
+
+    /**
+     * Update transient
+     *
+     * @return void
+     */
+    public function update_transient_wc_attributes() {
+        global $wpdb;
+        $query   = '
+            SELECT * FROM ' . $wpdb->prefix . 'woocommerce_attribute_taxonomies
+        ';
+        $results = $wpdb->get_results( $query );
+
+        $data = array();
+        foreach ( $results as $key => $value ) {
+            $data[ $key ] = $value;
+        }
+
+        update_option( '_transient_wc_attribute_taxonomies', $data );
+    }
+
+
+    /**
+     * Get the gross or net price from the Danea XML based on the admin set
+     *
+     * @param  array   $product      the single product. 
+     * @param  int     $number       the price list set. 
+     * @param  boolean $tax_included gross price with true. 
+     *
+     * @return stringa the price 
+     */
+    public static function get_list_price( $product, $number, $tax_included = false ) {
+
+        $gross_price = 'GrossPrice' . $number;
+        $net_price   = 'NetPrice' . $number;
+
+        if ( $tax_included ) {
+            $output = isset( $product[ $gross_price ] ) ? $product[ $gross_price ] : '';
+        } else {
+            $output = isset( $product[ $net_price ] ) ? $product[ $net_price ] : '';
+        }
+
+        return $output;
+
+    }
+
+
+    /**
+     * Get prices with labels for every user roles set with WC Role Based Price
+     *
+     * @return array
+     */
+    public static function get_wc_rbp() {
+
+        $output         = null;
+        $wc_rbp_general = get_option( 'wc_rbp_general' );
+
+        if ( function_exists( 'woocommerce_role_based_price' ) && $wc_rbp_general ) {
+            $wc_rbp_allowed_roles = isset( $wc_rbp_general['wc_rbp_allowed_roles'] ) ? $wc_rbp_general['wc_rbp_allowed_roles'] : '';
+            $wc_rbp_allowed_price = isset( $wc_rbp_general['wc_rbp_allowed_price'] ) ? $wc_rbp_general['wc_rbp_allowed_price'] : '';
+
+            if ( $wc_rbp_allowed_roles ) {
+                $output = array();
+                foreach ( $wc_rbp_allowed_roles as $role ) {
+                    foreach ( $wc_rbp_allowed_price as $price_type ) {
+                        $field_name = $price_type . '_' . $role;
+                        $price_list = get_option( 'wcifd_' . $field_name );
+
+                        $output[ $role ][ $price_type ] = $price_list;
+
+                    }
+                }
+            }
+        }
+
+        return $output;
+    }
+
+
+    /**
+     * Get the product size
+     *
+     * @param  array   $product the product.
+     * @param  string  $type    gross or net measures. 
+     * @param  string  $measure the param to be returned. 
+     * @param  boolean $csv     csv with true, object instead. 
+     *
+     * @return string
+     */
+    public static function get_product_size( $product, $type, $measure, $csv = false ) {
+
+        $x = null;
+        $y = null;
+        $z = null;
+        if ( 'gross-size' === $type ) {
+            if ( $csv ) {
+                $x = isset( $product['Dim. imballo X'] ) ? $product['Dim. imballo X'] : '';
+                $y = isset( $product['Dim. imballo Y'] ) ? $product['Dim. imballo Y'] : '';
+                $z = isset( $product['Dim. imballo Z'] ) ? $product['Dim. imballo Z'] : '';
+            } else {
+                $x = isset( $product['PackingSizeX'] ) ? $product['PackingSizeX'] : '';
+                $y = isset( $product['PackingSizeY'] ) ? $product['PackingSizeY'] : '';
+                $z = isset( $product['PackingSizeZ'] ) ? $product['PackingSizeZ'] : '';
+            }
+        } else {
+            if ( $csv ) {
+                $x = isset( $product['Dim. netta X'] ) ? $product['Dim. netta X'] : '';
+                $y = isset( $product['Dim. netta Y'] ) ? $product['Dim. netta Y'] : '';
+                $z = isset( $product['Dim. netta Z'] ) ? $product['Dim. netta Z'] : '';
+            } else {
+                $x = isset( $product['NetSizeX'] ) ? $product['NetSizeX'] : '';
+                $y = isset( $product['NetSizeY'] ) ? $product['NetSizeY'] : '';
+                $z = isset( $product['NetSizeZ'] ) ? $product['NetSizeZ'] : '';
+            }
+        }
+
+        switch ( $measure ) {
+            case 'x':
+                $output = $x;
+                break;
+
+            case 'y':
+                $output = $y;
+                break;
+
+            case 'z':
+                $output = $z;
+                break;
+        }
+
+        return $output;
+
+    }
 }
 
 
 
 
 
-/**
- * Update transient
- */
-function wcifd_update_transient_wc_attributes() {
-	global $wpdb;
-	$query   = '
-		SELECT * FROM ' . $wpdb->prefix . 'woocommerce_attribute_taxonomies
-	';
-	$results = $wpdb->get_results( $query );
-
-	$data = array();
-	foreach ( $results as $key => $value ) {
-		$data[ $key ] = $value;
-	}
-
-	update_option( '_transient_wc_attribute_taxonomies', $data );
-}
 
 
 
 
-/**
- * Restituisce il prezzo di listino dal file xml in base alle impostazioni dell'admin
- *
- * @param  array   $product      il singolo prodotto.
- * @param  int     $number       il listino impostato.
- * @param  boolean $tax_included prezzi ivati o meno.
- * @return stringa               il prezzo
- */
-function wcifd_get_list_price( $product, $number, $tax_included = false ) {
-
-	$gross_price = 'GrossPrice' . $number;
-	$net_price   = 'NetPrice' . $number;
-
-	if ( $tax_included ) {
-		$output = isset( $product[ $gross_price ] ) ? $product[ $gross_price ] : '';
-	} else {
-		$output = isset( $product[ $net_price ] ) ? $product[ $net_price ] : '';
-	}
-
-	return $output;
-
-}
 
 
-/**
- * Restituisce prezzi e label per ruolo utente definite con WC Role Based Price
- *
- * @return array
- */
-function get_wc_rbp() {
-
-	$output         = null;
-	$wc_rbp_general = get_option( 'wc_rbp_general' );
-
-	if ( function_exists( 'woocommerce_role_based_price' ) && $wc_rbp_general ) {
-		$wc_rbp_allowed_roles = isset( $wc_rbp_general['wc_rbp_allowed_roles'] ) ? $wc_rbp_general['wc_rbp_allowed_roles'] : '';
-		$wc_rbp_allowed_price = isset( $wc_rbp_general['wc_rbp_allowed_price'] ) ? $wc_rbp_general['wc_rbp_allowed_price'] : '';
-
-		if ( $wc_rbp_allowed_roles ) {
-			$output = array();
-			foreach ( $wc_rbp_allowed_roles as $role ) {
-				foreach ( $wc_rbp_allowed_price as $price_type ) {
-					$field_name = $price_type . '_' . $role;
-					$price_list = get_option( 'wcifd_' . $field_name );
-
-					$output[ $role ][ $price_type ] = $price_list;
-
-				}
-			}
-		}
-	}
-
-	return $output;
-}
 
 
-/**
- * Recupera le dimensioni del prodotto, sulla base delle impostazioni
- *
- * @param  array   $product il prodotto.
- * @param  string  $type    misure nette o meno.
- * @param  string  $measure la dimensione da restituire.
- * @param  boolean $csv     csv o oggetto.
- * @return string           il dato
- */
-function wcifd_get_product_size( $product, $type, $measure, $csv = false ) {
-	$x = null;
-	$y = null;
-	$z = null;
-	if ( 'gross-size' === $type ) {
-		if ( $csv ) {
-			$x = isset( $product['Dim. imballo X'] ) ? $product['Dim. imballo X'] : '';
-			$y = isset( $product['Dim. imballo Y'] ) ? $product['Dim. imballo Y'] : '';
-			$z = isset( $product['Dim. imballo Z'] ) ? $product['Dim. imballo Z'] : '';
-		} else {
-			$x = isset( $product['PackingSizeX'] ) ? $product['PackingSizeX'] : '';
-			$y = isset( $product['PackingSizeY'] ) ? $product['PackingSizeY'] : '';
-			$z = isset( $product['PackingSizeZ'] ) ? $product['PackingSizeZ'] : '';
-		}
-	} else {
-		if ( $csv ) {
-			$x = isset( $product['Dim. netta X'] ) ? $product['Dim. netta X'] : '';
-			$y = isset( $product['Dim. netta Y'] ) ? $product['Dim. netta Y'] : '';
-			$z = isset( $product['Dim. netta Z'] ) ? $product['Dim. netta Z'] : '';
-		} else {
-			$x = isset( $product['NetSizeX'] ) ? $product['NetSizeX'] : '';
-			$y = isset( $product['NetSizeY'] ) ? $product['NetSizeY'] : '';
-			$z = isset( $product['NetSizeZ'] ) ? $product['NetSizeZ'] : '';
-		}
-	}
-
-	switch ( $measure ) {
-		case 'x':
-			$output = $x;
-			break;
-
-		case 'y':
-			$output = $y;
-			break;
-
-		case 'z':
-			$output = $z;
-			break;
-	}
-
-	return $output;
-}
 
 
 /**

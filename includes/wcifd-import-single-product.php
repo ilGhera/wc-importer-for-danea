@@ -146,9 +146,9 @@ function wcifd_import_single_product( $hash ) {
 	}
 
 	/*Dimensione prodotto*/
-	$length = wcifd_get_product_size( $product, $size_type, 'z' );
-	$width  = wcifd_get_product_size( $product, $size_type, 'x' );
-	$height = wcifd_get_product_size( $product, $size_type, 'y' );
+	$length = WCIFD_Functions::get_product_size( $product, $size_type, 'z' );
+	$width  = WCIFD_Functions::get_product_size( $product, $size_type, 'x' );
+	$height = WCIFD_Functions::get_product_size( $product, $size_type, 'y' );
 
 	/*Peso del prodotto*/
 	if ( 'gross-weight' === $weight_type ) {
@@ -164,8 +164,8 @@ function wcifd_import_single_product( $hash ) {
 	$tax_included = get_option( 'wcifd-tax-included' );
 
 	/*Prezzo di listino e prezzo scontato*/
-	$regular_price = wcifd_get_list_price( $product, $regular_price_list, $tax_included );
-	$sale_price    = wcifd_get_list_price( $product, $sale_price_list, $tax_included );
+	$regular_price = WCIFD_Functions::get_list_price( $product, $regular_price_list, $tax_included );
+	$sale_price    = WCIFD_Functions::get_list_price( $product, $sale_price_list, $tax_included );
 	$on_sale       = $sale_price ? 1 : 0;
 
 	/*Variazione taglia e colore di Danea*/
@@ -248,7 +248,7 @@ function wcifd_import_single_product( $hash ) {
 			foreach ( $wc_rbp as $role => $price_types ) {
 				foreach ( $price_types as $key => $value ) {
 
-					$wc_rbp_price = wcifd_get_list_price( $product, $value, $tax_included );
+					$wc_rbp_price = WCIFD_Functions::get_list_price( $product, $value, $tax_included );
 
 					if ( $wc_rbp_price ) {
 
@@ -433,7 +433,7 @@ function wcifd_import_single_product( $hash ) {
 
 					foreach ( $price_types as $key => $value ) {
 
-						$wc_rbp_price = wcifd_get_list_price( $product, $value, $tax_included );
+						$wc_rbp_price = WCIFD_Functions::get_list_price( $product, $value, $tax_included );
 
 						if ( $wc_rbp_price ) {
 
@@ -752,7 +752,7 @@ function wcifd_import_single_product( $hash ) {
 					foreach ( $wc_rbp as $role => $price_types ) {
 						foreach ( $price_types as $key => $value ) {
 
-							$wc_rbp_price = wcifd_get_list_price( $product, $value, $tax_included );
+							$wc_rbp_price = WCIFD_Functions::get_list_price( $product, $value, $tax_included );
 
 							if ( $wc_rbp_price ) {
 

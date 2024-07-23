@@ -17,7 +17,7 @@
  */
 function wcifd_catalog_update( $file ) {
 
-	/*Opzioni admin*/
+	/* Admin options */
 	$regular_price_list = get_option( 'wcifd-regular-price-list' );
 	$sale_price_list    = get_option( 'wcifd-sale-price-list' );
 	$size_type          = get_option( 'wcifd-size-type' );
@@ -25,12 +25,12 @@ function wcifd_catalog_update( $file ) {
 	$deleted_products   = get_option( 'wcifd-deleted-products' );
 	$replace_products   = get_option( 'wcifd-replace-products' );
 
-	/*WooCommerce Role Based Price*/
-	$wc_rbp = get_wc_rbp();
+	/* WooCommerce Role Based Price */
+	$wc_rbp = WCIFD_Functions::get_wc_rbp();
 
 	$results = simplexml_load_file( $file );
 
-	/*Cancellazione prodotti esistenti*/
+	/* Delete products not found */
 	if ( $replace_products && 'full' === strval( $results->attributes()->Mode[0] ) ) {
 
 		wcifd_delete_all_products();

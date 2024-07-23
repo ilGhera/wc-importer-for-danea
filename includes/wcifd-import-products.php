@@ -123,9 +123,9 @@ function wcifd_products() {
 				$manage_stock = ( 'Art. con magazzino' === $product_type || 'Art. con magazzino (taglie/colori)' === $product_type ) ? 'yes' : 'no';
 
 				/*Dimensione prodotto*/
-				$length = wcifd_get_product_size( $product, $size_type, 'z', true );
-				$width  = wcifd_get_product_size( $product, $size_type, 'x', true );
-				$height = wcifd_get_product_size( $product, $size_type, 'y', true );
+				$length = WCIFD_Functions::get_product_size( $product, $size_type, 'z', true );
+				$width  = WCIFD_Functions::get_product_size( $product, $size_type, 'x', true );
+				$height = WCIFD_Functions::get_product_size( $product, $size_type, 'y', true );
 
 				/*Peso del prodotto*/
 				if ( 'gross-weight' === $weight_type ) {
@@ -188,7 +188,7 @@ function wcifd_products() {
 					}
 
 					/*WooCommerce Role Based Price*/
-					$wc_rbp = get_wc_rbp();
+					$wc_rbp = WCIFD_Functions::get_wc_rbp();
 
 					if ( is_array( $wc_rbp ) && ! empty( $wc_rbp ) ) {
 
@@ -199,7 +199,7 @@ function wcifd_products() {
 
 							/*Tipo prezzi, scontati o meno*/
 							foreach ( $price_types as $key => $value ) {
-								$wc_rbp_price = wcifd_get_list_price( $product, $value, $tax_included );
+								$wc_rbp_price = WCIFD_Functions::get_list_price( $product, $value, $tax_included );
 
 								/*Prezzo ivato o meno*/
 								if ( 0 === intval( $tax_included ) ) {
@@ -319,7 +319,7 @@ function wcifd_products() {
 						}
 
 						/*WooCommerce Role Based Price*/
-						$wc_rbp = get_wc_rbp();
+						$wc_rbp = WCIFD_Functions::get_wc_rbp();
 
 						if ( is_array( $wc_rbp ) && ! empty( $wc_rbp ) ) {
 
@@ -330,7 +330,7 @@ function wcifd_products() {
 
 								/*Tipo prezzi, scontati o meno*/
 								foreach ( $price_types as $key => $value ) {
-									$wc_rbp_price = wcifd_get_list_price( $product, $value, $tax_included );
+									$wc_rbp_price = WCIFD_Functions::get_list_price( $product, $value, $tax_included );
 
 									/*Prezzo ivato o meno*/
 									if ( 0 === intval( $tax_included ) ) {
