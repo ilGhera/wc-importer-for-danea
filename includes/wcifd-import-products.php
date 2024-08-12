@@ -215,7 +215,7 @@ function wcifd_products() {
 
 					/*Descrizione breve*/
 					if ( get_option( 'wcifd-short-description' ) ) {
-						$args['post_excerpt'] = wcifd_get_short_description( $description );
+						$args['post_excerpt'] = WCIFD_Functions::get_short_description( $description );
 					}
 
 					/*Inserimento nuovo prodotto*/
@@ -360,7 +360,7 @@ function wcifd_products() {
 
 							/*Descrizione breve*/
 							if ( get_option( 'wcifd-short-description' ) ) {
-								$args['post_excerpt'] = wcifd_get_short_description( $description );
+								$args['post_excerpt'] = WCIFD_Functions::get_short_description( $description );
 							}
 						}
 

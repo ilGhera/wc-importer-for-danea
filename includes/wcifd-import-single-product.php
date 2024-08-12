@@ -82,7 +82,7 @@ function wcifd_import_single_product( $hash ) {
 
 	if ( 'excerpt' === $short_description_opt ) {
 
-		$short_description = wcifd_get_short_description( $description );
+		$short_description = WCIFD_Functions::get_short_description( $description );
 
 	} elseif ( 'notes' === $short_description_opt && isset( $product['Notes'] ) && is_string( $product['Notes'] ) ) {
 
