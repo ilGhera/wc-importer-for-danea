@@ -62,6 +62,15 @@ From WordPress.org
 
 == Changelog ==
 
+= 1.3.2 =
+Release Date: 7 October 2024
+
+* Enhancement: Plugin renamed
+* Enhancement: New plugin images
+* Enhancement: WordPress 6.6 support
+* Enhancement: WooCommerce 9.3.3 support
+
+
 = 1.3.1 =
 Release Date: 18 September 2023 
 
