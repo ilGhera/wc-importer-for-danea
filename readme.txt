@@ -1,4 +1,4 @@
-=== WooCommerce Importer for Danea ===
+=== ilGhera WooCommerce Importer for Danea ===
 Contributors: ghera74
 Tags: Fattura elettronica, WooCommerce, Danea Easyfatt, ecommerce, exporter, csv, shop, orders, products, gestionale
 Version: 1.3.1
@@ -10,7 +10,7 @@ Import customers and suppliers from Danea Easyfatt into your WooCommerce store. 
 
 == Description ==
 
-If you've built your online store with WooCommerce and you're using Danea Easyfatt as management software, you definitely need WooCommerce Importer for Danea.
+If you've built your online store with WooCommerce and you're using Danea Easyfatt as management software, you definitely need ilGhera WooCommerce Importer for Danea.
 You'll be able to import client and suppliers width this free version, also products and orders with the premium one.
 
 *Danea Easyfatt certified*
@@ -35,16 +35,16 @@ https://youtu.be/LZ6urO531OE
 From your WordPress dashboard
 
 * Visit 'Plugins > Add New'
-* Search for 'WooCommerce Importer for Danea' and download it.
-* Activate WooCommerce Importer for Danea from your Plugins page.
-* Once Activated, go to WooCommerce/ WooCommerce Importer for Danea.
+* Search for 'ilGhera WooCommerce Importer for Danea' and download it.
+* Activate ilGhera WooCommerce Importer for Danea from your Plugins page.
+* Once Activated, go to WooCommerce/ WC Importer for Danea.
 
 
 From WordPress.org
 
-* Download WooCommerce Importer for Danea
+* Download ilGhera WooCommerce Importer for Danea
 * Upload the 'woocommerce-importer-for-danea' directory to your '/wp-content/plugins/' directory, using your favorite method (ftp, sftp, scp, etc...)
-* Activate WooCommerce Importer for Danea from your Plugins page.
+* Activate ilGhera WooCommerce Importer for Danea from your Plugins page.
 * Once Activated, go to WooCommerce/ WC Importer for Danea.
 
 
