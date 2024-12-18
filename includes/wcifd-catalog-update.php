@@ -40,8 +40,8 @@ function wcifd_catalog_update( $file ) {
 	/*Verifica che si tratti di un aggiornamento o dell'intero catalogo prodotti*/
 	$products = $results->Products ? $results->Products : $results->UpdatedProducts;
 
-    /* Set transient for progress bar */
-    set_transient( 'wcifd-total-actions', count( $products->children() ), DAY_IN_SECONDS );
+	/* Set transient for progress bar */
+	set_transient( 'wcifd-total-actions', count( $products->children() ), DAY_IN_SECONDS );
 
 	foreach ( $products->children() as $product ) {
 
@@ -65,11 +65,11 @@ function wcifd_catalog_update( $file ) {
 
 		);
 
-		$hash  = md5( json_encode( $data ) );
+		$hash  = md5( wp_json_encode( $data ) );
 		$class = new WCIFD_Temporary_Data();
 
 		/*Aggiungo i dati temporanei nella tabella dedicata*/
-		$class->wcifd_add_temporary_data( $hash, json_encode( $data ) );
+		$class->wcifd_add_temporary_data( $hash, wp_json_encode( $data ) );
 
 		/*Importazione singolo prodotto*/
 		as_enqueue_async_action(
@@ -92,7 +92,7 @@ function wcifd_catalog_update( $file ) {
 				as_enqueue_async_action(
 					'wcifd_delete_product_event',
 					array(
-						json_encode( $del_product->Code ),
+						wp_json_encode( $del_product->Code ),
 					),
 					'wcifd-delete-product'
 				);
