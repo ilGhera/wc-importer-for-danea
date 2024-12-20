@@ -154,4 +154,3 @@ if ( isset( $_POST['wcifd-products-general-nonce'] ) && wp_verify_nonce( sanitiz
 
 </div>
 
-<?php wcifd_products(); ?>
