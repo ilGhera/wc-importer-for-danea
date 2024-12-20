@@ -545,7 +545,7 @@ function wcifd_import_single_product( $hash ) {
 
 		} else {
 
-			wp_remove_object_terms( $product_id, array( $value ), 'pa_' . $key );
+			wp_delete_object_term_relationships( $product_id, 'pa_' . $key );
 			unset( $attributes[ 'pa_' . $key ] );
 
 		}
