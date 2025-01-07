@@ -168,7 +168,7 @@ function get_order_by_number( $number ) {
 		SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'wcifd-order-number' AND meta_value = '$number'
 	";
 	$results = $wpdb->get_results( $query, ARRAY_A );
-	return $results[0];
+	return isset( $results[0] ) ? $result[0] : null;
 }
 
 
