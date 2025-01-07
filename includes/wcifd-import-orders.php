@@ -34,6 +34,7 @@ function wcifd_orders() {
 
 			/*L'id ordine Danea, utile a cui verrà legato quello WooCommerce*/
 			$order_number = wcifd_json_decode( $order->Number );
+            error_log( 'ORDER N.: ' . $order_number );
 
 			if ( ! get_order_by_number( $order_number ) ) {
 
@@ -77,8 +78,10 @@ function wcifd_orders() {
 				$shipping_state    = wcifd_json_decode( $order->DeliveryProvince );
 				$shipping_country  = wcifd_get_state_code( wcifd_json_decode( $order->DeliveryCountry ) );
 
+                error_log( 'TAX CODE: ' .  check_tax_code( $order->CustomerVatCode ) );
+
 				/*Creazione utente se necessario*/
-				if ( ! email_exists( $order->CustomerEmail ) && ! check_tax_code( $order->CustomerVatCode ) && ! check_tax_code( $order->CustomerFiscalCode ) && 1 === intval( $wcifd_orders_add_users ) ) {
+				if ( ! email_exists( $order->CustomerEmail ) && 1 === intval( $wcifd_orders_add_users ) ) {
 
 					$u++;
 					$random_password = wp_generate_password( 12, false );
@@ -91,9 +94,11 @@ function wcifd_orders() {
 						'last_name'    => $name[1],
 						'display_name' => $order->CustomerName,
 						'user_email'   => $order->CustomerEmail,
+                        'user_pass'    => $random_password,
 					);
 
 					$user_id = wp_insert_user( $userdata );
+                    error_log( 'USER: ' . $user_id );
 
 					/*User meta*/
 					if ( $order->CustomerReference ) {
@@ -165,10 +170,10 @@ function wcifd_orders() {
 				$wc_order = wc_create_order( $args );
 
 				/*Aggiunta ordine Danea*/
-				add_post_meta( $wc_order->id, 'wcifd-order-number', $order_number );
+				add_post_meta( $wc_order->get_id(), 'wcifd-order-number', $order_number );
 				wp_update_post(
 					array(
-						'ID'        => $wc_order->id,
+						'ID'        => $wc_order->get_id(),
 						'post_date' => $order_date,
 					)
 				);
@@ -178,8 +183,11 @@ function wcifd_orders() {
 
 				/*Impostazione metodo di pagamento*/
 				$payment_gateway = wcifd_payment_gateway( $payment_method );
-				update_post_meta( $wc_order->id, '_payment_method', $payment_gateway['id'] );
-				update_post_meta( $wc_order->id, '_payment_method_title', $payment_gateway['title'] );
+
+                if ( is_array( $payment_gateway ) ) {
+                    update_post_meta( $wc_order->get_id(), '_payment_method', $payment_gateway['id'] );
+                    update_post_meta( $wc_order->get_id(), '_payment_method_title', $payment_gateway['title'] );
+                }
 
 				/*Dettagli prodotti*/
 				foreach ( $order->Rows->Row as $item ) {
@@ -194,7 +202,7 @@ function wcifd_orders() {
 					if ( wcifd_search_product( $item->Code ) ) {
 
 						$product_id = wcifd_search_product( $sku );
-						$wc_order->add_product( get_product( $product_id ), $total_sales );
+						$wc_order->add_product( wp_get_product( $product_id ), $total_sales );
 
 					} else {
 
@@ -204,8 +212,8 @@ function wcifd_orders() {
 						/*Verifica classe di imposta*/
 						$tax_status = 'none';
 						$tax_class  = '';
-						$perc       = wcifd_json_decode( $tax['Perc'] );
-						$class      = wcifd_json_decode( $tax['Class'] );
+						$perc       = isset( $tax['Perc'] ) ? wcifd_json_decode( $tax['Perc'] ) : $tax;
+						$class      = isset( $tax['Class'] ) ? wcifd_json_decode( $tax['Class'] ) : null;
 						if ( 0 !== intval( $perc ) || 'Escluso' !== $class ) {
 							$tax_status = 'taxable';
 							$tax_class  = wcifd_get_tax_rate_class( wcifd_json_decode( $tax ), strval( $perc ) );
@@ -227,7 +235,7 @@ function wcifd_orders() {
 						);
 						$product_id = wp_insert_post( $args );
 						wp_set_object_terms( $product_id, 'Imported', 'product_cat', true );
-						$wc_order->add_product( get_product( $product_id ), $total_sales );
+						$wc_order->add_product( wc_get_product( $product_id ), $total_sales );
 
 					}
 				}
