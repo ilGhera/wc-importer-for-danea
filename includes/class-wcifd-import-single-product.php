@@ -1,6 +1,6 @@
 <?php
 /**
- * Importazione singolo prodotto
+ * Single product import 
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
@@ -8,30 +8,46 @@
  * @since 1.6.4
  */
 
+defined( 'ABSPATH' ) || exit;
+
 /**
- * Importazione prodotto
+ * Class WCIFD_Import_Single_Product
  *
- * @param  string $hash il codice identificativo del prodotto.
- *
- * @return void
+ * @since 1.6.4
  */
-function wcifd_import_single_product( $hash ) {
+class WCIFD_Import_Single_Product {
 
-	$temp                  = new WCIFD_Temporary_Data();
-	$data                  = $temp->wcifd_get_temporary_data( $hash );
-	$product               = isset( $data['product'] ) ? $data['product'] : '';
-	$notes_as_descriptions = get_option( 'wcifd-notes-as-description' );
-	$short_description_opt = get_option( 'wcifd-short-description' );
+    /**
+     * The product imported
+     *
+     * @var array 
+     */
+    public $product;
 
-	/*Termina se il prodotto non esiste*/
-	if ( ! $product ) {
+	/**
+	 * The constructor
+	 *
+     * @param  string $hash il codice identificativo del prodotto.
+     *
+	 * @return void
+	 */
+	public function __construct( $hash ) {
 
-		/*Cancello i dati temporanei dalla tabella dedicata*/
-		$temp->wcifd_delete_temporary_data( $hash );
+        $temp                  = new WCIFD_Temporary_Data();
+        $data                  = $temp->wcifd_get_temporary_data( $hash );
+        $product               = isset( $data['product'] ) ? $data['product'] : '';
+        $notes_as_descriptions = get_option( 'wcifd-notes-as-description' );
+        $short_description_opt = get_option( 'wcifd-short-description' );
 
-		return;
+        /* Ends if the product does not exists */
+        if ( ! $product ) {
 
-	}
+            /* Delete temprary data from the db */
+            $temp->wcifd_delete_temporary_data( $hash );
+
+            return;
+        }
+    }
 
 	$sku                = isset( $product['Code'] ) ? $product['Code'] : '';
 	$sku                = str_replace( '\\', '\\\\', $sku );
@@ -77,6 +93,9 @@ function wcifd_import_single_product( $hash ) {
 
 	}
 
+    private function get_description() {
+
+    }
 	/* Descrizione breve prodotto */
 	$short_description = '';
 
