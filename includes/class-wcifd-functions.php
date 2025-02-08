@@ -576,7 +576,7 @@ class WCIFD_Functions {
 
 		global $wpdb;
 
-        /* Contiene il nome degli attributi modificati */
+		/* Contiene il nome degli attributi modificati */
 		$changes = array();
 
 		/* Unisco gli attributi */
