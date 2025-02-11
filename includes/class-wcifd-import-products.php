@@ -73,11 +73,11 @@ class WCIFD_Import_Products {
 
 
 	/**
-	 * Handles the import of an CSS file
+	 * Handles the import of an CSV file
 	 *
 	 * @return void
 	 */
-	private function css_handler() {
+	private function csv_handler() {
 
 		/*Change execution time limit*/
 		set_time_limi( 0 );
