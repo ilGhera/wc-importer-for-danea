@@ -79,7 +79,7 @@ class WCIFD_Import_Products {
 	 */
 	private function csv_handler() {
 
-		/*Change execution time limit*/
+		/* Change execution time limit */
 		set_time_limi( 0 );
 
 		$tax_included     = get_option( 'wcifd-tax-included' );
@@ -107,7 +107,7 @@ class WCIFD_Import_Products {
 		$output     = '<div id="message" class="updated"><p>';
 		$output    .= '<strong>Woocommerce Importer for Danea - Premium</strong><br>';
 
-		/* Translators: 1 numero prodotti, 2 numero variazioni, 3 numero aggiornamenti */
+		/* Translators: 1 products number, 2 variations number, 3 updates number */
 		$output .= sprintf( __( 'New products imported: %1$d<br>New variations imported: %2$d<br>Items updated: %3$d', 'wc-importer-for-danea' ), $p_imported, $v, $u );
 		$output .= '</p></div>';
 
@@ -227,12 +227,12 @@ class WCIFD_Import_Products {
 
 		$data = $this->prepare_product_data( $product );
 
-		/*Variazione taglia e colore di Danea*/
+		/* Danea size/color variation */
 		if ( 'Art. con magazzino (taglie/colori)' === $data['product_type'] ) {
 			update_post_meta( $data['id'], 'wcifd-danea-size-color', 1 );
 		}
 
-		/*Verifica classe di tassazione*/
+		/* Check tax class */
 		$tax_status = 'none';
 		$tax_class  = '';
 		if ( $data['tax'] ) {
@@ -240,7 +240,7 @@ class WCIFD_Import_Products {
 			$tax_class  = WCIFD_Functions::get_tax_rate_class( $data['tax'] );
 		}
 
-		/*Inizio aggiornamento prodotto o creazione se non presente*/
+		/* Start product update or creation if not present */
 		if ( ! $data['id'] ) {
 
 			$p++;
@@ -277,21 +277,21 @@ class WCIFD_Import_Products {
 				$args['meta_input']['_sale_price'] = '';
 			}
 
-			/*WooCommerce Role Based Price*/
+			/* WooCommerce Role Based Price */
 			$wc_rbp = WCIFD_Functions::get_wc_rbp();
 
 			if ( is_array( $wc_rbp ) && ! empty( $wc_rbp ) ) {
 
 				$args['meta_input']['_enable_role_based_price'] = 1;
 
-				/*Per ruolo utente impostato*/
+				/* Based on user role */
 				foreach ( $wc_rbp as $role => $price_types ) {
 
-					/*Tipo prezzi, scontati o meno*/
+					/* Price type */
 					foreach ( $price_types as $key => $value ) {
 						$wc_rbp_price = WCIFD_Functions::get_list_price( $product, $value, $tax_included );
 
-						/*Prezzo ivato o meno*/
+						/* Gross or net price */
 						if ( 0 === intval( $tax_included ) ) {
 							$wc_rbp_price = str_replace( ',', '.', str_replace( array( ' ', '€' ), '', $product[ 'Listino ' . $value ] ) );
 						} else {
@@ -303,17 +303,17 @@ class WCIFD_Import_Products {
 				}
 			}
 
-			/*Descrizione breve*/
+			/* Short description */
 			if ( get_option( 'wcifd-short-description' ) ) {
 				$args['post_excerpt'] = WCIFD_Functions::get_short_description( $description );
 			}
 
-			/*Inserimento nuovo prodotto*/
+			/* Insert new product */
 			$product_id = wp_insert_post( $args );
 
 			if ( $variable_product ) {
 
-				/*Aggiornamento prodotto padre*/
+				/* Update parent product */
 				wp_set_object_terms( $product_id, 'variable', 'product_type' );
 
 				if ( $imported_attributes ) {
@@ -370,7 +370,7 @@ class WCIFD_Import_Products {
 			}
 		} else {
 
-			/*Non aggiornare il prodotto se nel cestino*/
+			/* Don't update if product is in trash */
 			$status = 1 === intval( $deleted_products ) ? 'trash' : '';
 
 			if ( get_post_status( $id ) !== $status ) {
@@ -408,21 +408,21 @@ class WCIFD_Import_Products {
 					$args['meta_input']['_sale_price'] = '';
 				}
 
-				/*WooCommerce Role Based Price*/
+				/* WooCommerce Role Based Price */
 				$wc_rbp = WCIFD_Functions::get_wc_rbp();
 
 				if ( is_array( $wc_rbp ) && ! empty( $wc_rbp ) ) {
 
 					$args['meta_input']['_enable_role_based_price'] = 1;
 
-					/*Per ruolo utente impostato*/
+					/* Based on user role */
 					foreach ( $wc_rbp as $role => $price_types ) {
 
-						/*Tipo prezzi, scontati o meno*/
+						/* Price type */
 						foreach ( $price_types as $key => $value ) {
 							$wc_rbp_price = WCIFD_Functions::get_list_price( $product, $value, $tax_included );
 
-							/*Prezzo ivato o meno*/
+							/* Gross or net price */
 							if ( 0 === intval( $tax_included ) ) {
 								$wc_rbp_price = str_replace( ',', '.', str_replace( array( ' ', '€' ), '', $product[ 'Listino ' . $value ] ) );
 							} else {
@@ -434,35 +434,35 @@ class WCIFD_Import_Products {
 					}
 				}
 
-				/*Nome prodotto*/
+				/* Product name */
 				if ( ! get_option( 'wcifd-exclude-title' ) ) {
 					$args['post_title'] = $title;
 				}
 
-				/*URL prodotto*/
+				/* Product URL */
 				if ( ! get_option( 'wcifd-exclude-url' ) ) {
 					$args['post_name'] = sanitize_title_with_dashes( wp_strip_all_tags( $title ) );
 				}
 
-				/*Descrizione prodotto*/
+				/* Product description */
 				if ( ! get_option( 'wcifd-exclude-description' ) ) {
 					$args['post_content'] = $description;
 
-					/*Descrizione breve*/
+					/* Short description */
 					if ( get_option( 'wcifd-short-description' ) ) {
 						$args['post_excerpt'] = WCIFD_Functions::get_short_description( $description );
 					}
 				}
 
-				/*Aggiornamento prodotto*/
+				/* Product update */
 				$product_id = wp_update_post( $args );
 			}
 		}
 
-		/*Categorie prodotto*/
+		/* Product categories */
 		if ( $category ) {
 
-			/*Categoria*/
+			/* Category */
 			$cat_term = term_exists( $category, 'product_cat' );
 
 			if ( 0 === intval( $cat_term ) || null === $cat_term ) {
