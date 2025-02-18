@@ -1,6 +1,6 @@
 <?php
 /**
- * Aggiorna la tabella wp_wc_product_meta_lookup con i dati del prodotto
+ * Update the wp_wc_product_meta_lookup table with the product data
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/classes
@@ -150,9 +150,11 @@ class WCIFD_Product_Meta_Lookup {
 
 
 	/**
-	 * Preparo i dati del prodotto
+	 * Prepare the product data
 	 *
-	 * @param  array $data i dati del prodotto.
+	 * @param array $data the product data.
+	 *
+	 * @return void
 	 */
 	private function setup_data( $data ) {
 
@@ -173,7 +175,7 @@ class WCIFD_Product_Meta_Lookup {
 
 
 	/**
-	 * Verifica che il prodotto sia presente nella tabella wc_product_meta_lookup
+	 * Check if the product is present in the wc_product_meta_lookup table
 	 *
 	 * @return bool
 	 */
@@ -196,7 +198,9 @@ class WCIFD_Product_Meta_Lookup {
 
 
 	/**
-	 * Inserisce record nella tabella
+	 * Insert record in the table
+	 *
+	 * @return void
 	 */
 	private function add() {
 
@@ -244,7 +248,9 @@ class WCIFD_Product_Meta_Lookup {
 
 
 	/**
-	 * Aggiorna record nella tabella
+	 * Update record in the table
+	 *
+	 * @return void
 	 */
 	private function update() {
 
@@ -285,7 +291,9 @@ class WCIFD_Product_Meta_Lookup {
 
 
 	/**
-	 * Elimina record dalla tabella
+	 * Delete record from the table
+	 *
+	 * @return void
 	 */
 	private function delete() {
 
@@ -300,5 +308,5 @@ class WCIFD_Product_Meta_Lookup {
 		);
 
 	}
-
 }
+
