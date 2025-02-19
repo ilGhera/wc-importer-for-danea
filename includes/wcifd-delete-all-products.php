@@ -1,6 +1,6 @@
 <?php
 /**
- * Eliminazione di tutti i prodotti WooCommerce in caso di ricezione dell'intero catalogo da Danea Easyfatt
+ * Delete all WooCommerce products receiving the entire catalog from Danea Easyfatt
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
@@ -9,7 +9,7 @@
  */
 
 /**
- * Eliminazione prodotti
+ * Delete products
  *
  * @return void
  */
