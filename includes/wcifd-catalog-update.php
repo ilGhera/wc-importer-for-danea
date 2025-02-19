@@ -1,6 +1,6 @@
 <?php
 /**
- * Aggiornaemnto del catalogo prodotti
+ * Update products catalog
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
@@ -9,7 +9,7 @@
  */
 
 /**
- * Aggiornamento prodotti
+ * Update products catalog
  *
  * @param file $file l'xml proveniente da Danea Easyfatt.
  *
@@ -37,7 +37,7 @@ function wcifd_catalog_update( $file ) {
 
 	}
 
-	/*Verifica che si tratti di un aggiornamento o dell'intero catalogo prodotti*/
+	/* Check if the update is full or not */
 	$products = $results->Products ? $results->Products : $results->UpdatedProducts;
 
 	/* Set transient for progress bar */
@@ -45,7 +45,7 @@ function wcifd_catalog_update( $file ) {
 
 	foreach ( $products->children() as $product ) {
 
-		/*Gestione iva*/
+		/* Vat */
 		$tax_attributes = null;
 		if ( isset( $product->Vat ) ) {
 
@@ -68,10 +68,10 @@ function wcifd_catalog_update( $file ) {
 		$hash  = md5( wp_json_encode( $data ) );
 		$class = new WCIFD_Temporary_Data();
 
-		/*Aggiungo i dati temporanei nella tabella dedicata*/
+		/* Add temporary data to the dedicated table */
 		$class->wcifd_add_temporary_data( $hash, wp_json_encode( $data ) );
 
-		/*Importazione singolo prodotto*/
+		/* Import single product */
 		as_enqueue_async_action(
 			'wcifd_import_product_event',
 			array(
@@ -82,7 +82,7 @@ function wcifd_catalog_update( $file ) {
 
 	}
 
-	/*Cancellazione prodotti*/
+	/* Delete products */
 	if ( isset( $results->DeletedProducts ) ) {
 
 		foreach ( $results->DeletedProducts->children() as $del_product ) {
