@@ -1,6 +1,6 @@
 <?php
 /**
- * Importazione contatti Danea come utenti WordPress
+ * Import contacts from Danea as WordPress users
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
@@ -9,9 +9,9 @@
  */
 
 /**
- * Importazione utenti
+ * Import users
  *
- * @param  string $type il ruolo da assegnare agli utenti importati.
+ * @param string $type the role to assign to imported users.
  *
  * @return void
  */
@@ -49,7 +49,7 @@ function wcifd_users( $type ) {
 						$user  = array_combine( $head, $user );
 						$email = $user['e-mail'];
 
-						/*Email obbligatoria*/
+						/* Email required */
 						if ( ! $email ) {
 							continue;
 						}
@@ -86,13 +86,13 @@ function wcifd_users( $type ) {
 							'description'  => $description,
 						);
 
-						/*Definisco i campi fiscali*/
+						/* Define the tax fields */
 						$cf_name      = WCIFD_Functions::get_italian_tax_fields_names( 'cf_name' );
 						$pi_name      = WCIFD_Functions::get_italian_tax_fields_names( 'pi_name' );
 						$pec_name     = WCIFD_Functions::get_italian_tax_fields_names( 'pec_name' );
 						$pa_code_name = WCIFD_Functions::get_italian_tax_fields_names( 'pa_code_name' );
 
-						/*Verifico la presenza dell'utente*/
+						/* Check if the user exists */
 						$user_id = username_exists( $user_name );
 
 						if ( ! $user_id ) {
@@ -100,7 +100,7 @@ function wcifd_users( $type ) {
 							$user_id  = is_object( $get_user ) && isset( $get_user->ID ) ? $get_user->ID : null;
 						}
 
-						/*Add the new user*/
+						/* Add the new user */
 						if ( ! $user_id && ! email_exists( $email ) ) {
 
 							$i++;
@@ -108,11 +108,11 @@ function wcifd_users( $type ) {
 
 						} else {
 
-							/*Update the user*/
+							/* Update the user */
 							$n++;
 							$userdata['ID'] = $user_id;
 
-							/*Check if the user role must be changed*/
+							/* Check if the user role must be changed */
 							$user_info  = get_userdata( $user_id );
 							$user_roles = is_object( $user_info ) ? $user_info->roles : null;
 
@@ -126,7 +126,7 @@ function wcifd_users( $type ) {
 
 						}
 
-						/*User meta*/
+						/* User meta */
 						if ( $user['Referente'] ) {
 							update_user_meta( $user_id, 'billing_company', $user['Denominazione'] );
 						}
