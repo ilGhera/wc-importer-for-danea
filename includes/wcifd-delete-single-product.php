@@ -1,6 +1,6 @@
 <?php
 /**
- * Eliminazione del singolo prodotto a cui sia stato tolto il flag E-commerce in Danea Easyfatt
+ * Delete a single product from which the E-commerce flag has been removed in Danea Easyfatt
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
@@ -9,9 +9,9 @@
  */
 
 /**
- * Eliminazione prodotto
+ * Delete product
  *
- * @param string $product_sku lo sku del singolo prodotto da eliminare, codificato in json.
+ * @param string $product_sku the sku of the single product to be deleted, encoded in json.
  *
  * @return void
  */
@@ -25,13 +25,13 @@ function wcifd_delete_single_product( $product_sku ) {
 
 		if ( $product_id ) {
 
-			/*Eliminazione prodotto*/
+			/* Delete product */
 			wp_delete_post( $product_id, true );
 
-			/*Aggiornamento meta lookup table*/
+			/* Meta lookup table update */
 			new WCIFD_Product_Meta_Lookup( array( 'product_id' => $product_id ), 'delete' );
 
-			/*Se presenti elimino le variazionid i prodotto*/
+			/* Delete product variations if any */
 			WCIFD_Functions::delete_variations( $product_id );
 
 		}
@@ -39,3 +39,4 @@ function wcifd_delete_single_product( $product_sku ) {
 
 }
 add_action( 'wcifd_delete_product_event', 'wcifd_delete_single_product', 10, 1 );
+
