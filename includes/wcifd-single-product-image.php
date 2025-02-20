@@ -1,6 +1,6 @@
 <?php
 /**
- * Abbinamento immagine a singolo prodotto
+ * Matching image to single product
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
@@ -9,9 +9,9 @@
  */
 
 /**
- * Abbinmaneot immagine prodotto
+ * Matching image to single product
  *
- * @param string $hash il codice del prodotto WooCommerce che identifica l'abbinamento da eseguire.
+ * @param string $hash the WooCommerce product code that identifies the match to be made.
  *
  * @return void
  */
@@ -24,7 +24,7 @@ function wcifd_single_product_image( $hash ) {
 
 	if ( $product_id && $image_name ) {
 
-		/* Start - Recupero l'immagine attraverso il nome salvato nel db */
+		/* Start - Retrieve the image through the name saved in the DB */
 		$attachment_id = null;
 
 		$args = array(
@@ -46,10 +46,10 @@ function wcifd_single_product_image( $hash ) {
 
 		if ( $product_id && $attachment_id ) {
 
-			/*Lego l'immagine al prodotto*/
+			/* Link image to the product */
 			set_post_thumbnail( $product_id, $attachment_id );
 
-			/*Assegno il prodotto come post_parent dell'immagine*/
+			/* Assign the product as post_parent of the image */
 			$updated = wp_update_post(
 				array(
 					'ID'          => $attachment_id,
