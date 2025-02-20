@@ -51,7 +51,9 @@ function load_wc_importer_for_danea_premium() {
 	require_once WCIFD_DIR . 'libraries/action-scheduler/action-scheduler.php';
 	require_once WCIFD_ADMIN . 'class-wcifd-admin.php';
 	require_once WCIFD_ADMIN . 'ilghera-notice/class-ilghera-notice.php';
-	require_once WCIFD_INCLUDES . 'class-wcifd-functions.php';
+	require_once WCIFD_CLASSES . 'class-wcifd-functions.php';
+	require_once WCIFD_CLASSES . 'class-wcifd-import-products.php';
+	require_once WCIFD_CLASSES . 'class-wcifd-import-single-product.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-temporary-data.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-product-meta-lookup.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-progress-bar.php';
@@ -59,9 +61,7 @@ function load_wc_importer_for_danea_premium() {
 	require_once WCIFD_INCLUDES . 'wcifd-single-product-image.php';
 	require_once WCIFD_INCLUDES . 'wcifd-orphan-images.php';
 	require_once WCIFD_INCLUDES . 'wcifd-import-users.php';
-	require_once WCIFD_INCLUDES . 'class-wcifd-import-products.php';
 	require_once WCIFD_INCLUDES . 'wcifd-catalog-update.php';
-	/* require_once WCIFD_INCLUDES . 'class-wcifd-import-single-product.php'; temp!!!!!!*/
 	require_once WCIFD_INCLUDES . 'wcifd-delete-single-product.php';
 	require_once WCIFD_INCLUDES . 'wcifd-delete-all-products.php';
 	require_once WCIFD_INCLUDES . 'wcifd-import-orders.php';
