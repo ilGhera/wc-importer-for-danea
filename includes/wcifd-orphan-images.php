@@ -1,6 +1,6 @@
 <?php
 /**
- * Ricevute tutte le immagini dal gestionale, abbina quelle non legate al rispettivo prodotto
+ * Match the images with the respective products
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
@@ -9,7 +9,7 @@
  */
 
 /**
- * Abbinamento immagini
+ * Image matching
  *
  * @return void
  */
@@ -34,7 +34,7 @@ function wcifd_orphan_images() {
 		}
 	}
 
-	/*Interrompo se tutti i prodotti sono stati trasferiti e le immagini gestite*/
+	/* Abort if all products have been transferred and images managed */
 	$next = as_next_scheduled_action(
 		'wcifd_import_product_event',
 		array(),
@@ -45,7 +45,7 @@ function wcifd_orphan_images() {
 
 		if ( is_array( $orphan_images ) && empty( $orphan_images ) ) {
 
-			/*Schedulo un azione per interrompere il processo ricorrente*/
+			/* Schedule an action to stop the recurring process */
 			as_enqueue_async_action(
 				'wcifd_stop_orphan_images_event',
 				array(),
@@ -60,7 +60,7 @@ add_action( 'wcifd_orphan_images_event', 'wcifd_orphan_images' );
 
 
 /**
- * Interrompe l'azione programmata di assegnazione delle immagini orfane
+ * Stops the scheduled action of assigning orphaned images
  *
  * @return void
  */
@@ -70,3 +70,4 @@ function wcifd_stop_orphan_images() {
 
 }
 add_action( 'wcifd_stop_orphan_images_event', 'wcifd_stop_orphan_images' );
+
