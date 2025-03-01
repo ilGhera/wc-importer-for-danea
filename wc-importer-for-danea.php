@@ -53,7 +53,7 @@ function load_wc_importer_for_danea_premium() {
 	require_once WCIFD_ADMIN . 'ilghera-notice/class-ilghera-notice.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-functions.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-import-products.php';
-	require_once WCIFD_CLASSES . 'class-wcifd-import-single-product.php';
+	/* require_once WCIFD_CLASSES . 'class-wcifd-import-single-product.php'; */
 	require_once WCIFD_CLASSES . 'class-wcifd-temporary-data.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-product-meta-lookup.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-progress-bar.php';
