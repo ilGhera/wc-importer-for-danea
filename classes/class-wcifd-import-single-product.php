@@ -434,40 +434,40 @@ class WCIFD_Import_Single_Product {
 			return;
 		}
 
-		$args = array(
-			'post_author'  => $data['author'],
-			'post_title'   => $data['title'],
-			'post_type'    => $this->get_product_type( $data ),
-			'post_parent'  => $data['parent_product_id'],
-			'post_content' => $data['description'],
-			'post_excerpt' => $data['short_description'],
-			'post_status'  => $data['status'],
-			'meta_input'   => array(
-				'_sku'           => $data['sku'],
-				'_tax_status'    => $data['tax_status'],
-				'_tax_class'     => $data['tax_class'],
-				'_stock'         => $data['stock'],
-				'_manage_stock'  => $data['manage_stock'],
-				'_stock_status'  => $data['stock_status'],
-				'_visibility'    => 'visible', // Temp.
-				'_regular_price' => $data['regular_price'],
-				'_price'         => $data['regular_price'],
-				'_sell_price'    => $data['regular_price'],
-				'_width'         => $data['width'],
-				'_height'        => $data['height'],
-				'_length'        => $data['length'],
-				'_weight'        => $data['weight'],
-                '_wcifd-um'      => $data['um'],
-			),
+		$props = array(
+			'name' => $data['title'],
+			'type' => $this->get_product_type( $data ),
+			'parent_id' => $data['parent_product_id'],
+			'description' => $data['description'],
+			'short_description' => $data['short_description'],
+			'status' => $data['status'],
+            'sku' => $data['sku'],
+            'tax_status' => $data['tax_status'],
+            'tax_class' => $data['tax_class'],
+            'stock_quantity'         => $data['stock'],
+            'manage_stock' => $data['manage_stock'],
+            'stock_status' => $data['stock_status'],
+            'catalog_visibility'    => 'visible', // Temp.
+            'regular_price' => $data['regular_price'],
+            'price'         => $data['regular_price'],
+            'sale_price'    => $data['regular_price'],
+            'width'         => $data['width'],
+            'height'        => $data['height'],
+            'length'        => $data['length'],
+            'weight'        => $data['weight'],
 		);
 
 		if ( $data['sale_price'] ) {
-			$args['meta_input']['_sale_price'] = $data['sale_price'];
-			$args['meta_input']['_sell_price'] = $data['sale_price'];
-			$args['meta_input']['_price']      = $data['sale_price'];
+			$props['sale_price'] = $data['sale_price'];
+			$props['price']      = $data['sale_price'];
 		} else {
-			$args['meta_input']['_sale_price'] = '';
+			$props['sale_price'] = '';
 		}
+
+        $metadata = array(
+            'author' => $data['author'], // Temp.
+            'wcifd-um' => $data['um'],
+        );
 
 		/* WooCommerce Role Based Price */
         if ( is_array( $data['wc_rbp'] ) && ! empty( $data['wc_rbp'] ) ) {
@@ -479,8 +479,8 @@ class WCIFD_Import_Single_Product {
 
 					if ( $wc_rbp_price ) {
 
-						$args['meta_input']['_enable_role_based_price'] = 1;
-						$args['meta_input']['_role_based_price'][ $role ][ $key ] = $wc_rbp_price;
+						$metadata['_enable_role_based_price'] = 1;
+						$metadata['_role_based_price'][ $role ][ $key ] = $wc_rbp_price;
 
 					}
 				}
@@ -488,8 +488,12 @@ class WCIFD_Import_Single_Product {
 		}
 
 		/* Insert the new product */
-		$product_id = wp_insert_post( $args, true );
-        $wc_product = wc_get_product( $product_id );
+        $new_product = wc_get_product();
+        $new_product->set_props( $props );
+        $new_product->set_metadata( $metadata );
+        $new_product->save();
+
+        $product_id = $new_product->get_id();
 
 		if ( is_wp_error( $product_id ) ) {
 
@@ -499,15 +503,27 @@ class WCIFD_Import_Single_Product {
 
 		} else {
 
-			if ( $variable_product ) {
+			if ( $data['variable_product'] ) {
 
-				/*Aggiornamento prodotto padre*/
+				/* Update product type */
 				wp_set_object_terms( $product_id, 'variable', 'product_type' );
 
-				if ( $imported_attributes ) {
+				if ( $data['imported_attributes'] ) {
 
-					foreach ( $imported_attributes as $key => $value ) {
+                    $attributes = $new_product->get_attributes();
 
+					foreach ( $data['imported_attributes'] as $key => $value ) {
+
+                        $attribute = new WC_Product_Attribute();
+                        $attribute->set_id( wc_attribute_taxonomy_id_by_name( 'pa_' . $key ) );
+                        $attribute->set_name( 'pa_' . $key );
+                        $attribute->set_options( array( $value ) );
+                        $attribute->set_visible( $is_taxonomy  );
+                        $attribute->set_variation( false );
+                        $attributes[] = $attribute;
+
+
+                        
 						$is_taxonomy = false === strpos( $key, 'pa_' ) ? false : true;
 						$attr_value  = $is_taxonomy ? null : $value;
 						$attr_value  = is_array( $attr_value ) ? implode( ' | ', $attr_value ) : $attr_value;
@@ -570,25 +586,6 @@ class WCIFD_Import_Single_Product {
 					}
 				}
 			}
-
-			/*Aggiornamento meta lookup table*/
-			$lookup_data = array(
-				'product_id'     => $product_id,
-				'sku'            => $sku,
-				'virtual'        => 0,
-				'downloadable'   => 0,
-				'min_price'      => $args['meta_input']['_price'],
-				'max_price'      => $args['meta_input']['_price'],
-				'onsale'         => $on_sale,
-				'stock_quantity' => $stock,
-				'stock_status'   => $stock_status,
-				'rating_count'   => 0,
-				'average_rating' => 0.00,
-				'total_sales'    => 0,
-
-			);
-
-			new WCIFD_Product_Meta_Lookup( $lookup_data );
 
 		}
     }
