@@ -336,7 +336,11 @@ class WCIFD_Functions {
 		}
 
 		if ( ! is_wp_error( $term ) ) {
-			$output = wp_set_object_terms( $product_id, intval( $term['term_id'] ), 'product_cat', $append );
+
+            $product = wc_get_product( $product_id );
+            $product->set_category_ids( array( $term['term_id'] ) );
+            $product->save();
+
 		}
 
 		return $term;
