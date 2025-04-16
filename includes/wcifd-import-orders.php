@@ -190,10 +190,11 @@ function wcifd_orders() {
 					$price       = WCIFD_Functions::decode_xml_value( $item->Price );
 					$total_sales = WCIFD_Functions::decode_xml_value( $item->Qty );
 
-					/* Check if the product exists */
-					if ( WCIFD_Functions::search_product( $item->Code ) ) {
+					/* Check if the product already exists */
+                    $product_id = WCIFD_Functions::search_product( $sku );
 
-						$product_id = WCIFD_Functions::search_product( $sku );
+					if ( $product_id ) {
+
 						$wc_order->add_product( get_product( $product_id ), $total_sales );
 
 					} else {
