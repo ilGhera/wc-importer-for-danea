@@ -337,8 +337,19 @@ class WCIFD_Functions {
 
 		if ( ! is_wp_error( $term ) ) {
 
+            /* Get the product */
             $product = wc_get_product( $product_id );
-            $product->set_category_ids( array( $term['term_id'] ) );
+
+            $categories = array();
+
+            if ( $append ) {
+
+                $categories = $product->get_category_ids();
+            }
+
+            $categories[] = $term['term_id'];
+
+            $product->set_category_ids( $categories );
             $product->save();
 
 		}
@@ -686,21 +697,23 @@ class WCIFD_Functions {
 	/**
 	 * Get the gross or net price from the Danea XML based on the admin set
 	 *
-	 * @param array   $product      the single product.
+	 * @param array   $d_product    the product received from Danea Easyfatt. 
 	 * @param int     $number       the price list set.
 	 * @param boolean $tax_included gross price with true.
 	 *
 	 * @return stringa the price
 	 */
-	public static function get_list_price( $product, $number, $tax_included = false ) {
+	public static function get_list_price( $d_product, $number, $tax_included = false ) {
+
+        $output = null;
 
 		$gross_price = 'GrossPrice' . $number;
 		$net_price   = 'NetPrice' . $number;
 
 		if ( $tax_included ) {
-			$output = isset( $product[ $gross_price ] ) ? $product[ $gross_price ] : '';
+			$output = isset( $d_product[ $gross_price ] ) ? $d_product[ $gross_price ] : '';
 		} else {
-			$output = isset( $product[ $net_price ] ) ? $product[ $net_price ] : '';
+			$output = isset( $d_product[ $net_price ] ) ? $d_product[ $net_price ] : '';
 		}
 
 		return $output;
