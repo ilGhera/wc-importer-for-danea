@@ -521,14 +521,14 @@ class WCIFD_Import_Single_Product {
 					$product->save();
 				}
 			}
-		} elseif ( $parent_product_id && $var_attributes ) {
+		} elseif ( $data['parent_product_id'] && $data['var_attributes'] ) {
 
 			/* Update product type */
 			$variation = new WC_Product_Variation( $product_id );
 
 			$attributes = $variation->get_attributes();
 
-			foreach ( $var_attributes as $attr ) {
+			foreach ( $data['var_attributes'] as $attr ) {
 
 				$attributes[] = $attr;
 			}
@@ -1257,7 +1257,7 @@ class WCIFD_Import_Single_Product {
 			$id = $this->create_new_product( $data );
 
 			/* Get previously exported product details */
-			$this->get_prev_exported_product_details( $id );
+			$this->get_prev_exported_product_details( $id, $data );
 
 		} else {
 
