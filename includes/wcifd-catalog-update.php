@@ -85,6 +85,9 @@ function wcifd_catalog_update( $file ) {
 	/* Delete products */
 	if ( isset( $results->DeletedProducts ) ) {
 
+        /* Set transient for progress bar */
+        set_transient( 'wcifd-total-delete-actions', count( $results->DeletedProducts->children() ), DAY_IN_SECONDS );
+
 		foreach ( $results->DeletedProducts->children() as $del_product ) {
 
 			if ( isset( $del_product->Code ) ) {

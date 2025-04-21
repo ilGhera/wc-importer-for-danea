@@ -25,7 +25,6 @@ class WCIFD_Progress_Bar {
 		add_action( 'wp_ajax_get-total-actions', array( $this, 'get_total_actions' ) );
 		add_action( 'wp_ajax_get-scheduled-actions', array( $this, 'get_scheduled_actions' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-
 	}
 
 
@@ -43,13 +42,13 @@ class WCIFD_Progress_Bar {
 			wp_enqueue_script( 'wcifd-progress-bar', WCIFD_URI . 'js/wcifd-progress-bar.js', array( 'jquery' ), WCIFD_VERSION, true );
 
 			$options = array(
-				'completedMessage' => __( 'Products import was completed!', 'wc-importer-for-danea' ),
+				'completedMessage'       => __( 'Products import was completed!', 'wc-importer-for-danea' ),
+				'deleteMessage'          => __( 'Products delete is running.', 'wc-importer-for-danea' ),
+				'completedDeleteMessage' => __( 'Products delete was completed!', 'wc-importer-for-danea' ),
 			);
 
 			wp_localize_script( 'wcifd-progress-bar', 'options', $options );
-
 		}
-
 	}
 
 
@@ -60,9 +59,17 @@ class WCIFD_Progress_Bar {
 	 */
 	public function get_total_actions() {
 
-		$transient = get_transient( 'wcifd-total-actions' );
+		$import = intval( get_transient( 'wcifd-total-actions' ) );
+		$delete = intval( get_transient( 'wcifd-total-delete-actions' ) );
+		$nonce  = wp_create_nonce( 'wcifd-get-actions' );
 
-		echo intval( $transient );
+		echo wp_json_encode(
+			array(
+				'import' => $import,
+				'delete' => $delete,
+				'nonce'  => $nonce,
+			)
+		);
 
 		exit;
 
@@ -76,26 +83,34 @@ class WCIFD_Progress_Bar {
 	 */
 	public function get_scheduled_actions() {
 
-		$actions = as_get_scheduled_actions(
-			array(
-				'hook'     => 'wcifd_import_product_event',
-				'group'    => 'wcifd-import-product',
-				'status'   => ActionScheduler_Store::STATUS_PENDING,
-				'per_page' => -1,
-			),
-			'ids'
-		);
+		$nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
 
-		if ( 0 === count( $actions ) ) {
+		if ( wp_verify_nonce( $nonce, 'wcifd-get-actions' ) ) {
 
-			delete_transient( 'wcifd-total-actions' );
+			$del   = isset( $_POST['delete'] ) ? sanitize_text_field( wp_unslash( $_POST['delete'] ) ) : 0;
+			$hook  = $del ? 'wcifd_delete_product_event' : 'wcifd_import_product_event';
+			$group = $del ? 'wcifd-delete-product' : 'wcifd-import-product';
 
+			$actions = as_get_scheduled_actions(
+				array(
+					'hook'     => $hook,
+					'group'    => $group,
+					'status'   => ActionScheduler_Store::STATUS_PENDING,
+					'per_page' => -1,
+				),
+				'ids'
+			);
+
+			if ( 0 === count( $actions ) ) {
+
+				$action = $del ? 'wcifd-total-delete-actions' : 'wcifd-total-actions';
+				delete_transient( $action );
+			}
+
+			echo intval( count( $actions ) );
 		}
 
-		echo intval( count( $actions ) );
-
 		exit;
-
 	}
 
 
