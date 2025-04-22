@@ -826,16 +826,9 @@ class WCIFD_Import_Single_Product {
 		/* Variation metas */
 		$meta_input = array();
 
-		/* Add attribute to the variations metas */
-		if ( $this->avail_colors ) {
-			$meta_input['attribute_pa_color'] = sanitize_title( $color );
-		}
-		if ( $this->avail_sizes ) {
-			$meta_input['attribute_pa_size'] = sanitize_title( $size );
-		}
-
 		/* Update variation */
 		$variation = new WC_Product_Variation( $var_id );
+        $variation->save();
 
 		$variation->set_sku( $barcode );
 		$variation->set_stock_quantity( $in_stock );
