@@ -88,7 +88,7 @@ class WCIFD_Admin {
 
 			echo '<div class="wrap-left">';
 
-        /* Check if WooCommerce is active */
+		/* Check if WooCommerce is active */
 		if ( ! class_exists( 'WooCommerce' ) ) {
 
 			echo '<div id="message" class="error">';
