@@ -16,6 +16,14 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.6.1
  */
 class WCIFD_Import_Products {
+    
+    /**
+     * The file
+     *
+     * @var file 
+     */
+    public $file;
+
 
 	/**
 	 * The constructor
@@ -38,17 +46,19 @@ class WCIFD_Import_Products {
 
 		if ( isset( $_POST['products-import'], $_POST['wcifd-products-file-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wcifd-products-file-nonce'] ) ), 'wcifd-products-file' ) ) {
 
-			$file      = isset( $_FILES['products-list']['tmp_name'] ) ? sanitize_text_field( wp_unslash( $_FILES['products-list']['tmp_name'] ) ) : null;
-			$file_type = isset( $_POST['file-type'] ) ? sanitize_text_field( wp_unslash( $_POST['file-type'] ) ) : null;
+			$this->file  = isset( $_FILES['products-list']['tmp_name'] ) ? sanitize_text_field( wp_unslash( $_FILES['products-list']['tmp_name'] ) ) : null;
+			$file_type   = isset( $_POST['file-type'] ) ? sanitize_text_field( wp_unslash( $_POST['file-type'] ) ) : null;
 			update_option( 'wcifd-file-type', $file_type );
 
 			if ( 'xml' === $file_type ) {
 
-				$this->xml_handler();
+				/* $this->xml_handler( $file ); */
+                add_action( 'wp_loaded', array( $this, 'xml_handler' ) );
 
 			} else {
 
-				$this->csv_handler();
+				/* $this->csv_handler( $file ); */
+                add_action( 'wp_loaded', array( $this, 'csv_handler' ) );
 
 			}
 		}
@@ -56,28 +66,24 @@ class WCIFD_Import_Products {
 
 	/**
 	 * Handles the import of an XML file
-	 *
+     *
 	 * @return void
 	 */
-	private function xml_handler() {
+	public function xml_handler() {
 
-		wcifd_catalog_update( $file );
+		wcifd_catalog_update( $this->file );
 
-		$output  = '<div id="message" class="updated"><p>';
-		$output .= '<strong>Woocommerce Importer for Danea - Premium</strong><br>';
-		$output .= __( 'The import process has started and is running in the background', 'wc-importer-for-danea' );
-		$output .= '</p></div>';
-
-		echo wp_kses_post( $output );
 	}
 
 
 	/**
 	 * Handles the import of an CSV file
 	 *
+     * @param file $file the file imported.
+     *
 	 * @return void
 	 */
-	private function csv_handler() {
+	public function csv_handler( $file ) {
 
 		/* Change execution time limit */
 		set_time_limi( 0 );
