@@ -395,6 +395,8 @@ class WCIFD_Functions {
 	 */
 	public static function get_tax_rate_class( $name, $value = '' ) {
 
+        $tax_rate_class = null;
+
 		/* If a value is not passed, use the tax name if numeric */
 		if ( '' === $value ) {
 			$value = ( is_numeric( $name ) ) ? $name : '';
