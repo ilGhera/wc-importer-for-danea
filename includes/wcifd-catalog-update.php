@@ -11,11 +11,14 @@
 /**
  * Update products catalog
  *
- * @param file $file l'xml proveniente da Danea Easyfatt.
+ * @param file $file   the file imported. 
+ * @param bool $is_csv csv with true, XML instead. 
  *
  * @return void
  */
-function wcifd_catalog_update( $file ) {
+function wcifd_catalog_update( $file, $is_csv = false ) {
+
+    $products = array();
 
 	/* Admin options */
 	$regular_price_list = get_option( 'wcifd-regular-price-list' );
@@ -28,22 +31,51 @@ function wcifd_catalog_update( $file ) {
 	/* WooCommerce Role Based Price */
 	$wc_rbp = WCIFD_Functions::get_wc_rbp();
 
-	$results = simplexml_load_file( $file );
+    if ( $is_csv ) {
 
-	/* Delete products not found */
-	if ( $replace_products && 'full' === strval( $results->attributes()->Mode[0] ) ) {
+        /* Handle CSV file */
+        $products = [];
 
-		wcifd_delete_all_products();
+        if ( false !== ( $handle = fopen( $file, 'r' ) ) ) {
 
-	}
+            $headers = fgetcsv( $handle );
 
-	/* Check if the update is full or not */
-	$products = $results->Products ? $results->Products : $results->UpdatedProducts;
+            while ( false !== ( $row = fgetcsv( $handle ) ) ) {
+
+                $product = new stdClass();
+
+                foreach ( $headers as $index => $header ) {
+
+                    $product->{ $header } = $row[ $index ];
+                }
+                $products[] = $product;
+            }
+
+            fclose( $handle );
+        }
+
+    } else {
+        
+        /* Handle XML file */
+        $results = simplexml_load_file( $file );
+
+        /* Delete products not found */
+        if ( $replace_products && 'full' === strval( $results->attributes()->Mode[0] ) ) {
+
+            wcifd_delete_all_products();
+
+        }
+
+        /* Check if the update is full or not */
+        $products = $results->Products ? $results->Products : $results->UpdatedProducts;
+        $products = $products->children();
+    }
+
 
 	/* Set transient for progress bar */
-	set_transient( 'wcifd-total-actions', count( $products->children() ), DAY_IN_SECONDS );
+	set_transient( 'wcifd-total-actions', count( $products ), DAY_IN_SECONDS );
 
-	foreach ( $products->children() as $product ) {
+	foreach ( $products as $product ) {
 
 		/* Vat */
 		$tax_attributes = null;
@@ -62,7 +94,7 @@ function wcifd_catalog_update( $file ) {
 			'tax_attributes'     => $tax_attributes,
 			'deleted_products'   => $deleted_products,
 			'wc_rbp'             => $wc_rbp,
-
+            'is_csv'             => $is_csv,
 		);
 
 		$hash  = md5( wp_json_encode( $data ) );
