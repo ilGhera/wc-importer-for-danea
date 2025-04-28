@@ -38,6 +38,14 @@ class WCIFD_Import_Single_Product {
 	 */
 	public $p_data;
 
+
+	/**
+	 * True if prouct is imported from CSV
+	 *
+	 * @var bool
+	 */
+	public $is_csv;
+
 	/**
 	 * The product imported from Danea Easyfatt
 	 *
@@ -120,6 +128,9 @@ class WCIFD_Import_Single_Product {
 		/* Get temporary data from the db */
 		$this->p_data = $this->temp->wcifd_get_temporary_data( $hash );
 
+		/* Check if the product is imported from CSV */
+		$this->is_csv = isset( $this->p_data['is_csv'] ) ? $this->p_data['is_csv'] : false;
+
 		/* Get the product data */
 		$this->d_product = isset( $this->p_data['product'] ) ? $this->p_data['product'] : '';
 
@@ -143,6 +154,7 @@ class WCIFD_Import_Single_Product {
 			$this->single_product( $this->d_product );
 		}
 	}
+
 
 	/**
 	 * Get the ID if the product exists
@@ -194,8 +206,9 @@ class WCIFD_Import_Single_Product {
 	 */
 	public function get_the_author() {
 
-		/* Check the option post author as supplier */
-		return ( 1 === intval( get_option( 'wcifd-use-suppliers' ) ) && isset( $this->d_product['SupplierCode'] ) ) ? $this->d_product['SupplierCode'] : get_option( 'wcifd-current-user' );
+		$field_name = $this->is_csv ? 'Cod. fornitore' : 'SupplierCode';
+
+		return ( 1 === intval( get_option( 'wcifd-use-suppliers' ) ) && isset( $this->d_product[ $field_name ] ) ) ? $this->d_product[ $field_name ] : get_option( 'wcifd-current-user' );
 	}
 
 
@@ -208,13 +221,16 @@ class WCIFD_Import_Single_Product {
 	 */
 	public function get_description( $title ) {
 
-		if ( $this->notes_as_descriptions && isset( $this->d_product['Notes'] ) && is_string( $this->d_product['Notes'] ) ) {
+		$notes = $this->is_csv ? 'Note' : 'Notes';
+		$html  = $this->is_csv ? 'Descriz. web (Sorgente HTML)' : 'DescriptionHtml';
 
-			$output = wp_filter_post_kses( $this->d_product['Notes'] );
+		if ( $this->notes_as_descriptions && isset( $this->d_product[ $notes ] ) && is_string( $this->d_product[ $notes ] ) ) {
 
-		} elseif ( isset( $this->d_product['DescriptionHtml'] ) && is_string( $this->d_product['DescriptionHtml'] ) ) {
+			$output = wp_filter_post_kses( $this->d_product[ $notes ] );
 
-			$output = wp_filter_post_kses( $this->d_product['DescriptionHtml'] );
+		} elseif ( isset( $this->d_product[ $html ] ) && is_string( $this->d_product[ $html ] ) ) {
+
+			$output = wp_filter_post_kses( $this->d_product[ $html ] );
 
 		} else {
 
@@ -233,14 +249,15 @@ class WCIFD_Import_Single_Product {
 	public function get_short_description() {
 
 		$output = null;
+		$notes  = $this->is_csv ? 'Note' : 'Notes';
 
 		if ( 'excerpt' === $this->short_description_opt ) {
 
 			$output = WCIFD_Functions::get_short_description( $data['description'] );
 
-		} elseif ( 'notes' === $this->short_description_opt && isset( $this->d_product['Notes'] ) && is_string( $this->d_product['Notes'] ) ) {
+		} elseif ( 'notes' === $this->short_description_opt && isset( $this->d_product[ $notes ] ) && is_string( $this->d_product[ $notes ] ) ) {
 
-			$output = wp_filter_post_kses( $this->d_product['Notes'] );
+			$output = wp_filter_post_kses( $this->d_product[ $notes ] );
 
 		}
 
@@ -260,10 +277,11 @@ class WCIFD_Import_Single_Product {
 		$output['var_attributes']    = null;
 		$output['variable_product']  = null;
 		$output['parent_product_id'] = null;
+		$notes_field                 = $this->is_csv ? 'Note' : 'Notes';
 
-		if ( ! $this->notes_as_descriptions && 'notes' !== $this->short_description_opt && isset( $this->d_product['Notes'] ) && is_string( $this->d_product['Notes'] ) ) {
+		if ( ! $this->notes_as_descriptions && 'notes' !== $this->short_description_opt && isset( $this->d_product[ $notes_field ] ) && is_string( $this->d_product[ $notes_field ] ) ) {
 
-			$notes = json_decode( $this->d_product['Notes'], true );
+			$notes = json_decode( $this->d_product[ $notes_field ], true );
 
 			if ( is_array( $notes ) ) {
 
@@ -309,7 +327,14 @@ class WCIFD_Import_Single_Product {
 
 		if ( 'yes' === $manage_stock ) {
 
-			return ( isset( $this->d_product['ManageWarehouse'] ) && 'true' === $this->d_product['ManageWarehouse'] ) ? 'yes' : 'no';
+			if ( $this->is_csv ) {
+
+				return false !== strpos( $this->d_product['Tipologia'], 'Art. con magazzino' ) ? 'yes' : 'no';
+
+			} else {
+
+				return ( isset( $this->d_product['ManageWarehouse'] ) && 'true' === $this->d_product['ManageWarehouse'] ) ? 'yes' : 'no';
+			}
 		} else {
 
 			return 'no';
@@ -382,7 +407,7 @@ class WCIFD_Import_Single_Product {
 	 *
 	 * @return array
 	 */
-	public function product_data() {
+	public function get_product_data() {
 
 		$data                     = array();
 		$data['sku']              = isset( $this->d_product['Code'] ) ? $this->d_product['Code'] : '';
@@ -392,7 +417,7 @@ class WCIFD_Import_Single_Product {
 		$data['sub_category']     = isset( $this->d_product['Subcategory'] ) ? $this->d_product['Subcategory'] : '';
 		$data['producer_name']    = isset( $this->d_product['ProducerName'] ) ? $this->d_product['ProducerName'] : '';
 		$data['supplier_name']    = isset( $this->d_product['SupplierName'] ) ? $this->d_product['SupplierName'] : '';
-		$data['sud_product_code'] = isset( $this->d_product['SupplierProductCode'] ) ? $this->d_product['SupplierProductCode'] : '';
+		$data['sup_product_code'] = isset( $this->d_product['SupplierProductCode'] ) ? $this->d_product['SupplierProductCode'] : '';
 		$data['get_tax']          = isset( $this->d_product['Vat'] ) ? $this->d_product['Vat'] : '';
 		$data['tax']              = ( is_array( $data['get_tax'] ) && isset( $data['get_tax'] ) && isset( $data['get_tax'][0] ) ) ? $data['get_tax'][0] : $data['get_tax'];
 		$data['stock']            = isset( $this->d_product['AvailableQty'] ) ? $this->d_product['AvailableQty'] : '';
@@ -450,13 +475,97 @@ class WCIFD_Import_Single_Product {
 
 
 	/**
-	 * Get the product size/color variants coming from Danea Easyfatt
-	 *
-	 * @param object $product the WC product.
+	 * The single product information
 	 *
 	 * @return array
 	 */
-	public function get_danea_variants( $product ) {
+	public function get_product_data_from_csv() {
+
+		/* Get the options */
+		$weight_type            = get_option( 'wcifd-weight-type' );
+		$size_type              = get_option( 'wcifd-size-type' );
+		$get_regular_price_list = get_option( 'wcifd-regular-price-list' );
+		$get_sale_price_list    = get_option( 'wcifd-sale-price-list' );
+		$use_suppliers          = get_option( 'wcifd-use-suppliers' );
+
+		$data                     = array();
+		$data['sku']              = isset( $this->d_product['Cod.'] ) ? $this->d_product['Cod.'] : '';
+		$data['sku']              = str_replace( '\\', '\\\\', $data['sku'] );
+		$data['title']            = isset( $this->d_product['Descrizione'] ) ? $this->d_product['Descrizione'] : '';
+		$data['category']         = isset( $this->d_product['Categoria'] ) ? $this->d_product['Categoria'] : '';
+		$data['sub_category']     = isset( $this->d_product['Sottocategoria'] ) ? $this->d_product['Sottocategoria'] : '';
+		$data['producer_name']    = isset( $this->d_product['Produttore'] ) ? $this->d_product['Produttore'] : '';
+		$data['supplier_name']    = isset( $this->d_product['Fornitore'] ) ? $this->d_product['Fornitore'] : '';
+		$data['supplier_id']      = isset( $this->d_product['Cod. fornitore'] ) ? $this->d_product['Cod. fornitore'] : '';
+		$data['sup_product_code'] = isset( $this->d_product['Cod. prod. forn.'] ) ? $this->d_product['Cod. prod. forn.'] : '';
+		$data['tax']              = isset( $this->d_product['Cod. Iva'] ) ? $this->d_product['Cod. Iva'] : '';
+		$data['stock']            = isset( $this->d_product['Q.tà giacenza'] ) ? $this->d_product['Q.tà giacenza'] : '';
+		$data['um']               = isset( $this->d_product['Cod. Udm'] ) ? $this->d_product['Cod. Udm'] : '';
+		$data['size_type']        = isset( $this->p_data['size_type'] ) ? $this->p_data['size_type'] : '';
+		$data['weight_type']      = isset( $this->p_data['weight_type'] ) ? $this->p_data['weight_type'] : '';
+		$data['tax_status']       = $this->get_tax_info( $data, true );
+		$data['tax_class']        = $this->get_tax_info( $data );
+		$data['wc_rbp']           = isset( $this->p_data['wc_rbp'] ) ? $this->p_data['wc_rbp'] : '';
+		$data['length']           = WCIFD_Functions::get_product_size( $this->d_product, $data['size_type'], 'z' );
+		$data['width']            = WCIFD_Functions::get_product_size( $this->d_product, $data['size_type'], 'x' );
+		$data['height']           = WCIFD_Functions::get_product_size( $this->d_product, $data['size_type'], 'y' );
+		$data['weight']           = $this->get_weight( $this->d_product );
+		$data['author']           = $this->get_the_author( $this->d_product );
+
+		/* Get the product prices */
+		if ( 0 === intval( $this->tax_included ) ) {
+			$data['regular_price'] = str_replace( ',', '.', str_replace( array( ' ', '€' ), '', $this->d_product[ 'Listino ' . $get_regular_price_list ] ) );
+			$data['sale_price']    = str_replace( ',', '.', str_replace( array( ' ', '€' ), '', $this->d_product[ 'Listino ' . $get_sale_price_list ] ) );
+
+		} else {
+			$data['regular_price'] = str_replace( ',', '.', str_replace( array( ' ', '€' ), '', $this->d_product[ 'Listino ' . $get_regular_price_list . ' (ivato)' ] ) );
+			$data['sale_price']    = str_replace( ',', '.', str_replace( array( ' ', '€' ), '', $this->d_product[ 'Listino ' . $get_sale_price_list . ' (ivato)' ] ) );
+		}
+
+		/* Product on sale */
+		$data['on_sale'] = $data['sale_price'] ? 1 : 0;
+
+		/* Product description */
+		$data['description'] = $this->get_description( $data['title'] );
+
+		/* Product short description */
+		$data['short_description'] = $this->get_short_description();
+
+		/* Retrieve product details from Notes field */
+		$data = array_merge( $data, $this->get_data_from_notes() );
+
+		/* Product status */
+		$data['status'] = $this->get_status( $data['var_attributes'] );
+
+		/* Manage stock */
+		$data['manage_stock'] = $this->get_manage_stock();
+
+		/* Stock status */
+		$data['stock_status'] = $this->get_stock_status( $data );
+
+		$data['total_sales'] = $this->d_product['Tot. q.tà scaricata'];
+
+		/* Custom fields */
+		for ( $i = 1; $i < 5; $i++ ) {
+
+			$field_name   = 'Extra' . $i;
+			$custom_field = isset( $this->d_product[ $field_name ] ) ? $this->d_product[ $field_name ] : '';
+
+			if ( $custom_field ) {
+				$data[ $field_name ] = $custom_field;
+			}
+		}
+
+		return $data;
+	}
+
+
+	/**
+	 * Get the product size/color variants coming from Danea Easyfatt
+	 *
+	 * @return array
+	 */
+	public function get_danea_variants() {
 
 		$output   = null;
 		$variants = null;
@@ -483,25 +592,42 @@ class WCIFD_Import_Single_Product {
 		if ( $output ) {
 
 			$product->set_meta_data( 'wcifd-danea-size-color', 1 );
+
 			return $output;
 		}
 	}
 
 
 	/**
+	 * Check if the product is a previously exported variant
+	 *
+	 * @param array $data the product data.
+	 *
+	 * @return bool
+	 */
+	public function is_prev_exported_variant( $data ) {
+
+		$parent_product_id = isset( $data['parent_product_id'] ) ? $data['parent_product_id'] : null;
+		$var_attributes    = isset( $data['var_attributes'] ) ? $data['var_attributes'] : null;
+
+		return $parent_product_id && $var_attributes;
+	}
+
+
+	/**
 	 * Get details about a product previously exported from WooCommerce
 	 *
-	 * @param int   $product_id the WC product ID.
 	 * @param array $data the product data.
+	 * @param int   $id   the WC product or variant ID.
 	 *
 	 * @return void
 	 */
-	public function get_prev_exported_product_details( $product_id, $data ) {
+	public function get_prev_exported_product_details( $data, $id = null ) {
 
 		if ( $data['variable_product'] ) {
 
 			/* Update product type */
-			$product = new WC_Product_Variable( $product_id );
+			$product = new WC_Product_Variable( $id );
 
 			if ( $data['imported_attributes'] ) {
 
@@ -509,32 +635,146 @@ class WCIFD_Import_Single_Product {
 
 				foreach ( $data['imported_attributes'] as $key => $value ) {
 
-					$attribute = new WC_Product_Attribute();
-					$attribute->set_id( wc_attribute_taxonomy_id_by_name( 'pa_' . $key ) );
-					$attribute->set_name( 'pa_' . $key );
-					$attribute->set_options( array( $value ) );
-					$attribute->set_visible( true );
-					$attribute->set_variation( true );
-					$attributes[] = $attribute;
+					$taxonomy_name = 'pa_' . sanitize_title( $key );
+					$taxonomy_id   = wc_attribute_taxonomy_id_by_name( $taxonomy_name );
 
-					$product->set_attributes( $attributes );
-					$product->save();
+					/* Create taxonomy if not exists */
+					if ( ! $taxonomy_id ) {
+						$attribute_data = array(
+							'name'         => ucfirst( $key ),
+							'slug'         => $taxonomy_name,
+							'type'         => 'select',
+							'order_by'     => 'menu_order',
+							'has_archives' => false,
+						);
+						wc_create_attribute( $attribute_data );
+						$taxonomy_id = wc_attribute_taxonomy_id_by_name( $taxonomy_name );
+					}
+
+					$term_ids = array();
+
+					foreach ( $value as $term_name ) {
+
+						$term = get_term_by( 'name', $term_name, $taxonomy_name );
+
+						if ( ! $term ) {
+
+							/* Create term if not exists */
+							$inserted_term = wp_insert_term( $term_name, $taxonomy_name );
+							if ( ! is_wp_error( $inserted_term ) ) {
+								$term_ids[] = $inserted_term['term_id'];
+							}
+						} else {
+
+							$term_ids[] = $term->term_id;
+						}
+					}
+
+					if ( $taxonomy_id ) {
+
+						$attribute = new WC_Product_Attribute();
+						$attribute->set_id( $taxonomy_id );
+						$attribute->set_name( $taxonomy_name );
+						$attribute->set_options( $term_ids );
+						$attribute->set_visible( true );
+						$attribute->set_variation( true );
+						$attributes[] = $attribute;
+					}
+				}
+
+				$product->set_attributes( $attributes );
+				$product->save();
+			}
+		} elseif ( $this->is_prev_exported_variant( $data ) ) {
+
+			/* Variation metas */
+			$meta_input = array();
+
+			/* Update variation */
+			$variation = new WC_Product_Variation( $id );
+			$variation->save();
+			$variation->set_sku( $data['sku'] );
+			$variation->set_stock_quantity( $data['stock'] );
+
+			/* Define the stock status */
+			$stock_status = ( $data['stock'] ) ? 'instock' : 'outofstock';
+
+			$variation->set_stock_status( $stock_status );
+			$variation->set_manage_stock( 'yes' );
+
+			/* Get the variation ID */
+			$id = $variation->get_id();
+
+			if ( ! $id || ( $id && ! $this->exclude_variations_prices ) ) {
+
+				if ( $data['sale_price'] ) {
+
+					$price = $data['sale_price'];
+				} else {
+
+					$price = $data['regular_price'];
+				}
+
+				$variation->set_regular_price( $price );
+				$variation->set_sale_price( $price );
+				$variation->set_price( $price );
+
+				/* WooCommerce Role Based Price */
+				$meta_input = array_merge( $meta_input, $this->add_wcrbp_data( $data ) );
+			}
+
+			/* Add weight and dimensions */
+			if ( $data['weight'] ) {
+				$variation->set_weight( $data['weight'] );
+			}
+
+			if ( $data['length'] ) {
+				$variation->set_length( $data['length'] );
+			}
+
+			if ( $data['width'] ) {
+				$variation->set_width( $data['width'] );
+			}
+
+			if ( $data['height'] ) {
+				$variation->set_height( $data['height'] );
+			}
+
+			$variation->set_parent_id( $data['parent_product_id'] );
+			$variation->set_status( 'publish' );
+
+			if ( is_array( $meta_input ) && ! empty( $meta_input ) ) {
+
+				foreach ( $meta_input as $key => $value ) {
+
+					$variation->update_meta_data( $key, $value );
 				}
 			}
-		} elseif ( $data['parent_product_id'] && $data['var_attributes'] ) {
 
-			/* Update product type */
-			$variation = new WC_Product_Variation( $product_id );
+			if ( $id ) {
 
-			$attributes = $variation->get_attributes();
+				/* Check backorders option */
+				if ( 'outofstock' === $stock_status && $id ) {
 
-			foreach ( $data['var_attributes'] as $attr ) {
+					$backorders = $variation->get_backorders();
 
-				$attributes[] = $attr;
+					if ( 'yes' === $backorders || 'notify' === $backorders ) {
+						$variation->set_stock_status( $stock_status );
+					}
+				}
+
+				$attributes = $variation->get_attributes();
+
+				foreach ( $data['var_attributes'] as $key => $value ) {
+
+					$attributes[ 'pa_' . $key ] = sanitize_title( $value );
+				}
+
+				$variation->set_attributes( $attributes );
+
+				/* Save the variation */
+				$variation->save();
 			}
-
-			$variation->set_attributes( $attributes );
-			$variation->save();
 		}
 	}
 
@@ -602,7 +842,7 @@ class WCIFD_Import_Single_Product {
 				/* Update role based price */
 				$product->update_meta_data( '_role_based_price', $role_based_price );
 
-				if ( $this->get_danea_variants( $product ) && function_exists( 'wc_rbp_delete_variation_data' ) ) {
+				if ( $this->get_danea_variants() && function_exists( 'wc_rbp_delete_variation_data' ) ) {
 
 					wc_rbp_delete_variation_data( $product->get_id(), $role );
 				}
@@ -753,7 +993,7 @@ class WCIFD_Import_Single_Product {
 				$product->set_short_description( $data['short_description'] );
 			}
 
-			if ( $this->get_danea_variants( $product ) ) {
+			if ( $this->get_danea_variants() ) {
 				wc_delete_product_transients( $product_id );
 				wp_cache_delete( 'alloptions', 'options' );
 			}
@@ -828,7 +1068,7 @@ class WCIFD_Import_Single_Product {
 
 		/* Update variation */
 		$variation = new WC_Product_Variation( $var_id );
-        $variation->save();
+		$variation->save();
 
 		$variation->set_sku( $barcode );
 		$variation->set_stock_quantity( $in_stock );
@@ -925,49 +1165,51 @@ class WCIFD_Import_Single_Product {
 	 */
 	public function danea_variants( $product_id, $data ) {
 
-		/* Update the parent product */
-		$product = new WC_Product_Variable( $product_id );
-
-		$v = 1;
+		$v = 0;
 
 		/* Define the array of the variations */
-		$variants = $this->get_danea_variants( $product );
+		$variants = $this->get_danea_variants();
 
 		if ( is_array( $variants ) && ! empty( $variants ) ) {
 
+			/* Update the parent product */
+			$product = new WC_Product_Variable( $product_id );
+
 			foreach ( $variants as $variant ) {
 
+				$v++;
 				$this->single_variant( $variant, $v, $product, $data );
 			}
+
+			/* Product attributes */
+			$attributes = $product->get_attributes();
+
+			if ( $this->avail_colors ) {
+
+				$attribute = new WC_Product_Attribute();
+				$attribute->set_id( wc_attribute_taxonomy_id_by_name( 'pa_color' ) );
+				$attribute->set_name( 'pa_color' );
+				$attribute->set_options( $this->avail_colors );
+				$attribute->set_visible( true );
+				$attribute->set_variation( true );
+				$attributes[] = $attribute;
+			}
+
+			if ( $this->avail_sizes ) {
+
+				$attribute = new WC_Product_Attribute();
+				$attribute->set_id( wc_attribute_taxonomy_id_by_name( 'pa_size' ) );
+				$attribute->set_name( 'pa_size' );
+				$attribute->set_options( $this->avail_sizes );
+				$attribute->set_visible( true );
+				$attribute->set_variation( true );
+				$attributes[] = $attribute;
+			}
+
+			$product->set_attributes( $attributes );
+			$product->save();
 		}
 
-		/* Product attributes */
-		$attributes = $product->get_attributes();
-
-		if ( $this->avail_colors ) {
-
-			$attribute = new WC_Product_Attribute();
-			$attribute->set_id( wc_attribute_taxonomy_id_by_name( 'pa_color' ) );
-			$attribute->set_name( 'pa_color' );
-			$attribute->set_options( $this->avail_colors );
-			$attribute->set_visible( true );
-			$attribute->set_variation( true );
-			$attributes[] = $attribute;
-		}
-
-		if ( $this->avail_sizes ) {
-
-			$attribute = new WC_Product_Attribute();
-			$attribute->set_id( wc_attribute_taxonomy_id_by_name( 'pa_size' ) );
-			$attribute->set_name( 'pa_size' );
-			$attribute->set_options( $this->avail_sizes );
-			$attribute->set_visible( true );
-			$attribute->set_variation( true );
-			$attributes[] = $attribute;
-		}
-
-		$product->set_attributes( $attributes );
-		$product->save();
 	}
 
 
@@ -991,16 +1233,31 @@ class WCIFD_Import_Single_Product {
 
 				$more_terms = array();
 
-				/* First subcategory */
-				$more_terms[1] = WCIFD_Functions::add_taxonomy_term( $product_id, $data['sub_category'], $category_term['term_id'], true );
+				if ( $this->is_csv ) {
 
-				/* Other subcategories */
-				for ( $i = 2; $i < 10; $i++ ) {
-					$sub_name = 'Subcategory' . $i;
-					if ( isset( $product[ $sub_name ] ) ) {
+					$subs       = explode( ' » ', $data['sub_category'] );
+					$subs_count = count( $subs );
 
-						$more_terms[ $i ] = WCIFD_Functions::add_taxonomy_term( $product_id, $product[ $sub_name ], $more_terms[ $i - 1 ]['term_id'], true );
+					if ( is_array( $subs ) ) {
 
+						for ( $i = 0; $i < $subs_count; $i++ ) {
+
+							$parent_term      = 0 === $i ? $category_term['term_id'] : $more_terms[ $i - 1 ]['term_id'];
+							$more_terms[ $i ] = WCIFD_Functions::add_taxonomy_term( $product_id, $subs[ $i ], $parent_term, true );
+						}
+					}
+				} else {
+
+					/* First subcategory */
+					$more_terms[1] = WCIFD_Functions::add_taxonomy_term( $product_id, $data['sub_category'], $category_term['term_id'], true );
+					/* Other subcategories */
+					for ( $i = 2; $i < 10; $i++ ) {
+						$sub_name = 'Subcategory' . $i;
+						if ( isset( $product[ $sub_name ] ) ) {
+
+							$more_terms[ $i ] = WCIFD_Functions::add_taxonomy_term( $product_id, $product[ $sub_name ], $more_terms[ $i - 1 ]['term_id'], true );
+
+						}
 					}
 				}
 			}
@@ -1017,6 +1274,11 @@ class WCIFD_Import_Single_Product {
 	 * @return void
 	 */
 	public function single_product_image( $product_id, $data ) {
+
+		/* No image with CSV */
+		if ( $this->is_csv ) {
+			return;
+		}
 
 		/* Save image information if present */
 		if ( get_option( 'wcifd-import-images' ) ) {
@@ -1058,7 +1320,7 @@ class WCIFD_Import_Single_Product {
 		$more_attributes = array(
 			'producer'         => $data['producer_name'],
 			'supplier'         => $data['supplier_name'],
-			'sup-product-code' => $data['sud_product_code'],
+			'sup-product-code' => $data['sup_product_code'],
 		);
 
 		foreach ( $more_attributes as $key => $value ) {
@@ -1242,35 +1504,43 @@ class WCIFD_Import_Single_Product {
 	 */
 	public function single_product() {
 
-		$data = $this->product_data();
+		$data = $this->is_csv ? $this->get_product_data_from_csv() : $this->get_product_data();
 		$id   = $this->get_product_id( $data );
 
-		if ( ! $id ) {
-
-			$id = $this->create_new_product( $data );
+		if ( $this->is_prev_exported_variant( $data ) ) {
 
 			/* Get previously exported product details */
-			$this->get_prev_exported_product_details( $id, $data );
+			$this->get_prev_exported_product_details( $data, $id );
 
 		} else {
 
-			$this->update_product( $id, $data );
+			if ( ! $id ) {
+
+				$id = $this->create_new_product( $data );
+
+			} else {
+
+				$this->update_product( $id, $data );
+			}
+
+			/* Get previously exported product details */
+			$this->get_prev_exported_product_details( $data, $id );
+
+			/* Handle product variants */
+			$this->danea_variants( $id, $data );
+
+			/* Handle product categories */
+			$this->product_categories( $id, $data );
+
+			/* Handle product image */
+			$this->single_product_image( $id, $data );
+
+			/* Handle product attributes */
+			$this->product_attributes( $id, $data );
+
+			/* Handle Danea Easyfatt custom fields */
+			$this->danea_custom_fields( $id, $data );
 		}
-
-		/* Handle product variants */
-		$this->danea_variants( $id, $data );
-
-		/* Handle product categories */
-		$this->product_categories( $id, $data );
-
-		/* Handle product image */
-		$this->single_product_image( $id, $data );
-
-		/* Handle product attributes */
-		$this->product_attributes( $id, $data );
-
-		/* Handle Danea Easyfatt custom fields */
-		$this->danea_custom_fields( $id, $data );
 
 		/* Deletes the temporary data from the database */
 		$this->temp->wcifd_delete_temporary_data( $this->hash );
