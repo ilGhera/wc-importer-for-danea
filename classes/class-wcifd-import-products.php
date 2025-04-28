@@ -72,7 +72,7 @@ class WCIFD_Import_Products {
 	 */
 	public function file_handler() {
 
-		wcifd_catalog_update( $this->file, $this->is_csv );
+		new WCIFD_Catalog_Update( $this->file, $this->is_csv );
 	}
 }
 

@@ -859,7 +859,7 @@ class WCIFD_Functions {
 
 					if ( isset( $_FILES['file']['tmp_name'] ) && move_uploaded_file( sanitize_text_field( wp_unslash( $_FILES['file']['tmp_name'] ) ), 'wcifd-prodotti.xml' ) ) {
 
-						wcifd_catalog_update( 'wcifd-prodotti.xml' );
+						new WCIFD_Catalog_Update( 'wcifd-prodotti.xml' );
 
 						echo "OK\n";
 
