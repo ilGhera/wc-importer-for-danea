@@ -478,11 +478,8 @@ class WCIFD_Functions {
 		$vars = get_children( $args, ARRAY_A );
 		if ( $vars ) {
 			foreach ( $vars as $var ) {
+
 				wp_delete_post( $var['ID'] );
-
-				/* Update meta lookup table */
-				new WCIFD_Product_Meta_Lookup( array( 'product_id' => $var['ID'] ), 'delete' );
-
 			}
 		}
 	}

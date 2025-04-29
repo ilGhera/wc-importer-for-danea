@@ -38,7 +38,6 @@ class WCIFD_Import_Single_Product {
 	 */
 	public $p_data;
 
-
 	/**
 	 * True if prouct is imported from CSV
 	 *
