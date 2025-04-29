@@ -13,7 +13,6 @@
  */
 class WCIFD_Progress_Bar {
 
-
 	/**
 	 * The constructor
 	 *
@@ -26,7 +25,6 @@ class WCIFD_Progress_Bar {
 		add_action( 'wp_ajax_get-scheduled-actions', array( $this, 'get_scheduled_actions' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 	}
-
 
 	/**
 	 * Enqueue scripts
@@ -51,7 +49,6 @@ class WCIFD_Progress_Bar {
 		}
 	}
 
-
 	/**
 	 * Get the total number of actions scheduled
 	 *
@@ -72,9 +69,7 @@ class WCIFD_Progress_Bar {
 		);
 
 		exit;
-
 	}
-
 
 	/**
 	 * Get the actions pending
@@ -113,7 +108,6 @@ class WCIFD_Progress_Bar {
 		exit;
 	}
 
-
 	/**
 	 * The progress bar as admin notice
 	 *
@@ -139,9 +133,7 @@ class WCIFD_Progress_Bar {
 			$output             .= '</div>';
 
 			echo wp_kses_post( $output );
-
 		}
-
 	}
 }
 new WCIFD_Progress_Bar();
