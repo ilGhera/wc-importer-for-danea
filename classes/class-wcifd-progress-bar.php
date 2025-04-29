@@ -8,6 +8,8 @@
  * @since 1.6.1
  */
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Class WCIFD_Progress_Bar
  */
