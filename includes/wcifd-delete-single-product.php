@@ -8,6 +8,8 @@
  * @since 1.6.0
  */
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Delete product
  *
@@ -25,14 +27,12 @@ function wcifd_delete_single_product( $product_sku ) {
 
 		if ( $product_id ) {
 
-            $product = wc_get_product( $product_id );
+			$product = wc_get_product( $product_id );
 
 			/* Delete product */
-            $product->delete( true );
-
+			$product->delete( true );
 		}
 	}
-
 }
 add_action( 'wcifd_delete_product_event', 'wcifd_delete_single_product', 10, 1 );
 

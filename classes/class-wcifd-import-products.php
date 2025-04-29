@@ -24,14 +24,12 @@ class WCIFD_Import_Products {
 	 */
 	public $file;
 
-
 	/**
 	 * Is CSV
 	 *
 	 * @var bool
 	 */
 	public $is_csv;
-
 
 	/**
 	 * The constructor
@@ -43,7 +41,6 @@ class WCIFD_Import_Products {
 		$this->import_file();
 
 	}
-
 
 	/**
 	 * Import file
@@ -63,7 +60,6 @@ class WCIFD_Import_Products {
 			add_action( 'wp_loaded', array( $this, 'file_handler' ) );
 		}
 	}
-
 
 	/**
 	 * Invoke the catalog update

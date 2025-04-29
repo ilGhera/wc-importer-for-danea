@@ -111,7 +111,6 @@ class WCIFD_Import_Single_Product {
 		add_action( 'wcifd_import_product_event', array( $this, 'init' ), 10, 8 );
 	}
 
-
 	/**
 	 * Init the product import
 	 *
@@ -154,7 +153,6 @@ class WCIFD_Import_Single_Product {
 		}
 	}
 
-
 	/**
 	 * Get the ID if the product exists
 	 *
@@ -166,7 +164,6 @@ class WCIFD_Import_Single_Product {
 
 		return WCIFD_Functions::search_product( $data['sku'], $data['parent_product_id'] );
 	}
-
 
 	/**
 	 * Get type if product exists
@@ -182,7 +179,6 @@ class WCIFD_Import_Single_Product {
 		return ( wp_get_post_parent_id( $id ) || $data['parent_product_id'] ) ? 'product_variation' : 'product';
 	}
 
-
 	/**
 	 * Get product status
 	 *
@@ -197,7 +193,6 @@ class WCIFD_Import_Single_Product {
 		return $var_attributes ? 'publish' : $status_option;
 	}
 
-
 	/**
 	 * Get the author of the post
 	 *
@@ -209,7 +204,6 @@ class WCIFD_Import_Single_Product {
 
 		return ( 1 === intval( get_option( 'wcifd-use-suppliers' ) ) && isset( $this->d_product[ $field_name ] ) ) ? $this->d_product[ $field_name ] : get_option( 'wcifd-current-user' );
 	}
-
 
 	/**
 	 * Get the product description
@@ -239,7 +233,6 @@ class WCIFD_Import_Single_Product {
 		return $output;
 	}
 
-
 	/**
 	 * Get the short product description
 	 *
@@ -262,7 +255,6 @@ class WCIFD_Import_Single_Product {
 
 		return $output;
 	}
-
 
 	/**
 	 * Get previously exported variable products details
@@ -314,7 +306,6 @@ class WCIFD_Import_Single_Product {
 		return $output;
 	}
 
-
 	/**
 	 * Get manage stock
 	 *
@@ -340,7 +331,6 @@ class WCIFD_Import_Single_Product {
 		}
 	}
 
-
 	/**
 	 * Get stock status
 	 *
@@ -359,7 +349,6 @@ class WCIFD_Import_Single_Product {
 		return $output;
 	}
 
-
 	/**
 	 * Get the product weight
 	 *
@@ -375,7 +364,6 @@ class WCIFD_Import_Single_Product {
 			return isset( $this->d_product['NetWeight'] ) ? $this->d_product['NetWeight'] : null;
 		}
 	}
-
 
 	/**
 	 * Get the product tax details
@@ -399,7 +387,6 @@ class WCIFD_Import_Single_Product {
 
 		return $status ? $tax_status : $tax_class;
 	}
-
 
 	/**
 	 * The single product information
@@ -471,7 +458,6 @@ class WCIFD_Import_Single_Product {
 
 		return $data;
 	}
-
 
 	/**
 	 * The single product information
@@ -558,7 +544,6 @@ class WCIFD_Import_Single_Product {
 		return $data;
 	}
 
-
 	/**
 	 * Get the product size/color variants coming from Danea Easyfatt
 	 *
@@ -596,7 +581,6 @@ class WCIFD_Import_Single_Product {
 		}
 	}
 
-
 	/**
 	 * Check if the product is a previously exported variant
 	 *
@@ -611,7 +595,6 @@ class WCIFD_Import_Single_Product {
 
 		return $parent_product_id && $var_attributes;
 	}
-
 
 	/**
 	 * Get details about a product previously exported from WooCommerce
@@ -777,7 +760,6 @@ class WCIFD_Import_Single_Product {
 		}
 	}
 
-
 	/**
 	 * Add data about WC Role Based Price
 	 *
@@ -807,7 +789,6 @@ class WCIFD_Import_Single_Product {
 
 		return $output;
 	}
-
 
 	/**
 	 * Update data about WC Role Based Price
@@ -848,7 +829,6 @@ class WCIFD_Import_Single_Product {
 			}
 		}
 	}
-
 
 	/**
 	 * Crate a new WC product
@@ -929,7 +909,6 @@ class WCIFD_Import_Single_Product {
 			return $product_id;
 		}
 	}
-
 
 	/**
 	 * Update product
@@ -1017,7 +996,6 @@ class WCIFD_Import_Single_Product {
 		}
 
 	}
-
 
 	/**
 	 * Handle Danea Easyfatt color/size single product variants
@@ -1153,7 +1131,6 @@ class WCIFD_Import_Single_Product {
 
 	}
 
-
 	/**
 	 * Handle Danea Easyfatt color/size product variants
 	 *
@@ -1211,7 +1188,6 @@ class WCIFD_Import_Single_Product {
 
 	}
 
-
 	/**
 	 * Handle product categories
 	 *
@@ -1263,7 +1239,6 @@ class WCIFD_Import_Single_Product {
 		}
 	}
 
-
 	/**
 	 * Handle product image
 	 *
@@ -1297,7 +1272,6 @@ class WCIFD_Import_Single_Product {
 			}
 		}
 	}
-
 
 	/**
 	 * Handle product attributes
@@ -1348,7 +1322,6 @@ class WCIFD_Import_Single_Product {
 		$product->set_attributes( $attributes );
 		$product->save();
 	}
-
 
 	/**
 	 * Handle Danea Easyfatt custom fields
@@ -1493,7 +1466,6 @@ class WCIFD_Import_Single_Product {
 			}
 		}
 	}
-
 
 	/**
 	 *

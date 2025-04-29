@@ -33,7 +33,6 @@ class WCIFD_Functions {
 		add_filter( 'puc_manual_check_message-wc-importer-for-danea-premium', array( $this, 'update_message' ), 10, 2 );
 	}
 
-
 	/**
 	 * Generate random string
 	 *
@@ -51,7 +50,6 @@ class WCIFD_Functions {
 
 		return substr( $random, 0, $length );
 	}
-
 
 	/**
 	 * Define the names of the fiscal checkout form fields
@@ -115,7 +113,6 @@ class WCIFD_Functions {
 		}
 	}
 
-
 	/**
 	 * Get user ID by tax code
 	 *
@@ -142,7 +139,6 @@ class WCIFD_Functions {
 		return $result[0]['user_id'];
 	}
 
-
 	/**
 	 * Get country code
 	 *
@@ -167,7 +163,6 @@ class WCIFD_Functions {
 		}
 	}
 
-
 	/**
 	 * Decode the XML values
 	 *
@@ -182,7 +177,6 @@ class WCIFD_Functions {
 
 		return $output;
 	}
-
 
 	/**
 	 * Get the WC order (ID) previously imported from Danea Easyfatt
@@ -203,7 +197,6 @@ class WCIFD_Functions {
 
 		return isset( $orders[0] ) ? $orders[0] : null;
 	}
-
 
 	/**
 	 * Get the WC payment gateway used in the order imported from Danea Easyfatt
@@ -236,7 +229,6 @@ class WCIFD_Functions {
 		}
 	}
 
-
 	/**
 	 * Delete orphan SKUs from the database
 	 *
@@ -258,7 +250,6 @@ class WCIFD_Functions {
 			)
 		);
 	}
-
 
 	/**
 	 * Search product by SKU
