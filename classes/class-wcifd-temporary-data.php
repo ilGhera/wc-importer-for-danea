@@ -10,6 +10,8 @@
  * @since 1.6.0
  */
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Class WCIFD_Temporary_Data
  */
@@ -81,7 +83,6 @@ class WCIFD_Temporary_Data {
 
 	}
 
-
 	/**
 	 * Get the temporary product data from the DB table
 	 *
@@ -118,7 +119,6 @@ class WCIFD_Temporary_Data {
 
 	}
 
-
 	/**
 	 * Returns all the product/image combinations of the dedicated table
 	 *
@@ -133,7 +133,6 @@ class WCIFD_Temporary_Data {
 		return $results;
 
 	}
-
 
 	/**
 	 * Adds the product data in the dedicated table waiting for it to be created
@@ -166,7 +165,6 @@ class WCIFD_Temporary_Data {
 		}
 
 	}
-
 
 	/**
 	 * Adds product id and image name in the dedicated table waiting for them to be matched
@@ -203,7 +201,6 @@ class WCIFD_Temporary_Data {
 
 	}
 
-
 	/**
 	 * Delete the temporary data from the DB table.
 	 *
@@ -230,5 +227,6 @@ class WCIFD_Temporary_Data {
 
 	}
 }
+
 new WCIFD_Temporary_Data( true );
 
