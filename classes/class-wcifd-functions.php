@@ -163,10 +163,8 @@ class WCIFD_Functions {
 			} elseif ( $key === $state_name ) {
 
 				return $state_name;
-
 			}
 		}
-
 	}
 
 
@@ -204,7 +202,6 @@ class WCIFD_Functions {
 		);
 
 		return isset( $orders[0] ) ? $orders[0] : null;
-
 	}
 
 
@@ -237,7 +234,6 @@ class WCIFD_Functions {
 			default:
 				return null;
 		}
-
 	}
 
 
@@ -261,7 +257,6 @@ class WCIFD_Functions {
 				'meta_value' => $sku,
 			)
 		);
-
 	}
 
 
@@ -295,7 +290,6 @@ class WCIFD_Functions {
 		} else {
 
 			$post_id = null;
-
 		}
 
 		if ( ! $post_id && $parent_product_id && is_numeric( $sku ) ) {
@@ -305,12 +299,10 @@ class WCIFD_Functions {
 			if ( $product && ! is_wp_error( $product ) ) {
 
 				$post_id = intval( $parent_product_id ) === $product->get_parent_id() ? $product->get_id() : null;
-
 			}
 		}
 
 		return $post_id;
-
 	}
 
 
@@ -330,30 +322,29 @@ class WCIFD_Functions {
 		$term   = term_exists( $category, 'product_cat', $parent_id );
 
 		if ( 0 === $term || null === $term ) {
+
 			$term = wp_insert_term( $category, 'product_cat', array( 'parent' => $parent_id ) );
 		}
 
 		if ( ! is_wp_error( $term ) ) {
 
-            /* Get the product */
-            $product = wc_get_product( $product_id );
+			/* Get the product */
+			$product = wc_get_product( $product_id );
 
-            $categories = array();
+			$categories = array();
 
-            if ( $append ) {
+			if ( $append ) {
 
-                $categories = $product->get_category_ids();
-            }
+				$categories = $product->get_category_ids();
+			}
 
-            $categories[] = $term['term_id'];
+			$categories[] = $term['term_id'];
 
-            $product->set_category_ids( $categories );
-            $product->save();
-
+			$product->set_category_ids( $categories );
+			$product->save();
 		}
 
 		return $term;
-
 	}
 
 
@@ -379,7 +370,6 @@ class WCIFD_Functions {
 				'%s',
 			)
 		);
-
 	}
 
 
@@ -393,10 +383,11 @@ class WCIFD_Functions {
 	 */
 	public static function get_tax_rate_class( $name, $value = '' ) {
 
-        $tax_rate_class = null;
+		$tax_rate_class = null;
 
 		/* If a value is not passed, use the tax name if numeric */
 		if ( '' === $value ) {
+
 			$value = ( is_numeric( $name ) ) ? $name : '';
 		}
 
@@ -423,6 +414,7 @@ class WCIFD_Functions {
 				$tax_rate_class = 22 !== $name ? $name : '';
 
 				if ( $tax_rate_class ) {
+
 					$tax_classes   = explode( "\n", get_option( 'woocommerce_tax_classes' ) );
 					$tax_classes[] = $tax_rate_class;
 					update_option( 'woocommerce_tax_classes', implode( "\n", $tax_classes ) );
@@ -430,6 +422,7 @@ class WCIFD_Functions {
 
 				/* New tax class */
 				if ( $tax_rate_class ) {
+
 					self::add_tax_rate_class( $tax_rate_class );
 				}
 
@@ -452,13 +445,12 @@ class WCIFD_Functions {
 						'%s',
 					)
 				);
-
 			}
 		}
 
 		return $tax_rate_class;
-
 	}
+
 
 	/**
 	 * Register taxonomy
@@ -516,9 +508,7 @@ class WCIFD_Functions {
 			);
 
 			register_taxonomy( $paname, array( 'product' ), $taxonomy_data );
-
 		}
-
 	}
 
 
@@ -640,7 +630,6 @@ class WCIFD_Functions {
 		if ( ! empty( $changes ) ) {
 			$this->update_transient_wc_attributes();
 		}
-
 	}
 
 
@@ -671,7 +660,7 @@ class WCIFD_Functions {
 	/**
 	 * Get the gross or net price from the Danea XML based on the admin set
 	 *
-	 * @param array   $d_product    the product received from Danea Easyfatt. 
+	 * @param array   $d_product    the product received from Danea Easyfatt.
 	 * @param int     $number       the price list set.
 	 * @param boolean $tax_included gross price with true.
 	 *
@@ -679,7 +668,7 @@ class WCIFD_Functions {
 	 */
 	public static function get_list_price( $d_product, $number, $tax_included = false ) {
 
-        $output = null;
+		$output = null;
 
 		$gross_price = 'GrossPrice' . $number;
 		$net_price   = 'NetPrice' . $number;
@@ -691,7 +680,6 @@ class WCIFD_Functions {
 		}
 
 		return $output;
-
 	}
 
 
@@ -779,7 +767,6 @@ class WCIFD_Functions {
 		}
 
 		return $output;
-
 	}
 
 
@@ -881,9 +868,7 @@ class WCIFD_Functions {
 			}
 
 			exit;
-
 		}
-
 	}
 
 
@@ -895,7 +880,6 @@ class WCIFD_Functions {
 	public function check_update_message() {
 
 		return __( 'Check for updates', 'wc-importer-for-danea' );
-
 	}
 
 
@@ -924,9 +908,7 @@ class WCIFD_Functions {
 		}
 
 		return $message;
-
 	}
-
 }
 
 new WCIFD_Functions();
