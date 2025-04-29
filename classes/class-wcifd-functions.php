@@ -113,7 +113,6 @@ class WCIFD_Functions {
 			case 'pa_code_name':
 				return $pa_code_name;
 		}
-
 	}
 
 
@@ -124,7 +123,7 @@ class WCIFD_Functions {
 	 *
 	 * @return int
 	 */
-	public static function get_uder_id_by_tax_code( $tax_code ) {
+	public static function get_user_id_by_tax_code( $tax_code ) {
 
 		global $wpdb;
 
@@ -141,7 +140,6 @@ class WCIFD_Functions {
 		);
 
 		return $result[0]['user_id'];
-
 	}
 
 
