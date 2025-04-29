@@ -25,11 +25,10 @@ function wcifd_delete_single_product( $product_sku ) {
 
 		if ( $product_id ) {
 
-			/* Delete product */
-			wp_delete_post( $product_id, true );
+            $product = wc_get_product( $product_id );
 
-			/* Delete product variations if any */
-			WCIFD_Functions::delete_variations( $product_id );
+			/* Delete product */
+            $product->delete( true );
 
 		}
 	}

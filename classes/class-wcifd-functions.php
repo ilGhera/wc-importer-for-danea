@@ -462,29 +462,6 @@ class WCIFD_Functions {
 
 	}
 
-
-	/**
-	 * Delete the product variations
-	 *
-	 * @param  int $parent_id the parent product ID.
-	 *
-	 * @return void
-	 */
-	public static function delete_variations( $parent_id ) {
-		$args = array(
-			'post_type'   => 'product_variation',
-			'post_parent' => $parent_id,
-		);
-		$vars = get_children( $args, ARRAY_A );
-		if ( $vars ) {
-			foreach ( $vars as $var ) {
-
-				wp_delete_post( $var['ID'] );
-			}
-		}
-	}
-
-
 	/**
 	 * Register taxonomy
 	 *
