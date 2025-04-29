@@ -130,14 +130,11 @@ class WCIFD_Catalog_Update {
 				return;
 			}
 
-			$handle = fopen( $this->file, 'r' );
-
-			if ( false !== ( $handle ) ) {
+			if ( false !== ( $handle = fopen( $this->file, 'r' ) ) ) {
 
 				$headers = fgetcsv( $handle );
-				$row     = fgetcsv( $handle );
 
-				while ( false !== ( $row ) ) {
+				while ( false !== ( $row = fgetcsv( $handle ) ) ) {
 
 					$product = new stdClass();
 
