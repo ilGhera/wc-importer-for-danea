@@ -296,7 +296,6 @@ class WCIFD_Functions {
 		return $post_id;
 	}
 
-
 	/**
 	 * Add a tax term to the given product
 	 *
@@ -338,7 +337,6 @@ class WCIFD_Functions {
 		return $term;
 	}
 
-
 	/**
 	 * Add a new tax class in WC
 	 *
@@ -362,7 +360,6 @@ class WCIFD_Functions {
 			)
 		);
 	}
-
 
 	/**
 	 * Get tax rate class
@@ -442,7 +439,6 @@ class WCIFD_Functions {
 		return $tax_rate_class;
 	}
 
-
 	/**
 	 * Register taxonomy
 	 *
@@ -501,7 +497,6 @@ class WCIFD_Functions {
 			register_taxonomy( $paname, array( 'product' ), $taxonomy_data );
 		}
 	}
-
 
 	/**
 	 * Register attributes
@@ -623,7 +618,6 @@ class WCIFD_Functions {
 		}
 	}
 
-
 	/**
 	 * Update transient
 	 *
@@ -646,7 +640,6 @@ class WCIFD_Functions {
 
 		update_option( '_transient_wc_attribute_taxonomies', $data );
 	}
-
 
 	/**
 	 * Get the gross or net price from the Danea XML based on the admin set
@@ -672,7 +665,6 @@ class WCIFD_Functions {
 
 		return $output;
 	}
-
 
 	/**
 	 * Get prices with labels for every user roles set with WC Role Based Price
@@ -704,7 +696,6 @@ class WCIFD_Functions {
 
 		return $output;
 	}
-
 
 	/**
 	 * Get the product size
@@ -760,7 +751,6 @@ class WCIFD_Functions {
 		return $output;
 	}
 
-
 	/**
 	 * Generate a short description of the product
 	 *
@@ -781,7 +771,6 @@ class WCIFD_Functions {
 
 		return $output;
 	}
-
 
 	/**
 	 * Receive the HTTP POST call from Danea Easyfatt
@@ -862,7 +851,6 @@ class WCIFD_Functions {
 		}
 	}
 
-
 	/**
 	 * Custom check for update message
 	 *
@@ -872,7 +860,6 @@ class WCIFD_Functions {
 
 		return __( 'Check for updates', 'wc-importer-for-danea' );
 	}
-
 
 	/**
 	 * Custom update message
