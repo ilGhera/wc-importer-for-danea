@@ -816,7 +816,7 @@ class WCIFD_Functions {
 				} elseif ( 'images' === $mode && 1 === intval( $import_images ) ) {
 
 					/* Images update */
-					wcifd_products_images();
+					new WCIFD_Products_Images();
 
 				} elseif ( 'images-send-finish' === $mode && 1 === intval( $import_images ) ) {
 
