@@ -8,6 +8,8 @@
  * @since 1.6.1
  */
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Import users
  *
@@ -20,6 +22,7 @@ function wcifd_users( $type ) {
 	if ( isset( $_POST[ $type . '-import' ], $_POST[ 'wcifd-' . $type . '-nonce' ] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST[ 'wcifd-' . $type . '-nonce' ] ) ), 'wcifd-' . $type . '-import' ) ) {
 
 		if ( isset( $_POST[ 'wcifd-users-' . $type ] ) ) {
+
 			$role = sanitize_text_field( wp_unslash( $_POST[ 'wcifd-users-' . $type ] ) );
 			update_option( 'wcifd-' . $type . '-role', $role );
 		}
@@ -51,13 +54,17 @@ function wcifd_users( $type ) {
 
 						/* Email required */
 						if ( ! $email ) {
+
 							continue;
 						}
 
 						if ( $user['Referente'] ) {
+
 							$user_name = strtolower( str_replace( ' ', '-', $user['Referente'] ) );
 							$name      = explode( ' ', $user['Referente'] );
+
 						} else {
+
 							$user_name = strtolower( str_replace( ' ', '-', $user['Denominazione'] ) );
 							$name      = explode( ' ', $user['Denominazione'] );
 						}
@@ -96,6 +103,7 @@ function wcifd_users( $type ) {
 						$user_id = username_exists( $user_name );
 
 						if ( ! $user_id ) {
+
 							$get_user = get_user_by( 'email', $email );
 							$user_id  = is_object( $get_user ) && isset( $get_user->ID ) ? $get_user->ID : null;
 						}
@@ -117,19 +125,21 @@ function wcifd_users( $type ) {
 							$user_roles = is_object( $user_info ) ? $user_info->roles : null;
 
 							if ( is_array( $user_roles ) && ! in_array( $role, $user_roles, true ) ) {
+
 								unset( $userdata['role'] );
 								$the_user = new WP_User( $user_id );
 								$the_user->set_role( $role );
 							}
 
 							wp_update_user( $userdata );
-
 						}
 
 						/* User meta */
 						if ( $user['Referente'] ) {
+
 							update_user_meta( $user_id, 'billing_company', $user['Denominazione'] );
 						}
+
 						update_user_meta( $user_id, 'billing_first_name', $name[0] );
 						update_user_meta( $user_id, 'billing_last_name', $last_name );
 						update_user_meta( $user_id, 'billing_address_1', $address );
@@ -141,18 +151,22 @@ function wcifd_users( $type ) {
 						update_user_meta( $user_id, 'billing_email', $email );
 
 						if ( $cf_name ) {
+
 							update_user_meta( $user_id, $cf_name, $fiscal_code );
 						}
 
 						if ( $pi_name ) {
+
 							update_user_meta( $user_id, $pi_name, $p_iva );
 						}
 
 						if ( $pec_name ) {
+
 							update_user_meta( $user_id, $pec_name, $pec );
 						}
 
 						if ( $pa_code_name ) {
+
 							update_user_meta( $user_id, $pa_code_name, $pa_code );
 						}
 					}
@@ -175,6 +189,5 @@ function wcifd_users( $type ) {
 			echo wp_kses_post( $output );
 		}
 	}
-
 }
 
