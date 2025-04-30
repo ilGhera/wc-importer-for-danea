@@ -3,7 +3,7 @@
  * Match the images with the respective products
  *
  * @author ilGhera
- * @package wc-importer-for-danea-premium/includes
+ * @package wc-importer-for-danea-premium/classes
  *
  * @since 1.6.0
  */
