@@ -15,88 +15,88 @@ defined( 'ABSPATH' ) || exit;
  *
  * @return void
  */
-class WCIFD_Orphan_Images() {
+class WCIFD_Orphan_Images {
 
-    /**
-     * The constructor
-     *
-     * @return void
-     */
-    public function __construct() {
-        
-        add_action( 'wcifd_orphan_images_event', array( $this, 'start_orphan_images' ) );
-        add_action( 'wcifd_stop_orphan_images_event', array( $this, 'stop_orphan_images' ) );
-    }
+	/**
+	 * The constructor
+	 *
+	 * @return void
+	 */
+	public function __construct() {
 
-    /**
-     * Start the orphan images process
-     *
-     * @return void
-     */
-    public function start_orphan_images() {
-        
-        $temp = new WCIFD_Temporary_Data();
+		add_action( 'wcifd_orphan_images_event', array( $this, 'start_orphan_images' ) );
+		add_action( 'wcifd_stop_orphan_images_event', array( $this, 'stop_orphan_images' ) );
+	}
 
-        $orphan_images = $temp->wcifd_get_temporary_images_data();
+	/**
+	 * Start the orphan images process
+	 *
+	 * @return void
+	 */
+	public function start_orphan_images() {
 
-        if ( is_array( $orphan_images ) && ! empty( $orphan_images ) ) {
+		$temp = new WCIFD_Temporary_Data();
 
-            foreach ( $orphan_images as $image ) {
+		$orphan_images = $temp->wcifd_get_temporary_images_data();
 
-                as_enqueue_async_action(
-                    'wcifd_product_image_event',
-                    array(
-                        $image['hash'],
-                    ),
-                    'wcifd-product-image'
-                );
-            }
-        }
+		if ( is_array( $orphan_images ) && ! empty( $orphan_images ) ) {
 
-        /* Check if next action exists */
-        $this->check_next_action( $orphan_images );
-    }
+			foreach ( $orphan_images as $image ) {
 
-    /**
-     * Check if the orphan images process can be stopped
-     *
-     * @param array $orphan_images the orphan images.
-     *
-     * @return void
-     */
-    public function check_next_action( $orphan_images ) {
-        
-        /* Get next scheduled action */
-        $next = as_next_scheduled_action(
-            'wcifd_import_product_event',
-            array(),
-            'wcifd-import-product'
-        );
+				as_enqueue_async_action(
+					'wcifd_product_image_event',
+					array(
+						$image['hash'],
+					),
+					'wcifd-product-image'
+				);
+			}
+		}
 
-        if ( ! $next ) {
+		/* Check if next action exists */
+		$this->check_next_action( $orphan_images );
+	}
 
-            if ( is_array( $orphan_images ) && empty( $orphan_images ) ) {
+	/**
+	 * Check if the orphan images process can be stopped
+	 *
+	 * @param array $orphan_images the orphan images.
+	 *
+	 * @return void
+	 */
+	public function check_next_action( $orphan_images ) {
 
-                /* Schedule an action to stop the recurring process */
-                as_enqueue_async_action(
-                    'wcifd_stop_orphan_images_event',
-                    array(),
-                    'wcifd-orphan-images'
-                );
+		/* Get next scheduled action */
+		$next = as_next_scheduled_action(
+			'wcifd_import_product_event',
+			array(),
+			'wcifd-import-product'
+		);
 
-            }
-        }
-    }
+		if ( ! $next ) {
 
-    /**
-     * Stop the orphan images process
-     *
-     * @return void
-     */
-    function stop_orphan_images() {
+			if ( is_array( $orphan_images ) && empty( $orphan_images ) ) {
 
-        as_unschedule_action( 'wcifd_orphan_images_event' );
-    }
+				/* Schedule an action to stop the recurring process */
+				as_enqueue_async_action(
+					'wcifd_stop_orphan_images_event',
+					array(),
+					'wcifd-orphan-images'
+				);
+
+			}
+		}
+	}
+
+	/**
+	 * Stop the orphan images process
+	 *
+	 * @return void
+	 */
+	public function stop_orphan_images() {
+
+		as_unschedule_action( 'wcifd_orphan_images_event' );
+	}
 }
 
 new WCIFD_Orphan_Images();
