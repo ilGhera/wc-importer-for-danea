@@ -30,7 +30,17 @@ function wcifd_delete_single_product( $product_sku ) {
 			$product = wc_get_product( $product_id );
 
 			/* Delete product */
-			$product->delete( true );
+			$deleted = $product->delete( true );
+
+			if ( $deleted ) {
+
+				/* Delete transients */
+				wc_delete_product_transients( $product_id );
+
+			} else {
+
+				error_log( 'WCIFD ERROR | Eliminazione prodotto | ID: ' . $product_id );
+			}
 		}
 	}
 }

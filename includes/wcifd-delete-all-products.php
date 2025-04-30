@@ -8,6 +8,8 @@
  * @since 1.6.0
  */
 
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Delete products
  *
@@ -15,25 +17,38 @@
  */
 function wcifd_delete_all_products() {
 
-	global $wpdb;
-
-	$queries = array(
-		"DELETE relations.*, taxes.*, terms.*
-        FROM $wpdb->term_relationships AS relations
-        INNER JOIN $wpdb->term_taxonomy AS taxes
-        ON relations.term_taxonomy_id=taxes.term_taxonomy_id
-        INNER JOIN $wpdb->terms AS terms
-        ON taxes.term_id=terms.term_id
-        WHERE object_id IN (SELECT ID FROM $wpdb->posts WHERE post_type='product')",
-		"DELETE FROM $wpdb->postmeta WHERE post_id IN (SELECT ID FROM $wpdb->posts WHERE post_type = 'product')",
-		"DELETE FROM $wpdb->posts WHERE post_type = 'product'",
+	$args = array(
+		'post_type'      => 'product',
+		'posts_per_page' => -1,
+		'post_status'    => 'any',
+		'fields'         => 'ids',
 	);
 
-	foreach ( $queries as $key => $query ) {
+	$product_ids = get_posts( $args );
 
-		$result = $wpdb->query( $query );
+	if ( $product_ids ) {
 
+		foreach ( $product_ids as $product_id ) {
+
+			/* Get product */
+			$product = wc_get_product( $product_id );
+
+			if ( $product ) {
+
+				/* Delete product */
+				$deleted = $product->delete( true );
+
+				if ( $deleted ) {
+
+					/* Delete transients */
+					wc_delete_product_transients( $product_id );
+
+				} else {
+
+					error_log( 'WCIFD ERROR | Eliminazione prodotto | ID: ' . $product_id );
+				}
+			}
+		}
 	}
-
 }
 
