@@ -83,7 +83,6 @@ class WCIFD_Orphan_Images {
 					array(),
 					'wcifd-orphan-images'
 				);
-
 			}
 		}
 	}
