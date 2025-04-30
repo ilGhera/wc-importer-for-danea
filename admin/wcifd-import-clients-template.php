@@ -8,6 +8,8 @@
  * @since 1.6.1
  */
 
+defined( 'ABSPATH' ) || exit;
+
 global $wp_roles;
 $roles     = $wp_roles->get_names();
 $users_val = get_option( 'wcifd-clients-role' );

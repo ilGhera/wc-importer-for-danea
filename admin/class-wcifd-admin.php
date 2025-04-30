@@ -30,7 +30,6 @@ class WCIFD_Admin {
 
 	}
 
-
 	/**
 	 * Enqueue scripts and styles
 	 *
@@ -56,7 +55,6 @@ class WCIFD_Admin {
 
 	}
 
-
 	/**
 	 * Add the submenu
 	 *
@@ -67,7 +65,6 @@ class WCIFD_Admin {
 		add_submenu_page( 'woocommerce', 'WCIFD Options', 'WC Importer for Danea', 'manage_woocommerce', 'wc-importer-for-danea', array( $this, 'setup_options_page' ) );
 
 	}
-
 
 	/**
 	 * The plugin options page
@@ -120,7 +117,6 @@ class WCIFD_Admin {
 
 	}
 
-
 	/**
 	 * The tab menu
 	 *
@@ -154,7 +150,6 @@ class WCIFD_Admin {
 		echo '</h2>';
 	}
 
-
 	/**
 	 * The premium key form
 	 *
@@ -181,7 +176,6 @@ class WCIFD_Admin {
 			echo '<input type="submit" class="button button-primary" value="' . esc_attr__( 'Save ', 'wc-importer-for-danea' ) . '" />';
 		echo '</form>';
 	}
-
 
 	/**
 	 * Message to the admin in case of update not downlodable for bad or missed premium key

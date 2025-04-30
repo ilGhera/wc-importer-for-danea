@@ -8,6 +8,7 @@
  * @since 1.6.1
  */
 
+defined( 'ABSPATH' ) || exit;
 ?>
 
 <div id="wcifd-products-file" class="wcifd-products-sub">

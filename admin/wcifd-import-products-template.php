@@ -8,6 +8,8 @@
  * @since 1.6.1
  */
 
+defined( 'ABSPATH' ) || exit;
+
 $tax_included               = get_option( 'wcifd-tax-included' );
 $use_suppliers              = get_option( 'wcifd-use-suppliers' );
 $display_producer           = get_option( 'wcifd-display-producer' );

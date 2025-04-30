@@ -8,6 +8,8 @@
  * @since 1.6.1
  */
 
+defined( 'ABSPATH' ) || exit;
+
 $wcifd_orders_add_users = get_option( 'wcifd-orders-add-users' );
 
 if ( isset( $_POST['wcifd-orders-add-users'], $_POST['wcifd-orders-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wcifd-orders-nonce'] ) ), 'wcifd-orders-import' ) ) {
