@@ -86,7 +86,6 @@ jQuery(document).ready(function ($) {
                             console.log( 'REMAINING PRODUCTS', resp );
                             console.log( 'TOT. PRODUCTS', totActions );
                             console.log( 'PERC. COMPLETED ', currentWidth );
-                            
 
                             if ( 1 == run ) {
 
