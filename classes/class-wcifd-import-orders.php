@@ -120,7 +120,7 @@ class WCIFD_Import_Orders {
             if ( ! email_exists( $order->CustomerEmail ) && ! WCIFD_Functions::get_user_id_by_tax_code( $order->CustomerVatCode ) && ! WCIFD_Functions::get_user_id_by_tax_code( $order->CustomerFiscalCode ) && 1 === intval( $this->add_new_users ) ) {
 
                 /* Increase the users counter */
-                $u++
+                $u++;
 
                 /* Add user */
                 $user_id = $this->add_user( $order );
