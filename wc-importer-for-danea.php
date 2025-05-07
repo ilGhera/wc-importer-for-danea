@@ -26,16 +26,26 @@ defined( 'ABSPATH' ) || exit;
 function load_wc_importer_for_danea_premium() {
 
 	if ( ! function_exists( 'is_plugin_active' ) ) {
+
 		require_once ABSPATH . '/wp-admin/includes/plugin.php';
 	}
 
 	/* Deactivate the free version of the plugin */
 	if ( function_exists( 'load_wc_importer_for_danea' ) ) {
+
 		deactivate_plugins( 'wc-importer-for-danea/wc-importer-for-danea.php' );
 		remove_action( 'plugins_loaded', 'load_wc_importer_for_danea' );
 		wp_safe_redirect( admin_url( 'plugins.php?plugin_status=all&paged=1&s' ) );
-
 	}
+}
+add_action( 'plugins_loaded', 'load_wc_importer_for_danea_premium' );
+
+/**
+ * Plugin init
+ *
+ * @return void
+ */
+function wcifd_init() {
 
 	/* Constant variables */
 	define( 'WCIFD_DIR', plugin_dir_path( __FILE__ ) );
@@ -64,9 +74,8 @@ function load_wc_importer_for_danea_premium() {
 	require_once WCIFD_CLASSES . 'class-wcifd-import-orders.php';
 	require_once WCIFD_INCLUDES . 'wcifd-import-users.php';
 	require_once WCIFD_INCLUDES . 'wcifd-delete-single-product.php';
-
 }
-add_action( 'after_setup_theme', 'load_wc_importer_for_danea_premium' );
+add_action( 'init', 'wcifd_init', PHP_INT_MIN );
 
 /**
  * Plugin Update Checker
@@ -95,10 +104,10 @@ function wcifd_secure_update_check( $args ) {
 	$key = base64_encode( get_option( 'wcifd-premium-key' ) );
 
 	if ( $key ) {
+
 		$args['premium-key'] = $key;
 	}
 
 	return $args;
-
 }
 
