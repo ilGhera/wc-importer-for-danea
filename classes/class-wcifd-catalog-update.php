@@ -110,6 +110,9 @@ class WCIFD_Catalog_Update {
 
 		/* Import products */
 		$this->import_products();
+
+		/* Delete products */
+		$this->delete_products();
 	}
 
 	/**
@@ -151,6 +154,7 @@ class WCIFD_Catalog_Update {
 
 			/* Handle XML file */
 			$results = simplexml_load_file( $this->file );
+            error_log('RESULTS: ' . print_r($results, true));
 
 			if ( $delete ) {
 
@@ -166,7 +170,6 @@ class WCIFD_Catalog_Update {
 
 				/* Check if the update is full or not */
 				$products = $results->Products ? $results->Products : $results->UpdatedProducts;
-				$products = $products->children();
 			}
 		}
 
@@ -183,12 +186,13 @@ class WCIFD_Catalog_Update {
 		/* Get products */
 		$products = $this->get_products();
 
-		if ( is_array( $products ) && ! empty( $products ) ) {
+		if ( is_array( $products->children() ) && ! empty( $products->children() ) ) {
 
+            error_log( 'CHILDREN: ' . print_r( $products->children(), true ) );
 			/* Set transient for progress bar */
-			set_transient( 'wcifd-total-actions', count( $products ), DAY_IN_SECONDS );
+			set_transient( 'wcifd-total-actions', count( $products->children() ), DAY_IN_SECONDS );
 
-			foreach ( $products as $product ) {
+			foreach ( $products->children() as $product ) {
 
 				/* Vat */
 				$tax_attributes = null;
@@ -230,22 +234,20 @@ class WCIFD_Catalog_Update {
 	/**
 	 * Delete products
 	 *
-	 * @param object $results the data coming from the XML file.
-	 *
 	 * @return void
 	 */
-	public function delete_products( $results ) {
+	public function delete_products() {
 
 		/* Get products to be deleted */
 		$products = $this->get_products( true );
 
 		/* Delete products */
-		if ( isset( $results->DeletedProducts ) ) {
+		if ( is_array( $products->children() ) && ! empty( $products->children() ) ) {
 
 			/* Set transient for progress bar */
-			set_transient( 'wcifd-total-delete-actions', count( $results->DeletedProducts->children() ), DAY_IN_SECONDS );
+			set_transient( 'wcifd-total-delete-actions', count( $products->children() ), DAY_IN_SECONDS );
 
-			foreach ( $results->DeletedProducts->children() as $del_product ) {
+			foreach ( $products->children() as $del_product ) {
 
 				if ( isset( $del_product->Code ) ) {
 
