@@ -148,19 +148,22 @@ class WCIFD_Functions {
 	 */
 	public static function get_country_code( $state_name ) {
 
-		$countries = WC()->countries->countries;
+        if ( function_exists( 'WC' ) && WC() && WC()->countries ) {
+            
+            $countries = WC()->countries->countries;
 
-        if ( is_array( $countries ) ) {
+            if ( is_array( $countries ) ) {
 
-            foreach ( $countries as $key => $value ) {
+                foreach ( $countries as $key => $value ) {
 
-                if ( $value === $state_name ) {
+                    if ( $value === $state_name ) {
 
-                    return $key;
+                        return $key;
 
-                } elseif ( $key === $state_name ) {
+                    } elseif ( $key === $state_name ) {
 
-                    return $state_name;
+                        return $state_name;
+                    }
                 }
             }
         }
