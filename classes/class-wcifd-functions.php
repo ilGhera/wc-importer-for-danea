@@ -150,17 +150,20 @@ class WCIFD_Functions {
 
 		$countries = WC()->countries->countries;
 
-		foreach ( $countries as $key => $value ) {
+        if ( is_array( $countries ) ) {
 
-			if ( $value === $state_name ) {
+            foreach ( $countries as $key => $value ) {
 
-				return $key;
+                if ( $value === $state_name ) {
 
-			} elseif ( $key === $state_name ) {
+                    return $key;
 
-				return $state_name;
-			}
-		}
+                } elseif ( $key === $state_name ) {
+
+                    return $state_name;
+                }
+            }
+        }
 	}
 
 	/**
