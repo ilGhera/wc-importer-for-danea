@@ -61,6 +61,8 @@ class WCIFD_Import_Orders {
 
             foreach ( $orders->Document as $order ) {
 
+                error_log( 'ORDER: ' . print_r( $order, true ) );
+
                 /* Import single order */
                 $this->import_single_order( $order, $o, $u, $p );
             }
@@ -132,8 +134,8 @@ class WCIFD_Import_Orders {
             }
 
             $args = array(
-                'status'        => $order_data['orders_status'],
-                'customer_id'   => $order_data['user_id'],
+                'status'        => $this->orders_status,
+                'customer_id'   => get_current_user_id(), 
                 'customer_note' => $order_data['order_comment'],
             );
 
