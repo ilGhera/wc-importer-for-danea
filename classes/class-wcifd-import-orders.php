@@ -61,8 +61,6 @@ class WCIFD_Import_Orders {
 
             foreach ( $orders->Document as $order ) {
 
-                error_log( 'ORDER: ' . print_r( $order, true ) );
-
                 /* Import single order */
                 $this->import_single_order( $order, $o, $u, $p );
             }
@@ -151,8 +149,12 @@ class WCIFD_Import_Orders {
 
             /* Set payment method */
             $payment_gateway = WCIFD_Functions::get_wc_payment_gateway( $order_data['payment_method'] );
-            $wc_order->set_payment_method( $payment_gateway['id'] );
-            $wc_order->set_payment_method_title( $payment_gateway['title'] );
+
+            if ( $payment_gateway ) {
+
+                $wc_order->set_payment_method( $payment_gateway['id'] );
+                $wc_order->set_payment_method_title( $payment_gateway['title'] );
+            }
 
             /* Products details */
             foreach ( $order->Rows->Row as $item ) {
@@ -311,9 +313,10 @@ class WCIFD_Import_Orders {
 
         /* Check tax class */
         $tax_status = 'none';
-        $tax_class  = '';
-        $perc       = WCIFD_Functions::decode_xml_value( $item_data['tax']['Perc'] );
-        $class      = WCIFD_Functions::decode_xml_value( $item_data['tax']['Class'] );
+        $tax_class  = null;
+        $perc       = isset( $item_data['tax']['Perc'] ) ? WCIFD_Functions::decode_xml_value( $item_data['tax']['Perc'] ) : null;
+        $class      = isset( $item_data['tax']['Class'] ) ? WCIFD_Functions::decode_xml_value( $item_data['tax']['Class'] ) : null;
+
         if ( 0 !== intval( $perc ) || 'Escluso' !== $class ) {
             $tax_status = 'taxable';
             $tax_class  = WCIFD_Functions::get_tax_rate_class( WCIFD_Functions::decode_xml_value( $item_data['tax'] ), strval( $perc ) );
@@ -324,12 +327,12 @@ class WCIFD_Import_Orders {
 
         $props = array(
             'author'        => get_current_user_id(),
-            'name'          => $title,
+            'name'          => $item_data['title'],
             'type'          => 'product',
             'status'        => 'publish',
             'sku'           => $item_data['sku'],
-            'tax_status'    => $item_data['tax_status'],
-            'tax_class'     => $item_data['tax_class'],
+            'tax_status'    => $tax_status,
+            'tax_class'     => $tax_class,
             'regular_price' => $item_data['price'],
             'price'         => $item_data['price'],
 
@@ -446,5 +449,5 @@ class WCIFD_Import_Orders {
     }
 }
 
-new WCIFD_Import_Orders();
+/* new WCIFD_Import_Orders(); */
 

@@ -72,3 +72,4 @@ if ( isset( $_POST['wcifd-orders-add-users'], $_POST['wcifd-orders-nonce'] ) && 
 		<input type="submit" class="button-primary" value="<?php esc_html_e( 'Import Orders', 'wc-importer-for-danea' ); ?>">
 	</form>
 </div>
+<?php new WCIFD_Import_Orders(); ?>
