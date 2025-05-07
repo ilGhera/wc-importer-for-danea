@@ -79,7 +79,7 @@ class WCIFD_Single_Product_Image {
 				$updated = wp_update_post(
 					array(
 						'ID'          => $attachment_id,
-						'post_parent' => $product_id,
+						'post_parent' => $this->product_id,
 					)
 				);
 
@@ -103,7 +103,7 @@ class WCIFD_Single_Product_Image {
 		$args = array(
 			'post_type'      => 'attachment',
 			'post_status'    => 'inherit',
-			'name'           => $image_name,
+			'name'           => $this->image_name,
 			'fields'         => 'ids',
 			'posts_per_page' => -1,
 		);
