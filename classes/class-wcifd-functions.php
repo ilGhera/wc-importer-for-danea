@@ -120,23 +120,26 @@ class WCIFD_Functions {
 	 *
 	 * @return int
 	 */
-	public static function get_user_id_by_tax_code( $tax_code ) {
+	public static function get_user_id_by_tax_code( $tax_code = null ) {
 
-		global $wpdb;
+        if ( $tax_code ) {
 
-		$result = $wpdb->get_results(
-			$wpdb->prepare(
-				"
-                SELECT user_id
-                FROM $wpdb->usermeta
-                WHERE meta_value = %s
-                ",
-				$tax_code
-			),
-			ARRAY_A
-		);
+            global $wpdb;
 
-		return $result[0]['user_id'];
+            $result = $wpdb->get_results(
+                $wpdb->prepare(
+                    "
+                    SELECT user_id
+                    FROM $wpdb->usermeta
+                    WHERE meta_value = %s
+                    ",
+                    $tax_code
+                ),
+                ARRAY_A
+            );
+
+            return $result[0]['user_id'];
+        }
 	}
 
 	/**
