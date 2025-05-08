@@ -123,7 +123,7 @@ class WCIFD_Import_Orders {
                 $u++;
 
                 /* Add user */
-                $user_id = $this->add_user( $order );
+                $user_id = $this->add_user( $order_data );
 
             } else {
 
@@ -249,36 +249,68 @@ class WCIFD_Import_Orders {
         /* Get item data */
         $item_data = $this->get_item_data( $item );
 
-        /* Check if the product already exists */
-        $product_id = WCIFD_Functions::search_product( $item_data['sku'] );
-
-        if ( ! $product_id ) {
-
-            /* Increase the products counter */
-            $p++;
-
-            /* Create new WC product */
-            $product_id = $this->create_new_product( $item_data );
-
-            /* Add the product category Imported */
-            wp_set_object_terms( $product_id, 'Imported', 'product_cat', true );
-        }
-
-        if ( $product_id ) {
+        if ( $item_data['sku'] ) {
             
-            /* Get product */
-            $product = wc_get_product( $product_id );
+            /* Check if the product already exists */
+            $product_id = WCIFD_Functions::search_product( $item_data['sku'] );
 
-            $wc_item = new WC_Order_Item_Product();
-            $wc_item->set_product_id( $product_id );
-            $wc_item->set_quantity( $item_data['total_sales'] );
-            $wc_item->set_name( $product->get_name() );
-            $wc_item->set_subtotal( $product->get_price() * $item_data['total_sales'] );
-            $wc_item->set_total( $product->get_price() * $item_data['total_sales'] );
-            $wc_item->set_tax_class( $product->get_tax_class() );
+            if ( ! $product_id ) {
 
-            /* Add item to the WC order */
-            $wc_order->add_item( $wc_item ); 
+                /* Increase the products counter */
+                $p++;
+
+                /* Create new WC product */
+                $product_id = $this->create_new_product( $item_data );
+
+                /* Add the product category Imported */
+                wp_set_object_terms( $product_id, 'Imported', 'product_cat', true );
+            }
+
+            if ( $product_id ) {
+                
+                /* Get product */
+                $product = wc_get_product( $product_id );
+
+                /* Add new WC order item */
+                $wc_item = new WC_Order_Item_Product();
+                $wc_item->set_product_id( $product_id );
+                $wc_item->set_quantity( $item_data['total_sales'] );
+                $wc_item->set_name( $product->get_name() );
+                $wc_item->set_subtotal( $product->get_price() * $item_data['total_sales'] );
+                $wc_item->set_total( $product->get_price() * $item_data['total_sales'] );
+                $wc_item->set_tax_class( $product->get_tax_class() );
+
+                /* Add item to the WC order */
+                $wc_order->add_item( $wc_item ); 
+            }
+
+        } else {
+
+            /* Check if is a discount */
+            if ( 0 > $item_data['price'] ) {
+
+                /* Check tax class */
+                $tax_status = 'none';
+                $tax_class  = null;
+                $perc       = isset( $item_data['tax']['Perc'] ) ? WCIFD_Functions::decode_xml_value( $item_data['tax']['Perc'] ) : null;
+                $class      = isset( $item_data['tax']['Class'] ) ? WCIFD_Functions::decode_xml_value( $item_data['tax']['Class'] ) : null;
+
+                if ( 0 !== intval( $perc ) ) {
+                    $tax_status = 'taxable';
+                    $tax_class  = WCIFD_Functions::get_tax_rate_class( WCIFD_Functions::decode_xml_value( $item_data['tax'] ), strval( $perc ) );
+                }
+
+                /* Add new WC order item */
+                $wc_item = new WC_Order_Item_Fee();
+                $wc_item->set_name( $item_data['title'] );
+                $wc_item->set_amount( $item_data['price'] );
+                $wc_item->set_total( $item_data['price'] * $item_data['total_sales'] );
+                $wc_item->set_tax_class( $tax_class );
+                $wc_item->save();
+
+                /* Add item to the WC order */
+                $wc_order->add_item( $wc_item );
+            }
         }
     }
 
@@ -317,7 +349,7 @@ class WCIFD_Import_Orders {
         $perc       = isset( $item_data['tax']['Perc'] ) ? WCIFD_Functions::decode_xml_value( $item_data['tax']['Perc'] ) : null;
         $class      = isset( $item_data['tax']['Class'] ) ? WCIFD_Functions::decode_xml_value( $item_data['tax']['Class'] ) : null;
 
-        if ( 0 !== intval( $perc ) || 'Escluso' !== $class ) {
+        if ( 0 !== intval( $perc ) ) {
             $tax_status = 'taxable';
             $tax_class  = WCIFD_Functions::get_tax_rate_class( WCIFD_Functions::decode_xml_value( $item_data['tax'] ), strval( $perc ) );
         }
@@ -394,56 +426,57 @@ class WCIFD_Import_Orders {
     /**
      * Add user
      *
-     * @param array $order the order data.
+     * @param array $order_data the order data.
      *
      * @return int the user ID
      */
-    public function add_user( $order ) {
+    public function add_user( $order_data ) {
         
         $random_password = wp_generate_password( 12, false );
         $role            = ( get_option( 'wcifd-clients-role' ) ) ? get_option( 'wcifd-clients-role' ) : 'customer';
 
         $userdata = array(
             'role'         => $role,
-            'user_login'   => $user_name,
-            'first_name'   => $name[0],
-            'last_name'    => $name[1],
-            'display_name' => $order->CustomerName,
-            'user_email'   => $order->CustomerEmail,
+            'user_login'   => $order_data['user_name'],
+            'first_name'   => $order_data['name'][0],
+            'last_name'    => $order_data['name'][1],
+            'display_name' => $order_data['name'],
+            'user_email'   => $order_data['billing_email'],
+            'user_pass'    => $random_password,
         );
 
         $user_id = wp_insert_user( $userdata );
 
         /*User meta*/
-        if ( $order->CustomerReference ) {
-            add_user_meta( $user_id, 'billing_company', $billing_company );
+        if ( $order_data['billing_company'] ) {
+            add_user_meta( $user_id, 'billing_company', $order_data['billing_company'] );
         }
 
         /* Order details */
-        add_user_meta( $user_id, 'billing_first_name', $name[0] );
-        add_user_meta( $user_id, 'billing_last_name', $name[1] );
-        add_user_meta( $user_id, 'billing_address_1', $billing_address );
-        add_user_meta( $user_id, 'billing_city', $billing_city );
-        add_user_meta( $user_id, 'billing_postcode', $billing_postcode );
-        add_user_meta( $user_id, 'billing_state', $billing_state );
-        add_user_meta( $user_id, 'billing_country', $billing_country );
-        add_user_meta( $user_id, 'billing_phone', $billing_phone );
-        add_user_meta( $user_id, 'billing_email', $billing_email );
+        add_user_meta( $user_id, 'billing_first_name', $order_data['name'][0] );
+        add_user_meta( $user_id, 'billing_last_name', $order_data['name'][1] );
+        add_user_meta( $user_id, 'billing_address_1', $order_data['billing_address'] );
+        add_user_meta( $user_id, 'billing_city', $order_data['billing_city'] );
+        add_user_meta( $user_id, 'billing_postcode', $order_data['billing_postcode'] );
+        add_user_meta( $user_id, 'billing_state', $order_data['billing_state'] );
+        add_user_meta( $user_id, 'billing_country', $order_data['billing_country'] );
+        add_user_meta( $user_id, 'billing_phone', $order_data['billing_phone'] );
+        add_user_meta( $user_id, 'billing_email', $order_data['billing_email'] );
 
-        if ( $cf_name ) {
-            add_user_meta( $user_id, $cf_name, $fiscal_code );
+        if ( $order_data['cf_name'] ) {
+            add_user_meta( $user_id, $order_data['cf_name'], $order_data['fiscal_code'] );
         }
-        if ( $pi_name ) {
-            add_user_meta( $user_id, $pi_name, $p_iva );
+        if ( $order_data['pi_name'] ) {
+            add_user_meta( $user_id, $order_data['pi_name'], $order_data['p_iva'] );
         }
 
         /* Shipping details */
-        add_user_meta( $user_id, 'shipping_first_name', $shipping_name );
-        add_user_meta( $user_id, 'shipping_address_1', $shipping_address );
-        add_user_meta( $user_id, 'shipping_city', $shipping_city );
-        add_user_meta( $user_id, 'shipping_postcode', $shipping_postcode );
-        add_user_meta( $user_id, 'shipping_state', $shipping_state );
-        add_user_meta( $user_id, 'shipping_country', $shipping_country );
+        add_user_meta( $user_id, 'shipping_first_name', $order_data['shipping_name'] );
+        add_user_meta( $user_id, 'shipping_address_1', $order_data['shipping_address'] );
+        add_user_meta( $user_id, 'shipping_city', $order_data['shipping_city'] );
+        add_user_meta( $user_id, 'shipping_postcode', $order_data['shipping_postcode'] );
+        add_user_meta( $user_id, 'shipping_state', $order_data['shipping_state'] );
+        add_user_meta( $user_id, 'shipping_country', $order_data['shipping_country'] );
 
         return $user_id;
     }
