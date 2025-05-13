@@ -2,7 +2,7 @@
 /**
  * Import orders from Danea Easyfatt
  *
- * @author ilGhera
+ * @author  ilGhera
  * @package wc-importer-for-danea-premium/includes
  *
  * @since 1.6.1
@@ -16,6 +16,7 @@ defined( 'ABSPATH' ) || exit;
  * @return void
  */
 class WCIFD_Import_Orders {
+
 
 	/**
 	 * Add new users
@@ -95,10 +96,10 @@ class WCIFD_Import_Orders {
 	/**
 	 * Import single order
 	 *
-	 * @param  object $order the Danea order.
-	 * @param  int    $o     the orders counter.
-	 * @param  int    $u     the users counter.
-	 * @param  int    $p     the products counter.
+	 * @param object $order the Danea order.
+	 * @param int    $o     the orders counter.
+	 * @param int    $u     the users counter.
+	 * @param int    $p     the products counter.
 	 *
 	 * @return void
 	 */
@@ -189,7 +190,7 @@ class WCIFD_Import_Orders {
 	/**
 	 * Get order data
 	 *
-	 * @param  object $order the Danea order.
+	 * @param object $order the Danea order.
 	 *
 	 * @return array
 	 */
@@ -338,7 +339,6 @@ class WCIFD_Import_Orders {
 
 		return $wc_item;
 	}
-
 
 	/**
 	 * Get tax details
