@@ -282,7 +282,7 @@ class WCIFD_Import_Orders {
 			if ( 0 > $item_data['price'] ) {
 
 				/* Add new WC order item */
-				$wc_item = $this->add_order_item_discount( $item_data );
+				$wc_item = $this->add_order_item_fee( $item_data );
 			}
 		}
 
