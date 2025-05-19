@@ -142,7 +142,7 @@ class WCIFD_Import_Orders {
 			$wc_order = wc_create_order( $args );
 
 			/* Add Danea order number */
-			$wc_order->add_meta_data( 'wcifd_order_number', $order_number );
+			$wc_order->add_meta_data( 'wcifd-order-number', $order_number );
 
 			$wc_order->set_date_created( $order_data['order_date'] );
 			$wc_order->set_address( $this->get_billing_address( $order_data ), 'billing' );
