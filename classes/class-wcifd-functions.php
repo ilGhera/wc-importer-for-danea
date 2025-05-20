@@ -20,17 +20,22 @@ class WCIFD_Functions {
 	/**
 	 * The constructor
 	 *
+     * @param bool $init initialize with true.
+     *
 	 * @return void
 	 */
-	public function __construct() {
+	public function __construct( $init = false ) {
 
-		/* Actions */
-		add_action( 'init', array( $this, 'register_attributes' ) );
-		add_action( 'init', array( $this, 'products_update_request' ) );
+        if ( $init ) {
 
-		/* Filters */
-		add_filter( 'puc_manual_check_link-wc-importer-for-danea-premium', array( $this, 'check_update_message' ) );
-		add_filter( 'puc_manual_check_message-wc-importer-for-danea-premium', array( $this, 'update_message' ), 10, 2 );
+            /* Actions */
+            add_action( 'init', array( $this, 'register_attributes' ) );
+            add_action( 'init', array( $this, 'products_update_request' ) );
+
+            /* Filters */
+            add_filter( 'puc_manual_check_link-wc-importer-for-danea-premium', array( $this, 'check_update_message' ) );
+            add_filter( 'puc_manual_check_message-wc-importer-for-danea-premium', array( $this, 'update_message' ), 10, 2 );
+        }
 	}
 
 	/**
@@ -898,5 +903,5 @@ class WCIFD_Functions {
 	}
 }
 
-new WCIFD_Functions();
+new WCIFD_Functions( true );
 
