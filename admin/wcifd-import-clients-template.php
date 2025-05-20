@@ -68,4 +68,4 @@ if ( isset( $_POST['wcifd-users'], $_POST['wcifd-clients-nonce'] ) && wp_verify_
 	</form>
 </div>
 
-<?php wcifd_users( 'clients' ); ?>
+<?php new WCIFD_Import_Users( 'clients' ); ?>
