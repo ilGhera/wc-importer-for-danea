@@ -101,12 +101,22 @@ class WCIFD_Import_Single_Product {
 	 */
 	public $exclude_variations_prices;
 
+    /**
+     * The functions class
+     *
+     * @var object 
+     */
+    public $functions;
+
 	/**
 	 * The constructor
 	 *
 	 * @return void
 	 */
 	public function __construct() {
+
+        /* Initialize the function class */
+        $this->functions = new WCIFD_Functions();
 
 		add_action( 'wcifd_import_product_event', array( $this, 'init' ), 10, 8 );
 	}
@@ -162,7 +172,7 @@ class WCIFD_Import_Single_Product {
 	 */
 	public function get_product_id( $data ) {
 
-		return WCIFD_Functions::search_product( $data['sku'], $data['parent_product_id'] );
+		return $this->functions->search_product( $data['sku'], $data['parent_product_id'] );
 	}
 
 	/**
@@ -245,7 +255,7 @@ class WCIFD_Import_Single_Product {
 
 		if ( 'excerpt' === $this->short_description_opt ) {
 
-			$output = WCIFD_Functions::get_short_description( $data['description'] );
+			$output = $this->functions->get_short_description( $data['description'] );
 
 		} elseif ( 'notes' === $this->short_description_opt && isset( $this->d_product[ $notes ] ) && is_string( $this->d_product[ $notes ] ) ) {
 
@@ -288,7 +298,7 @@ class WCIFD_Import_Single_Product {
 				}
 
 				if ( $output['parent_sku'] ) {
-					$output['parent_product_id'] = WCIFD_Functions::search_product( $output['parent_sku'] );
+					$output['parent_product_id'] = $this->functions->search_product( $output['parent_sku'] );
 				}
 
 				$output['var_attributes'] = isset( $notes['var_attributes'] ) ? $notes['var_attributes'] : null;
@@ -382,7 +392,7 @@ class WCIFD_Import_Single_Product {
 
 		if ( '0' !== $perc || ( 'Escluso' !== $class && 'NonSoggetto' !== $class ) ) {
 			$tax_status = 'taxable';
-			$tax_class  = WCIFD_Functions::get_tax_rate_class( $data['tax'], strval( $perc ) );
+			$tax_class  = $this->functions->get_tax_rate_class( $data['tax'], strval( $perc ) );
 		}
 
 		return $status ? $tax_status : $tax_class;
@@ -411,8 +421,8 @@ class WCIFD_Import_Single_Product {
 		$data['size_um']          = isset( $this->d_product['SizeUm'] ) ? $this->d_product['SizeUm'] : '';
 		$data['weight_um']        = isset( $this->d_product['WeightUm'] ) ? $this->d_product['WeightUm'] : '';
 		$data['image_file_name']  = isset( $this->d_product['ImageFileName'] ) ? sanitize_title( $this->d_product['ImageFileName'] ) : '';
-		$data['regular_price']    = WCIFD_Functions::get_list_price( $this->d_product, $this->p_data['regular_price_list'], $this->tax_included );
-		$data['sale_price']       = WCIFD_Functions::get_list_price( $this->d_product, $this->p_data['sale_price_list'], $this->tax_included );
+		$data['regular_price']    = $this->functions->get_list_price( $this->d_product, $this->p_data['regular_price_list'], $this->tax_included );
+		$data['sale_price']       = $this->functions->get_list_price( $this->d_product, $this->p_data['sale_price_list'], $this->tax_included );
 		$data['on_sale']          = $data['sale_price'] ? 1 : 0;
 		$data['size_type']        = isset( $this->p_data['size_type'] ) ? $this->p_data['size_type'] : '';
 		$data['weight_type']      = isset( $this->p_data['weight_type'] ) ? $this->p_data['weight_type'] : '';
@@ -421,9 +431,9 @@ class WCIFD_Import_Single_Product {
 		$data['tax_class']        = $this->get_tax_info( $data );
 		$data['deleted_products'] = isset( $this->p_data['deleted_products'] ) ? $this->p_data['deleted_products'] : '';
 		$data['wc_rbp']           = isset( $this->p_data['wc_rbp'] ) ? $this->p_data['wc_rbp'] : '';
-		$data['length']           = WCIFD_Functions::get_product_size( $this->d_product, $data['size_type'], 'z' );
-		$data['width']            = WCIFD_Functions::get_product_size( $this->d_product, $data['size_type'], 'x' );
-		$data['height']           = WCIFD_Functions::get_product_size( $this->d_product, $data['size_type'], 'y' );
+		$data['length']           = $this->functions->get_product_size( $this->d_product, $data['size_type'], 'z' );
+		$data['width']            = $this->functions->get_product_size( $this->d_product, $data['size_type'], 'x' );
+		$data['height']           = $this->functions->get_product_size( $this->d_product, $data['size_type'], 'y' );
 		$data['weight']           = $this->get_weight( $this->d_product );
 		$data['author']           = $this->get_the_author( $this->d_product );
 
@@ -491,9 +501,9 @@ class WCIFD_Import_Single_Product {
 		$data['tax_status']       = $this->get_tax_info( $data, true );
 		$data['tax_class']        = $this->get_tax_info( $data );
 		$data['wc_rbp']           = isset( $this->p_data['wc_rbp'] ) ? $this->p_data['wc_rbp'] : '';
-		$data['length']           = WCIFD_Functions::get_product_size( $this->d_product, $data['size_type'], 'z' );
-		$data['width']            = WCIFD_Functions::get_product_size( $this->d_product, $data['size_type'], 'x' );
-		$data['height']           = WCIFD_Functions::get_product_size( $this->d_product, $data['size_type'], 'y' );
+		$data['length']           = $this->functions->get_product_size( $this->d_product, $data['size_type'], 'z' );
+		$data['width']            = $this->functions->get_product_size( $this->d_product, $data['size_type'], 'x' );
+		$data['height']           = $this->functions->get_product_size( $this->d_product, $data['size_type'], 'y' );
 		$data['weight']           = $this->get_weight( $this->d_product );
 		$data['author']           = $this->get_the_author( $this->d_product );
 
@@ -776,7 +786,7 @@ class WCIFD_Import_Single_Product {
 			foreach ( $data['wc_rbp'] as $role => $price_types ) {
 				foreach ( $price_types as $key => $value ) {
 
-					$wc_rbp_price = WCIFD_Functions::get_list_price( $this->d_product, $value, $this->tax_included );
+					$wc_rbp_price = $this->functions->get_list_price( $this->d_product, $value, $this->tax_included );
 
 					if ( $wc_rbp_price ) {
 
@@ -808,7 +818,7 @@ class WCIFD_Import_Single_Product {
 
 				foreach ( $price_types as $key => $value ) {
 
-					$wc_rbp_price = WCIFD_Functions::get_list_price( $this->d_product, $value, $this->tax_included );
+					$wc_rbp_price = $this->functions->get_list_price( $this->d_product, $value, $this->tax_included );
 
 					if ( $wc_rbp_price ) {
 
@@ -1010,7 +1020,7 @@ class WCIFD_Import_Single_Product {
 	public function single_variant( $variant, $n, $product, $data ) {
 
 		$barcode      = isset( $variant['Barcode'] ) ? $variant['Barcode'] : '';
-		$var_id       = WCIFD_Functions::search_product( $barcode );
+		$var_id       = $this->functions->search_product( $barcode );
 		$in_stock     = isset( $variant['AvailableQty'] ) ? $variant['AvailableQty'] : '';
 		$man_stock    = 'yes';
 		$stock_status = ( $in_stock ) ? 'instock' : 'outofstock';
@@ -1202,7 +1212,7 @@ class WCIFD_Import_Single_Product {
 		if ( $data['category'] ) {
 
 			/* Category */
-			$category_term = WCIFD_Functions::add_taxonomy_term( $product_id, $data['category'], 0 );
+			$category_term = $this->functions->add_taxonomy_term( $product_id, $data['category'], 0 );
 
 			if ( $data['sub_category'] && ! is_wp_error( $category_term ) && isset( $category_term['term_id'] ) ) {
 
@@ -1218,19 +1228,19 @@ class WCIFD_Import_Single_Product {
 						for ( $i = 0; $i < $subs_count; $i++ ) {
 
 							$parent_term      = 0 === $i ? $category_term['term_id'] : $more_terms[ $i - 1 ]['term_id'];
-							$more_terms[ $i ] = WCIFD_Functions::add_taxonomy_term( $product_id, $subs[ $i ], $parent_term, true );
+							$more_terms[ $i ] = $this->functions->add_taxonomy_term( $product_id, $subs[ $i ], $parent_term, true );
 						}
 					}
 				} else {
 
 					/* First subcategory */
-					$more_terms[1] = WCIFD_Functions::add_taxonomy_term( $product_id, $data['sub_category'], $category_term['term_id'], true );
+					$more_terms[1] = $this->functions->add_taxonomy_term( $product_id, $data['sub_category'], $category_term['term_id'], true );
 					/* Other subcategories */
 					for ( $i = 2; $i < 10; $i++ ) {
 						$sub_name = 'Subcategory' . $i;
 						if ( isset( $product[ $sub_name ] ) ) {
 
-							$more_terms[ $i ] = WCIFD_Functions::add_taxonomy_term( $product_id, $product[ $sub_name ], $more_terms[ $i - 1 ]['term_id'], true );
+							$more_terms[ $i ] = $this->functions->add_taxonomy_term( $product_id, $product[ $sub_name ], $more_terms[ $i - 1 ]['term_id'], true );
 
 						}
 					}

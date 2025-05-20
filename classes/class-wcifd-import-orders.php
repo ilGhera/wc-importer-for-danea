@@ -2,7 +2,7 @@
 /**
  * Import orders from Danea Easyfatt
  *
- * @author  ilGhera
+ * @author ilGhera
  * @package wc-importer-for-danea-premium/includes
  *
  * @since 1.6.1
@@ -11,12 +11,11 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Class wcifd_orders
+ * Class WCIFD_Import_Orders
  *
- * @return void
+ * @since 1.6.1
  */
 class WCIFD_Import_Orders {
-
 
 	/**
 	 * Add new users
@@ -32,12 +31,22 @@ class WCIFD_Import_Orders {
 	 */
 	public $orders_status;
 
+    /**
+     * The functions class
+     *
+     * @var object 
+     */
+    public $functions;
+
 	/**
 	 * The constructor
 	 *
 	 * @return void
 	 */
 	public function __construct() {
+
+        /* Initialize the function class */
+        $this->functions = new WCIFD_Functions();
 
 		$this->import_orders();
 	}
@@ -106,10 +115,10 @@ class WCIFD_Import_Orders {
 	public function import_single_order( $order, $o, $u, $p ) {
 
 		/* The Danea order ID */
-		$order_number = WCIFD_Functions::decode_xml_value( $order->Number );
+		$order_number = $this->functions->decode_xml_value( $order->Number );
 
 		/* Check if the order already exists */
-		if ( ! WCIFD_Functions::get_order_by_number( $order_number ) ) {
+		if ( ! $this->functions->get_order_by_number( $order_number ) ) {
 
 			/* Increase the orders counter */
 			$o++;
@@ -118,7 +127,7 @@ class WCIFD_Import_Orders {
 			$order_data = $this->get_order_data( $order );
 
 			/* Create new user if necessary */
-			if ( ! email_exists( $order->CustomerEmail ) && ! WCIFD_Functions::get_user_id_by_tax_code( $order->CustomerVatCode ) && ! WCIFD_Functions::get_user_id_by_tax_code( $order->CustomerFiscalCode ) && 1 === intval( $this->add_new_users ) ) {
+			if ( ! email_exists( $order->CustomerEmail ) && ! $this->functions->get_user_id_by_tax_code( $order->CustomerVatCode ) && ! $this->functions->get_user_id_by_tax_code( $order->CustomerFiscalCode ) && 1 === intval( $this->add_new_users ) ) {
 
 				/* Increase the users counter */
 				$u++;
@@ -149,7 +158,7 @@ class WCIFD_Import_Orders {
 			$wc_order->set_address( $this->get_shipping_address( $order_data ), 'shipping' );
 
 			/* Set payment method */
-			$payment_gateway = WCIFD_Functions::get_wc_payment_gateway( $order_data['payment_method'] );
+			$payment_gateway = $this->functions->get_wc_payment_gateway( $order_data['payment_method'] );
 
 			if ( $payment_gateway ) {
 
@@ -199,9 +208,9 @@ class WCIFD_Import_Orders {
 		$order_data = array();
 
 		/* Order details */
-		$order_data['order_date']     = WCIFD_Functions::decode_xml_value( $order->Date );
-		$order_data['order_comment']  = WCIFD_Functions::decode_xml_value( $order->InternalComment );
-		$order_data['payment_method'] = WCIFD_Functions::decode_xml_value( $order->PaymentName );
+		$order_data['order_date']     = $this->functions->decode_xml_value( $order->Date );
+		$order_data['order_comment']  = $this->functions->decode_xml_value( $order->InternalComment );
+		$order_data['payment_method'] = $this->functions->decode_xml_value( $order->PaymentName );
 
 		/* Client details */
 		if ( $order->CustomerReference ) {
@@ -213,28 +222,28 @@ class WCIFD_Import_Orders {
 		}
 
 		/* Fiscal fields names */
-		$order_data['cf_name'] = WCIFD_Functions::get_italian_tax_fields_names( 'cf_name' );
-		$order_data['pi_name'] = WCIFD_Functions::get_italian_tax_fields_names( 'pi_name' );
+		$order_data['cf_name'] = $this->functions->get_italian_tax_fields_names( 'cf_name' );
+		$order_data['pi_name'] = $this->functions->get_italian_tax_fields_names( 'pi_name' );
 
 		/* Order details */
-		$order_data['billing_company']  = WCIFD_Functions::decode_xml_value( $order->CustomerName );
-		$order_data['billing_address']  = WCIFD_Functions::decode_xml_value( $order->CustomerAddress );
-		$order_data['billing_city']     = WCIFD_Functions::decode_xml_value( $order->CustomerCity );
-		$order_data['billing_postcode'] = WCIFD_Functions::decode_xml_value( $order->CustomerPostcode );
-		$order_data['billing_state']    = WCIFD_Functions::decode_xml_value( $order->CustomerProvince );
-		$order_data['billing_country']  = WCIFD_Functions::get_country_code( WCIFD_Functions::decode_xml_value( $order->CustomerCountry ) );
-		$order_data['billing_phone']    = WCIFD_Functions::decode_xml_value( $order->CustomerTel );
-		$order_data['billing_email']    = WCIFD_Functions::decode_xml_value( $order->CustomerEmail );
-		$order_data['fiscal_code']      = WCIFD_Functions::decode_xml_value( $order->CustomerFiscalCode );
-		$order_data['p_iva']            = WCIFD_Functions::decode_xml_value( $order->CustomerVatCode );
+		$order_data['billing_company']  = $this->functions->decode_xml_value( $order->CustomerName );
+		$order_data['billing_address']  = $this->functions->decode_xml_value( $order->CustomerAddress );
+		$order_data['billing_city']     = $this->functions->decode_xml_value( $order->CustomerCity );
+		$order_data['billing_postcode'] = $this->functions->decode_xml_value( $order->CustomerPostcode );
+		$order_data['billing_state']    = $this->functions->decode_xml_value( $order->CustomerProvince );
+		$order_data['billing_country']  = $this->functions->get_country_code( $this->functions->decode_xml_value( $order->CustomerCountry ) );
+		$order_data['billing_phone']    = $this->functions->decode_xml_value( $order->CustomerTel );
+		$order_data['billing_email']    = $this->functions->decode_xml_value( $order->CustomerEmail );
+		$order_data['fiscal_code']      = $this->functions->decode_xml_value( $order->CustomerFiscalCode );
+		$order_data['p_iva']            = $this->functions->decode_xml_value( $order->CustomerVatCode );
 
 		/* Shipping details */
-		$order_data['shipping_name']     = WCIFD_Functions::decode_xml_value( $order->DeliveryName );
-		$order_data['shipping_address']  = WCIFD_Functions::decode_xml_value( $order->DeliveryAddress );
-		$order_data['shipping_city']     = WCIFD_Functions::decode_xml_value( $order->DeliveryCity );
-		$order_data['shipping_postcode'] = WCIFD_Functions::decode_xml_value( $order->DeliveryPostcode );
-		$order_data['shipping_state']    = WCIFD_Functions::decode_xml_value( $order->DeliveryProvince );
-		$order_data['shipping_country']  = WCIFD_Functions::get_country_code( WCIFD_Functions::decode_xml_value( $order->DeliveryCountry ) );
+		$order_data['shipping_name']     = $this->functions->decode_xml_value( $order->DeliveryName );
+		$order_data['shipping_address']  = $this->functions->decode_xml_value( $order->DeliveryAddress );
+		$order_data['shipping_city']     = $this->functions->decode_xml_value( $order->DeliveryCity );
+		$order_data['shipping_postcode'] = $this->functions->decode_xml_value( $order->DeliveryPostcode );
+		$order_data['shipping_state']    = $this->functions->decode_xml_value( $order->DeliveryProvince );
+		$order_data['shipping_country']  = $this->functions->get_country_code( $this->functions->decode_xml_value( $order->DeliveryCountry ) );
 
 		return $order_data;
 	}
@@ -257,7 +266,7 @@ class WCIFD_Import_Orders {
 		if ( $item_data['sku'] ) {
 
 			/* Check if the product already exists */
-			$product_id = WCIFD_Functions::search_product( $item_data['sku'] );
+			$product_id = $this->functions->search_product( $item_data['sku'] );
 
 			if ( ! $product_id ) {
 
@@ -354,12 +363,12 @@ class WCIFD_Import_Orders {
 			'class'  => null,
 		);
 
-		$perc  = isset( $item_data['tax']['Perc'] ) ? WCIFD_Functions::decode_xml_value( $item_data['tax']['Perc'] ) : null;
-		$class = isset( $item_data['tax']['Class'] ) ? WCIFD_Functions::decode_xml_value( $item_data['tax']['Class'] ) : null;
+		$perc  = isset( $item_data['tax']['Perc'] ) ? $this->functions->decode_xml_value( $item_data['tax']['Perc'] ) : null;
+		$class = isset( $item_data['tax']['Class'] ) ? $this->functions->decode_xml_value( $item_data['tax']['Class'] ) : null;
 
 		if ( 0 !== intval( $perc ) ) {
 			$tax_details['status'] = 'taxable';
-			$tax_details['class']  = WCIFD_Functions::get_tax_rate_class( WCIFD_Functions::decode_xml_value( $item_data['tax'] ), strval( $perc ) );
+			$tax_details['class']  = $this->functions->get_tax_rate_class( $this->functions->decode_xml_value( $item_data['tax'] ), strval( $perc ) );
 		}
 
 		return $tax_details;
@@ -376,11 +385,11 @@ class WCIFD_Import_Orders {
 
 		$item_data = array();
 
-		$item_data['sku']         = WCIFD_Functions::decode_xml_value( $item->Code );
-		$item_data['title']       = WCIFD_Functions::decode_xml_value( $item->Description );
-		$item_data['tax']         = WCIFD_Functions::decode_xml_value( $item->VatCode );
-		$item_data['price']       = WCIFD_Functions::decode_xml_value( $item->Price );
-		$item_data['total_sales'] = WCIFD_Functions::decode_xml_value( $item->Qty );
+		$item_data['sku']         = $this->functions->decode_xml_value( $item->Code );
+		$item_data['title']       = $this->functions->decode_xml_value( $item->Description );
+		$item_data['tax']         = $this->functions->decode_xml_value( $item->VatCode );
+		$item_data['price']       = $this->functions->decode_xml_value( $item->Price );
+		$item_data['total_sales'] = $this->functions->decode_xml_value( $item->Qty );
 
 		return $item_data;
 	}

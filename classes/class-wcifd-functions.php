@@ -63,7 +63,7 @@ class WCIFD_Functions {
 	 *
 	 * @return string
 	 */
-	public static function get_italian_tax_fields_names( $field ) {
+	public function get_italian_tax_fields_names( $field ) {
 
 		$cf_name      = null;
 		$pi_name      = null;
@@ -125,7 +125,7 @@ class WCIFD_Functions {
 	 *
 	 * @return int
 	 */
-	public static function get_user_id_by_tax_code( $tax_code = null ) {
+	public function get_user_id_by_tax_code( $tax_code = null ) {
 
         if ( $tax_code ) {
 
@@ -154,7 +154,7 @@ class WCIFD_Functions {
 	 *
 	 * @return string
 	 */
-	public static function get_country_code( $state_name ) {
+	public function get_country_code( $state_name ) {
 
         if ( function_exists( 'WC' ) && WC() && WC()->countries ) {
             
@@ -184,7 +184,7 @@ class WCIFD_Functions {
 	 *
 	 * @return string
 	 */
-	public static function decode_xml_value( $field = null ) {
+	public function decode_xml_value( $field = null ) {
 
 		$decoded = json_decode( json_encode( $field ), true );
 		$output  = $decoded ? $decoded[0] : null;
@@ -199,7 +199,7 @@ class WCIFD_Functions {
 	 *
 	 * @return int
 	 */
-	public static function get_order_by_number( $number ) {
+	public function get_order_by_number( $number ) {
 
 		$orders = wc_get_orders(
 			array(
@@ -219,7 +219,7 @@ class WCIFD_Functions {
 	 *
 	 * @return string
 	 */
-	public static function get_wc_payment_gateway( $method ) {
+	public function get_wc_payment_gateway( $method ) {
 
 		switch ( $method ) {
 			case 'Paypal':
@@ -251,7 +251,7 @@ class WCIFD_Functions {
 	 *
 	 * @return void
 	 */
-	public static function delete_orphan_sku( $product_id, $sku ) {
+	public function delete_orphan_sku( $product_id, $sku ) {
 
 		global $wpdb;
 
@@ -320,7 +320,7 @@ class WCIFD_Functions {
 	 *
 	 * @return array
 	 */
-	public static function add_taxonomy_term( $product_id, $category, $parent_id = 0, $append = false ) {
+	public function add_taxonomy_term( $product_id, $category, $parent_id = 0, $append = false ) {
 
 		$append = '1' === get_option( 'wcifd-deleting-categories' ) ? true : $append;
 		$term   = term_exists( $category, 'product_cat', $parent_id );
@@ -358,7 +358,7 @@ class WCIFD_Functions {
 	 *
 	 * @return void
 	 */
-	public static function add_tax_rate_class( $tax_name ) {
+	public function add_tax_rate_class( $tax_name ) {
 
 		global $wpdb;
 
@@ -383,7 +383,7 @@ class WCIFD_Functions {
 	 *
 	 * @return string
 	 */
-	public static function get_tax_rate_class( $name, $value = '' ) {
+	public function get_tax_rate_class( $name, $value = '' ) {
 
 		$tax_rate_class = null;
 
@@ -664,7 +664,7 @@ class WCIFD_Functions {
 	 *
 	 * @return stringa the price
 	 */
-	public static function get_list_price( $d_product, $number, $tax_included = false ) {
+	public function get_list_price( $d_product, $number, $tax_included = false ) {
 
 		$output = null;
 
@@ -721,7 +721,7 @@ class WCIFD_Functions {
 	 *
 	 * @return string
 	 */
-	public static function get_product_size( $product, $type, $measure, $csv = false ) {
+	public function get_product_size( $product, $type, $measure, $csv = false ) {
 
 		$x = null;
 		$y = null;
@@ -772,7 +772,7 @@ class WCIFD_Functions {
 	 *
 	 * @return string
 	 */
-	public static function get_short_description( $description ) {
+	public function get_short_description( $description ) {
 		$output = null;
 
 		$description = wp_strip_all_tags( $description );
