@@ -100,11 +100,11 @@ class WCIFD_Admin {
 
 				$this->tab_menu();
 
-				include WCIFD_ADMIN . 'wcifd-import-suppliers-template.php';
-				include WCIFD_ADMIN . 'wcifd-import-products-template.php';
-				include WCIFD_ADMIN . 'wcifd-import-clients-template.php';
-				include WCIFD_ADMIN . 'wcifd-import-orders-template.php';
-				include WCIFD_ADMIN . 'wcifd-role-based-price.php';
+				include WCIFD_ADMIN . 'templates/wcifd-import-suppliers-template.php';
+				include WCIFD_ADMIN . 'templates/wcifd-import-products-template.php';
+				include WCIFD_ADMIN . 'templates/wcifd-import-clients-template.php';
+				include WCIFD_ADMIN . 'templates/wcifd-import-orders-template.php';
+				include WCIFD_ADMIN . 'templates/wcifd-role-based-price-template.php';
 
 			echo '</div>'; // wrap-left.
 

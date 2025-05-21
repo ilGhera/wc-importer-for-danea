@@ -61,8 +61,9 @@ function wcifd_init() {
 	require_once WCIFD_DIR . 'libraries/action-scheduler/action-scheduler.php';
 	require_once WCIFD_ADMIN . 'class-wcifd-admin.php';
 	require_once WCIFD_ADMIN . 'ilghera-notice/class-ilghera-notice.php';
-	require_once WCIFD_CLASSES . 'class-wcifd-functions.php';
 	require_once WCIFD_INCLUDES . 'wcifd-delete-all-products.php';
+	require_once WCIFD_INCLUDES . 'wcifd-delete-single-product.php';
+	require_once WCIFD_CLASSES . 'class-wcifd-functions.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-temporary-data.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-catalog-update.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-import-products.php';
@@ -73,7 +74,6 @@ function wcifd_init() {
 	require_once WCIFD_CLASSES . 'class-wcifd-single-product-image.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-import-orders.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-import-users.php';
-	require_once WCIFD_INCLUDES . 'wcifd-delete-single-product.php';
 }
 add_action( 'init', 'wcifd_init', PHP_INT_MIN );
 
