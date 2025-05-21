@@ -583,12 +583,7 @@ class WCIFD_Import_Single_Product {
 			$output = $variants['Variant'];
 		}
 
-		if ( $output ) {
-
-			$product->set_meta_data( 'wcifd-danea-size-color', 1 );
-
-			return $output;
-		}
+        return $output;
 	}
 
 	/**
@@ -1160,6 +1155,9 @@ class WCIFD_Import_Single_Product {
 
 			/* Update the parent product */
 			$product = new WC_Product_Variable( $product_id );
+
+            /* Add specific metadata for size and color */
+			$product->set_meta_data( 'wcifd-danea-size-color', 1 );
 
 			foreach ( $variants as $variant ) {
 
