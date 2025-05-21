@@ -185,7 +185,7 @@ class WCIFD_Catalog_Update {
 		/* Get products */
 		$products = $this->get_products();
 
-		if ( $products->children() ) {
+		if ( $products && $products->children() ) {
 
 			/* Set transient for progress bar */
 			set_transient( 'wcifd-total-actions', count( $products->children() ), DAY_IN_SECONDS );
@@ -240,7 +240,7 @@ class WCIFD_Catalog_Update {
 		$products = $this->get_products( true );
 
 		/* Delete products */
-		if ( $products->children() ) {
+		if ( $products && $products->children() ) {
 
 			/* Set transient for progress bar */
 			set_transient( 'wcifd-total-delete-actions', count( $products->children() ), DAY_IN_SECONDS );
