@@ -27,25 +27,13 @@ class WCIFD_Single_Product_Image {
 	public $temp;
 
 	/**
-	 * Product ID
-	 *
-	 * @var int
-	 */
-	public $product_id;
-
-	/**
-	 * Image name
-	 *
-	 * @var string
-	 */
-	public $image_name;
-
-	/**
 	 * The constructor
 	 *
 	 * @return void
 	 */
 	public function __construct() {
+
+		$this->temp = new WCIFD_Temporary_Data();
 
 		add_action( 'wcifd_product_image_event', array( $this, 'set_product_image' ), 10, 1 );
 	}
@@ -60,26 +48,25 @@ class WCIFD_Single_Product_Image {
 	public function set_product_image( $hash ) {
 
 		/* Vars */
-		$this->temp       = new WCIFD_Temporary_Data();
-		$data             = $this->temp->wcifd_get_temporary_data( $hash, true );
-		$this->product_id = isset( $data['product_id'] ) ? $data['product_id'] : '';
-		$this->image_name = isset( $data['image_name'] ) ? $data['image_name'] : '';
+		$data = $this->temp->wcifd_get_temporary_data( $hash, true );
+		$product_id = isset( $data['product_id'] ) ? $data['product_id'] : '';
+		$image_name = isset( $data['image_name'] ) ? $data['image_name'] : '';
 
-		if ( $this->product_id && $this->image_name ) {
+		if ( $product_id && $image_name ) {
 
 			/* Get the image ID */
-			$attachment_id = $this->get_image_id_by_name( $this->image_name );
+			$attachment_id = $this->get_image_id( $image_name );
 
 			if ( $attachment_id ) {
 
 				/* Link image to the product */
-				set_post_thumbnail( $this->product_id, $attachment_id );
+				set_post_thumbnail( $product_id, $attachment_id );
 
 				/* Assign the product as post_parent of the image */
 				$updated = wp_update_post(
 					array(
 						'ID'          => $attachment_id,
-						'post_parent' => $this->product_id,
+						'post_parent' => $product_id,
 					)
 				);
 
@@ -91,30 +78,80 @@ class WCIFD_Single_Product_Image {
 		}
 	}
 
+    public function get_image_id( $image_name ) {
+
+        $image_id = $this->get_image_id_by_original_name( $image_name );
+
+        if ( ! $image_id ) {
+
+            $image_id = $this->get_image_id_by_name( $image_name );
+        }
+
+        return $image_id;
+    }
+
+     /**
+     * Retrieves an attachment ID by its stored original filename.
+     *
+     * @param string $image_name The image name.
+     *
+     * @return int|false The attachment ID if found, false otherwise.
+     */
+    public function get_attachment_id_by_original_filename( $image_name ) {
+
+        $args = array(
+            'post_type'      => 'attachment',
+            'post_status'    => 'inherit',
+            'meta_query'     => array(
+                array(
+                    'key'     => '_wcifd_original_filename',
+                    'value'   => $image_name,
+                    'compare' => '=',
+                ),
+            ),
+            'fields'         => 'ids',
+            'posts_per_page' => 1, // Ci aspettiamo solo uno per nome originale, dato il delete_duplicates
+            'no_found_rows'  => true,
+        );
+
+        $image_ids = get_posts( $args );
+
+        return ( ! empty( $image_ids ) ) ? $image_ids[0] : false;
+    }
+
 	/**
 	 * Get image by name
 	 *
+     * @param string $image_name The image name.
+     *
 	 * @return int
 	 */
-	public function get_image_id_by_name() {
+	public function get_image_id_by_name( $image_name ) {
+
+        $sanitized_slug = sanitize_title( pathinfo( $image_name, PATHINFO_FILENAME ) ); // Assicurati che lo slug sia generato allo stesso modo di WP
 
 		$attachment_id = null;
 
 		$args = array(
 			'post_type'      => 'attachment',
 			'post_status'    => 'inherit',
-			'name'           => $this->image_name,
+			'name'           => $sanitized_slug,
 			'fields'         => 'ids',
-			'posts_per_page' => -1,
+            'posts_per_page' => 1,
+            'no_found_rows'  => true,
 		);
 
-		$image_ids = get_posts( $args );
+        $image_ids_old_slug = get_posts( $args_old_slug );
 
-		if ( is_array( $image_ids ) && isset( $image_ids[0] ) ) {
+		if ( ! empty( $image_ids_old_slug ) && isset( $image_ids_old_slug[0] ) ) {
+			// Opzionale: Se trovi un vecchio allegato, potresti volerlo "migrare"
+			// aggiungendo il _wcifd_original_filename meta, così la prossima volta sarà trovato subito.
+			// Tuttavia, fai attenzione a non rallentare l'importazione.
+			update_post_meta( $image_ids_old_slug[0], '_wcifd_original_filename', $image_name );
 
-			return $image_ids[0];
-		}
-	}
+			return $image_ids_old_slug[0];
+        }
+    }
 }
 
 new WCIFD_Single_Product_Image();
