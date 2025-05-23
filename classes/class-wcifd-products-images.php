@@ -56,7 +56,7 @@ class WCIFD_Products_Images {
         }
 
         // Start
-        $original_file_name = sanitize_file_name( $file['name'] ); // Sanitizza il nome originale
+        $original_file_name = $file['name']; // Sanitizza il nome originale
 
         // Ottieni la directory di upload
         $upload_dir = wp_upload_dir();
@@ -68,7 +68,7 @@ class WCIFD_Products_Images {
 
         // Crea un nuovo array $_FILES per wp_handle_upload con il nome univoco desiderato
         // Questo è fondamentale per "forzare" il nome del file se wp_handle_upload non lo fa da solo.
-        $uploaded_file = array(
+        $uploaded_file_data = array(
             'name'     => $unique_file_name, // Il nome desiderato
             'type'     => $file['type'],
             'tmp_name' => $file['tmp_name'],
@@ -88,7 +88,7 @@ class WCIFD_Products_Images {
 		/* $this->delete_duplicates( $file ); */
 
 		/* Load image in WP Media */
-		$wp_image = wp_handle_upload( $uploaded_fi, array( 'test_form' => false ) );
+		$wp_image = wp_handle_upload( $uploaded_file_data, array( 'test_form' => false ) );
 
 		if ( isset( $wp_image['error'] ) ) {
 

@@ -49,13 +49,14 @@ class WCIFD_Single_Product_Image {
 
 		/* Vars */
 		$data = $this->temp->wcifd_get_temporary_data( $hash, true );
-		$product_id = isset( $data['product_id'] ) ? $data['product_id'] : '';
+		$product_id = isset( $data['product_id'] ) ? (int) $data['product_id'] : '';
 		$image_name = isset( $data['image_name'] ) ? $data['image_name'] : '';
 
 		if ( $product_id && $image_name ) {
 
 			/* Get the image ID */
 			$attachment_id = $this->get_image_id( $image_name );
+            error_log( 'ATTACHMENT ID: ' . $attachment_id );
 
 			if ( $attachment_id ) {
 
@@ -78,14 +79,27 @@ class WCIFD_Single_Product_Image {
 		}
 	}
 
+    /**
+	 * Retrieves an attachment ID by its stored original filename, with fallback to post_name.
+	 *
+	 * @param string $image_name The original image filename from Danea.
+     *
+	 * @return int|false The attachment ID if found, false otherwise.
+	 */
     public function get_image_id( $image_name ) {
 
-        $image_id = $this->get_image_id_by_original_name( $image_name );
+        /* Attempt to retrieve using the new custom post meta */
+        $image_id = $this->get_image_id_by_original_filename( $image_name );
+        error_log( 'IMAGE ID META: ' . $image_id );
 
         if ( ! $image_id ) {
 
+            /* If not found with the meta, try the old method (post_name/slug) */
             $image_id = $this->get_image_id_by_name( $image_name );
+            error_log( 'IMAGE ID SLUG: ' . $image_id );
         }
+
+        error_log( 'IMAGE ID: ' . $image_id );
 
         return $image_id;
     }
@@ -97,7 +111,12 @@ class WCIFD_Single_Product_Image {
      *
      * @return int|false The attachment ID if found, false otherwise.
      */
-    public function get_attachment_id_by_original_filename( $image_name ) {
+    public function get_image_id_by_original_filename( $image_name ) {
+
+        error_log( 'IMAGE NAME 1: ' . $image_name );
+        error_log( 'WCIFD DEBUG | Searching for IMAGE NAME: ' . $image_name );
+        error_log( 'WCIFD DEBUG | Length of IMAGE NAME: ' . strlen( $image_name ) );
+        error_log( 'WCIFD DEBUG | MD5 of IMAGE NAME: ' . md5( $image_name ) );
 
         $args = array(
             'post_type'      => 'attachment',
@@ -110,11 +129,14 @@ class WCIFD_Single_Product_Image {
                 ),
             ),
             'fields'         => 'ids',
-            'posts_per_page' => 1, // Ci aspettiamo solo uno per nome originale, dato il delete_duplicates
+            'posts_per_page' => 1,
             'no_found_rows'  => true,
         );
 
         $image_ids = get_posts( $args );
+        error_log( 'IMAGE IDS: ' . print_r( $image_ids, true ) );
+        error_log( 'WCIFD DEBUG | Resulting IMAGE IDS: ' . print_r( $image_ids, true ) );
+        error_log( 'WCIFD DEBUG | Empty image_ids? ' . ( empty( $image_ids ) ? 'Yes' : 'No' ) );
 
         return ( ! empty( $image_ids ) ) ? $image_ids[0] : false;
     }
@@ -128,9 +150,12 @@ class WCIFD_Single_Product_Image {
 	 */
 	public function get_image_id_by_name( $image_name ) {
 
-        $sanitized_slug = sanitize_title( pathinfo( $image_name, PATHINFO_FILENAME ) ); // Assicurati che lo slug sia generato allo stesso modo di WP
+        error_log( 'IMAGE NAME 2: ' . $image_name );
 
-		$attachment_id = null;
+        $sanitized_slug = sanitize_title( pathinfo( $image_name, PATHINFO_FILENAME ) );
+        error_log( 'SANITIZED SLUG: ' . $sanitized_slug );
+
+		$attachment_id  = null;
 
 		$args = array(
 			'post_type'      => 'attachment',
@@ -141,12 +166,12 @@ class WCIFD_Single_Product_Image {
             'no_found_rows'  => true,
 		);
 
-        $image_ids_old_slug = get_posts( $args_old_slug );
+        $image_ids_old_slug = get_posts( $args );
+        error_log( 'IMAGE IDS OLD SLUG: ' . print_r( $image_ids_old_slug, true ) );
 
 		if ( ! empty( $image_ids_old_slug ) && isset( $image_ids_old_slug[0] ) ) {
-			// Opzionale: Se trovi un vecchio allegato, potresti volerlo "migrare"
-			// aggiungendo il _wcifd_original_filename meta, così la prossima volta sarà trovato subito.
-			// Tuttavia, fai attenzione a non rallentare l'importazione.
+
+            /* Adding original filename to the DB */
 			update_post_meta( $image_ids_old_slug[0], '_wcifd_original_filename', $image_name );
 
 			return $image_ids_old_slug[0];
