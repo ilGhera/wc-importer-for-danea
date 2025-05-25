@@ -35,28 +35,23 @@ class WCIFD_Products_Images {
 	public function handle_image_upload() {
 
 		if ( ! function_exists( 'wp_handle_upload' ) ) {
-
 			require_once ABSPATH . 'wp-admin/includes/file.php';
 		}
 
         if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
-
             require_once ABSPATH . 'wp-admin/includes/image.php';
         }
 
 		$file = isset( $_FILES['file'] ) ? $_FILES['file'] : null;
 
         if ( ! $file || ! is_array( $file ) || empty( $file['tmp_name'] ) ) {
-
             error_log( 'WCIFD ERROR | Immagine: nessun file ricevuto.' );
-
             echo 'OK'; // O un messaggio di errore più specifico per il frontend
-
             return;
         }
 
         // Start
-        $original_file_name = $file['name']; // Sanitizza il nome originale
+        $original_file_name = $file['name'];
 
         // Ottieni la directory di upload
         $upload_dir = wp_upload_dir();
@@ -91,19 +86,12 @@ class WCIFD_Products_Images {
 		$wp_image = wp_handle_upload( $uploaded_file_data, array( 'test_form' => false ) );
 
 		if ( isset( $wp_image['error'] ) ) {
-
 			error_log( 'WCIFD ERROR | Immagine: ' . $file['name'] . ' | ' . print_r( $wp_image['error'], true ) );
-
 			echo 'OK';
-
 			return;
-
 		} elseif ( ! $wp_image ) {
-
 			error_log( 'WCIFD ERROR | Immagine: ' . $file['name'] . ' |  Errore di ricezione' );
-
 			echo 'OK';
-
 			return;
 		}
 
