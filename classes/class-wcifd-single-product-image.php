@@ -52,6 +52,8 @@ class WCIFD_Single_Product_Image {
 		$product_id = isset( $data['product_id'] ) ? (int) $data['product_id'] : '';
 		$image_name = isset( $data['image_name'] ) ? $data['image_name'] : '';
 
+        error_log('');
+        error_log( '#######################################' );
         error_log( 'IMAGE NAME FROM HASH: ' . $image_name );
 
 		if ( $product_id && $image_name ) {
@@ -61,6 +63,8 @@ class WCIFD_Single_Product_Image {
             error_log( 'ATTACHMENT ID: ' . $attachment_id );
 
 			if ( $attachment_id ) {
+
+                error_log( 'LINK IMAGE TO PRODUCT' );
 
 				/* Link image to the product */
 				set_post_thumbnail( $product_id, $attachment_id );
@@ -79,6 +83,8 @@ class WCIFD_Single_Product_Image {
 				}
 			}
 		}
+        error_log( '#######################################' );
+        error_log('');
 	}
 
     /**

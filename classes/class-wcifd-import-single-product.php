@@ -420,7 +420,7 @@ class WCIFD_Import_Single_Product {
 		$data['um']               = isset( $this->d_product['Um'] ) ? $this->d_product['Um'] : '';
 		$data['size_um']          = isset( $this->d_product['SizeUm'] ) ? $this->d_product['SizeUm'] : '';
 		$data['weight_um']        = isset( $this->d_product['WeightUm'] ) ? $this->d_product['WeightUm'] : '';
-		$data['image_file_name']  = isset( $this->d_product['ImageFileName'] ) ? sanitize_title( $this->d_product['ImageFileName'] ) : '';
+		$data['image_file_name']  = isset( $this->d_product['ImageFileName'] ) ? $this->d_product['ImageFileName'] : '';
 		$data['regular_price']    = $this->functions->get_list_price( $this->d_product, $this->p_data['regular_price_list'], $this->tax_included );
 		$data['sale_price']       = $this->functions->get_list_price( $this->d_product, $this->p_data['sale_price_list'], $this->tax_included );
 		$data['on_sale']          = $data['sale_price'] ? 1 : 0;
@@ -1269,6 +1269,7 @@ class WCIFD_Import_Single_Product {
 
 				/* Add temporary data to the dedicated table for image/product association */
 				$this->temp->wcifd_add_temporary_image( $this->hash, $product_id, $data['image_file_name'] );
+                error_log( 'IMAGE NAME BEFORE HASH: ' . $data['image_file_name'] );
 
 			} else {
 

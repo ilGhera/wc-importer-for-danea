@@ -150,10 +150,12 @@ class WCIFD_Products_Images {
         if ( ! empty( $image_ids_new_meta ) ) {
             // Trovati duplicati con il nuovo meta: elimina questi
             $image_ids_to_delete = $image_ids_new_meta;
+            error_log( 'POSTMETA - IMAGE IDS TO DELETE: ' . print_r( $image_ids_to_delete, true ) );
         } else {
             // 2. Se nessun duplicato trovato con il nuovo meta, prova con il vecchio metodo (post_name)
             // Questo cattura le immagini importate prima dell'introduzione del meta
             $sanitized_slug = sanitize_title( pathinfo( $original_filename, PATHINFO_FILENAME ) );
+            error_log( 'NOME IMMAGINE - SANITIZED SLUG: ' . $sanitized_slug );
 
             $args_old_slug = array(
                 'post_type'      => 'attachment',
@@ -168,6 +170,7 @@ class WCIFD_Products_Images {
             if ( ! empty( $image_ids_old_slug ) ) {
                 // Trovati duplicati con il vecchio slug: elimina questi
                 $image_ids_to_delete = $image_ids_old_slug;
+                error_log( 'NOME IMMAGINE - IMAGE IDS TO DELETE: ' . print_r( $image_ids_to_delete, true ) );
             }
         }
 
