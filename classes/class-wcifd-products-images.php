@@ -93,15 +93,12 @@ class WCIFD_Products_Images {
 		/* Get the file type */
 		$filetype = wp_check_filetype( basename( $wp_image['file'] ), null );
 
-        $test = sanitize_title( pathinfo( $unique_file_name, PATHINFO_FILENAME ) );
-        error_log( 'TEST: ' . $test );
-
 		/* The attachment data */
 		$attachment = array(
 			'guid'           => $wp_image['url'],
 			'post_mime_type' => $filetype['type'],
 			/* 'post_title'     => sanitize_title( pathinfo( $unique_file_name, PATHINFO_FILENAME ) ), */
-            'post_title'     => $test,
+            'post_title'     => sanitize_title( $original_file_name ),
 			'post_content'   => '',
 			'post_status'    => 'inherit',
 		);
@@ -196,13 +193,14 @@ class WCIFD_Products_Images {
 	 */
 	public function get_image_ids_by_name( $original_filename ) {
 
-		$sanitized_slug = sanitize_title( pathinfo( $original_filename, PATHINFO_FILENAME ) );
-		error_log( 'NOME IMMAGINE - SANITIZED SLUG: ' . $sanitized_slug );
+		/* $sanitized_slug = sanitize_title( pathinfo( $original_filename, PATHINFO_FILENAME ) ); */
+		/* error_log( 'NOME IMMAGINE - SANITIZED SLUG: ' . $sanitized_slug ); */
 
 		$args = array(
 			'post_type'      => 'attachment',
 			'post_status'    => 'inherit',
-			'name'           => $sanitized_slug,
+			/* 'name'           => $sanitized_slug, */
+			'name'           => sanitize_title( $original_filename ), 
 			'fields'         => 'ids',
 			'posts_per_page' => -1,
 			'no_found_rows'  => true,

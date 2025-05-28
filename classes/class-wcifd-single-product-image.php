@@ -157,15 +157,16 @@ class WCIFD_Single_Product_Image {
 
         error_log( 'RICERCA PER NOME IMMAGINE: ' . $image_name );
 
-        $sanitized_slug = sanitize_title( pathinfo( $image_name, PATHINFO_FILENAME ) );
-        error_log( 'SANITIZED SLUG: ' . $sanitized_slug );
+        /* $sanitized_slug = sanitize_title( pathinfo( $image_name, PATHINFO_FILENAME ) ); */
+        /* error_log( 'SANITIZED SLUG: ' . $sanitized_slug ); */
 
 		$attachment_id  = null;
 
 		$args = array(
 			'post_type'      => 'attachment',
 			'post_status'    => 'inherit',
-			'name'           => $sanitized_slug,
+			/* 'name'           => $sanitized_slug, */
+			'name'           => sanitize_title( $image_name ), 
 			'fields'         => 'ids',
             'posts_per_page' => 1,
             'no_found_rows'  => true,
