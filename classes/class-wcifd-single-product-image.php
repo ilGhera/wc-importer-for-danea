@@ -50,6 +50,9 @@ class WCIFD_Single_Product_Image {
 		$product_id = isset( $data['product_id'] ) ? (int) $data['product_id'] : 0;
 		$image_name = isset( $data['image_name'] ) ? $data['image_name'] : '';
 
+		error_log( '=== WCIFD | Associazione immagine prodotto ================' );
+		error_log( 'ID prodotto: ' . $product_id );
+
 		if ( 0 < $product_id && $image_name ) {
 
 			/* Get the image ID */
@@ -58,7 +61,7 @@ class WCIFD_Single_Product_Image {
 			if ( $attachment_id ) {
 
 				/* Link image to the product */
-				set_post_thumbnail( $product_id, $attachment_id );
+				$thumb = set_post_thumbnail( $product_id, $attachment_id );
 
 				/* Assign the product as post_parent of the image */
 				$updated = wp_update_post(
@@ -68,12 +71,16 @@ class WCIFD_Single_Product_Image {
 					)
 				);
 
-				if ( 0 !== $updated && ! is_wp_error( $updated ) ) {
+				if ( $thumb && 0 !== $updated && ! is_wp_error( $updated ) ) {
+
+					error_log( 'Immagine assegnata al prodotto' );
 
 					$this->temp->wcifd_delete_temporary_data( $hash, true );
 				}
 			}
 		}
+
+		error_log( '===========================================================' );
 	}
 
 	/**
@@ -87,11 +94,13 @@ class WCIFD_Single_Product_Image {
 
 		/* Attempt to retrieve using the new custom post meta */
 		$image_id = $this->get_image_id_by_meta( $image_name );
+		error_log( 'ID immagine da postmeta: ' . $image_id );
 
 		if ( ! $image_id ) {
 
 			/* If not found with the meta, try the old method (post_name/slug) */
 			$image_id = $this->get_image_id_by_name( $image_name );
+			error_log( 'ID immagine da nome: ' . $image_id );
 		}
 
 		return $image_id;

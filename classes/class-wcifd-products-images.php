@@ -128,20 +128,30 @@ class WCIFD_Products_Images {
 
 		$image_ids_by_meta = $this->get_image_ids_by_meta( $original_filename );
 
+		error_log( '=== WCIFD | Eliminazione duplicati ========================' );
+
 		if ( ! empty( $image_ids_by_meta ) ) {
 
 			$image_ids_to_delete = $image_ids_by_meta;
-			error_log( 'WCIFD INFO | Postmeta - ID immagini da eliminare: ' . print_r( $image_ids_to_delete, true ) );
 
+			if ( isset( $image_ids_to_delete[0] ) ) {
+
+				error_log( 'Ricerca immagine per postmeta: ' . $original_filename );
+				error_log( 'ID immagine da eliminare: ' . $image_ids_to_delete[0] );
+			}
 		} else {
 
-			error_log( 'WCIFD INFO | Ricerca immagine per nome: ' . sanitize_title( $original_filename ) );
+			error_log( 'Ricerca immagine per nome: ' . sanitize_title( $original_filename ) );
 			$image_ids_by_name = $this->get_image_ids_by_name( $original_filename );
 
 			if ( ! empty( $image_ids_by_name ) ) {
 
 				$image_ids_to_delete = $image_ids_by_name;
-				error_log( 'WCIFD INFO | Nome immagine - ID immagini da eliminare: ' . print_r( $image_ids_to_delete, true ) );
+
+				if ( isset( $image_ids_to_delete[0] ) ) {
+
+					error_log( 'ID immagine da eliminare: ' . $image_ids_to_delete[0] );
+				}
 			}
 		}
 
@@ -151,9 +161,11 @@ class WCIFD_Products_Images {
 			foreach ( $image_ids_to_delete as $id ) {
 
 				wp_delete_post( $id, true );
-				error_log( 'WCIFD INFO | Eliminato duplicato per ' . $original_filename . ' (ID: ' . $id . ')' );
+				error_log( 'Eliminato duplicato per ' . $original_filename . ' (ID: ' . $id . ')' );
 			}
 		}
+
+		error_log( '===========================================================' );
 	}
 
 	/**
