@@ -64,7 +64,6 @@ class WCIFD_Products_Images {
 
 		/* Create a unique filename based on the original file name */
 		$unique_file_name = wp_unique_filename( $upload_path, $original_file_name );
-        error_log( 'UNIQUE FILE NAME: ' . $unique_file_name );
 
 		/* The uploaded file data */
 		$uploaded_file_data = array(
@@ -83,6 +82,7 @@ class WCIFD_Products_Images {
 			error_log( 'WCIFD ERROR | Immagine: ' . $file['name'] . ' | ' . print_r( $wp_image['error'], true ) );
 			echo 'OK';
 			return;
+
 		} elseif ( ! $wp_image ) {
 
 			error_log( 'WCIFD ERROR | Immagine: ' . $file['name'] . ' |  Errore di ricezione' );
@@ -97,8 +97,7 @@ class WCIFD_Products_Images {
 		$attachment = array(
 			'guid'           => $wp_image['url'],
 			'post_mime_type' => $filetype['type'],
-			/* 'post_title'     => sanitize_title( pathinfo( $unique_file_name, PATHINFO_FILENAME ) ), */
-            'post_title'     => sanitize_title( $original_file_name ),
+			'post_title'     => sanitize_title( $original_file_name ),
 			'post_content'   => '',
 			'post_status'    => 'inherit',
 		);
@@ -132,17 +131,17 @@ class WCIFD_Products_Images {
 		if ( ! empty( $image_ids_by_meta ) ) {
 
 			$image_ids_to_delete = $image_ids_by_meta;
-			error_log( 'POSTMETA - IMAGE IDS TO DELETE: ' . print_r( $image_ids_to_delete, true ) );
+			error_log( 'WCIFD INFO | Postmeta - ID immagini da eliminare: ' . print_r( $image_ids_to_delete, true ) );
 
 		} else {
 
+			error_log( 'WCIFD INFO | Ricerca immagine per nome: ' . sanitize_title( $original_filename ) );
 			$image_ids_by_name = $this->get_image_ids_by_name( $original_filename );
-            error_log( 'RICERCA PER NOME IMMAGINE: ' . print_r( $image_ids_by_name, true ) );
 
 			if ( ! empty( $image_ids_by_name ) ) {
 
 				$image_ids_to_delete = $image_ids_by_name;
-				error_log( 'NOME IMMAGINE - IMAGE IDS TO DELETE: ' . print_r( $image_ids_to_delete, true ) );
+				error_log( 'WCIFD INFO | Nome immagine - ID immagini da eliminare: ' . print_r( $image_ids_to_delete, true ) );
 			}
 		}
 
@@ -193,14 +192,10 @@ class WCIFD_Products_Images {
 	 */
 	public function get_image_ids_by_name( $original_filename ) {
 
-		/* $sanitized_slug = sanitize_title( pathinfo( $original_filename, PATHINFO_FILENAME ) ); */
-		/* error_log( 'NOME IMMAGINE - SANITIZED SLUG: ' . $sanitized_slug ); */
-
 		$args = array(
 			'post_type'      => 'attachment',
 			'post_status'    => 'inherit',
-			/* 'name'           => $sanitized_slug, */
-			'name'           => sanitize_title( $original_filename ), 
+			'name'           => sanitize_title( $original_filename ),
 			'fields'         => 'ids',
 			'posts_per_page' => -1,
 			'no_found_rows'  => true,
