@@ -55,12 +55,16 @@ class WCIFD_Products_Images {
 		/* The original filename */
 		$original_file_name = $file['name'];
 
+		/* Delete duplicates */
+		$this->delete_duplicates( $original_file_name );
+
 		/* Get the upload directory */
 		$upload_dir  = wp_upload_dir();
 		$upload_path = $upload_dir['path'];
 
 		/* Create a unique filename based on the original file name */
 		$unique_file_name = wp_unique_filename( $upload_path, $original_file_name );
+        error_log( 'UNIQUE FILE NAME: ' . $unique_file_name );
 
 		/* The uploaded file data */
 		$uploaded_file_data = array(
@@ -70,9 +74,6 @@ class WCIFD_Products_Images {
 			'error'    => $file['error'],
 			'size'     => $file['size'],
 		);
-
-		/* Delete duplicates */
-		$this->delete_duplicates( $original_file_name );
 
 		/* Upload the image in WP Media */
 		$wp_image = wp_handle_upload( $uploaded_file_data, array( 'test_form' => false ) );
@@ -92,11 +93,15 @@ class WCIFD_Products_Images {
 		/* Get the file type */
 		$filetype = wp_check_filetype( basename( $wp_image['file'] ), null );
 
+        $test = sanitize_title( pathinfo( $unique_file_name, PATHINFO_FILENAME ) );
+        error_log( 'TEST: ' . $test );
+
 		/* The attachment data */
 		$attachment = array(
 			'guid'           => $wp_image['url'],
 			'post_mime_type' => $filetype['type'],
-			'post_title'     => sanitize_title( pathinfo( $unique_file_name, PATHINFO_FILENAME ) ),
+			/* 'post_title'     => sanitize_title( pathinfo( $unique_file_name, PATHINFO_FILENAME ) ), */
+            'post_title'     => $test,
 			'post_content'   => '',
 			'post_status'    => 'inherit',
 		);
@@ -135,10 +140,11 @@ class WCIFD_Products_Images {
 		} else {
 
 			$image_ids_by_name = $this->get_image_ids_by_name( $original_filename );
+            error_log( 'RICERCA PER NOME IMMAGINE: ' . print_r( $image_ids_by_name, true ) );
 
-			if ( ! empty( $image_ids_old_slug ) ) {
+			if ( ! empty( $image_ids_by_name ) ) {
 
-				$image_ids_to_delete = $image_ids_old_slug;
+				$image_ids_to_delete = $image_ids_by_name;
 				error_log( 'NOME IMMAGINE - IMAGE IDS TO DELETE: ' . print_r( $image_ids_to_delete, true ) );
 			}
 		}

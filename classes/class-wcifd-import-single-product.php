@@ -1269,7 +1269,6 @@ class WCIFD_Import_Single_Product {
 
 				/* Add temporary data to the dedicated table for image/product association */
 				$this->temp->wcifd_add_temporary_image( $this->hash, $product_id, $data['image_file_name'] );
-                error_log( 'IMAGE NAME BEFORE HASH: ' . $data['image_file_name'] );
 
 			} else {
 

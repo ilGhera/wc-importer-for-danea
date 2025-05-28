@@ -54,7 +54,9 @@ class WCIFD_Single_Product_Image {
 
         error_log('');
         error_log( '#######################################' );
-        error_log( 'IMAGE NAME FROM HASH: ' . $image_name );
+        error_log( 'SET PRODUCT IMAGE' );
+        error_log( 'PRODUCT ID: ' . $product_id );
+        error_log( 'IMAGE NAME: ' . $image_name );
 
 		if ( 0 < $product_id && $image_name ) {
 
@@ -66,9 +68,6 @@ class WCIFD_Single_Product_Image {
 
                 error_log( 'LINK IMAGE TO PRODUCT' );
 
-                error_log( 'WCIFD DEBUG | set_post_thumbnail - Product ID: ' . $product_id . ', Attachment ID: ' . $attachment_id );
-// ...
-                error_log( 'WCIFD DEBUG | wp_update_post - Attachment ID: ' . $attachment_id . ', Post Parent: ' . $product_id );
 				/* Link image to the product */
 				set_post_thumbnail( $product_id, $attachment_id );
 
