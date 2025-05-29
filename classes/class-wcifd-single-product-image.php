@@ -61,7 +61,7 @@ class WCIFD_Single_Product_Image {
 			if ( $attachment_id ) {
 
 				/* Link image to the product */
-				$thumb = set_post_thumbnail( $product_id, $attachment_id );
+				set_post_thumbnail( $product_id, $attachment_id );
 
 				/* Assign the product as post_parent of the image */
 				$updated = wp_update_post(
@@ -71,7 +71,7 @@ class WCIFD_Single_Product_Image {
 					)
 				);
 
-				if ( $thumb && 0 !== $updated && ! is_wp_error( $updated ) ) {
+				if ( 0 !== $updated && ! is_wp_error( $updated ) ) {
 
 					error_log( 'Immagine assegnata al prodotto' );
 
@@ -144,6 +144,7 @@ class WCIFD_Single_Product_Image {
 	 */
 	public function get_image_id_by_name( $image_name ) {
 
+        $output        = false;
 		$attachment_id = null;
 
 		$args = array(
@@ -162,8 +163,10 @@ class WCIFD_Single_Product_Image {
 			/* Add original filename to the DB */
 			update_post_meta( $image_ids_old_slug[0], '_wcifd_original_filename', $image_name );
 
-			return $image_ids_old_slug[0];
+			$output = $image_ids_old_slug[0];
 		}
+
+        return $output;
 	}
 }
 
