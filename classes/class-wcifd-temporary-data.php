@@ -29,9 +29,7 @@ class WCIFD_Temporary_Data {
 		if ( $init ) {
 
 			$this->wcifd_db_tables();
-
 		}
-
 	}
 
 	/**
@@ -78,7 +76,6 @@ class WCIFD_Temporary_Data {
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 			dbDelta( $sql );
-
 		}
 
 	}
@@ -107,16 +104,17 @@ class WCIFD_Temporary_Data {
 			ARRAY_A
 		);
 
-		if ( $image && isset( $results[0] ) ) {
+		if ( isset( $results[0] ) ) {
 
-			return $results[0];
+			if ( $image ) {
 
-		} elseif ( isset( $results[0]['data'] ) ) {
+				return $results[0];
 
-			return json_decode( $results[0]['data'], true );
+			} elseif ( isset( $results[0]['data'] ) ) {
 
+				return json_decode( $results[0]['data'], true );
+			}
 		}
-
 	}
 
 	/**
@@ -161,9 +159,7 @@ class WCIFD_Temporary_Data {
 					'%s',
 				)
 			);
-
 		}
-
 	}
 
 	/**
@@ -196,9 +192,7 @@ class WCIFD_Temporary_Data {
 					'%s',
 				)
 			);
-
 		}
-
 	}
 
 	/**
@@ -224,7 +218,6 @@ class WCIFD_Temporary_Data {
 				'%s',
 			)
 		);
-
 	}
 }
 

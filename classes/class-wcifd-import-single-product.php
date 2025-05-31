@@ -224,8 +224,9 @@ class WCIFD_Import_Single_Product {
 	 */
 	public function get_description( $title ) {
 
-		$notes = $this->is_csv ? 'Note' : 'Notes';
-		$html  = $this->is_csv ? 'Descriz. web (Sorgente HTML)' : 'DescriptionHtml';
+        $output = null;
+		$notes  = $this->is_csv ? 'Note' : 'Notes';
+		$html   = $this->is_csv ? 'Descriz. web (Sorgente HTML)' : 'DescriptionHtml';
 
 		if ( $this->notes_as_descriptions && isset( $this->d_product[ $notes ] ) && is_string( $this->d_product[ $notes ] ) ) {
 
@@ -240,22 +241,24 @@ class WCIFD_Import_Single_Product {
 			$output = $title;
 		}
 
-		return $output;
+		return (string) $output;
 	}
 
 	/**
 	 * Get the short product description
 	 *
+     * @param string $description the product description.
+     *
 	 * @return string
 	 */
-	public function get_short_description() {
+	public function get_short_description( $description ) {
 
 		$output = null;
 		$notes  = $this->is_csv ? 'Note' : 'Notes';
 
 		if ( 'excerpt' === $this->short_description_opt ) {
 
-			$output = $this->functions->get_short_description( $data['description'] );
+			$output = $this->functions->get_short_description( (string) $description );
 
 		} elseif ( 'notes' === $this->short_description_opt && isset( $this->d_product[ $notes ] ) && is_string( $this->d_product[ $notes ] ) ) {
 
@@ -263,7 +266,7 @@ class WCIFD_Import_Single_Product {
 
 		}
 
-		return $output;
+		return (string) $output;
 	}
 
 	/**
@@ -441,7 +444,7 @@ class WCIFD_Import_Single_Product {
 		$data['description'] = $this->get_description( $data['title'] );
 
 		/* Product short description */
-		$data['short_description'] = $this->get_short_description();
+		$data['short_description'] = $this->get_short_description( $data['description'] );
 
 		/* Retrieve product details from Notes field */
 		$data = array_merge( $data, $this->get_data_from_notes() );
@@ -524,7 +527,7 @@ class WCIFD_Import_Single_Product {
 		$data['description'] = $this->get_description( $data['title'] );
 
 		/* Product short description */
-		$data['short_description'] = $this->get_short_description();
+		$data['short_description'] = $this->get_short_description( $data['description'] );
 
 		/* Retrieve product details from Notes field */
 		$data = array_merge( $data, $this->get_data_from_notes() );
@@ -661,7 +664,7 @@ class WCIFD_Import_Single_Product {
 
 						$attribute = new WC_Product_Attribute();
 						$attribute->set_id( $taxonomy_id );
-						$attribute->set_name( $taxonomy_name );
+						$attribute->set_name( (string) $taxonomy_name );
 						$attribute->set_options( $term_ids );
 						$attribute->set_visible( true );
 						$attribute->set_variation( true );
@@ -962,18 +965,18 @@ class WCIFD_Import_Single_Product {
 
 			/* Product name */
 			if ( ! get_option( 'wcifd-exclude-title' ) ) {
-				$product->set_name( $data['title'] );
+				$product->set_name( (string) $data['title'] );
 			}
 
 			/* Product URL */
 			if ( ! get_option( 'wcifd-exclude-url' ) ) {
-				$product->set_slug( sanitize_title_with_dashes( wp_strip_all_tags( $data['title'] ) ) );
+				$product->set_slug( sanitize_title_with_dashes( wp_strip_all_tags( (string) $data['title'] ) ) );
 			}
 
 			/* Product description */
 			if ( ! get_option( 'wcifd-exclude-description' ) ) {
-				$product->set_description( $data['description'] );
-				$product->set_short_description( $data['short_description'] );
+				$product->set_description( (string) $data['description'] );
+				$product->set_short_description( (string) $data['short_description'] );
 			}
 
 			if ( $this->get_danea_variants() ) {
@@ -1131,9 +1134,6 @@ class WCIFD_Import_Single_Product {
 			/* Save the variation */
 			$variation->save();
 		}
-
-		/* error_log( 'WCIFD ERROR | Aggiornamento variazione prodotto | Sku: ' . $barcode . ' | ' . print_r( $var_id->get_error_message(), true ) ); */
-
 	}
 
 	/**
@@ -1236,9 +1236,9 @@ class WCIFD_Import_Single_Product {
 					/* Other subcategories */
 					for ( $i = 2; $i < 10; $i++ ) {
 						$sub_name = 'Subcategory' . $i;
-						if ( isset( $product[ $sub_name ] ) ) {
+						if ( isset( $this->d_product[ $sub_name ] ) ) {
 
-							$more_terms[ $i ] = $this->functions->add_taxonomy_term( $product_id, $product[ $sub_name ], $more_terms[ $i - 1 ]['term_id'], true );
+							$more_terms[ $i ] = $this->functions->add_taxonomy_term( $product_id, $this->d_product[ $sub_name ], $more_terms[ $i - 1 ]['term_id'], true );
 
 						}
 					}
@@ -1404,7 +1404,7 @@ class WCIFD_Import_Single_Product {
 						/* Set attribute */
 						$attribute = new WC_Product_Attribute();
 						$attribute->set_id( wc_attribute_taxonomy_id_by_name( $pa_name ) );
-						$attribute->set_name( $pa_name );
+						$attribute->set_name( (string) $pa_name );
 						$attribute->set_options( $attribute_options );
 						$attribute->set_visible( true );
 						$attribute->set_variation( true );
