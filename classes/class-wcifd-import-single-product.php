@@ -101,12 +101,12 @@ class WCIFD_Import_Single_Product {
 	 */
 	public $exclude_variations_prices;
 
-    /**
-     * The functions class
-     *
-     * @var object 
-     */
-    public $functions;
+	/**
+	 * The functions class
+	 *
+	 * @var object
+	 */
+	public $functions;
 
 	/**
 	 * The constructor
@@ -115,8 +115,8 @@ class WCIFD_Import_Single_Product {
 	 */
 	public function __construct() {
 
-        /* Initialize the function class */
-        $this->functions = new WCIFD_Functions();
+		/* Initialize the function class */
+		$this->functions = new WCIFD_Functions();
 
 		add_action( 'wcifd_import_product_event', array( $this, 'init' ), 10, 8 );
 	}
@@ -224,7 +224,7 @@ class WCIFD_Import_Single_Product {
 	 */
 	public function get_description( $title ) {
 
-        $output = null;
+		$output = null;
 		$notes  = $this->is_csv ? 'Note' : 'Notes';
 		$html   = $this->is_csv ? 'Descriz. web (Sorgente HTML)' : 'DescriptionHtml';
 
@@ -247,8 +247,8 @@ class WCIFD_Import_Single_Product {
 	/**
 	 * Get the short product description
 	 *
-     * @param string $description the product description.
-     *
+	 * @param string $description the product description.
+	 *
 	 * @return string
 	 */
 	public function get_short_description( $description ) {
@@ -586,7 +586,7 @@ class WCIFD_Import_Single_Product {
 			$output = $variants['Variant'];
 		}
 
-        return $output;
+		return $output;
 	}
 
 	/**
@@ -1139,7 +1139,7 @@ class WCIFD_Import_Single_Product {
 	/**
 	 * Handle Danea Easyfatt color/size product variants
 	 *
-	 * @param id    $product_id the WC product ID.
+	 * @param int   $product_id the WC product ID.
 	 * @param array $data the product data.
 	 *
 	 * @return void
@@ -1156,7 +1156,7 @@ class WCIFD_Import_Single_Product {
 			/* Update the parent product */
 			$product = new WC_Product_Variable( $product_id );
 
-            /* Add specific metadata for size and color */
+			/* Add specific metadata for size and color */
 			$product->set_meta_data( 'wcifd-danea-size-color', 1 );
 
 			foreach ( $variants as $variant ) {
@@ -1167,6 +1167,9 @@ class WCIFD_Import_Single_Product {
 
 			/* Product attributes */
 			$attributes = $product->get_attributes();
+
+			/* Delete variations with orphan attributes */
+			$this->delete_variations( $product );
 
 			if ( $this->avail_colors ) {
 
@@ -1196,6 +1199,39 @@ class WCIFD_Import_Single_Product {
 
 	}
 
+	/**
+	 * Delete variations with orphan attributes
+	 *
+	 * @param object $product the WC product.
+	 *
+	 * @return void
+	 */
+	public function delete_variations( $product ) {
+
+		/* Get existing attributes and variations */
+		$avail_colors        = array_map( 'sanitize_title', $this->avail_colors );
+		$avail_sizes         = array_map( 'sanitize_title', $this->avail_sizes );
+		$existing_variations = $product->get_children();
+
+		foreach ( $existing_variations as $existing_variation ) {
+
+			$existing_variation   = new WC_Product_Variation( $existing_variation );
+			$variation_attributes = $existing_variation->get_attributes();
+			$val_color            = isset( $variation_attributes['pa_color'] ) ? $variation_attributes['pa_color'] : '';
+			$val_size             = isset( $variation_attributes['pa_size'] ) ? $variation_attributes['pa_size'] : '';
+
+			if ( ! in_array( $val_color, $avail_colors ) || ! in_array( $val_size, $avail_sizes ) ) {
+
+				$existing_variation->delete( true );
+
+				error_log( '=== WCIFD | Variazione prodotto eliminata =================' );
+				error_log( 'ID prodotto padre: ' . print_r( $product->get_id(), true ) );
+				error_log( 'Colore: ' . print_r( $val_color, true ) );
+				error_log( 'Taglia: ' . print_r( $val_size, true ) );
+				error_log( '===========================================================' );
+			}
+		}
+	}
 	/**
 	 * Handle product categories
 	 *
