@@ -411,6 +411,8 @@ class WCIFD_Import_Single_Product {
 		$data                     = array();
 		$data['sku']              = isset( $this->d_product['Code'] ) ? $this->d_product['Code'] : '';
 		$data['sku']              = str_replace( '\\', '\\\\', $data['sku'] );
+		$data['barcode']          = isset( $this->d_product['Barcode'] ) ? $this->d_product['Barcode'] : '';
+		$data['barcode']          = str_replace( '\\', '\\\\', $data['barcode'] );
 		$data['title']            = isset( $this->d_product['Description'] ) ? htmlentities( $this->d_product['Description'] ) : '';
 		$data['category']         = isset( $this->d_product['Category'] ) ? $this->d_product['Category'] : '';
 		$data['sub_category']     = isset( $this->d_product['Subcategory'] ) ? $this->d_product['Subcategory'] : '';
@@ -1338,6 +1340,7 @@ class WCIFD_Import_Single_Product {
 			'producer'         => $data['producer_name'],
 			'supplier'         => $data['supplier_name'],
 			'sup-product-code' => $data['sup_product_code'],
+            'barcode'          => $data['barcode'],
 		);
 
 		foreach ( $more_attributes as $key => $value ) {
