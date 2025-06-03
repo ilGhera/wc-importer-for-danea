@@ -105,6 +105,7 @@ class WCIFD_Admin {
 				include WCIFD_ADMIN . 'templates/wcifd-import-clients-template.php';
 				include WCIFD_ADMIN . 'templates/wcifd-import-orders-template.php';
 				include WCIFD_ADMIN . 'templates/wcifd-role-based-price-template.php';
+				include WCIFD_ADMIN . 'templates/wcifd-tools.php';
 
 			echo '</div>'; // wrap-left.
 
@@ -147,6 +148,7 @@ class WCIFD_Admin {
 			echo '<a href="#" data-link="wcifd-rbp" class="nav-tab" onclick="return false;">' . esc_html__( 'WooCommerce Role Based Price', 'wc-importer-for-danea' ) . '</a>';
 
 		}
+			echo '<a href="#" data-link="wcifd-tools" class="nav-tab" onclick="return false;">' . esc_html__( 'Tools', 'wc-importer-for-danea' ) . '</a>';
 		echo '</h2>';
 	}
 

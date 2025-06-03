@@ -63,6 +63,7 @@ function wcifd_init() {
 	require_once WCIFD_ADMIN . 'ilghera-notice/class-ilghera-notice.php';
 	require_once WCIFD_INCLUDES . 'wcifd-delete-all-products.php';
 	require_once WCIFD_INCLUDES . 'wcifd-delete-single-product.php';
+	require_once WCIFD_CLASSES . 'class-wcifd-as-cleaner.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-functions.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-temporary-data.php';
 	require_once WCIFD_CLASSES . 'class-wcifd-catalog-update.php';
