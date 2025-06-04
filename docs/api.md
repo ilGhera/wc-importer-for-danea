@@ -3,7 +3,7 @@ description: Reference guide for background processing functions provided by the
 ---
 # API Reference
 
-Action Scheduler provides a range of functions for scheduling hooks to run at some time in the future on one or more occassions.
+Action Scheduler provides a range of functions for scheduling hooks to run at some time in the future on one or more occasions.
 
 To understand the scheduling functions, it can help to think of them as extensions to WordPress' `do_action()` function that add the ability to delay and repeat when the hook will be triggered.
 
@@ -49,8 +49,7 @@ as_enqueue_async_action( $hook, $args, $group, $unique, $priority );
 
 ### Return value
 
-`(integer)` the action's ID.
-
+`(integer)` the action's ID. Zero if there was an error scheduling the action. The error will be sent to `error_log`.
 
 ## Function Reference / `as_schedule_single_action()`
 
@@ -75,8 +74,7 @@ as_schedule_single_action( $timestamp, $hook, $args, $group, $unique, $priority 
 
 ### Return value
 
-`(integer)` the action's ID.
-
+`(integer)` the action's ID. Zero if there was an error scheduling the action. The error will be sent to `error_log`.
 
 ## Function Reference / `as_schedule_recurring_action()`
 
@@ -102,14 +100,13 @@ as_schedule_recurring_action( $timestamp, $interval_in_seconds, $hook, $args, $g
 
 ### Return value
 
-`(integer)` the action's ID.
-
+`(integer)` the action's ID. Zero if there was an error scheduling the action. The error will be sent to `error_log`.
 
 ## Function Reference / `as_schedule_cron_action()`
 
 ### Description
 
-Schedule an action that recurs on a cron-like schedule. 
+Schedule an action that recurs on a cron-like schedule.
 
 If execution of a cron-like action is delayed, the next attempt will still be scheduled according to the provided cron expression.
 
@@ -131,8 +128,7 @@ as_schedule_cron_action( $timestamp, $schedule, $hook, $args, $group, $unique, $
 
 ### Return value
 
-`(integer)` the action's ID.
-
+`(integer)` the action's ID. Zero if there was an error scheduling the action. The error will be sent to `error_log`.
 
 ## Function Reference / `as_unschedule_action()`
 
@@ -178,7 +174,6 @@ as_unschedule_all_actions( $hook, $args, $group )
 
 `(string|null)` The scheduled action ID if a scheduled action was found, or null if no matching action found.
 
-
 ## Function Reference / `as_next_scheduled_action()`
 
 ### Description
@@ -201,7 +196,6 @@ as_next_scheduled_action( $hook, $args, $group );
 
 `(integer|boolean)` The timestamp for the next occurrence of a pending scheduled action, true for an async or in-progress action or false if there is no matching action.
 
-
 ## Function Reference / `as_has_scheduled_action()`
 
 ### Description
@@ -223,7 +217,6 @@ as_has_scheduled_action( $hook, $args, $group );
 ### Return value
 
 `(boolean)` True if a matching action is pending or in-progress, false otherwise.
-
 
 ## Function Reference / `as_get_scheduled_actions()`
 
@@ -258,3 +251,38 @@ as_get_scheduled_actions( $args, $return_format );
 ### Return value
 
 `(array)` Array of action rows matching the criteria specified with `$args`.
+
+## Function Reference / `as_supports()`
+
+### Description
+
+Check if a specific feature is supported by the current version of Action Scheduler.
+
+*Available since 3.9.3.*
+
+### Usage
+
+```php
+as_supports( $feature );
+```
+
+### Parameters
+
+**$feature** (string) (required)  
+The feature to check support for.  
+Currently supported:
+- `'ensure_recurring_actions_hook'` — Indicates support for the `action_scheduler_ensure_recurring_actions` hook.
+
+### Return value
+
+`(boolean)`  
+True if the feature is supported, false otherwise.
+
+### Example
+
+```php
+if ( as_supports( 'ensure_recurring_actions_hook' ) ) {
+    // Safe to depend on the 'action_scheduler_ensure_recurring_actions' hook.
+    add_action( 'action_scheduler_ensure_recurring_actions', 'my_plugin_schedule_my_recurring_action' );
+}
+```
