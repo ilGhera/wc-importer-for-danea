@@ -41,6 +41,19 @@ These are the commands available to use with Action Scheduler:
     * `--group` - Process only actions in a specific group, like `'woocommerce-memberships'`. By default, actions in any group (or no group) will be processed.
     * `--exclude-groups` - Ignore actions from the specified group or groups (to specify multiple groups, supply a comma-separated list of slugs). This option is ignored if `--group` is also specified.
     * `--force` - By default, Action Scheduler limits the number of concurrent batches that can be run at once to ensure the server does not get overwhelmed. Using the `--force` flag overrides this behavior to force the WP CLI queue to run.
+    
+* `action-scheduler action cancel`
+* `action-scheduler action create`
+* `action-scheduler action delete`
+* `action-scheduler action generate`
+* `action-scheduler action get`
+* `action-scheduler action list`
+* `action-scheduler action next`
+* `action-scheduler action run`
+* `action-scheduler datastore`
+* `action-scheduler runner`
+* `action-scheduler status`
+* `action-scheduler version`
 
 The best way to get a full list of commands and their available options is to use WP CLI itself. This can be done by running `wp action-scheduler` to list all Action Scheduler commands, or by including the `--help` flag with any of the individual commands. This will provide all relevant parameters and flags for the command.
 
@@ -53,7 +66,7 @@ For example, consider two scheduled actions for the same subscription:
 * `scheduled_payment` scheduled for `2015-11-13 00:00:00` and
 * `scheduled_expiration` scheduled for `2015-11-13 00:01:00`.
 
-Under normal conditions, Action Scheduler will ensure the `scheduled_payment` action is run before the `scheduled_expiration` action. Becuase that's how they are scheduled.
+Under normal conditions, Action Scheduler will ensure the `scheduled_payment` action is run before the `scheduled_expiration` action. Because that's how they are scheduled.
 
 However, when using the `--hooks` option, the `scheduled_payment` and `scheduled_expiration` actions will be processed in separate queues. As a result, this dependency is not guaranteed.
 
