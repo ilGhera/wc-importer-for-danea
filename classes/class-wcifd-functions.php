@@ -525,7 +525,7 @@ class WCIFD_Functions {
 			'producer'         => __( 'Producer', 'wc-importer-for-danea' ),
 			'supplier'         => __( 'Supplier', 'wc-importer-for-danea' ),
 			'sup-product-code' => __( 'Supplier product code', 'wc-importer-for-danea' ),
-            'barcode'          => __( 'Codice a barre', 'wc-importer-for-danea' ),
+            'barcode'          => __( 'Barcode', 'wc-importer-for-danea' ),
 		);
 
 		$additional_attributes = array();
