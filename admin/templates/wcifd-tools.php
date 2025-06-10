@@ -27,12 +27,10 @@ if ( isset( $_POST['wcifd-tools-nonce'] ) && wp_verify_nonce( sanitize_text_fiel
 	}
 
 	if ( isset( $_POST['as-clean-failed'] ) ) {
-		error_log( 'clean failed' );
 		$tools['as-clean-failed'] = sanitize_text_field( wp_unslash( $_POST['as-clean-failed'] ) );
 	}
 
 	if ( isset( $_POST['as-clean-canceled'] ) ) {
-		error_log( 'clean canceled' );
 		$tools['as-clean-canceled'] = sanitize_text_field( wp_unslash( $_POST['as-clean-canceled'] ) );
 	}
 
@@ -48,7 +46,7 @@ if ( isset( $_POST['wcifd-tools-nonce'] ) && wp_verify_nonce( sanitize_text_fiel
 				<td>
 					<select class="wcifd-select" name="as-cleaner-days" id="as-cleaner-days">
 						<?php
-						$options_days = array( 1, 7, 14, 30, 60, 90, 180, 365 ); // Temp.
+						$options_days = array( 7, 30, 60, 90 );
 						foreach ( $options_days as $day_value ) {
 							/* Translators: the number of days */
 							echo '<option value="' . esc_attr( $day_value ) . '" ' . selected( $day_value, $tools['as-cleaner-days'], false ) . '>' . sprintf( esc_html__( '%d Days', 'wc-importer-for-danea' ), intval( $day_value ) ) . '</option>';
