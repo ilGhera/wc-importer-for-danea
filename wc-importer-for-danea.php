@@ -2,7 +2,8 @@
 /**
  * Plugin Name: WC Importer for Danea - Premium
  * Plugin URI: https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/
- * Description: If you've built your online store with WooCommerce and you're using Danea Easyfatt as management software, you definitely need ilGhera WooCommerce Importer for Danea - Premium!
+ * Description: If you've built your online store with WooCommerce and you're using Danea Easyfatt as management software
+ * you definitely need ilGhera WooCommerce Importer for Danea - Premium!
  * You'll be able to import suppliers, clients and products.
  * Version: 1.6.4
  * Requires at least: 4.0
@@ -89,10 +90,6 @@ final class WCIFD_Plugin {
         /* Define additional constants if needed, though most are defined globally above. */
         $this->define_remaining_constants();
 
-        /* Register activation and deactivation hooks. */
-        register_activation_hook( __FILE__, array( $this, 'activate_plugin' ) );
-        register_deactivation_hook( __FILE__, array( $this, 'deactivate_plugin' ) );
-
         /* Set up all necessary WordPress hooks for plugin initialization. */
         $this->setup_hooks();
     }
@@ -164,17 +161,6 @@ final class WCIFD_Plugin {
             remove_action( 'plugins_loaded', 'load_wc_importer_for_danea' );
             wp_safe_redirect( admin_url( 'plugins.php?plugin_status=all&paged=1&s' ) );
         }
-
-        /* Instantiate core classes that need to be active from plugins_loaded. */
-        new WCIFD_AS_Cleaner();
-        new WCIFD_Admin();
-        new WCIFD_Functions( true );
-        new WCIFD_Temporary_Data( true );
-        new WCIFD_Import_Products();
-        new WCIFD_Import_Single_Product();
-        new WCIFD_Progress_Bar();
-        new WCIFD_Orphan_Images();
-        new WCIFD_Single_Product_Image();
     }
 
     /**
@@ -186,6 +172,17 @@ final class WCIFD_Plugin {
 
         /* Load plugin text domain for internationalization. */
         load_plugin_textdomain( 'wc-importer-for-danea', false, basename( dirname( __FILE__ ) ) . '/languages' );
+
+        /* Instantiate core classes */
+        new WCIFD_AS_Cleaner();
+        new WCIFD_Admin();
+        new WCIFD_Functions( true );
+        new WCIFD_Temporary_Data( true );
+        new WCIFD_Import_Products();
+        new WCIFD_Import_Single_Product();
+        new WCIFD_Progress_Bar();
+        new WCIFD_Orphan_Images();
+        new WCIFD_Single_Product_Image();
     }
 
     /**
@@ -232,29 +229,6 @@ final class WCIFD_Plugin {
             $args['premium-key'] = $key;
         }
         return $args;
-    }
-
-    /**
-     * Plugin activation logic.
-     * This static method is called when the plugin is activated.
-     *
-     * @return void
-     */
-    public static function activate_plugin() {
-        /* Add any activation-specific tasks here, e.g., create custom database tables, */
-        /* set default options, flush rewrite rules if needed. */
-    }
-
-    /**
-     * Plugin deactivation logic.
-     * This static method is called when the plugin is deactivated.
-     *
-     * @return void
-     */
-    public static function deactivate_plugin() {
-        /* Add any deactivation-specific cleanup tasks here, e.g., */
-        /* delete transient data, clear caches. */
-        /* Be cautious about deleting user data on deactivation. */
     }
 }
 
