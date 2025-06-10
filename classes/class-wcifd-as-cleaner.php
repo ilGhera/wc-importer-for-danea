@@ -58,6 +58,7 @@ class WCIFD_AS_Cleaner {
 
 		/* Action Scheduler filters */
 		add_filter( 'action_scheduler_retention_period', array( $this, 'set_custom_retention_period' ) );
+        add_filter( 'action_scheduler_logger_retention_period', array( $this, 'set_custom_retention_period' ) );
 		add_filter( 'action_scheduler_default_cleaner_statuses', array( $this, 'add_custom_cleaner_statuses' ) );
         add_filter( 'action_scheduler_cleanup_batch_size', array( $this, 'set_cleanup_batch_size' ) );
 
@@ -122,7 +123,7 @@ class WCIFD_AS_Cleaner {
      */
     public function set_cleanup_batch_size( $size ) {
 
-        return 1000;
+        return 500;
     }
 
     /**
@@ -180,7 +181,4 @@ class WCIFD_AS_Cleaner {
         }
     }
 }
-
-/* Instantiate the cleaner class to activate its hooks and functionalities. */
-new WCIFD_AS_Cleaner();
 
