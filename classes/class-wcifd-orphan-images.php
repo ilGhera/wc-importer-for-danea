@@ -98,5 +98,3 @@ class WCIFD_Orphan_Images {
 	}
 }
 
-new WCIFD_Orphan_Images();
-

@@ -19,9 +19,7 @@
 /* Ensure WordPress is loaded. */
 defined( 'ABSPATH' ) || exit;
 
-/* --- Load Core Plugin Classes --- */
-/* It's crucial to load class definitions before they are instantiated. */
-/* Define constants for paths first, as they are needed for includes. */
+/* Load Core Plugin Classes */
 if ( ! defined( 'WCIFD_DIR' ) ) {
     define( 'WCIFD_DIR', plugin_dir_path( __FILE__ ) );
 }
@@ -58,8 +56,6 @@ require_once WCIFD_DIR . 'libraries/action-scheduler/action-scheduler.php';
 /* Load the Plugin Update Checker library. */
 require_once WCIFD_DIR . 'vendor/plugin-update-checker/plugin-update-checker.php';
 
-/* --- Main Plugin Class --- */
-
 /**
  * WCIFD_Plugin
  *
@@ -85,9 +81,11 @@ final class WCIFD_Plugin {
 
     /**
      * Class constructor.
-     * Protected to prevent direct instantiation, enforcing the singleton pattern.
+     *
+     * @return void
      */
     private function __construct() {
+
         /* Define additional constants if needed, though most are defined globally above. */
         $this->define_remaining_constants();
 
@@ -105,6 +103,7 @@ final class WCIFD_Plugin {
      * @return WCIFD_Plugin
      */
     public static function get_instance() {
+
         if ( is_null( self::$instance ) ) {
             self::$instance = new self();
         }
@@ -113,8 +112,11 @@ final class WCIFD_Plugin {
 
     /**
      * Defines any remaining constants not defined globally.
+     *
+     * @return void
      */
     private function define_remaining_constants() {
+
         if ( ! defined( 'WCIFD_URI' ) ) {
             define( 'WCIFD_URI', plugin_dir_url( __FILE__ ) );
         }
@@ -125,8 +127,11 @@ final class WCIFD_Plugin {
 
     /**
      * Sets up all WordPress action and filter hooks.
+     *
+     * @return void
      */
     private function setup_hooks() {
+
         /* Hook for early plugin loading. This is ideal for instantiating classes */
         /* that need to hook into filters/actions very early, like AS Cleaner. */
         add_action( 'plugins_loaded', array( $this, 'on_plugins_loaded' ), 0 );
@@ -143,9 +148,11 @@ final class WCIFD_Plugin {
 
     /**
      * Method hooked to 'plugins_loaded'.
-     * This is where early plugin logic and class instantiations happen.
+     *
+     * @return void
      */
     public function on_plugins_loaded() {
+
         /* Ensure 'is_plugin_active' function is available for activation logic. */
         if ( ! function_exists( 'is_plugin_active' ) ) {
             require_once ABSPATH . '/wp-admin/includes/plugin.php';
@@ -155,36 +162,39 @@ final class WCIFD_Plugin {
         if ( function_exists( 'load_wc_importer_for_danea' ) ) {
             deactivate_plugins( 'wc-importer-for-danea/wc-importer-for-danea.php' );
             remove_action( 'plugins_loaded', 'load_wc_importer_for_danea' );
-            // wp_safe_redirect( admin_url( 'plugins.php?plugin_status=all&paged=1&s' ) ); /* Note: Redirects on plugins_loaded can cause issues, consider a notice instead. */
+            wp_safe_redirect( admin_url( 'plugins.php?plugin_status=all&paged=1&s' ) );
         }
 
         /* Instantiate core classes that need to be active from plugins_loaded. */
-        /* The cleaner must be instantiated here to ensure its filters are active early. */
         new WCIFD_AS_Cleaner();
-        new WCIFD_Admin(); /* Assuming WCIFD_Admin needs to be instantiated here too */
-        // new WCIFD_Temporary_Data(); /* Add other classes here if they need early instantiation */
-        /* ... and so on for other primary classes */
+        new WCIFD_Admin();
+        new WCIFD_Functions( true );
+        new WCIFD_Temporary_Data( true );
+        new WCIFD_Import_Products();
+        new WCIFD_Import_Single_Product();
+        new WCIFD_Progress_Bar();
+        new WCIFD_Orphan_Images();
+        new WCIFD_Single_Product_Image();
     }
 
     /**
      * Method hooked to 'init'.
-     * Handles general plugin initialization tasks like text domain loading.
+     * 
+     * @return void
      */
     public function on_init() {
+
         /* Load plugin text domain for internationalization. */
         load_plugin_textdomain( 'wc-importer-for-danea', false, basename( dirname( __FILE__ ) ) . '/languages' );
-
-        /* Other classes that can be instantiated later (e.g., those that interact with posts/users/terms). */
-        /* This is where you might instantiate classes like your import/export logic. */
-        // new WCIFD_Import_Products();
-        // new WCIFD_Import_Users();
-        /* ... etc. */
     }
 
     /**
      * Declares compatibility with WooCommerce's High-Performance Order Storage (HPOS).
+     *
+     * @return void
      */
     public function hpos_compatibility() {
+
         if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
             \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
         }
@@ -192,8 +202,11 @@ final class WCIFD_Plugin {
 
     /**
      * Sets up the Plugin Update Checker.
+     *
+     * @return void
      */
     private function setup_update_checker() {
+
         /* Use the PucFactory from the included library. */
         $wcifd_update_checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
             'https://www.ilghera.com/wp-update-server-2/?action=get_metadata&slug=wc-importer-for-danea-premium',
@@ -210,6 +223,7 @@ final class WCIFD_Plugin {
      * This method is a callback for the PUC filter.
      *
      * @param array $args The query arguments for the update check.
+     *
      * @return array The filtered query arguments.
      */
     public function secure_update_check( $args ) {
@@ -244,6 +258,12 @@ final class WCIFD_Plugin {
     }
 }
 
-/* --- Plugin Initialization --- */
-/* Get the single instance of the plugin and start its lifecycle. */
+/* Plugin Initialization */
 WCIFD_Plugin::get_instance();
+
+/*
+ * This hook ensures that the custom cron job is removed cleanly when your plugin is deactivated,
+ * which is crucial for proper plugin management.
+ */
+register_deactivation_hook( __FILE__, array( 'WCIFD_AS_Cleaner', 'deactivate_plugin' ) );
+

@@ -217,5 +217,3 @@ class WCIFD_Admin {
 
 }
 
-new WCIFD_Admin();
-

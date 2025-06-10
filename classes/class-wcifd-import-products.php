@@ -72,5 +72,3 @@ class WCIFD_Import_Products {
 	}
 }
 
-new WCIFD_Import_Products();
-

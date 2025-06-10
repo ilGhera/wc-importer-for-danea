@@ -904,5 +904,3 @@ class WCIFD_Functions {
 	}
 }
 
-new WCIFD_Functions( true );
-

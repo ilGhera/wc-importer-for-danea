@@ -170,5 +170,3 @@ class WCIFD_Single_Product_Image {
 	}
 }
 
-new WCIFD_Single_Product_Image();
-

@@ -221,5 +221,3 @@ class WCIFD_Temporary_Data {
 	}
 }
 
-new WCIFD_Temporary_Data( true );
-

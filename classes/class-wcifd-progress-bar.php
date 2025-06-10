@@ -139,5 +139,3 @@ class WCIFD_Progress_Bar {
 	}
 }
 
-new WCIFD_Progress_Bar();
-

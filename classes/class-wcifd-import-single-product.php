@@ -1565,5 +1565,3 @@ class WCIFD_Import_Single_Product {
 	}
 }
 
-new WCIFD_Import_Single_Product();
-
