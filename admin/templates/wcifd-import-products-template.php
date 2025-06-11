@@ -5,7 +5,7 @@
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
  *
- * @since 1.6.1
+ * @since 1.7.0
  */
 
 defined( 'ABSPATH' ) || exit;
