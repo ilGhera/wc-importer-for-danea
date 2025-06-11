@@ -1449,7 +1449,7 @@ class WCIFD_Import_Single_Product {
 						$attribute->set_name( (string) $pa_name );
 						$attribute->set_options( $attribute_options );
 						$attribute->set_visible( true );
-						$attribute->set_variation( true );
+						$attribute->set_variation( false );
 						$attributes[] = $attribute;
 						$product->set_attributes( $attributes );
 					}
