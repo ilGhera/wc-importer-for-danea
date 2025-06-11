@@ -7,13 +7,15 @@
  * @author ilGhera
  * @package wc-importer-for-danea-premium/classes
  *
- * @since 1.6.0
+ * @since 1.7.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Class WCIFD_Temporary_Data
+ *
+ * @since 1.7.0
  */
 class WCIFD_Temporary_Data {
 

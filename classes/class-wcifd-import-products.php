@@ -5,7 +5,7 @@
  * @author ilGhera
  * @package wc-importer-for-danea-premium/classes
  *
- * @since 1.6.1
+ * @since 1.7.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Class WCIFD_Import_Products
  *
- * @since 1.6.1
+ * @since 1.7.0
  */
 class WCIFD_Import_Products {
 

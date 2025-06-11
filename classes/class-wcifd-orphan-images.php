@@ -5,7 +5,7 @@
  * @author ilGhera
  * @package wc-importer-for-danea-premium/classes
  *
- * @since 1.6.0
+ * @since 1.7.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Image matching
  *
- * @return void
+ * @since 1.7.0
  */
 class WCIFD_Orphan_Images {
 

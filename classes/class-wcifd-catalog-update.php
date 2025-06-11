@@ -5,7 +5,7 @@
  * @author ilGhera
  * @package wc-importer-for-danea-premium/classes
  *
- * @since 1.6.2
+ * @since 1.7.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -13,10 +13,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Class WCIFD_Catalog_Update
  *
- * @param file $file   the file imported.
- * @param bool $is_csv csv with true, XML instead.
- *
- * @return void
+ * @since 1.7.0
  */
 class WCIFD_Catalog_Update {
 

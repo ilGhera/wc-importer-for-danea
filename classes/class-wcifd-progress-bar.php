@@ -5,13 +5,15 @@
  * @author ilGhera
  * @package wc-importer-for-danea-premium/classes
  *
- * @since 1.6.1
+ * @since 1.7.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Class WCIFD_Progress_Bar
+ *
+ * @since 1.7.0
  */
 class WCIFD_Progress_Bar {
 

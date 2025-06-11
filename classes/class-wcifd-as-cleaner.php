@@ -5,7 +5,7 @@
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
  *
- * @since 1.6.0
+ * @since 1.7.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
  * This class handles the custom cleanup of Action Scheduler actions
  * based on plugin settings, and schedules a custom cron job to perform this cleanup automatically.
  *
- * @since 1.6.0
+ * @since 1.7.0
  */
 class WCIFD_AS_Cleaner {
 
