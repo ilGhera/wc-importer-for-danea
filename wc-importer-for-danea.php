@@ -139,6 +139,9 @@ final class WCIFD_Plugin {
 		/* HPOS compatibility hook. */
 		add_action( 'before_woocommerce_init', array( $this, 'hpos_compatibility' ) );
 
+        /* Handle the single product delete event. */
+        add_action( 'wcifd_delete_product_event', array( 'WCIFD_Catalog_Update', 'delete_product_by_sku' ), 10, 1 );
+
 		/* Setup the Plugin Update Checker. */
 		$this->setup_update_checker();
 	}

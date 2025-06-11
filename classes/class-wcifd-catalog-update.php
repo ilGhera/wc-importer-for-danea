@@ -161,7 +161,7 @@ class WCIFD_Catalog_Update {
 				/* Delete all products */
 				if ( $this->replace_products && 'full' === strval( $results->attributes()->Mode[0] ) ) {
 
-					wcifd_delete_all_products();
+					$this->delete_all_products();
 				}
 
 				/* Check if the update is full or not */
@@ -257,5 +257,82 @@ class WCIFD_Catalog_Update {
 			}
 		}
 	}
+
+    /**
+     * Handle the single product delete event
+     *
+     * @param string $product_sku the sku of the single product to be deleted, encoded in json.
+     *
+     * @return void
+     */
+    public function delete_single_product( $product_sku ) {
+
+        $sku = json_decode( $product_sku, true );
+
+        if ( isset( $sku[0] ) ) {
+
+            $product_id = WCIFD_Functions::search_product( $sku[0] );
+
+            if ( $product_id ) {
+
+                $product = wc_get_product( $product_id );
+
+                /* Delete product */
+                $deleted = $product->delete( true );
+
+                if ( $deleted ) {
+
+                    /* Delete transients */
+                    wc_delete_product_transients( $product_id );
+
+                } else {
+
+                    error_log( 'WCIFD ERROR | Eliminazione prodotto | ID: ' . $product_id );
+                }
+            }
+        }
+    }
+
+    /**
+     * Delete all products in WooCommerce
+     *
+     * @return void
+     */
+    public function delete_all_products() {
+
+        $args = array(
+            'post_type'      => 'product',
+            'posts_per_page' => -1,
+            'post_status'    => 'any',
+            'fields'         => 'ids',
+        );
+
+        $product_ids = get_posts( $args );
+
+        if ( $product_ids ) {
+
+            foreach ( $product_ids as $product_id ) {
+
+                /* Get product */
+                $product = wc_get_product( $product_id );
+
+                if ( $product ) {
+
+                    /* Delete product */
+                    $deleted = $product->delete( true );
+
+                    if ( $deleted ) {
+
+                        /* Delete transients */
+                        wc_delete_product_transients( $product_id );
+
+                    } else {
+
+                        error_log( 'WCIFD ERROR | Eliminazione prodotto | ID: ' . $product_id );
+                    }
+                }
+            }
+        }
+    }
 }
 
