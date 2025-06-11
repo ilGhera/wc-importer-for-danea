@@ -265,7 +265,7 @@ class WCIFD_Catalog_Update {
      *
      * @return void
      */
-    public function delete_single_product( $product_sku ) {
+    public static function delete_single_product( $product_sku ) {
 
         $sku = json_decode( $product_sku, true );
 
