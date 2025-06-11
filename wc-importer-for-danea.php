@@ -62,6 +62,8 @@ require_once WCIFD_DIR . 'vendor/plugin-update-checker/plugin-update-checker.php
  * This is the main class for the WC Importer for Danea Premium plugin.
  * It handles the plugin's core functionalities, initialization, and manages other classes.
  * Implements a singleton pattern to ensure only one instance of the plugin runs.
+ *
+ * @since 1.7.0
  */
 final class WCIFD_Plugin {
 
