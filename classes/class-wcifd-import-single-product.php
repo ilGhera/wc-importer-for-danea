@@ -1373,149 +1373,191 @@ class WCIFD_Import_Single_Product {
 		$product->save();
 	}
 
-	/**
-	 * Handle Danea Easyfatt custom fields
-	 *
-	 * @param int   $product_id the WC product ID.
-	 * @param array $data the product data.
-	 *
-	 * @return void
-	 */
-	public function danea_custom_fields( $product_id, $data ) {
+    /**
+     * Handle Danea Easyfatt custom fields
+     *
+     * @param int   $product_id The WC product ID.
+     * @param array $data The product data.
+     *
+     * @return void
+     */
+    public function danea_custom_fields( $product_id, $data ) {
 
-		/* Get the product */
-		$product = wc_get_product( $product_id );
+        $product        = wc_get_product( $product_id );
+        $attributes     = $product->get_attributes();
+        $fields_options = get_option( 'wcifd-custom-fields' );
 
-		/* Get the product attributes */
-		$attributes = $product->get_attributes();
+        /**
+         * Determine if existing product tags should be appended.
+         * Defaults to false (clear tags) unless at least one custom field
+         * configured as 'tag' has 'append' explicitly set to true.
+         */
+        $should_append_existing_tags = false;
 
-		/* Get the product tag ids */
-		$tag_ids = $product->get_tag_ids();
+        for ( $i = 1; $i < 5; $i++ ) {
 
-		for ( $i = 1; $i < 5; $i++ ) {
+            if ( isset( $fields_options[ $i ] ) ) {
 
-			$field_name   = 'CustomField' . $i;
-			$pa_name      = 'pa_' . strtolower( $field_name );
-			$custom_field = isset( $data[ $field_name ] ) ? $data[ $field_name ] : '';
-			$tag_id       = null;
+                $import_type = isset( $fields_options[ $i ]['import'] ) ? $fields_options[ $i ]['import'] : false;
 
-			if ( $custom_field ) {
+                /* Ensure boolean conversion for the 'append' setting. */
+                $append_setting = isset( $fields_options[ $i ]['append'] ) ? filter_var( $fields_options[ $i ]['append'], FILTER_VALIDATE_BOOLEAN ) : false;
 
-				$fields_options = get_option( 'wcifd-custom-fields' );
-				$import         = isset( $fields_options[ $i ]['import'] ) ? $fields_options[ $i ]['import'] : false;
-				$cf_name        = isset( $fields_options[ $i ]['name'] ) ? $fields_options[ $i ]['name'] : false;
-				$split          = isset( $fields_options[ $i ]['split'] ) ? $fields_options[ $i ]['split'] : false;
-				$is_visible     = isset( $fields_options[ $i ]['display'] ) ? $fields_options[ $i ]['display'] : '0';
+                if ( 'tag' === $import_type && $append_setting ) {
 
-				/* Append option for tags */
-				if ( 1 === $i ) {
-					$append  = isset( $fields_options[ $i ]['append'] ) ? $fields_options[ $i ]['append'] : false;
-					$tag_ids = array();
-				}
+                    $should_append_existing_tags = true;
+                    break; // Found at least one 'append' true, no need to check further.
+                }
+            }
+        }
 
-				/* Get the tag id if exists */
-				$tag_id = term_exists( $custom_field, 'product_tag' );
+        /* Initialize final_tag_ids based on the 'append' logic. */
+        $final_tag_ids = $should_append_existing_tags ? $product->get_tag_ids() : [];
 
-				if ( 'attribute' === $import ) {
+        for ( $i = 1; $i < 5; $i++ ) {
 
-					/* Remove tag */
-					if ( $tag_id && 0 !== $tag_id ) {
+            $field_name   = 'CustomField' . $i;
+            $pa_name      = 'pa_' . strtolower( $field_name );
+            $custom_field = isset( $data[ $field_name ] ) ? $data[ $field_name ] : '';
 
-						$tag_ids = array_diff( $tag_ids, array( $tag_id ) );
-						$product->set_tag_ids( $tag_ids );
-					}
+            if ( $custom_field ) {
 
-					/* Get product attribute options */
-					$attribute_options = array();
+                /* Get settings for the current custom field in the loop. */
+                $import     = isset( $fields_options[ $i ]['import'] ) ? $fields_options[ $i ]['import'] : false;
+                $cf_name    = isset( $fields_options[ $i ]['name'] ) ? $fields_options[ $i ]['name'] : false;
+                $split      = isset( $fields_options[ $i ]['split'] ) ? $fields_options[ $i ]['split'] : false;
+                $is_visible = isset( $fields_options[ $i ]['display'] ) ? $fields_options[ $i ]['display'] : '0';
 
-					if ( $split ) {
+                if ( 'attribute' === $import ) {
 
-						$values = array_map( 'trim', explode( ',', $custom_field ) );
+                    /* Remove tag if it existed as one previously */
+                    $tag_id_check_result = term_exists( $custom_field, 'product_tag' ); // Renamed to avoid confusion with $tag_id_exists
 
-						if ( is_array( $values ) ) {
+                    if ( $tag_id_check_result && ! is_wp_error( $tag_id_check_result ) && 0 !== $tag_id_check_result ) {
 
-							$attribute_options = $values;
-						}
-					} else {
+                        $final_tag_ids = array_diff( $final_tag_ids, array( $tag_id_check_result['term_id'] ) );
+                    }
 
-						$attribute_options = array( $custom_field );
-					}
+                    $attribute_options = array();
 
-					if ( ! empty( $attribute_options ) ) {
+                    if ( $split ) {
 
-						/* Set attribute */
-						$attribute = new WC_Product_Attribute();
-						$attribute->set_id( wc_attribute_taxonomy_id_by_name( $pa_name ) );
-						$attribute->set_name( (string) $pa_name );
-						$attribute->set_options( $attribute_options );
-						$attribute->set_visible( true );
-						$attribute->set_variation( false );
-						$attributes[] = $attribute;
-						$product->set_attributes( $attributes );
-					}
+                        $values = array_map( 'trim', explode( ',', $custom_field ) );
 
-					$product->save();
+                        if ( is_array( $values ) ) {
 
-				} elseif ( 'tag' === $import ) {
+                            $attribute_options = $values;
+                        }
 
-					/* Remove attribute */
-					if ( isset( $attributes[ $pa_name ] ) ) {
-						unset( $attributes[ $pa_name ] );
-						$product->set_attributes( $attributes );
-					}
+                    } else {
 
-					/* Add tag */
-					if ( $tag_id && 0 !== $tag_id ) {
+                        $attribute_options = [ $custom_field ];
+                    }
 
-						if ( ! in_array( $tag_id, $tag_ids, true ) ) {
+                    if ( ! empty( $attribute_options ) ) {
 
-							$tag_ids[] = $tag_id;
-						}
-					} else {
+                        $attribute = new WC_Product_Attribute();
+                        $attribute->set_id( wc_attribute_taxonomy_id_by_name( $pa_name ) );
+                        $attribute->set_name( (string) $pa_name );
+                        $attribute->set_options( $attribute_options );
+                        $attribute->set_visible( true );
+                        $attribute->set_variation( false ); // Attributes from custom fields are not for variations
+                        $attributes[] = $attribute;
+                    }
 
-						$tag_id    = wp_insert_term( $custom_field, 'product_tag' );
-						$tag_ids[] = $tag_id['term_id'];
-					}
+                } elseif ( 'tag' === $import ) {
 
-					$product->set_tag_ids( $tag_ids );
-					$product->save();
+                    /* Remove attribute if it existed as one previously */
+                    if ( isset( $attributes[ $pa_name ] ) ) {
+                        unset( $attributes[ $pa_name ] );
+                    }
 
-				} else {
+                    $tag_values_to_process = array();
 
-					/* Remove attribute */
-					if ( isset( $attributes[ $pa_name ] ) ) {
-						unset( $attributes[ $pa_name ] );
-						$product->set_attributes( $attributes );
-					}
+                    if ( $split ) {
 
-					/* Remove tag */
-					if ( $tag_id && 0 !== $tag_id ) {
+                        $tag_values_to_process = array_map( 'trim', explode( ',', $custom_field ) );
+                        $tag_values_to_process = array_filter( $tag_values_to_process );
 
-						$tag_ids = array_diff( $tag_ids, array( $tag_id ) );
-						$product->set_tag_ids( $tag_ids );
-					}
+                    } else {
 
-					$product->save();
-				}
-			} else {
+                        $tag_values_to_process = [ $custom_field ];
+                    }
 
-				/* Remove attribute */
-				if ( isset( $attributes[ $pa_name ] ) ) {
-					unset( $attributes[ $pa_name ] );
-					$product->set_attributes( $attributes );
-				}
+                    foreach ( $tag_values_to_process as $single_tag_value ) {
 
-				/* Remove tag */
-				if ( $tag_id && 0 !== $tag_id ) {
+                        if ( empty( $single_tag_value ) ) {
 
-					$tag_ids = array_diff( $tag_ids, array( $tag_id ) );
-					$product->set_tag_ids( $tag_ids );
-				}
+                            continue;
+                        }
 
-				$product->save();
-			}
-		}
-	}
+                        $tag_id_check_result = term_exists( $single_tag_value, 'product_tag' );
+
+                        /* Add tag */
+                        if ( $tag_id_check_result && ! is_wp_error( $tag_id_check_result ) && 0 !== $tag_id_check_result ) {
+
+                            $term_id = $tag_id_check_result['term_id'];
+
+                            if ( ! in_array( $term_id, $final_tag_ids, true ) ) {
+
+                                $final_tag_ids[] = $term_id;
+                            }
+
+                        } else {
+
+                            $tag_id_new = wp_insert_term( $single_tag_value, 'product_tag' );
+
+                            if ( ! is_wp_error( $tag_id_new ) ) {
+
+                                $final_tag_ids[] = $tag_id_new['term_id'];
+
+                            } else {
+
+                                error_log( 'WCIFD ERROR | Tag creation failed: ' . $single_tag_value . ' | Error: ' . $tag_id_new->get_error_message() );
+                            }
+                        }
+                    }
+
+                } else { // Not imported as attribute or tag
+
+                    /* Remove attribute if it existed */
+                    if ( isset( $attributes[ $pa_name ] ) ) {
+
+                        unset( $attributes[ $pa_name ] );
+                    }
+
+                    /* Remove tag if it existed */
+                    $tag_id_check_result = term_exists( $custom_field, 'product_tag' );
+
+                    if ( $tag_id_check_result && ! is_wp_error( $tag_id_check_result ) && 0 !== $tag_id_check_result ) {
+
+                        $final_tag_ids = array_diff( $final_tag_ids, array( $tag_id_check_result['term_id'] ) );
+                    }
+                }
+
+            } else { // Custom field is empty in Danea
+
+                /* Remove attribute if it existed */
+                if ( isset( $attributes[ $pa_name ] ) ) {
+
+                    unset( $attributes[ $pa_name ] );
+                }
+
+                /* Remove tag if it existed */
+                $tag_id_check_result = term_exists( $custom_field, 'product_tag' );
+
+                if ( $tag_id_check_result && ! is_wp_error( $tag_id_check_result ) && 0 !== $tag_id_check_result ) {
+
+                    $final_tag_ids = array_diff( $final_tag_ids, array( $tag_id_check_result['term_id'] ) );
+                }
+            }
+        } // End of for loop
+
+        /* Apply and save all changes once */
+        $product->set_attributes( $attributes );
+        $product->set_tag_ids( $final_tag_ids );
+        $product->save();
+    }
 
 	/**
 	 *
