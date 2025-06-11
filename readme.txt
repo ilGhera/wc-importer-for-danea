@@ -90,7 +90,7 @@ Release Date: 11 June 2025
     * Enhancement: **Action Scheduler is now used for CSV product imports**, significantly improving performance and enabling the seamless import of thousands of products.
     * Enhancement: **Improved product image synchronization**, ensuring more reliable and efficient handling of images during imports and updates.
     * Enhancement: Adhered to **WordPress Coding Standards** for improved code quality, readability, and future maintainability.
-* Enhancement: **Enhanced Custom Field Handling:** Implemented a robust logic for Danea Easyfatt custom fields (CustomField1-4).
+    * Enhancement: **Enhanced Custom Field Handling:** Implemented a robust logic for Danea Easyfatt custom fields (CustomField1-4).
     * **Conditional Tag Appending:** Product tags are now cleared before import unless at least one custom field configured as a 'tag' explicitly has the 'append' option enabled. This ensures precise control over existing tags.
     * **Optimized Saving:** Product attributes and tags are now saved only once at the end of the `danea_custom_fields` method, improving performance and data consistency.
     * Enhancement: **Detailed Synchronization Logging:** Added comprehensive information about the synchronization process to the plugin's log for better monitoring and troubleshooting.
