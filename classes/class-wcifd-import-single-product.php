@@ -1148,6 +1148,10 @@ class WCIFD_Import_Single_Product {
 	 */
 	public function danea_variants( $product_id, $data ) {
 
+        /* Reset available colors and sizes */
+        $this->avail_colors = array();
+		$this->avail_sizes  = array();
+
 		$v = 0;
 
 		/* Define the array of the variations */
@@ -1169,9 +1173,6 @@ class WCIFD_Import_Single_Product {
 
 			/* Product attributes */
 			$attributes = $product->get_attributes();
-
-			/* Delete variations with orphan attributes */
-			$this->delete_variations( $product );
 
 			if ( $this->avail_colors ) {
 
@@ -1197,8 +1198,10 @@ class WCIFD_Import_Single_Product {
 
 			$product->set_attributes( $attributes );
 			$product->save();
-		}
 
+			/* Delete variations with orphan attributes */
+			$this->delete_variations( $product );
+		}
 	}
 
 	/**
