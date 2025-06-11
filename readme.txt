@@ -79,6 +79,22 @@ Once activated, you'll find the plugin options in your WordPress in **WooCommerc
 
 == Changelog ==
 
+= 1.7.0 =
+Release Date: 11 June 2025
+
+    * Enhancement: Added full compatibility with WooCommerce High-Performance Order Storage (HPOS) for improved order management and database efficiency.
+    * Enhancement: Optimized plugin loading performance and stability by refining class instantiation timing, ensuring smoother plugin initialization.
+    * Enhancement: Introduced comprehensive options for Action Scheduler task cleanup, allowing administrators to define retention days for completed, failed, and canceled tasks, improving database hygiene.
+    * Enhancement: Implemented **CRUD (Create, Read, Update, Delete) methods for products and orders**, providing more robust and efficient data management capabilities.
+    * Enhancement: Enhanced product attribute synchronization; if a product attribute is removed in Danea, the plugin now automatically deletes any dependent WooCommerce product variations during synchronization, ensuring data consistency.
+    * Enhancement: **Action Scheduler is now used for CSV product imports**, significantly improving performance and enabling the seamless import of thousands of products.
+    * Enhancement: **Improved product image synchronization**, ensuring more reliable and efficient handling of images during imports and updates.
+    * Enhancement: Adhered to **WordPress Coding Standards** for improved code quality, readability, and future maintainability.
+    * Update: Action Scheduler
+    * Update: Plugin Update Checker
+    * Update: Translations
+
+
 = 1.6.4 =
 Release Date: 16 January 2024 
 
