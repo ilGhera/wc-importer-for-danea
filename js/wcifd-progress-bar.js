@@ -4,7 +4,7 @@
  * @author ilGhera
  * @package wc-importer-for-danea-premium/js
  *
- * @since 1.6.1
+ * @since 1.7.0
  */
 jQuery(document).ready(function ($) {
 
@@ -24,13 +24,34 @@ jQuery(document).ready(function ($) {
 
             $.post(ajaxurl, data, function(response){
 
-                var totActions = response;
-                console.log( 'TOT. PRODOTTI', totActions );
+                var del = 0;
+                var totActions = parseInt(response.import);
+                var completeMessage;
+
+                if ( totActions == 0 ) {
+
+                    totActions = parseInt(response.delete);
+
+                    if ( totActions > 0 ) {
+                        del = 1;
+                    }
+                }
+                console.log( 'TOT. PRODUCTS', totActions );
+                console.log( 'DELETE', del );
 
                 if ( totActions > 0 ) {
 
-                    console.log('TRASFERIMENTO IN CORSO!');
+                    console.log( 'UPDATE IN PROGRESS!' );
 
+                    // Change the progress bar message
+                    if ( del ) {
+                        $('.wcifd-progress-bar-text').html( options.deleteMessage );
+                        completeMessage = options.completedDeleteMessage;
+                    } else {
+                        completeMessage = options.completedMessage;
+                    }
+
+                    // Show the progress bar
                     $('.ilghera-notice-warning.catalog-update').show('slow');
 
                     var run = 0;
@@ -39,7 +60,9 @@ jQuery(document).ready(function ($) {
                     var updateData = setInterval( function(){
 
                         data2 = {
-                            'action': 'get-scheduled-actions'
+                            'action': 'get-scheduled-actions',
+                            'delete': del,
+                            'nonce': response.nonce
                         }
 
                         $.post(ajaxurl, data2, function(resp){
@@ -50,21 +73,19 @@ jQuery(document).ready(function ($) {
 
                             if ( resp > 0 ) {
 
-                                diff         = totActions - resp;
+                                diff = totActions - resp;
                                 currentWidth = ( diff / totActions ) * 100;
-                                // var id = setInterval(frame, 30);
 
                             } else {
 
                                 run = 1;
                                 clearInterval( updateData );
                                 currentWidth = 100;
-
                             }
 
-                            console.log( 'PRODOTTI RIMANENTI', resp );
-                            console.log( 'TOT. PRODOTTI', totActions );
-                            console.log( 'PERC. COMPLETAMENTO', currentWidth );
+                            console.log( 'REMAINING PRODUCTS', resp );
+                            console.log( 'TOT. PRODUCTS', totActions );
+                            console.log( 'PERC. COMPLETED ', currentWidth );
 
                             if ( 1 == run ) {
 
@@ -73,26 +94,19 @@ jQuery(document).ready(function ($) {
 
                                 if ( resp == 0) {
 
-                                    $('.wcifd-progress-bar-text').html( options.completedMessage );
+                                    $('.wcifd-progress-bar-text').html( completeMessage );
 
                                     run = 0;
-
                                 }
-
                             }
-
                         })
 
                     }, 500 );
-
                 }
 
-            })
-
+            }, 'json')
         })
-
     }
 
     wcifdProgressBar();
-
 })

@@ -1,14 +1,13 @@
 /**
- * Foglio di stile
+ * Style sheet
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/css
  *
- * @since 1.6.1
+ * @since 1.7.0
  */
 
 @import url(https://fonts.googleapis.com/css?family=Raleway:200,300,400,500,600,700);
-
 
 .wcifd-admin,
 .wcifd-products-sub {

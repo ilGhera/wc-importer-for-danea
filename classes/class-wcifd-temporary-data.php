@@ -2,36 +2,40 @@
 /**
  * WCIFD Temporary Data
  *
- * Gestisce i dati dei prodotti provenienti da Danea Easyfatt.
+ * Handles the products data received from Danea Easyfatt.
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/classes
  *
- * @since 1.6.0
+ * @since 1.7.0
  */
+
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Class WCIFD_Temporary_Data
+ *
+ * @since 1.7.0
  */
 class WCIFD_Temporary_Data {
 
 	/**
 	 * The constructor
 	 *
-	 * @param boolean $init true per eseguire hooks iniziali.
+	 * @param boolean $init execute hooks with true.
+	 *
+	 * @retur void
 	 */
 	public function __construct( $init = false ) {
 
 		if ( $init ) {
 
 			$this->wcifd_db_tables();
-
 		}
-
 	}
 
 	/**
-	 * Crea le tabelle previste dal plugin se non presenti
+	 * Create the expected tables if not present
 	 *
 	 * @return void
 	 */
@@ -74,18 +78,17 @@ class WCIFD_Temporary_Data {
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 			dbDelta( $sql );
-
 		}
 
 	}
 
-
 	/**
-	 * Recupera i dati temporanei del prodotto nella tabella dedicata
+	 * Get the temporary product data from the DB table
 	 *
-	 * @param  string $hash  il codice identificativo del prodotto.
-	 * @param  bool   $image se true recupera i dati dalla tabella delle immagini.
-	 * @return array i dati del prodotto
+	 * @param string $hash  the single product hash.
+	 * @param bool   $image get data about the image with true.
+	 *
+	 * @return array the product data
 	 */
 	public function wcifd_get_temporary_data( $hash, $image = false ) {
 
@@ -103,21 +106,21 @@ class WCIFD_Temporary_Data {
 			ARRAY_A
 		);
 
-		if ( $image && isset( $results[0] ) ) {
+		if ( isset( $results[0] ) ) {
 
-			return $results[0];
+			if ( $image ) {
 
-		} elseif ( isset( $results[0]['data'] ) ) {
+				return $results[0];
 
-			return json_decode( $results[0]['data'], true );
+			} elseif ( isset( $results[0]['data'] ) ) {
 
+				return json_decode( $results[0]['data'], true );
+			}
 		}
-
 	}
 
-
 	/**
-	 * Restituisce tutti gli abbinamenti prodotto/ immagine della tabella dedicata
+	 * Returns all the product/image combinations of the dedicated table
 	 *
 	 * @return array
 	 */
@@ -131,12 +134,12 @@ class WCIFD_Temporary_Data {
 
 	}
 
-
 	/**
-	 * Aggiunge i dati del prodotto nella tabella dedicata in attesa che venga creato
+	 * Adds the product data in the dedicated table waiting for it to be created
 	 *
-	 * @param  string $hash il codice identificativo del prodotto.
-	 * @param  string $data tutti i dati del prodotto.
+	 * @param string $hash the single product hash.
+	 * @param string $data the product data.
+	 *
 	 * @return void
 	 */
 	public function wcifd_add_temporary_data( $hash, $data ) {
@@ -158,18 +161,16 @@ class WCIFD_Temporary_Data {
 					'%s',
 				)
 			);
-
 		}
-
 	}
 
-
 	/**
-	 * Aggiunge id prodotto e nome dell'immagine nella tabella dedicata in attesa che vengano abbinati
+	 * Adds product id and image name in the dedicated table waiting for them to be matched
 	 *
-	 * @param  string $hash il codice identificativo del prodotto.
-	 * @param  int    $product_id l'id del prodotto WooCommerce.
-	 * @param  string $image_name il nome dell'immagine proveniente da Danea Easyfatt.
+	 * @param string $hash        the single product hash.
+	 * @param int    $product_id  the WooCommerce product ID.
+	 * @param  string $image_name the name of the image coming from Danea Easyfatt.
+	 *
 	 * @return void
 	 */
 	public function wcifd_add_temporary_image( $hash, $product_id, $image_name ) {
@@ -193,17 +194,15 @@ class WCIFD_Temporary_Data {
 					'%s',
 				)
 			);
-
 		}
-
 	}
 
-
 	/**
-	 * Cancella i dati temporanei dalla tabella dedicata
+	 * Delete the temporary data from the DB table.
 	 *
-	 * @param  string $hash  il codice identificativo del prodotto.
-	 * @param  bool   $image se true cancella dati dalla tabella delle immagini.
+	 * @param string $hash  the single product hash.
+	 * @param bool   $image delete data from the image table with true.
+	 *
 	 * @return void
 	 */
 	public function wcifd_delete_temporary_data( $hash, $image = false ) {
@@ -221,10 +220,6 @@ class WCIFD_Temporary_Data {
 				'%s',
 			)
 		);
-
 	}
-
-
-
 }
-new WCIFD_Temporary_Data( true );
+
