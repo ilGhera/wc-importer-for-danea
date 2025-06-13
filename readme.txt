@@ -62,17 +62,17 @@ To install **ilGhera WooCommerce Importer for Danea - Premium**, you can follow 
 
 #### 1. Installation via WordPress Dashboard (Recommended Method)
 
-1.  From your WordPress Dashboard, navigate to "Plugins > Add New".
-2.  Click the "Upload Plugin" button at the top of the page.
-3.  Select the compressed zip file of "ilGhera WooCommerce Importer for Danea - Premium" that you downloaded.
-4.  Complete the installation process and activate the plugin.
+    1.  From your WordPress Dashboard, navigate to "Plugins > Add New".
+    2.  Click the "Upload Plugin" button at the top of the page.
+    3.  Select the compressed zip file of "ilGhera WooCommerce Importer for Danea - Premium" that you downloaded.
+    4.  Complete the installation process and activate the plugin.
 
 #### 2. Manual Installation (via FTP/SFTP)
 
-1.  Unzip the "ilGhera WooCommerce Importer for Danea - Premium" zip file on your computer.
-2.  Upload the "wc-importer-for-danea-premium" directory (the unzipped folder) to your "/wp-content/plugins/" directory on your server, using your favorite FTP/SFTP client.
-3.  Once the upload is complete, go to the "Plugins" page in your WordPress Dashboard.
-4.  Locate "ilGhera WooCommerce Importer for Danea - Premium" and click "Activate".
+    1.  Unzip the "ilGhera WooCommerce Importer for Danea - Premium" zip file on your computer.
+    2.  Upload the "wc-importer-for-danea-premium" directory (the unzipped folder) to your "/wp-content/plugins/" directory on your server, using your favorite FTP/SFTP client.
+    3.  Once the upload is complete, go to the "Plugins" page in your WordPress Dashboard.
+    4.  Locate "ilGhera WooCommerce Importer for Danea - Premium" and click "Activate".
 
 Once activated, you'll find the plugin options in your WordPress in **WooCommerce > WC Importer for Danea**.
 
