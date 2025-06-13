@@ -80,9 +80,12 @@ Once activated, you'll find the plugin options in your WordPress in **WooCommerc
 == Changelog ==
 
 = 1.7.1 =
-Release Date: 12 June 2025
+Release Date: 13 June 2025
 
-* Bug Fix: Fixed a **fatal error** (`wp_verify_nonce() undefined`) occurring during plugin loading by ensuring the license check runs only when all WordPress core functions are available.
+    * Bug Fix: Addressed a fatal error (wp_verify_nonce() undefined) during plugin loading by ensuring the license check runs only when all WordPress core functions are available.
+    * Bug Fix: Resolved an issue where product variations were incorrectly deleted if only one attribute (color or size) was defined.
+    * Minor Fixes: Includes various small adjustments and typo corrections.
+    * Update: Translations
 
 = 1.7.0 =
 Release Date: 11 June 2025
