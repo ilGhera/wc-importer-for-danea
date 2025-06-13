@@ -38,7 +38,7 @@ defined( 'ABSPATH' ) || exit;
 						}
 						?>
 					</select>
-					<p class="description"><?php esc_html_e( 'The Danea price list to use for Woocommerce regular price.', 'wc-importer-for-danea' ); ?></p>
+					<p class="description"><?php esc_html_e( 'The Danea price list to use for WooCommerce regular price.', 'wc-importer-for-danea' ); ?></p>
 				</td>
 			</tr>
 			<tr>
@@ -52,7 +52,7 @@ defined( 'ABSPATH' ) || exit;
 						}
 						?>
 					</select>
-					<p class="description"><?php esc_html_e( 'The Danea price list to use for Woocommerce sale price.', 'wc-importer-for-danea' ); ?></p>
+					<p class="description"><?php esc_html_e( 'The Danea price list to use for WooCommerce sale price.', 'wc-importer-for-danea' ); ?></p>
 				</td>
 			</tr>
 			<tr>

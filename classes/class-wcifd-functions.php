@@ -888,11 +888,11 @@ class WCIFD_Functions {
 
 		if ( 'no_update' === $status ) {
 
-			$message = __( '<strong>Woocommerce Importer for Danea - Premium</strong> is up to date.', 'wc-importer-for-danea' );
+			$message = __( '<strong>WooCommerce Importer for Danea - Premium</strong> is up to date.', 'wc-importer-for-danea' );
 
 		} elseif ( 'update_available' === $status ) {
 
-			$message = __( 'A new version of <strong>Woocommerce Importer for Danea - Premium</strong> is available.', 'wc-importer-for-danea' );
+			$message = __( 'A new version of <strong>WooCommerce Importer for Danea - Premium</strong> is available.', 'wc-importer-for-danea' );
 
 		} else {
 
