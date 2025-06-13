@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
 				add_option( 'wcifd-url-code', $url_code );
 			}
 
-			$receive_orders_url = __( 'Please insert your <strong>Premium Key</strong>', 'wc-importer-for-danea' );
+			$receive_orders_url = __( 'Please insert your premium key to generate the URL', 'wc-importer-for-danea' );
 			if ( $premium_key ) {
 				$receive_orders_url = home_url() . '?key=' . $premium_key . '&code=' . $url_code . '&mode=data';
 			}
