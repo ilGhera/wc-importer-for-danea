@@ -1204,39 +1204,66 @@ class WCIFD_Import_Single_Product {
 		}
 	}
 
-	/**
-	 * Delete variations with orphan attributes
-	 *
+    /**
+     * Delete variations with orphan attributes
+     *
 	 * @param object $product the WC product.
-	 *
-	 * @return void
-	 */
-	public function delete_variations( $product ) {
+     *
+     * @return void
+     */
+    public function delete_variations( $product ) {
 
-		/* Get existing attributes and variations */
-		$avail_colors        = array_map( 'sanitize_title', $this->avail_colors );
-		$avail_sizes         = array_map( 'sanitize_title', $this->avail_sizes );
-		$existing_variations = $product->get_children();
+        /* Get available colors and sizes */ 
+        $avail_colors = array_map( 'sanitize_title', $this->avail_colors );
+        $avail_sizes  = array_map( 'sanitize_title', $this->avail_sizes );
 
-		foreach ( $existing_variations as $existing_variation ) {
+        /* Get IDs of existing variations for the parent product. */
+        $existing_variations_ids = $product->get_children();
 
-			$existing_variation   = new WC_Product_Variation( $existing_variation );
-			$variation_attributes = $existing_variation->get_attributes();
-			$val_color            = isset( $variation_attributes['pa_color'] ) ? $variation_attributes['pa_color'] : '';
-			$val_size             = isset( $variation_attributes['pa_size'] ) ? $variation_attributes['pa_size'] : '';
+        foreach ( $existing_variations_ids as $existing_variation_id ) {
 
-			if ( ! in_array( $val_color, $avail_colors ) || ! in_array( $val_size, $avail_sizes ) ) {
+            $existing_variation   = new WC_Product_Variation( $existing_variation_id );
+            $variation_attributes = $existing_variation->get_attributes();
 
-				$existing_variation->delete( true );
+            /* Get the color and size values for the current variation. */
+            $val_color = isset( $variation_attributes['pa_color'] ) ? sanitize_title( $variation_attributes['pa_color'] ) : '';
+            $val_size  = isset( $variation_attributes['pa_size'] ) ? sanitize_title( $variation_attributes['pa_size'] ) : '';
+
+            /* Initialize a flag to determine if the variation should be deleted. */
+            $should_delete = false;
+
+            /* Condition 1: Check for "orphan" attributes. If a color is present but not in the list of available colors. */
+            if ( ! empty( $val_color ) && ! in_array( $val_color, $avail_colors ) ) {
+
+                $should_delete = true;
+            }
+
+            /* If a size is present but not in the list of available sizes. */
+            if ( ! empty( $val_size ) && ! in_array( $val_size, $avail_sizes ) ) {
+
+                $should_delete = true;
+            }
+
+            /* Condition 2: Check for truly malformed/empty variations. If both color and size attributes are empty, the variation is likely malformed or no longer intended. */
+            if ( empty( $val_color ) && empty( $val_size ) ) {
+                 $should_delete = true;
+
+            }
+
+            /* If any of the above conditions are met, proceed with deletion. */
+            if ( $should_delete ) {
+
+                $existing_variation->delete( true ); /* true parameter forces deletion even if not trashable. */
 
 				error_log( '=== WCIFD | Variazione prodotto eliminata =================' );
 				error_log( 'ID prodotto padre: ' . print_r( $product->get_id(), true ) );
 				error_log( 'Colore: ' . print_r( $val_color, true ) );
 				error_log( 'Taglia: ' . print_r( $val_size, true ) );
 				error_log( '===========================================================' );
-			}
-		}
-	}
+            }
+        }
+    }
+
 	/**
 	 * Handle product categories
 	 *
