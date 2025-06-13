@@ -1,78 +1,55 @@
-=== ilGhera WooCommerce Importer for Danea - Premium ===
+=== ilGhera WooCommerce Importer for Danea ===
 Contributors: ghera74
 Tags: Fattura elettronica, Danea Easyfatt, gestionale, prodotti, sincronizzazione
 Version: 1.4.0
 Requires at least: 6.0
 Tested up to: 6.8
 WC tested up to: 9
+License: GPLv3
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
+Import and sync Danea Easyfatt customers and suppliers with your WooCommerce store. Premium version also supports products and orders.
 
-Import suppliers, clients and products, from Danea Easyfatt into your WooCommerce store.
 
 == Description ==
 
-Se hai realizzato il tuo negozio online con WooCommerce ed utilizzi Danea Easyfatt come gestionale, **ilGhera WooCommerce Importer per Danea - Premium** è lo strumento indispensabile per far comunicare efficacemente le due piattaforme. Il nostro software è **certificato Danea Easyfatt**, garantendo la massima affidabilità e un'integrazione fluida.
+If you've built your online store with WooCommerce and you're using Danea Easyfatt as management software, you definitely need ilGhera WooCommerce Importer for Danea.
+You'll be able to import client and suppliers width this free version, also products and orders with the premium one.
 
-ilGhera WooCommerce Importer for Danea - Premium ti permette di importare e sincronizzare facilmente i tuoi dati:
+*Danea Easyfatt certified*
 
-* **Fornitori:** Importa l'elenco dei fornitori direttamente in WordPress come utenti, assegnando loro un ruolo specifico (tramite file CSV). Questo ti consente una gestione centralizzata e flessibile dei tuoi contatti commerciali.
-* **Clienti:** Carica l'elenco dei tuoi clienti da Danea, anche loro come utenti WordPress con un ruolo dedicato (tramite file CSV), semplificando la gestione del tuo database clienti e la loro interazione con il negozio.
-* **Prodotti (CSV):** Sincronizza l'intero elenco dei tuoi prodotti da Danea Easyfatt direttamente in WooCommerce (tramite file CSV), permettendoti di aggiornare le schede prodotto esistenti o creare nuove voci di catalogo in modo rapido.
-* **Prodotti (POST HTTP con Variazioni e Immagini):** Ottieni la massima automazione per i tuoi aggiornamenti di catalogo. Questo metodo ti consente di sincronizzare i tuoi prodotti in tempo reale, comprese le variazioni di taglie/colori e le immagini associate, grazie alla ricezione di un POST HTTP inviato direttamente da Danea Easyfatt.
-* **Ordini:** Importa l'elenco degli ordini da Danea direttamente in WooCommerce. Il plugin gestisce automaticamente la creazione dei prodotti mancanti all'interno degli ordini e ti offre l'opzione di inserire i nuovi clienti, garantendo una completa e accurata tracciabilità delle transazioni.
+SOME AVAILABLE TOOLS:
 
-**ENGLISH**
+* Import customers
+* Customers and suppliers import now supports the fiscal fields coming from the Exporter plugin.
+* (Premium) Avoid product name update with a dedicated option
+* (Premium) Avoid product URL update with a dedicated option
+* (Premium) Import Producer from Danea and add it to the product as attribute
+* (Premium) Option for showing the Producer in front-end or not
+* (Premium) Import Danea custom fields and add them to the product as attributes
+* (Premium) Add a name to the custom fields coming from Danea 
+* (Premium) Option for showing the custom fields in front-end or not
 
-If you've built your online store with WooCommerce and you're using Danea Easyfatt as management software, you definitely need **ilGhera WooCommerce Importer for Danea - Premium**! Our software is **Danea Easyfatt certified**, ensuring maximum reliability and seamless integration.
-
-ilGhera WooCommerce Importer for Danea - Premium allows you to easily import and synchronize your data:
-
-* **Suppliers:** Import your supplier list directly into WordPress as users, assigning them a specific role (via CSV file). This allows for centralized and flexible management of your business contacts.
-* **Clients:** Upload your client list from Danea, also as WordPress users with a dedicated role (via CSV file), simplifying your customer database management and their interaction with the store.
-* **Products (CSV):** Synchronize your entire product list from Danea Easyfatt directly into WooCommerce (via CSV file), allowing you to quickly update existing product sheets or create new catalog entries.
-* **Products (HTTP POST with Variations and Images):** Achieve maximum automation for your catalog updates. This method allows you to synchronize your products in real-time, including size/color variations and associated images, by receiving an HTTP POST sent directly from Danea Easyfatt.
-* **Orders:** Import your order list from Danea directly into WooCommerce. The plugin automatically handles the creation of missing products within orders and offers the option to add new clients, ensuring complete and accurate transaction traceability.
+https://youtu.be/LZ6urO531OE
 
 
 == Installation ==
 
-Per installare **ilGhera WooCommerce Importer for Danea - Premium**, puoi seguire due metodi:
-
-#### 1. Installazione tramite Bacheca di WordPress (Metodo Consigliato)
-
-    1.  Dalla Bacheca del tuo sito WordPress, naviga su **Plugin > Aggiungi nuovo**.
-    2.  Clicca sul pulsante **"Carica plugin"** in cima alla pagina.
-    3.  Seleziona il file zip compresso di **ilGhera WooCommerce Importer for Danea - Premium** che hai scaricato.
-    4.  Completa il processo di installazione e attiva il plugin.
-
-#### 2. Installazione Manuale (via FTP/SFTP)
-
-    1.  Decomprimi il file zip di **ilGhera WooCommerce Importer for Danea - Premium** sul tuo computer.
-    2.  Carica la cartella `wc-importer-for-danea-premium` (la cartella scompattata) nella tua directory `/wp-content/plugins/` sul server, usando il tuo client FTP/SFTP preferito.
-    3.  Una volta completato il caricamento, vai alla pagina **Plugin** nella tua Bacheca WordPress.
-    4.  Trova **"ilGhera WooCommerce Importer for Danea - Premium"** e clicca su **"Attiva"**.
-
-Dopo l'attivazione, troverai le opzioni del plugin nel menù di WordPress in **WooCommerce > WC Importer for Danea**
-
----
-
-**ENGLISH**
-
-To install **ilGhera WooCommerce Importer for Danea - Premium**, you can follow two methods:
+To install **ilGhera WooCommerce Importer for Danea**, you can follow two methods, depending on whether you install it directly from the WordPress dashboard or via manual download:
 
 #### 1. Installation via WordPress Dashboard (Recommended Method)
 
-1.  From your WordPress Dashboard, navigate to **Plugins > Add New**.
-2.  Click the **"Upload Plugin"** button at the top of the page.
-3.  Select the compressed zip file of **ilGhera WooCommerce Importer for Danea - Premium** that you downloaded.
-4.  Complete the installation process and activate the plugin.
+    1.  From your WordPress Dashboard, navigate to Plugins > Add New.
+    2.  Search for "ilGhera WooCommerce Importer for Danea".
+    3.  Click "Install Now" and then "Activate".
 
-#### 2. Manual Installation (via FTP/SFTP)
+#### 2. Manual Installation from WordPress.org (via FTP/SFTP)
 
-1.  Unzip the **ilGhera WooCommerce Importer for Danea - Premium** zip file on your computer.
-2.  Upload the `wc-importer-for-danea-premium` directory (the unzipped folder) to your `/wp-content/plugins/` directory on your server, using your favorite FTP/SFTP client.
-3.  Once the upload is complete, go to the **Plugins** page in your WordPress Dashboard.
-4.  Locate **"ilGhera WooCommerce Importer for Danea - Premium"** and click **"Activate"**.
+    1.  Download the ilGhera WooCommerce Importer for Danea zip file from WordPress.org.
+    2.  Unzip the file on your computer.
+    3.  Upload the `woocommerce-importer-for-danea` directory (the unzipped folder) to your `/wp-content/plugins/` directory on your server, using your favorite FTP/SFTP client.
+    4.  Once the upload is complete, go to the Plugins page in your WordPress Dashboard.
+    5.  Locate "ilGhera WooCommerce Importer for Danea" and click "Activate".
 
 Once activated, you'll find the plugin options in your WordPress in **WooCommerce > WC Importer for Danea**.
 
@@ -97,20 +74,19 @@ Release Date: 13 June 2025
     * Enhancement: Added full compatibility with WooCommerce High-Performance Order Storage (HPOS) for improved order management and database efficiency.
     * Enhancement: Optimized plugin loading performance and stability by refining class instantiation timing, ensuring smoother plugin initialization.
     * Enhancement: (Premium) Introduced comprehensive options for Action Scheduler task cleanup, allowing administrators to define retention days for completed, failed, and canceled tasks, improving database hygiene.
-    * Enhancement: (Premium) Implemented **CRUD (Create, Read, Update, Delete) methods for products and orders**, providing more robust and efficient data management capabilities.
+    * Enhancement: (Premium) Implemented CRUD (Create, Read, Update, Delete) methods for products and orders, providing more robust and efficient data management capabilities.
     * Enhancement: (Premium) Enhanced product attribute synchronization; if a product attribute is removed in Danea, the plugin now automatically deletes any dependent WooCommerce product variations during synchronization, ensuring data consistency.
-    * Enhancement: (Premium) **Action Scheduler is now used for CSV product imports**, significantly improving performance and enabling the seamless import of thousands of products.
-    * Enhancement: (Premium) **Improved product image synchronization**, ensuring more reliable and efficient handling of images during imports and updates.
-    * Enhancement: Adhered to **WordPress Coding Standards** for improved code quality, readability, and future maintainability.
-    * Enhancement: (Premium) **Enhanced Custom Field Handling:** Implemented a robust logic for Danea Easyfatt custom fields (CustomField1-4).
-    * **Conditional Tag Appending: (Premium) **Product tags are now cleared before import unless at least one custom field configured as a 'tag' explicitly has the 'append' option enabled. This ensures precise control over existing tags.
-    * **Optimized Saving: (Premium) **Product attributes and tags are now saved only once at the end of the `danea_custom_fields` method, improving performance and data consistency.
-    * Enhancement: (Premium) **Detailed Synchronization Logging:** Added comprehensive information about the synchronization process to the plugin's log for better monitoring and troubleshooting.
-    * Enhancement: (Premium) **Progress Bar Enhancements:** The progress bar now accurately reflects the advancement of product deletion during synchronization, providing a clearer overview of the import process.
+    * Enhancement: (Premium) Action Scheduler is now used for CSV product imports, significantly improving performance and enabling the seamless import of thousands of products.
+    * Enhancement: (Premium) Improved product image synchronization, ensuring more reliable and efficient handling of images during imports and updates.
+    * Enhancement: Adhered to WordPress Coding Standards for improved code quality, readability, and future maintainability.
+    * Enhancement: (Premium) Enhanced Custom Field Handling: Implemented a robust logic for Danea Easyfatt custom fields (CustomField1-4).
+    * Conditional Tag Appending: (Premium) Product tags are now cleared before import unless at least one custom field configured as a 'tag' explicitly has the 'append' option enabled. This ensures precise control over existing tags.
+    * Optimized Saving: (Premium) Product attributes and tags are now saved only once at the end of the `danea_custom_fields` method, improving performance and data consistency.
+    * Enhancement: (Premium) Detailed Synchronization Logging: Added comprehensive information about the synchronization process to the plugin's log for better monitoring and troubleshooting.
+    * Enhancement: (Premium) Progress Bar Enhancements: The progress bar now accurately reflects the advancement of product deletion during synchronization, providing a clearer overview of the import process.
     * Update: (Premium) Action Scheduler
     * Update: (Premium) Plugin Update Checker
     * Update: Translations
-
 
 = 1.3.2 =
 Release Date: 7 October 2024
