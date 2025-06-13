@@ -128,7 +128,7 @@ class WCIFD_Admin {
 		echo '<div id="wcifd-general">';
 
 			/* Header */
-			echo '<h1 class="wcifd main">' . esc_html__( 'Woocommmerce Importer for Danea - Premium', 'wc-importer-for-danea' ) . '</h1>';
+			echo '<h1 class="wcifd main">' . esc_html__( 'WooCommerce Importer for Danea - Premium', 'wc-importer-for-danea' ) . '</h1>';
 
 			/* The premium key form */
 			$this->premium_key_form();
