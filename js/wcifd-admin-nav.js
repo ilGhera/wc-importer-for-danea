@@ -1,13 +1,20 @@
 /**
- * Script menu di navigazione
+ * Main script 
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/js
  *
- * @since 1.3.1
+ * @since 1.4.0
  */
 jQuery(document).ready(function ($) {
 
+    /**
+     * Paginazione
+     *
+     * @param boolean submenu
+     *
+     * @return void
+     */
 	var wcifd_pagination = function( submenu = false ) {
 
 		var contents = submenu ? '.wcifd-products-sub' : '.wcifd-admin';
@@ -21,9 +28,7 @@ jQuery(document).ready(function ($) {
 		if(hash) {
 
 	        $(contents).hide();
-
 			$('#' + hash).show();
-
 			sub = hash.split("products-")[1];
 
 			if (sub) {
@@ -35,7 +40,6 @@ jQuery(document).ready(function ($) {
 
 				oldHash = 'wcifd-products-general';//temp
 			    $('#' + oldHash).fadeIn(200);	
-			
 			}
 
 		    $('#' + hash).fadeIn(200);	
@@ -46,9 +50,7 @@ jQuery(document).ready(function ($) {
 	        	if($(this).data('link') == hash || $(this).data('link') == oldHash) {
 	        		
 	        		$(this).addClass(active);
-	        	
 	        	}
-
 	        })
 	        
 	        $('html, body').animate({
@@ -59,7 +61,6 @@ jQuery(document).ready(function ($) {
 		$(toggle).click(function () {
 	        
 	        $(contents).hide();
-
 	        $("#" + $(this).data("link")).fadeIn(200);
 
             if ( 'wcifd-products' == $(this).data("link") ) {
@@ -72,25 +73,21 @@ jQuery(document).ready(function ($) {
 	        $(this).addClass(active);
 
 	        window.location = url + '#' + $(this).data('link');
-
 	        $('html, body').scrollTop(0);
-
 	    })
-	        	
 	}
 	
     wcifd_pagination();
     wcifd_pagination(true);
 
-
     /**
-     * Visualizzazione dei campi liberi di Danea
+     * Custom fields options 
      *
      * @return void
      */
     var custom_fields_options = function() {
 
-        // Opzione uguale per ogni custom field
+        // Equal option for each custom field
         $('.field-tag-append .tzCheckBox').on('click', function(){
 
             if ( $(this).hasClass('checked') ) {
@@ -104,9 +101,7 @@ jQuery(document).ready(function ($) {
                 $('.field-tag-append .tzCheckBox').not(this).removeClass('checked');
                 $('.field-tag-append .tzCBContent').not(this).text('Off');
                 $('.field-tag-append input[type="checkbox"]').not(this).removeAttr('checked');
-
             }
-
         })
 
     	$('.wcifd-custom-field').each(function(){
@@ -127,7 +122,6 @@ jQuery(document).ready(function ($) {
                 } else {
 
                     $(fieldTagAppend).hide();
-
                 }
 
             } else {
@@ -136,7 +130,6 @@ jQuery(document).ready(function ($) {
                 $(fieldSplit).hide();
                 $(fieldDisplay).hide();
                 $(fieldName).hide();
-
             }
 
     		$('select', field).on('change', function(){
@@ -156,7 +149,6 @@ jQuery(document).ready(function ($) {
                         $(fieldTagAppend).show('slow');
                         $(fieldDisplay).hide('slow');
                         $(fieldName).hide('slow');
-
                     }
 
                 } else {
@@ -165,20 +157,15 @@ jQuery(document).ready(function ($) {
                     $(fieldSplit).hide('slow');
                     $(fieldDisplay).hide('slow');
                     $(fieldName).hide('slow');
-
                 }
-
             })
-            
     	})
-
 	}
 
     custom_fields_options();
-
     
     /**
-	 * Esegue Chosen
+	 * Execute Chosen
      *
      * @return void
 	 */
@@ -190,13 +177,9 @@ jQuery(document).ready(function ($) {
 		
 				disable_search_threshold: 10,
 				width: '200px'
-			
 			});
-
 		})
-
 	}
 
     wcifdChosen();
-
 });

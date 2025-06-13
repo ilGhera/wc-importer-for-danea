@@ -1,6 +1,5 @@
 # FILES
 
 # FOLDERS
-vendor/plugin-update-checker/
+plugin-update-checker/
 admin/ilghera-notice/
-libraries/action-scheduler/
