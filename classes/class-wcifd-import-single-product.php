@@ -1064,17 +1064,21 @@ class WCIFD_Import_Single_Product {
 
 		if ( ! $var_id || ( $var_id && ! $this->exclude_variations_prices ) ) {
 
-			if ( $data['sale_price'] ) {
+            /* Set the regular price */
+            $variation->set_regular_price( $data['regular_price'] );
 
-				$price = $data['sale_price'];
-			} else {
+            /* Check if a sale price exists and is valid */
+            if ( ! empty( $data['sale_price'] ) && $data['sale_price'] < $data['regular_price'] ) {
 
-				$price = $data['regular_price'];
-			}
+                $variation->set_sale_price( $data['sale_price'] );
+                $variation->set_price( $data['sale_price'] );
 
-			$variation->set_regular_price( $price );
-			$variation->set_sale_price( $price );
-			$variation->set_price( $price );
+            } else {
+
+                /* If no valid sale price, ensure it's cleared */
+                $variation->set_sale_price( '' );
+                $variation->set_price( $data['regular_price'] );
+            }
 
 			/* WooCommerce Role Based Price */
 			$meta_input = array_merge( $meta_input, $this->add_wcrbp_data( $data ) );
