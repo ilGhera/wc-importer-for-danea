@@ -5,7 +5,7 @@
  * Description: If you've built your online store with WooCommerce and you're using Danea Easyfatt as management software
  * you definitely need ilGhera WooCommerce Importer for Danea - Premium!
  * You'll be able to import suppliers, clients and products.
- * Version: 1.7.1
+ * Version: 1.7.2
  * Requires at least: 6.0
  * Tested up to: 6.8
  * WC tested up to: 9
@@ -79,7 +79,7 @@ final class WCIFD_Plugin {
 	 *
 	 * @var string
 	 */
-	private $version = '1.7.1';
+	private $version = '1.7.2';
 
 	/**
 	 * Class constructor.
