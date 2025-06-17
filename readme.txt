@@ -1,7 +1,7 @@
 === ilGhera WooCommerce Importer for Danea - Premium ===
 Contributors: ghera74
 Tags: Fattura elettronica, Danea Easyfatt, gestionale, prodotti, sincronizzazione
-Version: 1.7.2
+Version: 1.7.3
 Requires at least: 6.0
 Tested up to: 6.8
 WC tested up to: 9
@@ -78,6 +78,12 @@ Once activated, you'll find the plugin options in your WordPress in **WooCommerc
 
 
 == Changelog ==
+
+= 1.7.3 =
+Release Date: June 17, 2025
+
+* Bug Fix: Resolved an issue where the "Products not available" option prevented all product imports due to an incorrect variable being used for stock status checks.
+
 
 = 1.7.2 =
 Release Date: June 15, 2025
