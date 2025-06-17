@@ -850,7 +850,7 @@ class WCIFD_Import_Single_Product {
 	public function create_new_product( $data ) {
 
 		/* No new product if not in stock */
-		if ( $this->products_not_available && 1 > $stock ) {
+		if ( $this->products_not_available && 1 > $data['stock'] ) {
 			return;
 		}
 
