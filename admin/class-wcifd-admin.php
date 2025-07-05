@@ -105,6 +105,7 @@ class WCIFD_Admin {
 				include WCIFD_ADMIN . 'templates/wcifd-import-clients-template.php';
 				include WCIFD_ADMIN . 'templates/wcifd-import-orders-template.php';
 				include WCIFD_ADMIN . 'templates/wcifd-role-based-price-template.php';
+				include WCIFD_ADMIN . 'templates/wcifd-role-based-pricing-template.php';
 				include WCIFD_ADMIN . 'templates/wcifd-tools.php';
 
 			echo '</div>'; // wrap-left.
