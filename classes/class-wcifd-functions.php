@@ -718,7 +718,7 @@ class WCIFD_Functions {
 	}
 
 	/**
-	 * Get prices with labels for every user roles set with WC Role Based Pricing
+	 * Get prices with labels for every user roles set with WC User Role Based Pricing
 	 *
 	 * @return array
 	 */
@@ -729,7 +729,7 @@ class WCIFD_Functions {
 
 		if ( class_exists( 'WOOCOMMERCE_ROLE_BASED_PRICING' ) && is_array( $wrbp_settings ) ) {
 
-			/* WC Role Based Pricing */
+			/* WC User Role Based Pricing */
 			$allowed_price = array( 'regular_price', 'sale_price' );
 
 			if ( isset( $wrbp_settings['wrbp_func_enable'] ) && 'yes' !== $wrbp_settings['wrbp_func_enable'] ) {

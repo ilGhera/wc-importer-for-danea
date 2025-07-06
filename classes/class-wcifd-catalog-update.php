@@ -81,7 +81,7 @@ class WCIFD_Catalog_Update {
 	public $wc_rbp;
 
 	/**
-	 * WC Role Based Pricing
+	 * WC User Role Based Pricing
 	 *
 	 * @var array $wc_mrbp
 	 */
@@ -112,7 +112,7 @@ class WCIFD_Catalog_Update {
 		/* WooCommerce Role Based Price */
 		$this->wc_rbp = WCIFD_Functions::get_wc_rbp();
 
-		/* WooCommerce Role Based Pricing */
+		/* WooCommerce User Role Based Pricing */
 		$this->wc_mrbp = WCIFD_Functions::get_wc_mrbp();
 
 		/* Import products */

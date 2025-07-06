@@ -716,7 +716,7 @@ class WCIFD_Import_Single_Product {
 				/* WooCommerce Role Based Price */
 				$meta_input = array_merge( $meta_input, $this->add_wcrbp_data( $data ) );
 
-				/* WooCommerce Role Based Pricing */
+				/* WooCommerce User Role Based Pricing */
 				$meta_input = array_merge( $meta_input, $this->add_wcmrbp_data( $data ) );
 			}
 
@@ -846,7 +846,7 @@ class WCIFD_Import_Single_Product {
 	}
 
 	/**
-	 * Add data about WC Role Based Pricing
+	 * Add data about WC User Role Based Pricing
 	 *
 	 * @param array $data the product data.
 	 *
@@ -880,7 +880,7 @@ class WCIFD_Import_Single_Product {
 	}
 
 	/**
-	 * Update data about WC Role Based Pricing
+	 * Update data about WC User Role Based Pricing
 	 *
 	 * @param object $product the WC product.
 	 * @param array  $data    the product data.
@@ -972,7 +972,7 @@ class WCIFD_Import_Single_Product {
 		/* WooCommerce Role Based Price */
 		$metadata = array_merge( $metadata, $this->add_wcrbp_data( $data ) );
 
-		/* WooCommerce Role Based Pricing */
+		/* WooCommerce User Role Based Pricing */
 		$metadata = array_merge( $metadata, $this->add_wcmrbp_data( $data ) );
 
 		/* Set props */
@@ -1069,7 +1069,7 @@ class WCIFD_Import_Single_Product {
 			/* Update WC Role Based Price data */
 			$this->upate_wcrbp_data( $product, $data );
 
-			/* Update WC Role Based Pricing data */
+			/* Update WC User Role Based Pricing data */
 			$this->upate_wcmrbp_data( $product, $data );
 
 			/* Save updates */
@@ -1166,7 +1166,7 @@ class WCIFD_Import_Single_Product {
 			/* WooCommerce Role Based Price */
 			$meta_input = array_merge( $meta_input, $this->add_wcrbp_data( $data ) );
 
-			/* WooCommerce Role Based Pricing */
+			/* WooCommerce User Role Based Pricing */
 			$meta_input = array_merge( $meta_input, $this->add_wcmrbp_data( $data ) );
 		}
 

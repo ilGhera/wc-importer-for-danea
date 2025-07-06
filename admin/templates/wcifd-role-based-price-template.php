@@ -1,6 +1,6 @@
 <?php
 /**
- * WooCommerce Role Based Price template
+ * WooCommerce User Role Based Price template
  *
  * @author ilGhera
  * @package wc-importer-for-danea-premium/admin
