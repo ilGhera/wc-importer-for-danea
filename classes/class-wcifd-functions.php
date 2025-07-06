@@ -20,22 +20,22 @@ class WCIFD_Functions {
 	/**
 	 * The constructor
 	 *
-     * @param bool $init initialize with true.
-     *
+	 * @param bool $init initialize with true.
+	 *
 	 * @return void
 	 */
 	public function __construct( $init = false ) {
 
-        if ( $init ) {
+		if ( $init ) {
 
-            /* Actions */
-            add_action( 'init', array( $this, 'register_attributes' ) );
-            add_action( 'init', array( $this, 'products_update_request' ) );
+			/* Actions */
+			add_action( 'init', array( $this, 'register_attributes' ) );
+			add_action( 'init', array( $this, 'products_update_request' ) );
 
-            /* Filters */
-            add_filter( 'puc_manual_check_link-wc-importer-for-danea-premium', array( $this, 'check_update_message' ) );
-            add_filter( 'puc_manual_check_message-wc-importer-for-danea-premium', array( $this, 'update_message' ), 10, 2 );
-        }
+			/* Filters */
+			add_filter( 'puc_manual_check_link-wc-importer-for-danea-premium', array( $this, 'check_update_message' ) );
+			add_filter( 'puc_manual_check_message-wc-importer-for-danea-premium', array( $this, 'update_message' ), 10, 2 );
+		}
 	}
 
 	/**
@@ -127,24 +127,24 @@ class WCIFD_Functions {
 	 */
 	public function get_user_id_by_tax_code( $tax_code = null ) {
 
-        if ( $tax_code ) {
+		if ( $tax_code ) {
 
-            global $wpdb;
+			global $wpdb;
 
-            $result = $wpdb->get_results(
-                $wpdb->prepare(
-                    "
+			$result = $wpdb->get_results(
+				$wpdb->prepare(
+					"
                     SELECT user_id
                     FROM $wpdb->usermeta
                     WHERE meta_value = %s
                     ",
-                    $tax_code
-                ),
-                ARRAY_A
-            );
+					$tax_code
+				),
+				ARRAY_A
+			);
 
-            return $result[0]['user_id'];
-        }
+			return $result[0]['user_id'];
+		}
 	}
 
 	/**
@@ -156,25 +156,25 @@ class WCIFD_Functions {
 	 */
 	public function get_country_code( $state_name ) {
 
-        if ( function_exists( 'WC' ) && WC() && WC()->countries ) {
-            
-            $countries = WC()->countries->countries;
+		if ( function_exists( 'WC' ) && WC() && WC()->countries ) {
 
-            if ( is_array( $countries ) ) {
+			$countries = WC()->countries->countries;
 
-                foreach ( $countries as $key => $value ) {
+			if ( is_array( $countries ) ) {
 
-                    if ( $value === $state_name ) {
+				foreach ( $countries as $key => $value ) {
 
-                        return $key;
+					if ( $value === $state_name ) {
 
-                    } elseif ( $key === $state_name ) {
+						return $key;
 
-                        return $state_name;
-                    }
-                }
-            }
-        }
+					} elseif ( $key === $state_name ) {
+
+						return $state_name;
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -525,7 +525,7 @@ class WCIFD_Functions {
 			'producer'         => __( 'Producer', 'wc-importer-for-danea' ),
 			'supplier'         => __( 'Supplier', 'wc-importer-for-danea' ),
 			'sup-product-code' => __( 'Supplier product code', 'wc-importer-for-danea' ),
-            'barcode'          => __( 'Barcode', 'wc-importer-for-danea' ),
+			'barcode'          => __( 'Barcode', 'wc-importer-for-danea' ),
 		);
 
 		$additional_attributes = array();
@@ -692,18 +692,69 @@ class WCIFD_Functions {
 		$wc_rbp_general = get_option( 'wc_rbp_general' );
 
 		if ( function_exists( 'woocommerce_role_based_price' ) && $wc_rbp_general ) {
+
+			/* WC Role Based Price */
 			$wc_rbp_allowed_roles = isset( $wc_rbp_general['wc_rbp_allowed_roles'] ) ? $wc_rbp_general['wc_rbp_allowed_roles'] : '';
 			$wc_rbp_allowed_price = isset( $wc_rbp_general['wc_rbp_allowed_price'] ) ? $wc_rbp_general['wc_rbp_allowed_price'] : '';
 
 			if ( $wc_rbp_allowed_roles ) {
+
 				$output = array();
+
 				foreach ( $wc_rbp_allowed_roles as $role ) {
+
 					foreach ( $wc_rbp_allowed_price as $price_type ) {
+
 						$field_name = $price_type . '_' . $role;
 						$price_list = get_option( 'wcifd_' . $field_name );
 
 						$output[ $role ][ $price_type ] = $price_list;
+					}
+				}
+			}
+		}
 
+		return $output;
+	}
+
+	/**
+	 * Get prices with labels for every user roles set with WC Role Based Pricing
+	 *
+	 * @return array
+	 */
+	public static function get_wc_mrbp() {
+
+		$output        = null;
+		$wrbp_settings = get_option( 'wrbp_settings_array' );
+
+		if ( class_exists( 'WOOCOMMERCE_ROLE_BASED_PRICING' ) && is_array( $wrbp_settings ) ) {
+
+			/* WC Role Based Pricing */
+			$allowed_price = array( 'regular_price', 'sale_price' );
+
+			if ( isset( $wrbp_settings['wrbp_func_enable'] ) && 'yes' !== $wrbp_settings['wrbp_func_enable'] ) {
+
+				return;
+			}
+
+			$roles_excluded = isset( $wrbp_settings['wrbp_exclude_role'] ) ? $wrbp_settings['wrbp_exclude_role'] : array();
+			$roles_excluded = str_replace( ' ', '_', $roles_excluded );
+
+			global $wp_roles;
+
+			if ( isset( $wp_roles->roles ) && is_array( $wp_roles->roles ) ) {
+
+				foreach ( $wp_roles->roles as $key => $value ) {
+
+					if ( ! in_array( $key, $roles_excluded ) ) {
+
+						foreach ( $allowed_price as $price_type ) {
+
+							$field_name = $price_type . '_' . $key;
+							$price_list = get_option( 'wcifd_' . $field_name );
+
+							$output[ $key ][ $price_type ] = $price_list;
+						}
 					}
 				}
 			}

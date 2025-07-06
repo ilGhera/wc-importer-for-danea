@@ -81,6 +81,13 @@ class WCIFD_Catalog_Update {
 	public $wc_rbp;
 
 	/**
+	 * WC Role Based Pricing
+	 *
+	 * @var array $wc_mrbp
+	 */
+	public $wc_mrbp;
+
+	/**
 	 * The constructor
 	 *
 	 * @param file $file   the file imported.
@@ -104,6 +111,9 @@ class WCIFD_Catalog_Update {
 
 		/* WooCommerce Role Based Price */
 		$this->wc_rbp = WCIFD_Functions::get_wc_rbp();
+
+		/* WooCommerce Role Based Pricing */
+		$this->wc_mrbp = WCIFD_Functions::get_wc_mrbp();
 
 		/* Import products */
 		$this->import_products();
@@ -205,6 +215,7 @@ class WCIFD_Catalog_Update {
 					'tax_attributes'     => $tax_attributes,
 					'deleted_products'   => $this->deleted_products,
 					'wc_rbp'             => $this->wc_rbp,
+					'wc_mrbp'            => $this->wc_mrbp,
 					'is_csv'             => $this->is_csv,
 				);
 
@@ -258,81 +269,81 @@ class WCIFD_Catalog_Update {
 		}
 	}
 
-    /**
-     * Handle the single product delete event
-     *
-     * @param string $product_sku the sku of the single product to be deleted, encoded in json.
-     *
-     * @return void
-     */
-    public static function delete_single_product( $product_sku ) {
+	/**
+	 * Handle the single product delete event
+	 *
+	 * @param string $product_sku the sku of the single product to be deleted, encoded in json.
+	 *
+	 * @return void
+	 */
+	public static function delete_single_product( $product_sku ) {
 
-        $sku = json_decode( $product_sku, true );
+		$sku = json_decode( $product_sku, true );
 
-        if ( isset( $sku[0] ) ) {
+		if ( isset( $sku[0] ) ) {
 
-            $product_id = WCIFD_Functions::search_product( $sku[0] );
+			$product_id = WCIFD_Functions::search_product( $sku[0] );
 
-            if ( $product_id ) {
+			if ( $product_id ) {
 
-                $product = wc_get_product( $product_id );
+				$product = wc_get_product( $product_id );
 
-                /* Delete product */
-                $deleted = $product->delete( true );
+				/* Delete product */
+				$deleted = $product->delete( true );
 
-                if ( $deleted ) {
+				if ( $deleted ) {
 
-                    /* Delete transients */
-                    wc_delete_product_transients( $product_id );
+					/* Delete transients */
+					wc_delete_product_transients( $product_id );
 
-                } else {
+				} else {
 
-                    error_log( 'WCIFD ERROR | Eliminazione prodotto | ID: ' . $product_id );
-                }
-            }
-        }
-    }
+					error_log( 'WCIFD ERROR | Eliminazione prodotto | ID: ' . $product_id );
+				}
+			}
+		}
+	}
 
-    /**
-     * Delete all products in WooCommerce
-     *
-     * @return void
-     */
-    public function delete_all_products() {
+	/**
+	 * Delete all products in WooCommerce
+	 *
+	 * @return void
+	 */
+	public function delete_all_products() {
 
-        $args = array(
-            'post_type'      => 'product',
-            'posts_per_page' => -1,
-            'post_status'    => 'any',
-            'fields'         => 'ids',
-        );
+		$args = array(
+			'post_type'      => 'product',
+			'posts_per_page' => -1,
+			'post_status'    => 'any',
+			'fields'         => 'ids',
+		);
 
-        $product_ids = get_posts( $args );
+		$product_ids = get_posts( $args );
 
-        if ( $product_ids ) {
+		if ( $product_ids ) {
 
-            foreach ( $product_ids as $product_id ) {
+			foreach ( $product_ids as $product_id ) {
 
-                /* Get product */
-                $product = wc_get_product( $product_id );
+				/* Get product */
+				$product = wc_get_product( $product_id );
 
-                if ( $product ) {
+				if ( $product ) {
 
-                    /* Delete product */
-                    $deleted = $product->delete( true );
+					/* Delete product */
+					$deleted = $product->delete( true );
 
-                    if ( $deleted ) {
+					if ( $deleted ) {
 
-                        /* Delete transients */
-                        wc_delete_product_transients( $product_id );
+						/* Delete transients */
+						wc_delete_product_transients( $product_id );
 
-                    } else {
+					} else {
 
-                        error_log( 'WCIFD ERROR | Eliminazione prodotto | ID: ' . $product_id );
-                    }
-                }
-            }
-        }
-    }
+						error_log( 'WCIFD ERROR | Eliminazione prodotto | ID: ' . $product_id );
+					}
+				}
+			}
+		}
+	}
 }
 

@@ -436,6 +436,7 @@ class WCIFD_Import_Single_Product {
 		$data['tax_class']        = $this->get_tax_info( $data );
 		$data['deleted_products'] = isset( $this->p_data['deleted_products'] ) ? $this->p_data['deleted_products'] : '';
 		$data['wc_rbp']           = isset( $this->p_data['wc_rbp'] ) ? $this->p_data['wc_rbp'] : '';
+		$data['wc_mrbp']          = isset( $this->p_data['wc_mrbp'] ) ? $this->p_data['wc_mrbp'] : '';
 		$data['length']           = $this->functions->get_product_size( $this->d_product, $data['size_type'], 'z' );
 		$data['width']            = $this->functions->get_product_size( $this->d_product, $data['size_type'], 'x' );
 		$data['height']           = $this->functions->get_product_size( $this->d_product, $data['size_type'], 'y' );
@@ -506,6 +507,7 @@ class WCIFD_Import_Single_Product {
 		$data['tax_status']       = $this->get_tax_info( $data, true );
 		$data['tax_class']        = $this->get_tax_info( $data );
 		$data['wc_rbp']           = isset( $this->p_data['wc_rbp'] ) ? $this->p_data['wc_rbp'] : '';
+		$data['wc_mrbp']          = isset( $this->p_data['wc_mrbp'] ) ? $this->p_data['wc_mrbp'] : '';
 		$data['length']           = $this->functions->get_product_size( $this->d_product, $data['size_type'], 'z' );
 		$data['width']            = $this->functions->get_product_size( $this->d_product, $data['size_type'], 'x' );
 		$data['height']           = $this->functions->get_product_size( $this->d_product, $data['size_type'], 'y' );
@@ -713,6 +715,9 @@ class WCIFD_Import_Single_Product {
 
 				/* WooCommerce Role Based Price */
 				$meta_input = array_merge( $meta_input, $this->add_wcrbp_data( $data ) );
+
+				/* WooCommerce Role Based Pricing */
+				$meta_input = array_merge( $meta_input, $this->add_wcmrbp_data( $data ) );
 			}
 
 			/* Add weight and dimensions */
@@ -841,6 +846,78 @@ class WCIFD_Import_Single_Product {
 	}
 
 	/**
+	 * Add data about WC Role Based Pricing
+	 *
+	 * @param array $data the product data.
+	 *
+	 * @return array
+	 */
+	public function add_wcmrbp_data( $data ) {
+
+		$output = array();
+
+		if ( is_array( $data['wc_mrbp'] ) && ! empty( $data['wc_mrbp'] ) && ! $data['variable_product'] ) {
+
+            global $wp_roles;
+
+			foreach ( $wc_mrbp as $role => $price_types ) {
+
+                $output[ $role ] = $wp_roles->roles[ $role ]['name'];
+
+				foreach ( $price_types as $key => $value ) {
+
+					$wc_mrbp_price = wcifd_get_list_price( $product, $value, $tax_included );
+
+					if ( $wc_mrbp_price ) {
+
+						$output[ 'mrbp_' . $key ] = $wc_mrbp_price;
+					}
+				}
+			}
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Update data about WC Role Based Pricing
+	 *
+	 * @param object $product the WC product.
+	 * @param array  $data    the product data.
+	 *
+	 * @return void
+	 */
+	public function upate_wcmrbp_data( $product, $data ) {
+
+		if ( is_array( $data['wc_mrbp'] ) && ! empty( $data['wc_mrbp'] ) && ! $data['variable_product'] ) {
+
+            global $wp_roles;
+            $mrbp_role = array();
+
+			foreach ( $data['wc_mrbp'] as $role => $price_types ) {
+
+                $array = array();
+                $array[ $role ] = $wp_roles->roles[ $role ]['name'];
+
+                foreach ( $price_types as $key => $value ) {
+
+                    $wc_mrbp_price = wcifd_get_list_price( $product, $value, $tax_included );
+
+                    if ( $wc_mrbp_price ) {
+
+                        $array[ 'mrbp_' . $key ] = $wc_mrbp_price;
+                    }
+                }
+
+                $mrbp_role[] = $array;
+            }
+
+            /* Update role based price */
+            $product->update_meta_data( 'mrbp_role', $role_based_price );
+		}
+	}
+
+	/**
 	 * Crate a new WC product
 	 *
 	 * @param array $data the product data.
@@ -894,6 +971,9 @@ class WCIFD_Import_Single_Product {
 
 		/* WooCommerce Role Based Price */
 		$metadata = array_merge( $metadata, $this->add_wcrbp_data( $data ) );
+
+		/* WooCommerce Role Based Pricing */
+		$metadata = array_merge( $metadata, $this->add_wcmrbp_data( $data ) );
 
 		/* Set props */
 		$product->set_props( $props );
@@ -989,6 +1069,9 @@ class WCIFD_Import_Single_Product {
 			/* Update WC Role Based Price data */
 			$this->upate_wcrbp_data( $product, $data );
 
+			/* Update WC Role Based Pricing data */
+			$this->upate_wcmrbp_data( $product, $data );
+
 			/* Save updates */
 			$product->save();
 
@@ -1082,6 +1165,9 @@ class WCIFD_Import_Single_Product {
 
 			/* WooCommerce Role Based Price */
 			$meta_input = array_merge( $meta_input, $this->add_wcrbp_data( $data ) );
+
+			/* WooCommerce Role Based Pricing */
+			$meta_input = array_merge( $meta_input, $this->add_wcmrbp_data( $data ) );
 		}
 
 		/* Add weight and dimensions */
