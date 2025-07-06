@@ -860,7 +860,7 @@ class WCIFD_Import_Single_Product {
 
             global $wp_roles;
 
-			foreach ( $wc_mrbp as $role => $price_types ) {
+			foreach ( $data['wc_mrbp'] as $role => $price_types ) {
 
                 $output[ $role ] = $wp_roles->roles[ $role ]['name'];
 
