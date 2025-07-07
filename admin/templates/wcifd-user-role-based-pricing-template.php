@@ -11,17 +11,19 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 
-<div id="wcifd-rbp" class="wcifd-admin">
-    <form name="wcifd-rbp-settings" class="wcifd-form" method="post" action="">
+<div id="wcifd-mrbp" class="wcifd-admin">
+    <form name="wcifd-mrbp-settings" class="wcifd-form" method="post" action="">
 
         <table class="form-table">
             <?php
             $wrbp_settings = get_option( 'wrbp_settings_array' );
 
             if ( class_exists( 'WOOCOMMERCE_ROLE_BASED_PRICING' ) && is_array( $wrbp_settings ) ) {
+
                 $allowed_price = array( 'regular_price', 'sale_price' ); 
 
                 if ( isset( $wrbp_settings['wrbp_func_enable'] ) && 'yes' !== $wrbp_settings['wrbp_func_enable'] ) {
+
                     return;
                 }
 
@@ -33,6 +35,7 @@ defined( 'ABSPATH' ) || exit;
                 if ( isset( $wp_roles->roles ) && is_array( $wp_roles->roles ) ) {
 
                     $p = 0;
+
                     foreach ( $wp_roles->roles as $key => $value ) {
 
                         if ( ! in_array( $key, $roles_excluded ) ) {
@@ -42,14 +45,12 @@ defined( 'ABSPATH' ) || exit;
                                 $p ++;
                                 $price_label = 'regular_price' === $price_type ? __( 'Regular price', 'wc-importer-for-danea' ) : __( 'Sale price', 'wc-importer-for-danea' );
                                 $field_name  = $price_type . '_' . $key;
+                                $price_list  = get_option( 'wcifd_' . $field_name );
 
-                                $price_list = get_option( 'wcifd_' . $field_name );
-
-                                if ( isset( $_POST[ $field_name ], $_POST['wcifd-role-based-price-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wcifd-role-based-price-nonce'] ) ), 'wcifd-role-based-price' ) ) {
+                                if ( isset( $_POST[ $field_name ], $_POST['wcifd-user-role-based-pricing-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wcifd-user-role-based-pricing-nonce'] ) ), 'wcifd-user-role-based-pricing' ) ) {
 
                                     $price_list = sanitize_text_field( wp_unslash( $_POST[ $field_name ] ) );
                                     update_option( 'wcifd_' . $field_name, $price_list );
-
                                 }
 
                                 if ( count( $allowed_price ) === 1 ) {
@@ -59,7 +60,6 @@ defined( 'ABSPATH' ) || exit;
                                 } else {
 
                                     echo 0 === $p % 2 ? '<tr class="one-of">' : '<tr>';
-
                                 }
                                 ?>
                                     <th scope="row"><?php echo esc_html__( $price_label, 'wc-importer-for-danea' ) . ' ' . ucfirst( esc_html__( $value['name'], 'woocommerce' ) ); ?></th>
@@ -82,7 +82,7 @@ defined( 'ABSPATH' ) || exit;
             }
             ?>
         </table>
-        <?php wp_nonce_field( 'wcifd-role-based-price', 'wcifd-role-based-price-nonce' ); ?>
+        <?php wp_nonce_field( 'wcifd-user-role-based-pricing', 'wcifd-user-role-based-pricing-nonce' ); ?>
         <input type="submit" class="button-primary" style="margin-top: 1.5rem;" value="<?php esc_html_e( 'Save Changes', 'wc-importer-for-danea' ); ?>">
     </form>
 </div>

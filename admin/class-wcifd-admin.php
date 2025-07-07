@@ -152,7 +152,7 @@ class WCIFD_Admin {
 		} elseif ( class_exists( 'WOOCOMMERCE_ROLE_BASED_PRICING' ) ) {
 
             /* WooCommerce User Role Based Pricing */
-			echo '<a href="#" data-link="wcifd-rbp" class="nav-tab" onclick="return false;">' . esc_html__( 'WooCommerce User Role Based Pricing', 'wc-importer-for-danea' ) . '</a>';
+			echo '<a href="#" data-link="wcifd-mrbp" class="nav-tab" onclick="return false;">' . esc_html__( 'WooCommerce User Role Based Pricing', 'wc-importer-for-danea' ) . '</a>';
 
 		}
 			echo '<a href="#" data-link="wcifd-tools" class="nav-tab" onclick="return false;">' . esc_html__( 'Tools', 'wc-importer-for-danea' ) . '</a>';
