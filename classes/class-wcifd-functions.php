@@ -744,7 +744,15 @@ class WCIFD_Functions {
 
 			if ( isset( $wp_roles->roles ) && is_array( $wp_roles->roles ) ) {
 
-				foreach ( $wp_roles->roles as $key => $value ) {
+				$roles = $wp_roles->roles;
+				$guest = array(
+					'guest' => array(
+						'name' => __( 'Guest', 'woocommerce' ),
+					),
+				);
+				$roles = $guest + $roles;
+
+				foreach ( $roles as $key => $value ) {
 
 					if ( ! in_array( $key, $roles_excluded ) ) {
 
