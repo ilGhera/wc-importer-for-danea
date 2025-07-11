@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: WC Importer for Danea - Premium
+ * Plugin Name: ilGhera WC Importer for Danea
  * Plugin URI: https://www.ilghera.com/product/woocommerce-importer-for-danea-premium/
  * Description: If you've built your online store with WooCommerce and you're using Danea Easyfatt as management software
  * you definitely need ilGhera WooCommerce Importer for Danea - Premium!
@@ -42,7 +42,7 @@ require_once WCIFD_CLASSES . 'class-wcifd-import-users.php';
 /**
  * WCIFD_Plugin
  *
- * This is the main class for the WC Importer for Danea Premium plugin.
+ * This is the main class for the ilGhera WooCommerce Importer for Danea plugin.
  * It handles the plugin's core functionalities, initialization, and manages other classes.
  * Implements a singleton pattern to ensure only one instance of the plugin runs.
  *
