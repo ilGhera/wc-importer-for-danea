@@ -936,7 +936,6 @@ class WCIFD_Import_Single_Product {
 			'type'               => $this->get_product_type( $data ),
 			'parent_id'          => $data['parent_product_id'],
 			'description'        => $data['description'],
-			'short_description'  => $data['short_description'],
 			'status'             => $data['status'],
 			'sku'                => $data['sku'],
 			'tax_status'         => $data['tax_status'],
@@ -954,10 +953,21 @@ class WCIFD_Import_Single_Product {
 			'weight'             => $data['weight'],
 		);
 
+
+        /* Handle short description */
+        if ( isset( $data['short_description'] ) ) {
+
+            $props['short_description'] = $data['short_description'];
+        }
+
+        /* Handle sale price */
 		if ( $data['sale_price'] ) {
+
 			$props['sale_price'] = $data['sale_price'];
 			$props['price']      = $data['sale_price'];
+
 		} else {
+
 			$props['sale_price'] = '';
 		}
 
