@@ -447,7 +447,12 @@ class WCIFD_Import_Single_Product {
 		$data['description'] = $this->get_description( $data['title'] );
 
 		/* Product short description */
-		$data['short_description'] = $this->get_short_description( $data['description'] );
+		$short_description = $this->get_short_description( $data['description'] );
+
+        if ( $short_description ) {
+
+            $data['short_description'] = $short_description;
+        }
 
 		/* Retrieve product details from Notes field */
 		$data = array_merge( $data, $this->get_data_from_notes() );
@@ -1050,7 +1055,11 @@ class WCIFD_Import_Single_Product {
 			/* Product description */
 			if ( ! get_option( 'wcifd-exclude-description' ) ) {
 				$product->set_description( (string) $data['description'] );
-				$product->set_short_description( (string) $data['short_description'] );
+
+                if ( isset( $data['short_description'] ) ) {
+
+                    $product->set_short_description( (string) $data['short_description'] );
+                }
 			}
 
 			if ( $this->get_danea_variants() ) {
