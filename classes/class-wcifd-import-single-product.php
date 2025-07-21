@@ -1064,21 +1064,21 @@ class WCIFD_Import_Single_Product {
 
 		if ( ! $var_id || ( $var_id && ! $this->exclude_variations_prices ) ) {
 
-            /* Set the regular price */
-            $variation->set_regular_price( $data['regular_price'] );
+			/* Set the regular price */
+			$variation->set_regular_price( $data['regular_price'] );
 
-            /* Check if a sale price exists and is valid */
-            if ( ! empty( $data['sale_price'] ) && $data['sale_price'] < $data['regular_price'] ) {
+			/* Check if a sale price exists and is valid */
+			if ( ! empty( $data['sale_price'] ) && $data['sale_price'] < $data['regular_price'] ) {
 
-                $variation->set_sale_price( $data['sale_price'] );
-                $variation->set_price( $data['sale_price'] );
+				$variation->set_sale_price( $data['sale_price'] );
+				$variation->set_price( $data['sale_price'] );
 
-            } else {
+			} else {
 
-                /* If no valid sale price, ensure it's cleared */
-                $variation->set_sale_price( '' );
-                $variation->set_price( $data['regular_price'] );
-            }
+				/* If no valid sale price, ensure it's cleared */
+				$variation->set_sale_price( '' );
+				$variation->set_price( $data['regular_price'] );
+			}
 
 			/* WooCommerce Role Based Price */
 			$meta_input = array_merge( $meta_input, $this->add_wcrbp_data( $data ) );
@@ -1152,8 +1152,8 @@ class WCIFD_Import_Single_Product {
 	 */
 	public function danea_variants( $product_id, $data ) {
 
-        /* Reset available colors and sizes */
-        $this->avail_colors = array();
+		/* Reset available colors and sizes */
+		$this->avail_colors = array();
 		$this->avail_sizes  = array();
 
 		$v = 0;
@@ -1208,65 +1208,65 @@ class WCIFD_Import_Single_Product {
 		}
 	}
 
-    /**
-     * Delete variations with orphan attributes
-     *
+	/**
+	 * Delete variations with orphan attributes
+	 *
 	 * @param object $product the WC product.
-     *
-     * @return void
-     */
-    public function delete_variations( $product ) {
+	 *
+	 * @return void
+	 */
+	public function delete_variations( $product ) {
 
-        /* Get available colors and sizes */ 
-        $avail_colors = array_map( 'sanitize_title', $this->avail_colors );
-        $avail_sizes  = array_map( 'sanitize_title', $this->avail_sizes );
+		/* Get available colors and sizes */
+		$avail_colors = array_map( 'sanitize_title', $this->avail_colors );
+		$avail_sizes  = array_map( 'sanitize_title', $this->avail_sizes );
 
-        /* Get IDs of existing variations for the parent product. */
-        $existing_variations_ids = $product->get_children();
+		/* Get IDs of existing variations for the parent product. */
+		$existing_variations_ids = $product->get_children();
 
-        foreach ( $existing_variations_ids as $existing_variation_id ) {
+		foreach ( $existing_variations_ids as $existing_variation_id ) {
 
-            $existing_variation   = new WC_Product_Variation( $existing_variation_id );
-            $variation_attributes = $existing_variation->get_attributes();
+			$existing_variation   = new WC_Product_Variation( $existing_variation_id );
+			$variation_attributes = $existing_variation->get_attributes();
 
-            /* Get the color and size values for the current variation. */
-            $val_color = isset( $variation_attributes['pa_color'] ) ? sanitize_title( $variation_attributes['pa_color'] ) : '';
-            $val_size  = isset( $variation_attributes['pa_size'] ) ? sanitize_title( $variation_attributes['pa_size'] ) : '';
+			/* Get the color and size values for the current variation. */
+			$val_color = isset( $variation_attributes['pa_color'] ) ? sanitize_title( $variation_attributes['pa_color'] ) : '';
+			$val_size  = isset( $variation_attributes['pa_size'] ) ? sanitize_title( $variation_attributes['pa_size'] ) : '';
 
-            /* Initialize a flag to determine if the variation should be deleted. */
-            $should_delete = false;
+			/* Initialize a flag to determine if the variation should be deleted. */
+			$should_delete = false;
 
-            /* Condition 1: Check for "orphan" attributes. If a color is present but not in the list of available colors. */
-            if ( ! empty( $val_color ) && ! in_array( $val_color, $avail_colors ) ) {
+			/* Condition 1: Check for "orphan" attributes. If a color is present but not in the list of available colors. */
+			if ( ! empty( $val_color ) && ! in_array( $val_color, $avail_colors ) ) {
 
-                $should_delete = true;
-            }
+				$should_delete = true;
+			}
 
-            /* If a size is present but not in the list of available sizes. */
-            if ( ! empty( $val_size ) && ! in_array( $val_size, $avail_sizes ) ) {
+			/* If a size is present but not in the list of available sizes. */
+			if ( ! empty( $val_size ) && ! in_array( $val_size, $avail_sizes ) ) {
 
-                $should_delete = true;
-            }
+				$should_delete = true;
+			}
 
-            /* Condition 2: Check for truly malformed/empty variations. If both color and size attributes are empty, the variation is likely malformed or no longer intended. */
-            if ( empty( $val_color ) && empty( $val_size ) ) {
-                 $should_delete = true;
+			/* Condition 2: Check for truly malformed/empty variations. If both color and size attributes are empty, the variation is likely malformed or no longer intended. */
+			if ( empty( $val_color ) && empty( $val_size ) ) {
+				 $should_delete = true;
 
-            }
+			}
 
-            /* If any of the above conditions are met, proceed with deletion. */
-            if ( $should_delete ) {
+			/* If any of the above conditions are met, proceed with deletion. */
+			if ( $should_delete ) {
 
-                $existing_variation->delete( true ); /* true parameter forces deletion even if not trashable. */
+				$existing_variation->delete( true ); /* true parameter forces deletion even if not trashable. */
 
 				error_log( '=== WCIFD | Variazione prodotto eliminata =================' );
 				error_log( 'ID prodotto padre: ' . print_r( $product->get_id(), true ) );
 				error_log( 'Colore: ' . print_r( $val_color, true ) );
 				error_log( 'Taglia: ' . print_r( $val_size, true ) );
 				error_log( '===========================================================' );
-            }
-        }
-    }
+			}
+		}
+	}
 
 	/**
 	 * Handle product categories
@@ -1374,7 +1374,7 @@ class WCIFD_Import_Single_Product {
 			'producer'         => $data['producer_name'],
 			'supplier'         => $data['supplier_name'],
 			'sup-product-code' => $data['sup_product_code'],
-            'barcode'          => $data['barcode'],
+			'barcode'          => $data['barcode'],
 		);
 
 		foreach ( $more_attributes as $key => $value ) {
@@ -1404,191 +1404,257 @@ class WCIFD_Import_Single_Product {
 		$product->save();
 	}
 
-    /**
-     * Handle Danea Easyfatt custom fields
-     *
-     * @param int   $product_id The WC product ID.
-     * @param array $data The product data.
-     *
-     * @return void
-     */
-    public function danea_custom_fields( $product_id, $data ) {
+	/**
+	 * Handle Danea Easyfatt custom fields
+	 *
+	 * @param int    $product_id The WC product ID.
+	 * @param array    $data The product data.
+	 *
+	 * @return void
+	 */
+	public function danea_custom_fields( $product_id, $data ) {
 
-        $product        = wc_get_product( $product_id );
-        $attributes     = $product->get_attributes();
-        $fields_options = get_option( 'wcifd-custom-fields' );
+		$product        = wc_get_product( $product_id );
+		$attributes     = $product->get_attributes();
+		$fields_options = get_option( 'wcifd-custom-fields' );
 
-        /**
-         * Determine if existing product tags should be appended.
-         * Defaults to false (clear tags) unless at least one custom field
-         * configured as 'tag' has 'append' explicitly set to true.
-         */
-        $should_append_existing_tags = false;
+		/* Assume a global option to enable/disable the entire custom fields module */
+		$custom_fields_module_enabled = get_option( 'wcifd-custom-fields-module-enabled', true ); /* Default to true if not set */
 
-        for ( $i = 1; $i < 5; $i++ ) {
+		/* Get all existing tags for the product. */
+		$initial_product_tag_ids = $product->get_tag_ids();
 
-            if ( isset( $fields_options[ $i ] ) ) {
+		/* Separate existing tags into Danea-imported and manually added. */
+		$danea_marked_tags = array();
+		$non_danea_tags    = array();
 
-                $import_type = isset( $fields_options[ $i ]['import'] ) ? $fields_options[ $i ]['import'] : false;
+		foreach ( $initial_product_tag_ids as $tag_id ) {
 
-                /* Ensure boolean conversion for the 'append' setting. */
-                $append_setting = isset( $fields_options[ $i ]['append'] ) ? filter_var( $fields_options[ $i ]['append'], FILTER_VALIDATE_BOOLEAN ) : false;
+			/* Check if the tag was previously marked as imported by Danea. */
+			if ( get_term_meta( $tag_id, '_wcifd_danea_tag', true ) ) {
 
-                if ( 'tag' === $import_type && $append_setting ) {
+				$danea_marked_tags[] = $tag_id;
 
-                    $should_append_existing_tags = true;
-                    break; // Found at least one 'append' true, no need to check further.
-                }
-            }
-        }
+			} else {
 
-        /* Initialize final_tag_ids based on the 'append' logic. */
-        $final_tag_ids = $should_append_existing_tags ? $product->get_tag_ids() : [];
+				$non_danea_tags[] = $tag_id;
+			}
+		}
 
-        for ( $i = 1; $i < 5; $i++ ) {
+		/* Determine the starting point for $final_tag_ids based on module status and field configuration. */
+		$final_tag_ids = array();
 
-            $field_name   = 'CustomField' . $i;
-            $pa_name      = 'pa_' . strtolower( $field_name );
-            $custom_field = isset( $data[ $field_name ] ) ? $data[ $field_name ] : '';
+		if ( ! $custom_fields_module_enabled ) {
 
-            if ( $custom_field ) {
+			/*
+			 If the entire custom fields module is disabled, remove all Danea-marked tags. */
+			/* Only keep manually added tags. */
+			$final_tag_ids = $non_danea_tags;
 
-                /* Get settings for the current custom field in the loop. */
-                $import     = isset( $fields_options[ $i ]['import'] ) ? $fields_options[ $i ]['import'] : false;
-                $cf_name    = isset( $fields_options[ $i ]['name'] ) ? $fields_options[ $i ]['name'] : false;
-                $split      = isset( $fields_options[ $i ]['split'] ) ? $fields_options[ $i ]['split'] : false;
-                $is_visible = isset( $fields_options[ $i ]['display'] ) ? $fields_options[ $i ]['display'] : '0';
+		} else {
 
-                if ( 'attribute' === $import ) {
+			/* The custom fields module is enabled. */
 
-                    /* Remove tag if it existed as one previously */
-                    $tag_id_check_result = term_exists( $custom_field, 'product_tag' ); // Renamed to avoid confusion with $tag_id_exists
+			/* Determine if any custom field is configured to be imported as a 'tag'. */
+			$any_field_configured_as_tag = false;
 
-                    if ( $tag_id_check_result && ! is_wp_error( $tag_id_check_result ) && 0 !== $tag_id_check_result ) {
+			/* Determine if existing product tags should be appended to. */
+			$should_append_existing_tags = false;
 
-                        $final_tag_ids = array_diff( $final_tag_ids, array( $tag_id_check_result['term_id'] ) );
-                    }
+			/* Loop through custom field settings (1 to 4) to determine overall tag handling. */
+			for ( $i = 1; $i < 5; $i++ ) {
 
-                    $attribute_options = array();
+				if ( isset( $fields_options[ $i ] ) ) {
 
-                    if ( $split ) {
+					$import_type    = isset( $fields_options[ $i ]['import'] ) ? $fields_options[ $i ]['import'] : false;
+					$append_setting = isset( $fields_options[ $i ]['append'] ) ? filter_var( $fields_options[ $i ]['append'], FILTER_VALIDATE_BOOLEAN ) : false;
 
-                        $values = array_map( 'trim', explode( ',', $custom_field ) );
+					if ( 'tag' === $import_type ) {
 
-                        if ( is_array( $values ) ) {
+						$any_field_configured_as_tag = true;
 
-                            $attribute_options = $values;
-                        }
+						if ( $append_setting ) {
 
-                    } else {
+							$should_append_existing_tags = true;
+							/* Found an 'append' setting, no need to check further for this flag. */
+							break;
+						}
+					}
+				}
+			}
 
-                        $attribute_options = [ $custom_field ];
-                    }
+			if ( $any_field_configured_as_tag ) {
 
-                    if ( ! empty( $attribute_options ) ) {
+				/* If at least one custom field is configured as a tag. */
+				if ( $should_append_existing_tags ) {
 
-                        $attribute = new WC_Product_Attribute();
-                        $attribute->set_id( wc_attribute_taxonomy_id_by_name( $pa_name ) );
-                        $attribute->set_name( (string) $pa_name );
-                        $attribute->set_options( $attribute_options );
-                        $attribute->set_visible( true );
-                        $attribute->set_variation( false ); // Attributes from custom fields are not for variations
-                        $attributes[] = $attribute;
-                    }
+					/* If 'append' is true for any configured tag field, keep ALL existing tags (Danea and manual). */
+					$final_tag_ids = $initial_product_tag_ids;
 
-                } elseif ( 'tag' === $import ) {
+				} else {
 
-                    /* Remove attribute if it existed as one previously */
-                    if ( isset( $attributes[ $pa_name ] ) ) {
-                        unset( $attributes[ $pa_name ] );
-                    }
+					/*
+					 If 'append' is false for all configured tag fields, clear ONLY Danea-marked tags. */
+					/* Start with manually added tags, Danea tags will be replaced by new ones. */
+					$final_tag_ids = $non_danea_tags;
+				}
+			} else {
 
-                    $tag_values_to_process = array();
+				/*
+				 No custom fields are configured as 'tag', even if the module is enabled. */
+				/* In this scenario, we still want to remove any Danea-marked tags, as they are no longer managed by Danea fields. */
+				$final_tag_ids = $non_danea_tags;
+			}
+		}
 
-                    if ( $split ) {
+		/* Proceed with processing custom fields only if the module is enabled. */
+		if ( $custom_fields_module_enabled ) {
 
-                        $tag_values_to_process = array_map( 'trim', explode( ',', $custom_field ) );
-                        $tag_values_to_process = array_filter( $tag_values_to_process );
+			/* Process each custom field from Danea. */
+			for ( $i = 1; $i < 5; $i++ ) {
 
-                    } else {
+				$field_name   = 'CustomField' . $i;
+				$pa_name      = 'pa_' . strtolower( $field_name );
+				$custom_field = isset( $data[ $field_name ] ) ? $data[ $field_name ] : '';
 
-                        $tag_values_to_process = [ $custom_field ];
-                    }
+				$import     = isset( $fields_options[ $i ]['import'] ) ? $fields_options[ $i ]['import'] : false;
+				$cf_name    = isset( $fields_options[ $i ]['name'] ) ? $fields_options[ $i ]['name'] : false; /* Not directly used for logic but kept. */
+				$split      = isset( $fields_options[ $i ]['split'] ) ? $fields_options[ $i ]['split'] : false;
+				$is_visible = isset( $fields_options[ $i ]['display'] ) ? $fields_options[ $i ]['display'] : '0'; /* Not directly used for logic but kept. */
 
-                    foreach ( $tag_values_to_process as $single_tag_value ) {
+				if ( 'attribute' === $import ) {
 
-                        if ( empty( $single_tag_value ) ) {
+					/* Process as attribute. */
 
-                            continue;
-                        }
+					/*
+					 Remove tag if it existed as one previously and now this field is an attribute. */
+					/* This cleanup step is still valid to avoid term conflicts. */
+					if ( $custom_field ) {
 
-                        $tag_id_check_result = term_exists( $single_tag_value, 'product_tag' );
+						$tag_id_check_result = term_exists( $custom_field, 'product_tag' );
 
-                        /* Add tag */
-                        if ( $tag_id_check_result && ! is_wp_error( $tag_id_check_result ) && 0 !== $tag_id_check_result ) {
+						if ( $tag_id_check_result && ! is_wp_error( $tag_id_check_result ) && 0 !== $tag_id_check_result ) {
 
-                            $term_id = $tag_id_check_result['term_id'];
+							$term_id_to_remove = $tag_id_check_result['term_id'];
+							$final_tag_ids     = array_diff( $final_tag_ids, array( $term_id_to_remove ) );
+							/* Also unmark it, as it's no longer a Danea tag if it becomes an attribute */
+							delete_term_meta( $term_id_to_remove, '_wcifd_danea_tag' );
+						}
+					}
 
-                            if ( ! in_array( $term_id, $final_tag_ids, true ) ) {
+					$attribute_options = array();
 
-                                $final_tag_ids[] = $term_id;
-                            }
+					if ( $split ) {
 
-                        } else {
+						$values = array_map( 'trim', explode( ',', $custom_field ) );
+						if ( is_array( $values ) ) {
 
-                            $tag_id_new = wp_insert_term( $single_tag_value, 'product_tag' );
+							$attribute_options = $values;
+						}
+					} else {
 
-                            if ( ! is_wp_error( $tag_id_new ) ) {
+						$attribute_options = array( $custom_field );
+					}
 
-                                $final_tag_ids[] = $tag_id_new['term_id'];
+					if ( ! empty( $attribute_options ) ) {
 
-                            } else {
+						$attribute = new WC_Product_Attribute();
+						$attribute->set_id( wc_attribute_taxonomy_id_by_name( $pa_name ) );
+						$attribute->set_name( (string) $pa_name );
+						$attribute->set_options( $attribute_options );
+						$attribute->set_visible( true );
 
-                                error_log( 'WCIFD ERROR | Tag creation failed: ' . $single_tag_value . ' | Error: ' . $tag_id_new->get_error_message() );
-                            }
-                        }
-                    }
+						/* Attributes from custom fields are not for variations. */
+						$attribute->set_variation( false );
+						$attributes[] = $attribute;
+					}
+				} elseif ( 'tag' === $import ) {
 
-                } else { // Not imported as attribute or tag
+					/* Process as tag. */
 
-                    /* Remove attribute if it existed */
-                    if ( isset( $attributes[ $pa_name ] ) ) {
+					/* Remove attribute if it existed as one previously and now this field is a tag. */
+					if ( isset( $attributes[ $pa_name ] ) ) {
 
-                        unset( $attributes[ $pa_name ] );
-                    }
+						unset( $attributes[ $pa_name ] );
+					}
 
-                    /* Remove tag if it existed */
-                    $tag_id_check_result = term_exists( $custom_field, 'product_tag' );
+					$tag_values_to_process = array();
 
-                    if ( $tag_id_check_result && ! is_wp_error( $tag_id_check_result ) && 0 !== $tag_id_check_result ) {
+					if ( $split ) {
 
-                        $final_tag_ids = array_diff( $final_tag_ids, array( $tag_id_check_result['term_id'] ) );
-                    }
-                }
+						$tag_values_to_process = array_map( 'trim', explode( ',', $custom_field ) );
+						$tag_values_to_process = array_filter( $tag_values_to_process );
 
-            } else { // Custom field is empty in Danea
+					} else {
 
-                /* Remove attribute if it existed */
-                if ( isset( $attributes[ $pa_name ] ) ) {
+						$tag_values_to_process = array( $custom_field );
+					}
 
-                    unset( $attributes[ $pa_name ] );
-                }
+					foreach ( $tag_values_to_process as $single_tag_value ) {
 
-                /* Remove tag if it existed */
-                $tag_id_check_result = term_exists( $custom_field, 'product_tag' );
+						if ( empty( $single_tag_value ) ) {
 
-                if ( $tag_id_check_result && ! is_wp_error( $tag_id_check_result ) && 0 !== $tag_id_check_result ) {
+							continue;
+						}
 
-                    $final_tag_ids = array_diff( $final_tag_ids, array( $tag_id_check_result['term_id'] ) );
-                }
-            }
-        } // End of for loop
+						$tag_id_check_result = term_exists( $single_tag_value, 'product_tag' );
+						$term_id_to_add      = 0;
 
-        /* Apply and save all changes once */
-        $product->set_attributes( $attributes );
-        $product->set_tag_ids( $final_tag_ids );
-        $product->save();
-    }
+						/* Add tag if it exists or create new one. */
+						if ( $tag_id_check_result && ! is_wp_error( $tag_id_check_result ) && 0 !== $tag_id_check_result ) {
+
+							$term_id_to_add = $tag_id_check_result['term_id'];
+
+						} else {
+
+							$tag_id_new = wp_insert_term( $single_tag_value, 'product_tag' );
+
+							if ( ! is_wp_error( $tag_id_new ) ) {
+
+								$term_id_to_add = $tag_id_new['term_id'];
+
+							} else {
+
+								error_log( 'WCIFD ERROR | Tag creation failed: ' . $single_tag_value . ' | Error: ' . $tag_id_new->get_error_message() );
+							}
+						}
+
+						if ( $term_id_to_add ) {
+
+							/* Add the tag to our final list if not already present. */
+							if ( ! in_array( $term_id_to_add, $final_tag_ids, true ) ) {
+
+								$final_tag_ids[] = $term_id_to_add;
+							}
+
+							/* MARK the tag as imported by Danea. This is crucial for future cleanups. */
+							update_term_meta( $term_id_to_add, '_wcifd_danea_tag', true );
+						}
+					}
+				} else {
+
+					/* Custom field is NOT imported as attribute or tag. Clean up only attributes. */
+
+					/* Remove attribute if it existed for this custom field name. */
+					if ( isset( $attributes[ $pa_name ] ) ) {
+
+						unset( $attributes[ $pa_name ] );
+					}
+
+					/* Tags are not modified in this block. Their state is handled by the initial final_tag_ids setup. */
+				}
+			} // End of for loop for custom fields.
+		} // End of if ($custom_fields_module_enabled).
+
+		/* Apply and save all changes (attributes and tags) to the product. */
+		$product->set_attributes( $attributes );
+
+		/*
+		 Set product tags. */
+		/* The $final_tag_ids array now correctly contains only the desired tags (manual + Danea-imported if active/append, or only manual if Danea module/fields are not managing tags). */
+		$product->set_tag_ids( $final_tag_ids );
+		$product->save();
+	}
 
 	/**
 	 *
