@@ -1,7 +1,7 @@
 === ilGhera WooCommerce Importer for Danea - Premium ===
 Contributors: ghera74
 Tags: Fattura elettronica, Danea Easyfatt, gestionale, prodotti, sincronizzazione
-Version: 1.7.3
+Version: 1.7.4
 Requires at least: 6.0
 Tested up to: 6.8
 WC tested up to: 9
@@ -79,17 +79,25 @@ Once activated, you'll find the plugin options in your WordPress in **WooCommerc
 
 == Changelog ==
 
+= 1.7.4 =
+Release Date: 22 July 2025
+
+    * Enhancement: Support for WC User Role Based Pricing plugin.
+    * Bug Fix: Issue where the short description was always being overwritten.
+    * Bug Fix: Bug with product tag deletion in case of missing Danea custom fields import.
+
+
 = 1.7.3 =
 Release Date: June 17, 2025
 
-* Bug Fix: Resolved an issue where the "Products not available" option prevented all product imports due to an incorrect variable being used for stock status checks.
+    * Bug Fix: Resolved an issue where the "Products not available" option prevented all product imports due to an incorrect variable being used for stock status checks.
 
 
 = 1.7.2 =
 Release Date: June 15, 2025
 
-* Bug Fix: Resolved a fatal error caused by early instantiation of the notice class, ensuring proper plugin loading.
-* Bug Fix: Corrected an issue where product variations were incorrectly assigned the sale price as the regular price.
+    * Bug Fix: Resolved a fatal error caused by early instantiation of the notice class, ensuring proper plugin loading.
+    * Bug Fix: Corrected an issue where product variations were incorrectly assigned the sale price as the regular price.
 
 
 = 1.7.1 =
