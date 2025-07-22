@@ -943,7 +943,6 @@ class WCIFD_Import_Single_Product {
 			'stock_quantity'     => $data['stock'],
 			'manage_stock'       => $data['manage_stock'],
 			'stock_status'       => $data['stock_status'],
-			'catalog_visibility' => 'visible', // Temp.
 			'regular_price'      => $data['regular_price'],
 			'price'              => $data['regular_price'],
 			'sale_price'         => $data['regular_price'],
