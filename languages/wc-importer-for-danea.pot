@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WIFD\n"
-"POT-Creation-Date: 2025-06-13 07:55+0200\n"
+"POT-Creation-Date: 2025-09-29 09:48+0200\n"
 "PO-Revision-Date: 2016-05-26 13:25+0200\n"
 "Last-Translator: ilGhera <info@ilghera.com>\n"
 "Language-Team: ilGhera <info@ilghera.com>\n"
@@ -57,28 +57,6 @@ msgstr ""
 
 #: admin/class-wcifd-admin.php:157
 msgid "This is a premium functionality, click here for more information"
-msgstr ""
-
-#: admin/ilghera-notice/class-ilghera-notice.php:78
-msgid "Renew now"
-msgstr ""
-
-#: admin/ilghera-notice/class-ilghera-notice.php:78
-msgid "Get a license"
-msgstr ""
-
-#: admin/ilghera-notice/class-ilghera-notice.php:117
-msgid "Your license is <u>expired</u> and you're unable to receive updates."
-msgstr ""
-
-#: admin/ilghera-notice/class-ilghera-notice.php:131
-msgid ""
-"It seems like your license is <u>not valid</u> and you're unable to "
-"receive updates."
-msgstr ""
-
-#: admin/ilghera-notice/class-ilghera-notice.php:145
-msgid "You have not set up a license key and you cannot receive updates."
 msgstr ""
 
 #: admin/templates/wcifd-import-clients-template.php:29
@@ -175,7 +153,7 @@ msgid "Import Danea Custom Fields"
 msgstr ""
 
 #: admin/templates/wcifd-products-custom-fields-template.php:37
-#: classes/class-wcifd-functions.php:549
+#: classes/class-wcifd-functions.php:545
 #, php-format
 msgid "Custom Field %d"
 msgstr ""
@@ -222,8 +200,9 @@ msgstr ""
 #: admin/templates/wcifd-products-custom-fields-template.php:89
 #: admin/templates/wcifd-products-general-template.php:208
 #: admin/templates/wcifd-products-remote-template.php:54
-#: admin/templates/wcifd-role-based-price-template.php:73
+#: admin/templates/wcifd-role-based-price-template.php:69
 #: admin/templates/wcifd-tools.php:57
+#: admin/templates/wcifd-user-role-based-pricing-template.php:94
 msgid "Save Changes"
 msgstr ""
 
@@ -282,12 +261,14 @@ msgid ""
 msgstr ""
 
 #: admin/templates/wcifd-products-general-template.php:32
+#: admin/templates/wcifd-user-role-based-pricing-template.php:54
 msgid "Regular price"
 msgstr ""
 
 #: admin/templates/wcifd-products-general-template.php:37
 #: admin/templates/wcifd-products-general-template.php:51
-#: admin/templates/wcifd-role-based-price-template.php:58
+#: admin/templates/wcifd-role-based-price-template.php:51
+#: admin/templates/wcifd-user-role-based-pricing-template.php:78
 msgid "Price list "
 msgstr ""
 
@@ -296,6 +277,7 @@ msgid "The Danea price list to use for WooCommerce regular price."
 msgstr ""
 
 #: admin/templates/wcifd-products-general-template.php:45
+#: admin/templates/wcifd-user-role-based-pricing-template.php:54
 msgid "Sale price"
 msgstr ""
 
@@ -441,7 +423,7 @@ msgid "Use the product supplier as post author."
 msgstr ""
 
 #: admin/templates/wcifd-products-general-template.php:172
-#: classes/class-wcifd-functions.php:525
+#: classes/class-wcifd-functions.php:521
 msgid "Producer"
 msgstr ""
 
@@ -450,7 +432,7 @@ msgid "Display the producer to the user."
 msgstr ""
 
 #: admin/templates/wcifd-products-general-template.php:180
-#: classes/class-wcifd-functions.php:526
+#: classes/class-wcifd-functions.php:522
 msgid "Supplier"
 msgstr ""
 
@@ -459,7 +441,7 @@ msgid "Display the supplier to the user."
 msgstr ""
 
 #: admin/templates/wcifd-products-general-template.php:188
-#: classes/class-wcifd-functions.php:527
+#: classes/class-wcifd-functions.php:523
 msgid "Supplier product code"
 msgstr ""
 
@@ -504,7 +486,8 @@ msgstr ""
 msgid "Import products images from Danea."
 msgstr ""
 
-#: admin/templates/wcifd-role-based-price-template.php:62
+#: admin/templates/wcifd-role-based-price-template.php:55
+#: admin/templates/wcifd-user-role-based-pricing-template.php:82
 msgid "The Danea price list to use"
 msgstr ""
 
@@ -543,87 +526,71 @@ msgid ""
 "specified number of days."
 msgstr ""
 
-#: classes/class-wcifd-functions.php:477
+#: admin/templates/wcifd-user-role-based-pricing-template.php:40
+msgid "Guest"
+msgstr ""
+
+#: classes/class-wcifd-functions.php:473
 #, php-format
 msgid "Search %s"
 msgstr ""
 
-#: classes/class-wcifd-functions.php:479
+#: classes/class-wcifd-functions.php:475
 #, php-format
 msgid "All %s"
 msgstr ""
 
-#: classes/class-wcifd-functions.php:481
+#: classes/class-wcifd-functions.php:477
 #, php-format
 msgid "Parent %s"
 msgstr ""
 
-#: classes/class-wcifd-functions.php:483
+#: classes/class-wcifd-functions.php:479
 #, php-format
 msgid "Parent %s:"
 msgstr ""
 
-#: classes/class-wcifd-functions.php:485
+#: classes/class-wcifd-functions.php:481
 #, php-format
 msgid "Edit %s"
 msgstr ""
 
-#: classes/class-wcifd-functions.php:487
+#: classes/class-wcifd-functions.php:483
 #, php-format
 msgid "Update %s"
 msgstr ""
 
-#: classes/class-wcifd-functions.php:489
+#: classes/class-wcifd-functions.php:485
 #, php-format
 msgid "Add New %s"
 msgstr ""
 
-#: classes/class-wcifd-functions.php:491
+#: classes/class-wcifd-functions.php:487
 #, php-format
 msgid "New %s"
 msgstr ""
 
-#: classes/class-wcifd-functions.php:523
+#: classes/class-wcifd-functions.php:519
 msgid "Size"
 msgstr ""
 
-#: classes/class-wcifd-functions.php:524
+#: classes/class-wcifd-functions.php:520
 msgid "Color"
 msgstr ""
 
-#: classes/class-wcifd-functions.php:528
+#: classes/class-wcifd-functions.php:524
 msgid "Barcode"
 msgstr ""
 
-#: classes/class-wcifd-functions.php:828
+#: classes/class-wcifd-functions.php:824
 msgid ""
 "WCIFD ERROR | An error accourred while receiving data from Danea Easyfatt"
 msgstr ""
 
-#: classes/class-wcifd-functions.php:861
+#: classes/class-wcifd-functions.php:857
 msgid ""
 "WCIFD ERROR | It seems like the URL entered in Danea Easyfatt is not "
 "correct"
-msgstr ""
-
-#: classes/class-wcifd-functions.php:876
-#: vendor/plugin-update-checker/Puc/v5p6/Plugin/Ui.php:130
-msgid "Check for updates"
-msgstr ""
-
-#: classes/class-wcifd-functions.php:891
-msgid ""
-"<strong>WooCommerce Importer for Danea - Premium</strong> is up to date."
-msgstr ""
-
-#: classes/class-wcifd-functions.php:895
-msgid ""
-"A new version of <strong>WooCommerce Importer for Danea - Premium</strong> "
-"is available."
-msgstr ""
-
-#: classes/class-wcifd-functions.php:899
-msgid "There was an error trying to update. Please try again later."
 msgstr ""
 
 #: classes/class-wcifd-import-users.php:96
@@ -634,22 +601,4 @@ msgstr ""
 #: classes/class-wcifd-import-users.php:99
 #, php-format
 msgid "Updated %1$d of %2$d contacts"
-msgstr ""
-
-#: vendor/plugin-update-checker/Puc/v5p6/Plugin/Ui.php:56
-msgid "View details"
-msgstr ""
-
-#: vendor/plugin-update-checker/Puc/v5p6/Plugin/Ui.php:79
-#, php-format
-msgid "More information about %s"
-msgstr ""
-
-#: vendor/plugin-update-checker/Puc/v5p6/Plugin/Ui.php:227
-#, php-format
-msgid "Unknown update checker status \"%s\""
-msgstr ""
-
-#: vendor/plugin-update-checker/Puc/v5p6/Vcs/PluginUpdateChecker.php:113
-msgid "There is no changelog available."
 msgstr ""
