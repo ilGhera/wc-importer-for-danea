@@ -90,7 +90,7 @@ class WCIFD_Import_Users {
 			}
 
 			$output  = '<div id="message" class="updated"><p>';
-			$output .= '<strong>WooCommerce Importer for Danea - Premium</strong><br>';
+			$output .= '<strong>ilGhera Danea Importer for WooCommerce - Premium</strong><br>';
 
 			/* Translators: 1 the users imported, 2 the total rows */
 			$output .= sprintf( __( 'Imported %1$d of %2$d contacts<br>', 'wc-importer-for-danea' ), $i, ( $row - 1 ) );

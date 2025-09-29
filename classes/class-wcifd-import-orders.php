@@ -76,7 +76,7 @@ class WCIFD_Import_Orders {
 			}
 
 			$output  = '<div id="message" class="updated"><p>';
-			$output .= '<strong>Woocommerce Importer for Danea - Premium</strong><br>';
+			$output .= '<strong>ilGhera Danea Importer for WooCommerce - Premium</strong><br>';
 
 			/* Translators: 1 orders number, 2 users number, 3 products number */
 			$output .= sprintf( __( 'Imported %1$d orders, %2$d users and %3$d products.', 'wc-importer-for-danea' ), $o, $u, $p );

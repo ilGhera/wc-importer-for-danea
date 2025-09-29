@@ -1,4 +1,4 @@
-=== ilGhera WooCommerce Importer for Danea - Premium ===
+=== ilGhera Danea Importer for WooCommerce - Premium ===
 Contributors: ghera74
 Tags: Fattura elettronica, Danea Easyfatt, gestionale, prodotti, sincronizzazione
 Version: 1.7.4
@@ -11,9 +11,9 @@ Import suppliers, clients and products, from Danea Easyfatt into your WooCommerc
 
 == Description ==
 
-Se hai realizzato il tuo negozio online con WooCommerce ed utilizzi Danea Easyfatt come gestionale, **ilGhera WooCommerce Importer per Danea - Premium** è lo strumento indispensabile per far comunicare efficacemente le due piattaforme. Il nostro software è **certificato Danea Easyfatt**, garantendo la massima affidabilità e un'integrazione fluida.
+Se hai realizzato il tuo negozio online con WooCommerce ed utilizzi Danea Easyfatt come gestionale, **ilGhera Danea Importer for WooCommerce - Premium** è lo strumento indispensabile per far comunicare efficacemente le due piattaforme. Il nostro software è **certificato Danea Easyfatt**, garantendo la massima affidabilità e un'integrazione fluida.
 
-ilGhera WooCommerce Importer for Danea - Premium ti permette di importare e sincronizzare facilmente i tuoi dati:
+ilGhera Danea Importer for WooCommerce - Premium ti permette di importare e sincronizzare facilmente i tuoi dati:
 
 * **Fornitori:** Importa l'elenco dei fornitori direttamente in WordPress come utenti, assegnando loro un ruolo specifico (tramite file CSV). Questo ti consente una gestione centralizzata e flessibile dei tuoi contatti commerciali.
 * **Clienti:** Carica l'elenco dei tuoi clienti da Danea, anche loro come utenti WordPress con un ruolo dedicato (tramite file CSV), semplificando la gestione del tuo database clienti e la loro interazione con il negozio.
@@ -23,9 +23,9 @@ ilGhera WooCommerce Importer for Danea - Premium ti permette di importare e sinc
 
 **ENGLISH**
 
-If you've built your online store with WooCommerce and you're using Danea Easyfatt as management software, you definitely need **ilGhera WooCommerce Importer for Danea - Premium**! Our software is **Danea Easyfatt certified**, ensuring maximum reliability and seamless integration.
+If you've built your online store with WooCommerce and you're using Danea Easyfatt as management software, you definitely need **ilGhera Danea Importer for WooCommerce - Premium**! Our software is **Danea Easyfatt certified**, ensuring maximum reliability and seamless integration.
 
-ilGhera WooCommerce Importer for Danea - Premium allows you to easily import and synchronize your data:
+ilGhera Danea Importer for WooCommerce - Premium allows you to easily import and synchronize your data:
 
 * **Suppliers:** Import your supplier list directly into WordPress as users, assigning them a specific role (via CSV file). This allows for centralized and flexible management of your business contacts.
 * **Clients:** Upload your client list from Danea, also as WordPress users with a dedicated role (via CSV file), simplifying your customer database management and their interaction with the store.
@@ -36,45 +36,45 @@ ilGhera WooCommerce Importer for Danea - Premium allows you to easily import and
 
 == Installation ==
 
-Per installare **ilGhera WooCommerce Importer for Danea - Premium**, puoi seguire due metodi:
+Per installare **ilGhera Danea Importer for WooCommerce - Premium**, puoi seguire due metodi:
 
 #### 1. Installazione tramite Bacheca di WordPress (Metodo Consigliato)
 
     1.  Dalla Bacheca del tuo sito WordPress, naviga su "Plugin > Aggiungi nuovo".
     2.  Clicca sul pulsante "Carica plugin" in cima alla pagina.
-    3.  Seleziona il file zip compresso di "ilGhera WooCommerce Importer for Danea - Premium" che hai scaricato.
+    3.  Seleziona il file zip compresso di "ilGhera Danea Importer for WooCommerce - Premium" che hai scaricato.
     4.  Completa il processo di installazione e attiva il plugin.
 
 #### 2. Installazione Manuale (via FTP/SFTP)
 
-    1.  Decomprimi il file zip di "ilGhera WooCommerce Importer for Danea - Premium" sul tuo computer.
+    1.  Decomprimi il file zip di "ilGhera Danea Importer for WooCommerce - Premium" sul tuo computer.
     2.  Carica la cartella "wc-importer-for-danea-premium" (la cartella scompattata) nella tua directory "/wp-content/plugins/" sul server, usando il tuo client FTP/SFTP preferito.
     3.  Una volta completato il caricamento, vai alla pagina "Plugin" nella tua Bacheca WordPress.
-    4.  Trova "ilGhera WooCommerce Importer for Danea - Premium" e clicca su "Attiva".
+    4.  Trova "ilGhera Danea Importer for WooCommerce - Premium" e clicca su "Attiva".
 
-Dopo l'attivazione, troverai le opzioni del plugin nel menù di WordPress in **WooCommerce > WC Importer for Danea**
+Dopo l'attivazione, troverai le opzioni del plugin nel menù di WordPress in **WooCommerce > Danea Importer for WC**
 
 ---
 
 **ENGLISH**
 
-To install **ilGhera WooCommerce Importer for Danea - Premium**, you can follow two methods:
+To install **ilGhera Danea Importer for WooCommerce - Premium**, you can follow two methods:
 
 #### 1. Installation via WordPress Dashboard (Recommended Method)
 
     1.  From your WordPress Dashboard, navigate to "Plugins > Add New".
     2.  Click the "Upload Plugin" button at the top of the page.
-    3.  Select the compressed zip file of "ilGhera WooCommerce Importer for Danea - Premium" that you downloaded.
+    3.  Select the compressed zip file of "ilGhera Danea Importer for WooCommerce - Premium" that you downloaded.
     4.  Complete the installation process and activate the plugin.
 
 #### 2. Manual Installation (via FTP/SFTP)
 
-    1.  Unzip the "ilGhera WooCommerce Importer for Danea - Premium" zip file on your computer.
+    1.  Unzip the "ilGhera Danea Importer for WooCommerce - Premium" zip file on your computer.
     2.  Upload the "wc-importer-for-danea-premium" directory (the unzipped folder) to your "/wp-content/plugins/" directory on your server, using your favorite FTP/SFTP client.
     3.  Once the upload is complete, go to the "Plugins" page in your WordPress Dashboard.
-    4.  Locate "ilGhera WooCommerce Importer for Danea - Premium" and click "Activate".
+    4.  Locate "ilGhera Danea Importer for WooCommerce - Premium" and click "Activate".
 
-Once activated, you'll find the plugin options in your WordPress in **WooCommerce > WC Importer for Danea**.
+Once activated, you'll find the plugin options in your WordPress in **WooCommerce > Danea Importer for WC**.
 
 
 == Changelog ==

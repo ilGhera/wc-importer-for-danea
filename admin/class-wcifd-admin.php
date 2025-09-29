@@ -62,7 +62,7 @@ class WCIFD_Admin {
 	 */
 	public function add_menu() {
 
-		add_submenu_page( 'woocommerce', 'WCIFD Options', 'WC Importer for Danea', 'manage_woocommerce', 'wc-importer-for-danea', array( $this, 'setup_options_page' ) );
+		add_submenu_page( 'woocommerce', 'WCIFD Options', 'Danea Importer for WC', 'manage_woocommerce', 'wc-importer-for-danea', array( $this, 'setup_options_page' ) );
 
 	}
 
@@ -129,7 +129,7 @@ class WCIFD_Admin {
 		echo '<div id="wcifd-general">';
 
 			/* Header */
-			echo '<h1 class="wcifd main">' . esc_html__( 'WooCommerce Importer for Danea - Premium', 'wc-importer-for-danea' ) . '</h1>';
+			echo '<h1 class="wcifd main">' . esc_html__( 'ilGhera Danea Importer for WooCommerce - Premium', 'wc-importer-for-danea' ) . '</h1>';
 
 			/* The premium key form */
 			$this->premium_key_form();
@@ -180,7 +180,7 @@ class WCIFD_Admin {
 		echo '<form id="wcifd-options" method="post" action="">';
 			echo '<label>' . esc_html__( 'Premium Key', 'wc-importer-for-danea' ) . '</label>';
 			echo '<input type="text" class="regular-text" name="wcifd-premium-key" id="wcifd-premium-key" placeholder="' . esc_html__( 'Add your Premium Key', 'wc-importer-for-danea' ) . '" value="' . esc_attr( $key ) . '" />';
-			echo '<p class="description">' . wp_kses_post( __( 'Add your Premium Key and keep update your copy of <strong>Woocommerce Importer for Danea - Premium</strong>.', 'wc-importer-for-danea' ) ) . '</p>';
+			echo '<p class="description">' . wp_kses_post( __( 'Add your Premium Key and keep update your copy of <strong>ilGhera Danea Importer for WooCommerce - Premium</strong>.', 'wc-importer-for-danea' ) ) . '</p>';
 			echo '<input type="hidden" name="done" value="1" />';
 
 			wp_nonce_field( 'wcifd-premium-key', 'wcifd-premium-key-nonce' );

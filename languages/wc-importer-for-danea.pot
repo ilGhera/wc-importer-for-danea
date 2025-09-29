@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WIFD\n"
-"POT-Creation-Date: 2025-06-13 07:39+0200\n"
+"POT-Creation-Date: 2025-09-29 08:38+0200\n"
 "PO-Revision-Date: 2016-05-26 13:25+0200\n"
 "Last-Translator: ilGhera <info@ilghera.com>\n"
 "Language-Team: ilGhera <info@ilghera.com>\n"
@@ -27,49 +27,53 @@ msgstr ""
 msgid "WARNING! It seems like WooCommerce is not installed."
 msgstr ""
 
-#: admin/class-wcifd-admin.php:131
-msgid "Woocommmerce Importer for Danea - Premium"
-msgstr ""
-
-#: admin/class-wcifd-admin.php:141
-msgid "Suppliers"
+#: admin/class-wcifd-admin.php:132
+msgid "ilGhera Danea Importer for WooCommerce - Premium"
 msgstr ""
 
 #: admin/class-wcifd-admin.php:142
-msgid "Products"
+msgid "Suppliers"
 msgstr ""
 
 #: admin/class-wcifd-admin.php:143
-msgid "Clients"
+msgid "Products"
 msgstr ""
 
 #: admin/class-wcifd-admin.php:144
+msgid "Clients"
+msgstr ""
+
+#: admin/class-wcifd-admin.php:145
 msgid "Orders"
 msgstr ""
 
-#: admin/class-wcifd-admin.php:148
+#: admin/class-wcifd-admin.php:150
 msgid "WooCommerce Role Based Price"
 msgstr ""
 
-#: admin/class-wcifd-admin.php:151
+#: admin/class-wcifd-admin.php:158
+msgid "WooCommerce User Role Based Pricing"
+msgstr ""
+
+#: admin/class-wcifd-admin.php:161
 msgid "Tools"
 msgstr ""
 
-#: admin/class-wcifd-admin.php:171
+#: admin/class-wcifd-admin.php:181
 msgid "Premium Key"
 msgstr ""
 
-#: admin/class-wcifd-admin.php:172
+#: admin/class-wcifd-admin.php:182
 msgid "Add your Premium Key"
 msgstr ""
 
-#: admin/class-wcifd-admin.php:173
+#: admin/class-wcifd-admin.php:183
 msgid ""
-"Add your Premium Key and keep update your copy of <strong>Woocommerce "
-"Importer for Danea - Premium</strong>."
+"Add your Premium Key and keep update your copy of <strong>ilGhera Danea "
+"Importer for WooCommerce - Premium</strong>."
 msgstr ""
 
-#: admin/class-wcifd-admin.php:178
+#: admin/class-wcifd-admin.php:188
 msgid "Save "
 msgstr ""
 
@@ -238,6 +242,7 @@ msgstr ""
 #: admin/templates/wcifd-products-remote-template.php:65
 #: admin/templates/wcifd-role-based-price-template.php:73
 #: admin/templates/wcifd-tools.php:75
+#: admin/templates/wcifd-user-role-based-pricing-template.php:94
 msgid "Save Changes"
 msgstr ""
 
@@ -296,20 +301,23 @@ msgid ""
 msgstr ""
 
 #: admin/templates/wcifd-products-general-template.php:32
+#: admin/templates/wcifd-user-role-based-pricing-template.php:54
 msgid "Regular price"
 msgstr ""
 
 #: admin/templates/wcifd-products-general-template.php:37
 #: admin/templates/wcifd-products-general-template.php:51
 #: admin/templates/wcifd-role-based-price-template.php:58
+#: admin/templates/wcifd-user-role-based-pricing-template.php:78
 msgid "Price list "
 msgstr ""
 
 #: admin/templates/wcifd-products-general-template.php:41
-msgid "The Danea price list to use for Woocommerce regular price."
+msgid "The Danea price list to use for WooCommerce regular price."
 msgstr ""
 
 #: admin/templates/wcifd-products-general-template.php:45
+#: admin/templates/wcifd-user-role-based-pricing-template.php:54
 msgid "Sale price"
 msgstr ""
 
@@ -318,7 +326,7 @@ msgid "Select a price list"
 msgstr ""
 
 #: admin/templates/wcifd-products-general-template.php:55
-msgid "The Danea price list to use for Woocommerce sale price."
+msgid "The Danea price list to use for WooCommerce sale price."
 msgstr ""
 
 #: admin/templates/wcifd-products-general-template.php:59
@@ -519,6 +527,7 @@ msgid "Import products images from Danea."
 msgstr ""
 
 #: admin/templates/wcifd-role-based-price-template.php:62
+#: admin/templates/wcifd-user-role-based-pricing-template.php:82
 msgid "The Danea price list to use"
 msgstr ""
 
@@ -555,6 +564,12 @@ msgid ""
 "By default, Action Scheduler cleans up completed tasks. Select these "
 "options to also remove tasks that have failed or were canceled after the "
 "specified number of days."
+msgstr ""
+
+#: admin/templates/wcifd-user-role-based-pricing-template.php:40
+#: classes/class-wcifd-functions.php:750
+#: classes/class-wcifd-import-single-product.php:873
+msgid "Guest"
 msgstr ""
 
 #: classes/class-wcifd-functions.php:477
@@ -609,34 +624,35 @@ msgstr ""
 msgid "Barcode"
 msgstr ""
 
-#: classes/class-wcifd-functions.php:828
+#: classes/class-wcifd-functions.php:887
 msgid ""
 "WCIFD ERROR | An error accourred while receiving data from Danea Easyfatt"
 msgstr ""
 
-#: classes/class-wcifd-functions.php:861
+#: classes/class-wcifd-functions.php:920
 msgid ""
 "WCIFD ERROR | It seems like the URL entered in Danea Easyfatt is not "
 "correct"
 msgstr ""
 
-#: classes/class-wcifd-functions.php:876
+#: classes/class-wcifd-functions.php:935
 #: vendor/plugin-update-checker/Puc/v5p6/Plugin/Ui.php:130
 msgid "Check for updates"
 msgstr ""
 
-#: classes/class-wcifd-functions.php:891
+#: classes/class-wcifd-functions.php:950
 msgid ""
-"<strong>Woocommerce Importer for Danea - Premium</strong> is up to date."
+"<strong>ilGhera Danea Importer for WooCommerce - Premium</strong> is up to "
+"date."
 msgstr ""
 
-#: classes/class-wcifd-functions.php:895
+#: classes/class-wcifd-functions.php:954
 msgid ""
-"A new version of <strong>Woocommerce Importer for Danea - Premium</strong> "
-"is available."
+"A new version of <strong>ilGhera Danea Importer for WooCommerce - Premium</"
+"strong> is available."
 msgstr ""
 
-#: classes/class-wcifd-functions.php:899
+#: classes/class-wcifd-functions.php:958
 msgid "There was an error trying to update. Please try again later."
 msgstr ""
 
@@ -668,7 +684,7 @@ msgid "Products delete was completed!"
 msgstr ""
 
 #: classes/class-wcifd-progress-bar.php:129
-msgid "WC Importer for Danea"
+msgid "ilGhera Danea Importer for WC"
 msgstr ""
 
 #: classes/class-wcifd-progress-bar.php:130
