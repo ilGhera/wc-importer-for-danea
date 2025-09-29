@@ -31,10 +31,6 @@ class WCIFD_Functions {
             /* Actions */
             add_action( 'init', array( $this, 'register_attributes' ) );
             add_action( 'init', array( $this, 'products_update_request' ) );
-
-            /* Filters */
-            add_filter( 'puc_manual_check_link-wc-importer-for-danea-premium', array( $this, 'check_update_message' ) );
-            add_filter( 'puc_manual_check_message-wc-importer-for-danea-premium', array( $this, 'update_message' ), 10, 2 );
         }
 	}
 

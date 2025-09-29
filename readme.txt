@@ -1,4 +1,4 @@
-=== ilGhera WooCommerce Importer for Danea ===
+=== ilGhera Danea Importer for WooCommerce ===
 Contributors: ghera74
 Tags: Fattura elettronica, Danea Easyfatt, gestionale, prodotti, sincronizzazione
 Version: 1.4.0
@@ -13,10 +13,9 @@ Import and sync Danea Easyfatt customers and suppliers with your WooCommerce sto
 
 == Description ==
 
-If you've built your online store with WooCommerce and you're using Danea Easyfatt as management software, you definitely need ilGhera WooCommerce Importer for Danea.
+If you've built your online store with WooCommerce and you're using Danea Easyfatt as management software, you definitely need ilGhera Danea Importer for WooCommerce.
 You'll be able to import client and suppliers width this free version, also products and orders with the premium one.
 
-*Danea Easyfatt certified*
 
 SOME AVAILABLE TOOLS:
 
@@ -35,23 +34,23 @@ https://youtu.be/LZ6urO531OE
 
 == Installation ==
 
-To install **ilGhera WooCommerce Importer for Danea**, you can follow two methods, depending on whether you install it directly from the WordPress dashboard or via manual download:
+To install **ilGhera Danea Importer for WooCommerce**, you can follow two methods, depending on whether you install it directly from the WordPress dashboard or via manual download:
 
 #### 1. Installation via WordPress Dashboard (Recommended Method)
 
     1.  From your WordPress Dashboard, navigate to Plugins > Add New.
-    2.  Search for "ilGhera WooCommerce Importer for Danea".
+    2.  Search for "ilGhera Danea Importer for WooCommerce".
     3.  Click "Install Now" and then "Activate".
 
 #### 2. Manual Installation from WordPress.org (via FTP/SFTP)
 
-    1.  Download the ilGhera WooCommerce Importer for Danea zip file from WordPress.org.
+    1.  Download the ilGhera Danea Importer for WooCommerce zip file from WordPress.org.
     2.  Unzip the file on your computer.
-    3.  Upload the `woocommerce-importer-for-danea` directory (the unzipped folder) to your `/wp-content/plugins/` directory on your server, using your favorite FTP/SFTP client.
+    3.  Upload the `woocommerce-importer-for-danea` folder (the unzipped folder) to your `/wp-content/plugins/` directory on your server, using your favorite FTP/SFTP client.
     4.  Once the upload is complete, go to the Plugins page in your WordPress Dashboard.
-    5.  Locate "ilGhera WooCommerce Importer for Danea" and click "Activate".
+    5.  Locate "ilGhera Danea Importer for WooCommerce" and click "Activate".
 
-Once activated, you'll find the plugin options in your WordPress in **WooCommerce > WC Importer for Danea**.
+Once activated, you'll find the plugin options in your WordPress in **WooCommerce > Danea Importer for WC**.
 
 
 == Screenshots ==

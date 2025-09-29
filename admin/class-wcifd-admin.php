@@ -60,7 +60,7 @@ class WCIFD_Admin {
 	 */
 	public function add_menu() {
 
-		add_submenu_page( 'woocommerce', 'WCIFD Options', 'WC Importer for Danea', 'manage_woocommerce', 'wc-importer-for-danea', array( $this, 'setup_options_page' ) );
+		add_submenu_page( 'woocommerce', 'WCIFD Options', 'Danea Importer for WC', 'manage_woocommerce', 'wc-importer-for-danea', array( $this, 'setup_options_page' ) );
 
 	}
 
