@@ -861,42 +861,5 @@ class WCIFD_Functions {
 			exit;
 		}
 	}
-
-	/**
-	 * Custom check for update message
-	 *
-	 * @return string
-	 */
-	public function check_update_message() {
-
-		return __( 'Check for updates', 'wc-importer-for-danea' );
-	}
-
-	/**
-	 * Custom update message
-	 *
-	 * @param  string $message the message text.
-	 * @param  string $status the answer status.
-	 *
-	 * @return string
-	 */
-	public function update_message( $message = '', $status = '' ) {
-
-		if ( 'no_update' === $status ) {
-
-			$message = __( '<strong>WooCommerce Importer for Danea - Premium</strong> is up to date.', 'wc-importer-for-danea' );
-
-		} elseif ( 'update_available' === $status ) {
-
-			$message = __( 'A new version of <strong>WooCommerce Importer for Danea - Premium</strong> is available.', 'wc-importer-for-danea' );
-
-		} else {
-
-			$message = __( 'There was an error trying to update. Please try again later.', 'wc-importer-for-danea' );
-
-		}
-
-		return $message;
-	}
 }
 
