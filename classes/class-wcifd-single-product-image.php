@@ -51,7 +51,9 @@ class WCIFD_Single_Product_Image {
 		$image_name = isset( $data['image_name'] ) ? $data['image_name'] : '';
 
 		error_log( '=== WCIFD | Associazione immagine prodotto ================' );
+		error_log( 'Hash: ' . $hash );
 		error_log( 'ID prodotto: ' . $product_id );
+		error_log( 'Nome immagine: ' . $image_name );
 
 		if ( 0 < $product_id && $image_name ) {
 
@@ -92,6 +94,8 @@ class WCIFD_Single_Product_Image {
 	 */
 	public function get_image_id( $image_name ) {
 
+		error_log( 'WCIFD | Nome immagine cercata: ' . $image_name );
+
 		/* Attempt to retrieve using the new custom post meta */
 		$image_id = $this->get_image_id_by_meta( $image_name );
 		error_log( 'ID immagine da postmeta: ' . $image_id );
@@ -101,6 +105,13 @@ class WCIFD_Single_Product_Image {
 			/* If not found with the meta, try the old method (post_name/slug) */
 			$image_id = $this->get_image_id_by_name( $image_name );
 			error_log( 'ID immagine da nome: ' . $image_id );
+		}
+
+		if ( ! $image_id ) {
+
+			/* Fallback: search by filename in guid or post_title */
+			$image_id = $this->get_image_id_by_fallback( $image_name );
+			error_log( 'ID immagine da fallback: ' . $image_id );
 		}
 
 		return $image_id;
@@ -167,6 +178,43 @@ class WCIFD_Single_Product_Image {
 		}
 
         return $output;
+	}
+
+	/**
+	 * Fallback search for attachment by filename in guid or post_title.
+	 *
+	 * @param string $image_name The original image filename.
+	 *
+	 * @return int|false The attachment ID if found, false otherwise.
+	 */
+	public function get_image_id_by_fallback( $image_name ) {
+
+		global $wpdb;
+
+		// Rimuovi l'estensione per una ricerca più flessibile
+		$clean_name = preg_replace( '/\\.[^.\\s]{3,4}$/', '', $image_name );
+		$clean_name = sanitize_title( $clean_name );
+
+		// Cerca nel post_title (senza estensione) e nel guid (URL che contiene il nome file)
+		$query = $wpdb->prepare(
+			"SELECT ID FROM $wpdb->posts 
+			WHERE post_type = 'attachment' 
+			AND post_status = 'inherit'
+			AND ( post_title LIKE %s OR guid LIKE %s )
+			LIMIT 1",
+			'%' . $wpdb->esc_like( $clean_name ) . '%',
+			'%' . $wpdb->esc_like( $image_name ) . '%'
+		);
+
+		$attachment_id = $wpdb->get_var( $query );
+
+		if ( $attachment_id ) {
+			// Salva il meta per futuri riferimenti
+			update_post_meta( $attachment_id, '_wcifd_original_filename', $image_name );
+			error_log( 'WCIFD | Immagine trovata con fallback: ' . $attachment_id );
+		}
+
+		return $attachment_id ? (int) $attachment_id : false;
 	}
 }
 

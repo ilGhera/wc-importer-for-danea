@@ -127,42 +127,32 @@ class WCIFD_Products_Images {
 		$image_ids_to_delete = array();
 
 		$image_ids_by_meta = $this->get_image_ids_by_meta( $original_filename );
+		$image_ids_by_name = $this->get_image_ids_by_name( $original_filename );
 
 		error_log( '=== WCIFD | Eliminazione duplicati ========================' );
+		error_log( 'Nome originale: ' . $original_filename );
+		error_log( 'Slug sanitizzato: ' . sanitize_title( $original_filename ) );
+		error_log( 'Trovati per meta: ' . print_r( $image_ids_by_meta, true ) );
+		error_log( 'Trovati per nome: ' . print_r( $image_ids_by_name, true ) );
 
 		if ( ! empty( $image_ids_by_meta ) ) {
-
 			$image_ids_to_delete = $image_ids_by_meta;
-
-			if ( isset( $image_ids_to_delete[0] ) ) {
-
-				error_log( 'Ricerca immagine per postmeta: ' . $original_filename );
-				error_log( 'ID immagine da eliminare: ' . $image_ids_to_delete[0] );
-			}
+			error_log( 'Duplicati da eliminare (trovati per meta): ' . implode( ', ', $image_ids_to_delete ) );
+		} elseif ( ! empty( $image_ids_by_name ) ) {
+			$image_ids_to_delete = $image_ids_by_name;
+			error_log( 'Duplicati da eliminare (trovati per nome): ' . implode( ', ', $image_ids_to_delete ) );
 		} else {
-
-			error_log( 'Ricerca immagine per nome: ' . sanitize_title( $original_filename ) );
-			$image_ids_by_name = $this->get_image_ids_by_name( $original_filename );
-
-			if ( ! empty( $image_ids_by_name ) ) {
-
-				$image_ids_to_delete = $image_ids_by_name;
-
-				if ( isset( $image_ids_to_delete[0] ) ) {
-
-					error_log( 'ID immagine da eliminare: ' . $image_ids_to_delete[0] );
-				}
-			}
+			error_log( 'Nessun duplicato trovato.' );
 		}
 
 		/* Deleting process */
 		if ( ! empty( $image_ids_to_delete ) ) {
-
 			foreach ( $image_ids_to_delete as $id ) {
-
 				wp_delete_post( $id, true );
 				error_log( 'Eliminato duplicato per ' . $original_filename . ' (ID: ' . $id . ')' );
 			}
+		} else {
+			error_log( 'Nessuna eliminazione eseguita.' );
 		}
 
 		error_log( '===========================================================' );
