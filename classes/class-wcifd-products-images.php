@@ -54,6 +54,7 @@ class WCIFD_Products_Images {
 
 		/* The original filename */
 		$original_file_name = $file['name'];
+		error_log( 'WCIFD | Ricevuta richiesta upload per: ' . $original_file_name );
 
 		/* Delete duplicates */
 		$this->delete_duplicates( $original_file_name );
@@ -105,12 +106,21 @@ class WCIFD_Products_Images {
 		/* Add attachment */
 		$attach_id = wp_insert_attachment( $attachment, $wp_image['file'] );
 
+		if ( is_wp_error( $attach_id ) ) {
+			error_log( 'WCIFD ERROR | Creazione attachment fallita per: ' . $original_file_name . ' | ' . $attach_id->get_error_message() );
+			echo 'OK';
+			return;
+		}
+
+		error_log( 'WCIFD | Attachment creato - ID: ' . $attach_id . ' per file: ' . $original_file_name );
+
 		/* Generate and update metadata */
 		$attach_data = wp_generate_attachment_metadata( $attach_id, $wp_image['file'] );
 		wp_update_attachment_metadata( $attach_id, $attach_data );
 
 		/* Add post meta to the attachment */
 		update_post_meta( $attach_id, '_wcifd_original_filename', $original_file_name );
+		error_log( 'WCIFD | Meta _wcifd_original_filename salvato per attachment ID ' . $attach_id . ': ' . $original_file_name );
 
 		echo 'OK';
 	}
