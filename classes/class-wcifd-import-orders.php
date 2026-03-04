@@ -106,13 +106,13 @@ class WCIFD_Import_Orders {
 	 * Import single order
 	 *
 	 * @param object $order the Danea order.
-	 * @param int    $o     the orders counter.
-	 * @param int    $u     the users counter.
-	 * @param int    $p     the products counter.
+	 * @param int    &$o    the orders counter (passed by reference).
+	 * @param int    &$u    the users counter (passed by reference).
+	 * @param int    &$p    the products counter (passed by reference).
 	 *
 	 * @return void
 	 */
-	public function import_single_order( $order, $o, $u, $p ) {
+	public function import_single_order( $order, &$o, &$u, &$p ) {
 
 		/* The Danea order ID */
 		$order_number = $this->functions->decode_xml_value( $order->Number );
@@ -269,11 +269,11 @@ class WCIFD_Import_Orders {
 	 *
 	 * @param object $wc_order the WC order.
 	 * @param object $item     the Danea order item.
-	 * @param int    $p        the products counter.
+	 * @param int    &$p       the products counter (passed by reference).
 	 *
 	 * @return void
 	 */
-	public function add_order_item( $wc_order, $item, $p ) {
+	public function add_order_item( $wc_order, $item, &$p ) {
 
 		/* Get item data */
 		$item_data = $this->get_item_data( $item );
