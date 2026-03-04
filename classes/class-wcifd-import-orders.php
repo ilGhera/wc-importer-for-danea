@@ -137,8 +137,24 @@ class WCIFD_Import_Orders {
 
 			} else {
 
-				$user    = get_user_by( 'email', $order_data['billing_email'] );
-				$user_id = $user->ID;
+				$user = get_user_by( 'email', $order_data['billing_email'] );
+				
+				if ( $user ) {
+					$user_id = $user->ID;
+				} else {
+					// Try to find user by tax code or VAT number
+					$user_id = $this->functions->get_user_id_by_tax_code( $order->CustomerVatCode );
+					
+					if ( ! $user_id ) {
+						$user_id = $this->functions->get_user_id_by_tax_code( $order->CustomerFiscalCode );
+					}
+					
+					// If still no user found and we should add new users, create one
+					if ( ! $user_id && 1 === intval( $this->add_new_users ) ) {
+						$u++;
+						$user_id = $this->add_user( $order_data );
+					}
+				}
 			}
 
 			$args = array(
@@ -436,9 +452,18 @@ class WCIFD_Import_Orders {
 	 */
 	public function get_billing_address( $order_data ) {
 
+		// Handle single-word names
+		$first_name = isset( $order_data['name'][0] ) ? $order_data['name'][0] : '';
+		$last_name  = isset( $order_data['name'][1] ) ? $order_data['name'][1] : '';
+		
+		// If only one word, use it as first name
+		if ( ! empty( $first_name ) && empty( $last_name ) ) {
+			$last_name = $first_name;
+		}
+		
 		$billing_address = array(
-			'first_name' => $order_data['name'][0],
-			'last_name'  => $order_data['name'][1],
+			'first_name' => $first_name,
+			'last_name'  => $last_name,
 			'company'    => $order_data['billing_company'],
 			'email'      => $order_data['billing_email'],
 			'phone'      => $order_data['billing_phone'],
@@ -486,12 +511,21 @@ class WCIFD_Import_Orders {
 		$random_password = wp_generate_password( 12, false );
 		$role            = ( get_option( 'wcifd-clients-role' ) ) ? get_option( 'wcifd-clients-role' ) : 'customer';
 
+		// Handle single-word names
+		$first_name = isset( $order_data['name'][0] ) ? $order_data['name'][0] : '';
+		$last_name  = isset( $order_data['name'][1] ) ? $order_data['name'][1] : '';
+		
+		// If only one word, use it as first name
+		if ( ! empty( $first_name ) && empty( $last_name ) ) {
+			$last_name = $first_name;
+		}
+		
 		$userdata = array(
 			'role'         => $role,
 			'user_login'   => $order_data['user_name'],
-			'first_name'   => $order_data['name'][0],
-			'last_name'    => $order_data['name'][1],
-			'display_name' => $order_data['name'],
+			'first_name'   => $first_name,
+			'last_name'    => $last_name,
+			'display_name' => is_array( $order_data['name'] ) ? implode( ' ', $order_data['name'] ) : $order_data['name'],
 			'user_email'   => $order_data['billing_email'],
 			'user_pass'    => $random_password,
 		);
