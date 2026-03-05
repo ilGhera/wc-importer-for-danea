@@ -456,11 +456,6 @@ class WCIFD_Import_Orders {
 		$first_name = isset( $order_data['name'][0] ) ? $order_data['name'][0] : '';
 		$last_name  = isset( $order_data['name'][1] ) ? $order_data['name'][1] : '';
 		
-		// If only one word, use it as first name
-		if ( ! empty( $first_name ) && empty( $last_name ) ) {
-			$last_name = $first_name;
-		}
-		
 		$billing_address = array(
 			'first_name' => $first_name,
 			'last_name'  => $last_name,
@@ -515,11 +510,6 @@ class WCIFD_Import_Orders {
 		$first_name = isset( $order_data['name'][0] ) ? $order_data['name'][0] : '';
 		$last_name  = isset( $order_data['name'][1] ) ? $order_data['name'][1] : '';
 		
-		// If only one word, use it as first name
-		if ( ! empty( $first_name ) && empty( $last_name ) ) {
-			$last_name = $first_name;
-		}
-		
 		$userdata = array(
 			'role'         => $role,
 			'user_login'   => $order_data['user_name'],
@@ -538,8 +528,8 @@ class WCIFD_Import_Orders {
 		}
 
 		/* Order details */
-		add_user_meta( $user_id, 'billing_first_name', $order_data['name'][0] );
-		add_user_meta( $user_id, 'billing_last_name', $order_data['name'][1] );
+		add_user_meta( $user_id, 'billing_first_name', isset($order_data['name'][0]) ? $order_data['name'][0] : '' );
+		add_user_meta( $user_id, 'billing_last_name', isset($order_data['name'][1]) ? $order_data['name'][1] : '' );
 		add_user_meta( $user_id, 'billing_address_1', $order_data['billing_address'] );
 		add_user_meta( $user_id, 'billing_city', $order_data['billing_city'] );
 		add_user_meta( $user_id, 'billing_postcode', $order_data['billing_postcode'] );
