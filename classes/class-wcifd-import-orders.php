@@ -335,9 +335,27 @@ class WCIFD_Import_Orders {
 		$wc_item->set_product_id( $product_id );
 		$wc_item->set_quantity( $item_data['total_sales'] );
 		$wc_item->set_name( $product->get_name() );
-		$wc_item->set_subtotal( $product->get_price() * $item_data['total_sales'] );
-		$wc_item->set_total( $product->get_price() * $item_data['total_sales'] );
+		
+		// Calculate item totals
+		$subtotal = $product->get_price() * $item_data['total_sales'];
+		$total    = $subtotal;
+		
+		$wc_item->set_subtotal( $subtotal );
+		$wc_item->set_total( $total );
 		$wc_item->set_tax_class( $product->get_tax_class() );
+		
+		// Calculate taxes based on product tax class
+		$tax_rates = WC_Tax::get_rates( $product->get_tax_class() );
+		if ( ! empty( $tax_rates ) ) {
+			$taxes = WC_Tax::calc_tax( $total, $tax_rates, false );
+			$wc_item->set_taxes(
+				array(
+					'subtotal' => $taxes,
+					'total'    => $taxes,
+				)
+			);
+		}
+		
 		$wc_item->save();
 
 		return $wc_item;
@@ -538,10 +556,10 @@ class WCIFD_Import_Orders {
 		add_user_meta( $user_id, 'billing_phone', $order_data['billing_phone'] );
 		add_user_meta( $user_id, 'billing_email', $order_data['billing_email'] );
 
-		if ( $order_data['cf_name'] ) {
+		if ( $order_data['cf_name'] && ! empty( $order_data['fiscal_code'] ) ) {
 			add_user_meta( $user_id, $order_data['cf_name'], $order_data['fiscal_code'] );
 		}
-		if ( $order_data['pi_name'] ) {
+		if ( $order_data['pi_name'] && ! empty( $order_data['p_iva'] ) ) {
 			add_user_meta( $user_id, $order_data['pi_name'], $order_data['p_iva'] );
 		}
 
