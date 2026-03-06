@@ -299,7 +299,7 @@ class WCIFD_Import_Orders {
 			if ( $product_id ) {
 
 				/* Add new WC order item */
-				$wc_item = $this->add_order_item_product( $item_data, $product_id );
+				$wc_item = $this->add_order_item_product( $wc_order, $item_data, $product_id );
 			}
 		} else {
 
@@ -307,37 +307,47 @@ class WCIFD_Import_Orders {
 			if ( 0 > $item_data['price'] ) {
 
 				/* Add new WC order item */
-				$wc_item = $this->add_order_item_fee( $item_data );
+				$wc_item = $this->add_order_item_fee( $wc_order, $item_data );
 			}
-		}
-
-		if ( $wc_item ) {
-
-			/* Add item to the WC order */
-			$wc_order->add_item( $wc_item );
 		}
 	}
 
 	/**
 	 * Add order item product
 	 *
-	 * @param array $item_data  the Danea order item data.
-	 * @param int   $product_id the WC product ID.
+	 * @param object $wc_order   the WC order.
+	 * @param array  $item_data  the Danea order item data.
+	 * @param int    $product_id the WC product ID.
 	 *
 	 * @return object
 	 */
-	public function add_order_item_product( $item_data, $product_id ) {
+	public function add_order_item_product( $wc_order, $item_data, $product_id ) {
 
 		/* Get product */
 		$product = wc_get_product( $product_id );
+
+		/* Get tax details from item data */
+		$tax_details = $this->get_tax_details( $item_data );
 
 		$wc_item = new WC_Order_Item_Product();
 		$wc_item->set_product_id( $product_id );
 		$wc_item->set_quantity( $item_data['total_sales'] );
 		$wc_item->set_name( $product->get_name() );
-		$wc_item->set_subtotal( $product->get_price() * $item_data['total_sales'] );
-		$wc_item->set_total( $product->get_price() * $item_data['total_sales'] );
-		$wc_item->set_tax_class( $product->get_tax_class() );
+		$wc_item->set_subtotal( $item_data['price'] * $item_data['total_sales'] );
+		$wc_item->set_total( $item_data['price'] * $item_data['total_sales'] );
+		$wc_item->set_tax_class( $tax_details['class'] );
+
+		/* Add item to the order */
+		$wc_order->add_item( $wc_item );
+
+		/* Calculate taxes based on order address */
+		$calculate_tax_for = array(
+			'country'  => $wc_order->get_billing_country(),
+			'state'    => $wc_order->get_billing_state(),
+			'postcode' => $wc_order->get_billing_postcode(),
+			'city'     => $wc_order->get_billing_city(),
+		);
+		$wc_item->calculate_taxes( $calculate_tax_for );
 		$wc_item->save();
 
 		return $wc_item;
@@ -346,11 +356,12 @@ class WCIFD_Import_Orders {
 	/**
 	 * Add order item fee
 	 *
-	 * @param array $item_data the Danea order item data.
+	 * @param object $wc_order  the WC order.
+	 * @param array  $item_data the Danea order item data.
 	 *
 	 * @return object
 	 */
-	public function add_order_item_fee( $item_data ) {
+	public function add_order_item_fee( $wc_order, $item_data ) {
 
 		/* Get tax details */
 		$tax_details = $this->get_tax_details( $item_data );
@@ -360,6 +371,18 @@ class WCIFD_Import_Orders {
 		$wc_item->set_amount( $item_data['price'] );
 		$wc_item->set_total( $item_data['price'] * $item_data['total_sales'] );
 		$wc_item->set_tax_class( $tax_details['class'] );
+
+		/* Add item to the order */
+		$wc_order->add_item( $wc_item );
+
+		/* Calculate taxes based on order address */
+		$calculate_tax_for = array(
+			'country'  => $wc_order->get_billing_country(),
+			'state'    => $wc_order->get_billing_state(),
+			'postcode' => $wc_order->get_billing_postcode(),
+			'city'     => $wc_order->get_billing_city(),
+		);
+		$wc_item->calculate_taxes( $calculate_tax_for );
 		$wc_item->save();
 
 		return $wc_item;
@@ -379,12 +402,12 @@ class WCIFD_Import_Orders {
 			'class'  => null,
 		);
 
-		$perc  = isset( $item_data['tax']['Perc'] ) ? $this->functions->decode_xml_value( $item_data['tax']['Perc'] ) : null;
-		$class = isset( $item_data['tax']['Class'] ) ? $this->functions->decode_xml_value( $item_data['tax']['Class'] ) : null;
+		$perc  = isset( $item_data['tax']['Perc'] ) ? $item_data['tax']['Perc'] : null;
+		$class = isset( $item_data['tax']['Class'] ) ? $item_data['tax']['Class'] : null;
 
 		if ( 0 !== intval( $perc ) ) {
 			$tax_details['status'] = 'taxable';
-			$tax_details['class']  = $this->functions->get_tax_rate_class( $this->functions->decode_xml_value( $item_data['tax'] ), strval( $perc ) );
+			$tax_details['class']  = $this->functions->get_tax_rate_class( $item_data['tax']['value'], strval( $perc ) );
 		}
 
 		return $tax_details;
@@ -403,7 +426,11 @@ class WCIFD_Import_Orders {
 
 		$item_data['sku']         = $this->functions->decode_xml_value( $item->Code );
 		$item_data['title']       = $this->functions->decode_xml_value( $item->Description );
-		$item_data['tax']         = $this->functions->decode_xml_value( $item->VatCode );
+		$item_data['tax']         = array(
+			'value' => $this->functions->decode_xml_value( $item->VatCode ),
+			'Perc'  => isset( $item->VatCode['Perc'] ) ? (string) $item->VatCode['Perc'] : null,
+			'Class' => isset( $item->VatCode['Class'] ) ? (string) $item->VatCode['Class'] : null,
+		);
 		$item_data['price']       = $this->functions->decode_xml_value( $item->Price );
 		$item_data['total_sales'] = $this->functions->decode_xml_value( $item->Qty );
 
