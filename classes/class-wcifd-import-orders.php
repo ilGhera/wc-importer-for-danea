@@ -190,6 +190,13 @@ class WCIFD_Import_Orders {
 			}
 
 			$wc_order->calculate_totals();
+
+			/* Override totals with Danea values to avoid rounding differences */
+			if ( ! empty( $order_data['total'] ) ) {
+				$wc_order->set_cart_tax( $order_data['vat_amount'] );
+				$wc_order->set_total( $order_data['total'] );
+			}
+
 			$wc_order->save();
 		}
 	}
@@ -260,6 +267,11 @@ class WCIFD_Import_Orders {
 		$order_data['shipping_postcode'] = $this->functions->decode_xml_value( $order->DeliveryPostcode );
 		$order_data['shipping_state']    = $this->functions->decode_xml_value( $order->DeliveryProvince );
 		$order_data['shipping_country']  = $this->functions->get_country_code( $this->functions->decode_xml_value( $order->DeliveryCountry ) );
+
+		/* Order totals from Danea */
+		$order_data['total_without_tax'] = $this->functions->decode_xml_value( $order->TotalWithoutTax );
+		$order_data['vat_amount']        = $this->functions->decode_xml_value( $order->VatAmount );
+		$order_data['total']             = $this->functions->decode_xml_value( $order->Total );
 
 		return $order_data;
 	}
