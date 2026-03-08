@@ -3,7 +3,7 @@ Contributors: ghera74
 Tags: Fattura elettronica, Danea Easyfatt, gestionale, prodotti, sincronizzazione
 Version: 1.4.2
 Requires at least: 6.0
-Tested up to: 6.8
+Tested up to: 6.9
 WC tested up to: 10
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -74,6 +74,8 @@ Release Date: 8 March 2026
     * Enhancement: (Premium) Order import now supports product variations (Size/Color).
     * Enhancement: (Premium) Automatic creation of variable products with variations during order import.
     * Enhancement: (Premium) Tax calculation in order imports now uses Danea totals to avoid rounding differences.
+    * Enhancement: WordPress 6.9 support 
+    * Enhancement: WooCommerce 10 support 
     * Update: (Premium) ilghera-notice library to v1.2.0.
     * Update: (Premium) Plugin Update Checker.
     * Update: Translations.
