@@ -119,28 +119,33 @@ class WCIFD_Functions {
 	 *
 	 * @param string $tax_code the tax code.
 	 *
-	 * @return int
+	 * @return int|null
 	 */
 	public function get_user_id_by_tax_code( $tax_code = null ) {
-
-        if ( $tax_code ) {
+		if ( $tax_code ) {
+			// Ensure $tax_code is a string
+			if ( is_object( $tax_code ) ) {
+				$tax_code = (string) $tax_code;
+			}
+			$tax_code = sanitize_text_field( $tax_code );
 
             global $wpdb;
 
-            $result = $wpdb->get_results(
-                $wpdb->prepare(
-                    "
-                    SELECT user_id
-                    FROM $wpdb->usermeta
-                    WHERE meta_value = %s
-                    ",
-                    $tax_code
-                ),
-                ARRAY_A
-            );
+			$result = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT user_id
+					 FROM $wpdb->usermeta
+					 WHERE meta_value = %s
+					 LIMIT 1",
+					$tax_code
+				),
+				ARRAY_A
+			);
 
-            return $result[0]['user_id'];
-        }
+			return isset( $result[0]['user_id'] ) ? $result[0]['user_id'] : null;
+		}
+
+		return null;
 	}
 
 	/**
@@ -153,7 +158,7 @@ class WCIFD_Functions {
 	public function get_country_code( $state_name ) {
 
         if ( function_exists( 'WC' ) && WC() && WC()->countries ) {
-            
+
             $countries = WC()->countries->countries;
 
             if ( is_array( $countries ) ) {
@@ -862,4 +867,3 @@ class WCIFD_Functions {
 		}
 	}
 }
-

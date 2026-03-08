@@ -10,26 +10,26 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$tax_included               = ''; 
-$use_suppliers              = ''; 
-$display_producer           = ''; 
-$display_supplier           = ''; 
-$display_sup_product_code   = ''; 
-$regular_price_list         = ''; 
-$sale_price_list            = ''; 
-$size_type                  = ''; 
-$weight_type                = ''; 
-$notes_as_description       = ''; 
-$short_description          = ''; 
-$exclude_description        = ''; 
-$exclude_title              = ''; 
-$exclude_url                = ''; 
-$deleting_categories        = ''; 
-$deleted_products           = ''; 
-$replace_products           = ''; 
-$products_variations_prices = ''; 
-$products_not_available     = ''; 
-$publish_new_products       = ''; 
+$tax_included               = '';
+$use_suppliers              = '';
+$display_producer           = '';
+$display_supplier           = '';
+$display_sup_product_code   = '';
+$regular_price_list         = '';
+$sale_price_list            = '';
+$size_type                  = '';
+$weight_type                = '';
+$notes_as_description       = '';
+$short_description          = '';
+$exclude_description        = '';
+$exclude_title              = '';
+$exclude_url                = '';
+$deleting_categories        = '';
+$deleted_products           = '';
+$replace_products           = '';
+$products_variations_prices = '';
+$products_not_available     = '';
+$publish_new_products       = '';
 ?>
 
 <div id="wcifd-products" class="wcifd-admin">
@@ -51,4 +51,3 @@ $publish_new_products       = '';
 	?>
 
 </div>
-

@@ -465,6 +465,14 @@ msgstr "Pubblicazione nuovi prodotti"
 msgid "Publish new products directly."
 msgstr "Pubblicare i nuovi prodotti direttamente."
 
+#: admin/templates/wcifd-products-general-template.php:196
+msgid "Import EAN barcode"
+msgstr "Importa codice EAN"
+
+#: admin/templates/wcifd-products-general-template.php:200
+msgid "Import the barcode field from Danea as GTIN/EAN in WooCommerce (only valid numeric codes)."
+msgstr "Importa il campo codice a barre da Danea come GTIN/EAN in WooCommerce (solo codici numerici validi)."
+
 #: admin/templates/wcifd-products-remote-template.php:18
 msgid "Receive products from Danea"
 msgstr "Ricevi  i prodotti da Danea"

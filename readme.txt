@@ -1,7 +1,7 @@
 === ilGhera Danea Importer for WooCommerce ===
 Contributors: ghera74
 Tags: Fattura elettronica, Danea Easyfatt, gestionale, prodotti, sincronizzazione
-Version: 1.4.1
+Version: 1.4.2
 Requires at least: 6.0
 Tested up to: 6.8
 WC tested up to: 10
@@ -26,7 +26,7 @@ SOME AVAILABLE TOOLS:
 * (Premium) Import Producer from Danea and add it to the product as attribute
 * (Premium) Option for showing the Producer in front-end or not
 * (Premium) Import Danea custom fields and add them to the product as attributes
-* (Premium) Add a name to the custom fields coming from Danea 
+* (Premium) Add a name to the custom fields coming from Danea
 * (Premium) Option for showing the custom fields in front-end or not
 
 https://youtu.be/LZ6urO531OE
@@ -67,6 +67,18 @@ Once activated, you'll find the plugin options in your WordPress in **WooCommerc
 
 == Changelog ==
 
+= 1.4.2 =
+Release Date: 8 March 2026
+
+    * Enhancement: (Premium) New option to import EAN/GTIN barcode from Danea (only valid numeric codes).
+    * Enhancement: (Premium) Order import now supports product variations (Size/Color).
+    * Enhancement: (Premium) Automatic creation of variable products with variations during order import.
+    * Enhancement: (Premium) Tax calculation in order imports now uses Danea totals to avoid rounding differences.
+    * Update: (Premium) ilghera-notice library to v1.2.0.
+    * Update: (Premium) Plugin Update Checker.
+    * Update: Translations.
+
+
 = 1.4.1 =
 Release Date: 29 September 2025
 
@@ -104,42 +116,42 @@ Release Date: 7 October 2024
 
 
 = 1.3.1 =
-Release Date: 18 September 2023 
+Release Date: 18 September 2023
 
-    * Enhancement: (Premium) Progress bar on products import 
-    * Enhancement: WordPress translation system 
-    * Update: (Premium) Action Scheduler 
-    * Update: (Premium) Plugin Update Checker 
-    * Update: (Premium) ilGhera admin notice 
+    * Enhancement: (Premium) Progress bar on products import
+    * Enhancement: WordPress translation system
+    * Update: (Premium) Action Scheduler
+    * Update: (Premium) Plugin Update Checker
+    * Update: (Premium) ilGhera admin notice
     * Update: Translations
     * Bug fix: Unencoded characters in plugin's options page
     * Bug fix: (Premium) Unencoded characters in Danea's error message
-    * Bug fix: (Premium) New products attributes not created during the import 
+    * Bug fix: (Premium) New products attributes not created during the import
 
 
 = 1.3.0 =
-Release Date: 1 August 2023 
+Release Date: 1 August 2023
 
-    * Enhancement: (Premium) Danea Notes field as short product description 
+    * Enhancement: (Premium) Danea Notes field as short product description
     * Enhancement: (Premium) Import Danea custom fields as product tags
-    * Enhancement: (Premium) Split Danea custom fields values by commas and create tags/attributes 
-    * Enhancement: (Premium) Option append tags on importing Danea custom fields 
-    * Enhancement: Better user interface 
-    * Enhancement: WordPress Coding Standard 
-    * Enhancement: (Premium) More details in log file in case of products/variations not imported/updated 
-    * Update: (Premium) Action Scheduler 
-    * Update: (Premium) Plugin Update Checker 
+    * Enhancement: (Premium) Split Danea custom fields values by commas and create tags/attributes
+    * Enhancement: (Premium) Option append tags on importing Danea custom fields
+    * Enhancement: Better user interface
+    * Enhancement: WordPress Coding Standard
+    * Enhancement: (Premium) More details in log file in case of products/variations not imported/updated
+    * Update: (Premium) Action Scheduler
+    * Update: (Premium) Plugin Update Checker
     * Update: Translations
-    * Bug fix: (Premium) Custom label not assigned to Danea custom fields imported 
+    * Bug fix: (Premium) Custom label not assigned to Danea custom fields imported
 
 
 = 1.2.1 =
 Release Date: 16 March 2023
 
-    * Update: (Premium) Action Scheduler 
-    * Update: (Premium) Plugin Update Checker 
-    * Update: (Premium) License notice 
-    * Bug fix: Error importing users by CSV file with contents in multiple lines  
+    * Update: (Premium) Action Scheduler
+    * Update: (Premium) Plugin Update Checker
+    * Update: (Premium) License notice
+    * Bug fix: Error importing users by CSV file with contents in multiple lines
 
 
 = 1.2.0 =
@@ -153,7 +165,7 @@ Release Date: 7 October 2021
 = 1.1.3 =
 Release Date: 5 March 2021
 
-    * Enhancement: (Premium) Import and display in front-end the supplier name 
+    * Enhancement: (Premium) Import and display in front-end the supplier name
     * Enhancement: (Premium) Import and display in front-end the supplier product code
     * Bug fix: (Premium) Import variable products with no sku via CSV
     * Bug fix: (Premium) No update of variations based on custom attributes previously imported via CSV
@@ -163,7 +175,7 @@ Release Date: 5 March 2021
 Release Date: 10 February 2021
 
     * Enhancement: (Premium) Exclude new products import if not in stock
-    * Enhancement: (Premium) Exclude variations prices from products update  
+    * Enhancement: (Premium) Exclude variations prices from products update
 
 
 = 1.1.1 =
@@ -178,12 +190,12 @@ Release Date: 05 February 2020
 
     * Enhancement: Import customers
     * Enhancement: Customers and suppliers import now supports the fiscal fields coming from the Exporter plugin.
-    * Enhancement: New product sub-menu for a better navigation 
+    * Enhancement: New product sub-menu for a better navigation
     * Enhancement: (Premium) Avoid product name update with a dedicated option
     * Enhancement: (Premium) Import Producer from Danea and add it to the product as attribute
     * Enhancement: (Premium) Option for showing the Producer in front-end or not
     * Enhancement: (Premium) Import Danea custom fields and add them to the product as attributes
-    * Enhancement: (Premium) Add a name to the custom fields coming from Danea 
+    * Enhancement: (Premium) Add a name to the custom fields coming from Danea
     * Enhancement: (Premium) Option for showing the custom fields in front-end or not
 
 
@@ -193,7 +205,7 @@ Release Date: 24 January, 2018
     * Enhancement: Update users imported if already present.
     * Enhancement: (Premium) Danea tax classes imported during synchronization.
     * Enhancement: (Premium) Choose which Danea menu list use for the WooCommerce regular price, and a second one for the sell price.
-    * Enhancement: (Premium) Import product weight and dimension from Danea, gross or net. 
+    * Enhancement: (Premium) Import product weight and dimension from Danea, gross or net.
     * Enhancement: (Premium) Use part of the Danea product description for the short description in WooCommerce.
     * Enhancement: (Premium) Exclude product description in update synchronizations.
     * Enhancement: (Premium) New products imported can now be published directly.
@@ -226,4 +238,3 @@ Release Date: 06 November, 2016
 Release Date: 10 October, 2016
 
     * First release
-
