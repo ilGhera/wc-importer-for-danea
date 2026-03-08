@@ -288,8 +288,9 @@ class WCIFD_Import_Orders {
 	public function add_order_item( $wc_order, $item, &$p ) {
 
 		/* Get item data */
-		$item_data = $this->get_item_data( $item );
-		$wc_item   = null;
+		$item_data    = $this->get_item_data( $item );
+		$wc_item      = null;
+		$variation_id = 0;
 
 		if ( $item_data['sku'] ) {
 
@@ -306,12 +307,33 @@ class WCIFD_Import_Orders {
 
 				/* Add the product category Imported */
 				wp_set_object_terms( $product_id, 'Imported', 'product_cat', true );
+
+				/* If product was created as variable, find the variation */
+				$product = wc_get_product( $product_id );
+				if ( $product && $product->is_type( 'variable' ) ) {
+					$variation_id = $this->find_variation( $product_id, $item_data );
+				}
 			}
 
 			if ( $product_id ) {
 
+				$product = wc_get_product( $product_id );
+
+				/* Check if we need to find a variation (for existing products) */
+				if ( $product && ! $variation_id && ( ! empty( $item_data['size'] ) || ! empty( $item_data['color'] ) ) ) {
+
+					/* If product found is a variation, get parent */
+					if ( $product->is_type( 'variation' ) ) {
+						$variation_id = $product_id;
+						$product_id   = $product->get_parent_id();
+					} elseif ( $product->is_type( 'variable' ) ) {
+						/* Search for the matching variation */
+						$variation_id = $this->find_variation( $product_id, $item_data );
+					}
+				}
+
 				/* Add new WC order item */
-				$wc_item = $this->add_order_item_product( $wc_order, $item_data, $product_id );
+				$wc_item = $this->add_order_item_product( $wc_order, $item_data, $product_id, $variation_id );
 			}
 		} else {
 
@@ -325,18 +347,79 @@ class WCIFD_Import_Orders {
 	}
 
 	/**
+	 * Find variation by size and color attributes
+	 *
+	 * @param int   $product_id the parent product ID.
+	 * @param array $item_data  the item data with size/color.
+	 *
+	 * @return int the variation ID or 0 if not found
+	 */
+	public function find_variation( $product_id, $item_data ) {
+
+		$product = wc_get_product( $product_id );
+
+		if ( ! $product || ! $product->is_type( 'variable' ) ) {
+			return 0;
+		}
+
+		$match_attributes = array();
+
+		if ( ! empty( $item_data['size'] ) ) {
+			$match_attributes['pa_size'] = sanitize_title( $item_data['size'] );
+		}
+
+		if ( ! empty( $item_data['color'] ) ) {
+			$match_attributes['pa_color'] = sanitize_title( $item_data['color'] );
+		}
+
+		if ( empty( $match_attributes ) ) {
+			return 0;
+		}
+
+		/* Get all variations */
+		$variations = $product->get_available_variations();
+
+		foreach ( $variations as $variation ) {
+
+			$variation_attributes = $variation['attributes'];
+			$match                = true;
+
+			foreach ( $match_attributes as $attr_name => $attr_value ) {
+
+				$variation_attr_key = 'attribute_' . $attr_name;
+
+				if ( isset( $variation_attributes[ $variation_attr_key ] ) ) {
+					/* Empty value means "any", so it matches */
+					if ( ! empty( $variation_attributes[ $variation_attr_key ] ) &&
+						 sanitize_title( $variation_attributes[ $variation_attr_key ] ) !== $attr_value ) {
+						$match = false;
+						break;
+					}
+				}
+			}
+
+			if ( $match ) {
+				return $variation['variation_id'];
+			}
+		}
+
+		return 0;
+	}
+
+	/**
 	 * Add order item product
 	 *
-	 * @param object $wc_order   the WC order.
-	 * @param array  $item_data  the Danea order item data.
-	 * @param int    $product_id the WC product ID.
+	 * @param object $wc_order     the WC order.
+	 * @param array  $item_data    the Danea order item data.
+	 * @param int    $product_id   the WC product ID.
+	 * @param int    $variation_id the WC variation ID (optional).
 	 *
 	 * @return object
 	 */
-	public function add_order_item_product( $wc_order, $item_data, $product_id ) {
+	public function add_order_item_product( $wc_order, $item_data, $product_id, $variation_id = 0 ) {
 
-		/* Get product */
-		$product = wc_get_product( $product_id );
+		/* Get product - use variation if available */
+		$product = $variation_id ? wc_get_product( $variation_id ) : wc_get_product( $product_id );
 
 		/* Get tax details from item data */
 		$tax_details = $this->get_tax_details( $item_data );
@@ -344,10 +427,26 @@ class WCIFD_Import_Orders {
 		$wc_item = new WC_Order_Item_Product();
 		$wc_item->set_product_id( $product_id );
 		$wc_item->set_quantity( $item_data['total_sales'] );
-		$wc_item->set_name( $product->get_name() );
 		$wc_item->set_subtotal( $item_data['price'] * $item_data['total_sales'] );
 		$wc_item->set_total( $item_data['price'] * $item_data['total_sales'] );
 		$wc_item->set_tax_class( $tax_details['class'] );
+
+		/* Handle variation */
+		if ( $variation_id ) {
+			$wc_item->set_variation_id( $variation_id );
+		}
+
+		/* Set product name */
+		$wc_item->set_name( $product ? $product->get_name() : $item_data['title'] );
+
+		/* Always add size/color as item meta if present (visible in order details) */
+		if ( ! empty( $item_data['size'] ) ) {
+			$wc_item->add_meta_data( __( 'Size', 'wc-importer-for-danea' ), $item_data['size'], true );
+		}
+
+		if ( ! empty( $item_data['color'] ) ) {
+			$wc_item->add_meta_data( __( 'Color', 'wc-importer-for-danea' ), $item_data['color'], true );
+		}
 
 		/* Add item to the order */
 		$wc_order->add_item( $wc_item );
@@ -446,6 +545,10 @@ class WCIFD_Import_Orders {
 		$item_data['price']       = $this->functions->decode_xml_value( $item->Price );
 		$item_data['total_sales'] = $this->functions->decode_xml_value( $item->Qty );
 
+		/* Variation attributes */
+		$item_data['size']  = $this->functions->decode_xml_value( $item->Size );
+		$item_data['color'] = $this->functions->decode_xml_value( $item->Color );
+
 		return $item_data;
 	}
 
@@ -461,7 +564,16 @@ class WCIFD_Import_Orders {
 		/* Get tax details */
 		$tax_details = $this->get_tax_details( $item_data );
 
-		/* Insert the new product */
+		/* Check if has variation attributes */
+		$has_size  = ! empty( $item_data['size'] );
+		$has_color = ! empty( $item_data['color'] );
+
+		if ( $has_size || $has_color ) {
+			/* Create variable product with variation */
+			return $this->create_variable_product( $item_data, $tax_details );
+		}
+
+		/* Insert simple product */
 		$product = new WC_Product_Simple();
 
 		$props = array(
@@ -480,6 +592,82 @@ class WCIFD_Import_Orders {
 		$product->set_props( $props );
 
 		return $product->save();
+	}
+
+	/**
+	 * Create variable product with variation
+	 *
+	 * @param array $item_data   the item data.
+	 * @param array $tax_details the tax details.
+	 *
+	 * @return int the product ID
+	 */
+	public function create_variable_product( $item_data, $tax_details ) {
+
+		/* Create variable product */
+		$product = new WC_Product_Variable();
+
+		$props = array(
+			'author'     => get_current_user_id(),
+			'name'       => $item_data['title'],
+			'status'     => 'publish',
+			'sku'        => $item_data['sku'],
+			'tax_status' => $tax_details['status'],
+			'tax_class'  => $tax_details['class'],
+		);
+
+		$product->set_props( $props );
+
+		/* Build attributes */
+		$attributes = array();
+
+		if ( ! empty( $item_data['size'] ) ) {
+			$size_attribute = new WC_Product_Attribute();
+			$size_attribute->set_id( wc_attribute_taxonomy_id_by_name( 'pa_size' ) );
+			$size_attribute->set_name( 'pa_size' );
+			$size_attribute->set_options( array( $item_data['size'] ) );
+			$size_attribute->set_visible( true );
+			$size_attribute->set_variation( true );
+			$attributes[] = $size_attribute;
+		}
+
+		if ( ! empty( $item_data['color'] ) ) {
+			$color_attribute = new WC_Product_Attribute();
+			$color_attribute->set_id( wc_attribute_taxonomy_id_by_name( 'pa_color' ) );
+			$color_attribute->set_name( 'pa_color' );
+			$color_attribute->set_options( array( $item_data['color'] ) );
+			$color_attribute->set_visible( true );
+			$color_attribute->set_variation( true );
+			$attributes[] = $color_attribute;
+		}
+
+		$product->set_attributes( $attributes );
+		$product_id = $product->save();
+
+		/* Create variation */
+		$variation = new WC_Product_Variation();
+		$variation->set_parent_id( $product_id );
+		$variation->set_status( 'publish' );
+		$variation->set_regular_price( $item_data['price'] );
+		$variation->set_price( $item_data['price'] );
+		$variation->set_tax_status( $tax_details['status'] );
+		$variation->set_tax_class( $tax_details['class'] );
+
+		/* Set variation attributes */
+		$variation_attributes = array();
+
+		if ( ! empty( $item_data['size'] ) ) {
+			$variation_attributes['pa_size'] = sanitize_title( $item_data['size'] );
+		}
+
+		if ( ! empty( $item_data['color'] ) ) {
+			$variation_attributes['pa_color'] = sanitize_title( $item_data['color'] );
+		}
+
+		$variation->set_attributes( $variation_attributes );
+		$variation->save();
+
+		return $product_id;
 	}
 
 	/**
