@@ -176,6 +176,17 @@ final class WCIFD_Plugin {
 		/* Load plugin text domain for internationalization. */
 		load_plugin_textdomain( 'wc-importer-for-danea', false, basename( dirname( __FILE__ ) ) . '/languages' );
 
+		/* Initialize the ilGhera Notice system. */
+		$notice = Ilghera_Notice::get_instance();
+		$notice->add_product(
+			array(
+				'name'   => 'ilGhera Danea Importer for WC - Premium',
+				'slug'   => 'woocommerce-importer-for-danea-premium',
+				'sign'   => 'wcifd',
+				'domain' => 'wc-importer-for-danea',
+			)
+		);
+
 		/* Instantiate core classes */
 		new WCIFD_AS_Cleaner();
 		new WCIFD_Admin();
