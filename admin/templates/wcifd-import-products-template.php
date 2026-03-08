@@ -30,6 +30,7 @@ $replace_products           = get_option( 'wcifd-replace-products' );
 $products_variations_prices = get_option( 'wcifd-products-variations-prices' );
 $products_not_available     = get_option( 'wcifd-products-not-available' );
 $publish_new_products       = get_option( 'wcifd-publish-new-products' );
+$import_ean                 = get_option( 'wcifd-import-ean' );
 
 if ( isset( $_POST['wcifd-products-general-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['wcifd-products-general-nonce'] ) ), 'wcifd-products-general' ) ) {
 
@@ -132,6 +133,11 @@ if ( isset( $_POST['wcifd-products-general-nonce'] ) && wp_verify_nonce( sanitiz
 	if ( isset( $_POST['publish-new-products'] ) ) {
 		$publish_new_products = sanitize_text_field( wp_unslash( $_POST['publish-new-products'] ) );
 		update_option( 'wcifd-publish-new-products', $publish_new_products );
+	}
+
+	if ( isset( $_POST['hidden-import-ean'] ) ) {
+		$import_ean = ( isset( $_POST['wcifd-import-ean'] ) ) ? sanitize_text_field( wp_unslash( $_POST['wcifd-import-ean'] ) ) : 0;
+		update_option( 'wcifd-import-ean', $import_ean );
 	}
 }
 ?>

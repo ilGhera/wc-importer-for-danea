@@ -193,6 +193,14 @@ defined( 'ABSPATH' ) || exit;
 				</td>
 			</tr>
 			<tr>
+				<th scope="row"><?php esc_html_e( 'Import EAN barcode', 'wc-importer-for-danea' ); ?></th>
+				<td>
+					<input type="hidden" name="hidden-import-ean" value="0">
+					<input type="checkbox" name="wcifd-import-ean" value="1"<?php echo 1 === intval( $import_ean ) ? ' checked="checked"' : ''; ?>>
+					<p class="description"><?php esc_html_e( 'Import the barcode field from Danea as GTIN/EAN in WooCommerce (only valid numeric codes).', 'wc-importer-for-danea' ); ?></p>
+				</td>
+			</tr>
+			<tr>
 				<th scope="row"><?php esc_html_e( 'Publish new products', 'wc-importer-for-danea' ); ?></th>
 				<td>
 					<input type="hidden" name="publish-new-products" value="0">

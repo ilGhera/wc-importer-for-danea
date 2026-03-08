@@ -412,6 +412,7 @@ class WCIFD_Import_Single_Product {
 		$data['sku']              = isset( $this->d_product['Code'] ) ? $this->d_product['Code'] : '';
 		$data['sku']              = str_replace( '\\', '\\\\', $data['sku'] );
 		$data['barcode']          = isset( $this->d_product['Barcode'] ) ? $this->d_product['Barcode'] : '';
+		$data['barcode']          = is_array( $data['barcode'] ) && isset( $data['barcode'][0] ) ? $data['barcode'][0] : $data['barcode'];
 		$data['barcode']          = str_replace( '\\', '\\\\', $data['barcode'] );
 		$data['title']            = isset( $this->d_product['Description'] ) ? htmlentities( $this->d_product['Description'] ) : '';
 		$data['category']         = isset( $this->d_product['Category'] ) ? $this->d_product['Category'] : '';
@@ -971,7 +972,7 @@ class WCIFD_Import_Single_Product {
 		}
 
 		$metadata = array(
-			'author'   => $data['author'], // Temp.
+			'author'   => $data['author'], // Temporary.
 			'wcifd-um' => $data['um'],
 		);
 
@@ -981,6 +982,9 @@ class WCIFD_Import_Single_Product {
 		/* WooCommerce User Role Based Pricing */
 		$metadata = array_merge( $metadata, $this->add_wcmrbp_data( $data ) );
 
+		/* Add barcode as global unique ID */
+		// Do not add to $metadata, will be set later with setter
+
 		/* Set props */
 		$product->set_props( $props );
 
@@ -988,6 +992,11 @@ class WCIFD_Import_Single_Product {
 		foreach ( $metadata as $key => $value ) {
 
 			$product->update_meta_data( $key, $value );
+		}
+
+		/* Set global unique ID (barcode) - only if enabled and valid GTIN format (numbers and dashes only) */
+		if ( get_option( 'wcifd-import-ean' ) && ! empty( $data['barcode'] ) && preg_match( '/^[0-9\-]+$/', $data['barcode'] ) ) {
+			$product->set_global_unique_id( $data['barcode'] );
 		}
 
 		$product->save();
@@ -1082,6 +1091,11 @@ class WCIFD_Import_Single_Product {
 			/* Update WC User Role Based Pricing data */
 			$this->upate_wcmrbp_data( $product, $data );
 
+			/* Update barcode as global unique ID - only if enabled and valid GTIN format (numbers and dashes only) */
+			if ( get_option( 'wcifd-import-ean' ) && ! empty( $data['barcode'] ) && preg_match( '/^[0-9\-]+$/', $data['barcode'] ) ) {
+				$product->set_global_unique_id( $data['barcode'] );
+			}
+
 			/* Save updates */
 			$product->save();
 
@@ -1113,6 +1127,7 @@ class WCIFD_Import_Single_Product {
 	public function single_variant( $variant, $n, $product, $data ) {
 
 		$barcode      = isset( $variant['Barcode'] ) ? $variant['Barcode'] : '';
+		$barcode      = is_array( $barcode ) && isset( $barcode[0] ) ? $barcode[0] : $barcode;
 		$var_id       = $this->functions->search_product( $barcode );
 		$in_stock     = isset( $variant['AvailableQty'] ) ? $variant['AvailableQty'] : '';
 		$man_stock    = 'yes';
@@ -1123,7 +1138,7 @@ class WCIFD_Import_Single_Product {
 			/* Do not import variation if not available */
 			if ( $this->products_not_available && 1 > $in_stock ) {
 				/* continue; */
-				return; // Temp.
+				return; // Temporary.
 			}
 		}
 
