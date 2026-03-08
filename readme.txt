@@ -3,8 +3,8 @@ Contributors: ghera74
 Tags: Fattura elettronica, Danea Easyfatt, gestionale, prodotti, sincronizzazione
 Version: 1.7.5
 Requires at least: 6.0
-Tested up to: 6.8
-WC tested up to: 9
+Tested up to: 6.9
+WC tested up to: 10
 
 
 Import suppliers, clients and products, from Danea Easyfatt into your WooCommerce store.
@@ -86,6 +86,8 @@ Release Date: 8 March 2026
     * Enhancement: Order import now supports product variations (Size/Color).
     * Enhancement: Automatic creation of variable products with variations during order import.
     * Enhancement: Tax calculation in order imports now uses Danea totals to avoid rounding differences.
+    * Enhancement: WordPress 6.9 support 
+    * Enhancement: WooCommerce 10 support 
     * Update: ilghera-notice library to v1.2.0.
     * Update: Plugin Update Checker.
     * Update: Translations.

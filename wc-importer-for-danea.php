@@ -7,8 +7,8 @@
  * You'll be able to import suppliers, clients and products.
  * Version: 1.7.5
  * Requires at least: 6.0
- * Tested up to: 6.8
- * WC tested up to: 9
+ * Tested up to: 6.9
+ * WC tested up to: 10
  * Author: ilGhera
  * Author URI: https://ilghera.com
  * Text Domain: wc-importer-for-danea
