@@ -3,8 +3,8 @@ Contributors: ghera74
 Tags: Fattura elettronica, Danea Easyfatt, gestionale, prodotti, sincronizzazione
 Version: 1.4.2
 Requires at least: 6.0
-Tested up to: 6.9
-WC tested up to: 10
+Tested up to: 7.0
+WC tested up to: 11.0.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
