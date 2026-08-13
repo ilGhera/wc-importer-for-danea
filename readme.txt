@@ -2,6 +2,7 @@
 Contributors: ghera74
 Tags: Fattura elettronica, Danea Easyfatt, gestionale, prodotti, sincronizzazione
 Version: 1.4.3
+Stable tag: 1.4.3
 Requires at least: 6.0
 Tested up to: 7.0
 WC tested up to: 11.0.1
@@ -70,8 +71,6 @@ Once activated, you'll find the plugin options in your WordPress in **WooCommerc
 = 1.4.3 =
 Release Date: 13 August 2026
 
-    * Compatibility: WordPress 7.0
-    * Compatibility: WooCommerce 11.0.1
     * Enhancement: supporto variazioni prodotto nell'importazione ordini
     * Enhancement: aggiungi opzione per importare codice EAN da Danea
     * Bug Fix: usa totali Danea per evitare differenze di arrotondamento
