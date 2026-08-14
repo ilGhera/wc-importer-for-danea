@@ -69,7 +69,7 @@ Once activated, you'll find the plugin options in your WordPress in **WooCommerc
 == Changelog ==
 
 = 1.4.3 =
-Release Date: 13 August 2026
+Release Date: 14 August 2026
 
     * Enhancement: supporto variazioni prodotto nell'importazione ordini
     * Enhancement: aggiungi opzione per importare codice EAN da Danea
