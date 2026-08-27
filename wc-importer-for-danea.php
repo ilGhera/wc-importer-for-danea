@@ -7,7 +7,7 @@
  * You'll be able to import client and suppliers width this free version, also products and orders with the premium one.
  * Version: 1.4.4
  * Requires at least: 6.0
- * Tested up to: 6.9
+ * Tested up to: 7.1
  * WC tested up to: 11.0.1
  * Author: ilGhera
  * Author URI: https://ilghera.com
