@@ -8,7 +8,7 @@
  * Version: 1.4.4
  * Requires at least: 6.0
  * Tested up to: 7.1
- * WC tested up to: 11.0.1
+ * WC tested up to: 11.1.0
  * Author: ilGhera
  * Author URI: https://ilghera.com
  * Text Domain: wc-importer-for-danea
