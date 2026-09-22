@@ -129,14 +129,6 @@ defined( 'ABSPATH' ) || exit;
 				</td>
 			</tr>
 			<tr>
-				<th scope="row"><?php esc_html_e( 'Deleted products', 'wc-importer-for-danea' ); ?></th>
-				<td>
-					<input type="hidden" name="deleted-products" value="0">
-					<input type="checkbox" name="deleted-products" value="1"<?php echo 1 === intval( $deleted_products ) ? ' checked="checked"' : ''; ?>>
-					<p class="description"><?php esc_html_e( 'Avoid updating products in trash.', 'wc-importer-for-danea' ); ?></p>
-				</td>
-			</tr>
-			<tr>
 				<th scope="row"><?php esc_html_e( 'Replace products', 'wc-importer-for-danea' ); ?></th>
 				<td>
 					<input type="hidden" name="replace-products" value="0">

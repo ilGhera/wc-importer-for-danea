@@ -25,7 +25,6 @@ $exclude_description        = '';
 $exclude_title              = '';
 $exclude_url                = '';
 $deleting_categories        = '';
-$deleted_products           = '';
 $replace_products           = '';
 $products_variations_prices = '';
 $products_not_available     = '';
