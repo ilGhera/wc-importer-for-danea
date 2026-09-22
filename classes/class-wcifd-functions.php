@@ -245,7 +245,7 @@ class WCIFD_Functions {
 	}
 
 	/**
-	 * Delete orphan SKUs from the database
+	 * Delete orphan SKUs from the database (postmeta and WooCommerce lookup table)
 	 *
 	 * @param int    $product_id the WC product ID.
 	 * @param string $sku the WC product SKU.
@@ -264,6 +264,18 @@ class WCIFD_Functions {
 				'meta_value' => $sku,
 			)
 		);
+
+		/* Clear the SKU in the WooCommerce lookup table too, used by wc_get_product_id_by_sku() */
+		$wpdb->update(
+			$wpdb->prefix . 'wc_product_meta_lookup',
+			array( 'sku' => '' ),
+			array(
+				'product_id' => $product_id,
+				'sku'        => $sku,
+			),
+			array( '%s' ),
+			array( '%d', '%s' )
+		);
 	}
 
 	/**
@@ -278,7 +290,6 @@ class WCIFD_Functions {
 
 		$post_id = null;
 		$result  = wc_get_product_id_by_sku( $sku );
-		$product = wc_get_product( $post_id );
 
 		if ( $result ) {
 
