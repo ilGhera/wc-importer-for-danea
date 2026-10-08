@@ -629,6 +629,16 @@ msgstr "Importati %d di %d contatti<br>"
 msgid "Updated %1$d of %2$d contacts"
 msgstr "Aggiornati %d di %d contatti"
 
+#: wc-importer-for-danea.php:44
+msgid ""
+"ilGhera Danea Importer for WooCommerce has been deactivated because the "
+"Premium version is already active. The Premium version includes all the "
+"features of the free one, so you can delete the free version."
+msgstr ""
+"ilGhera Danea Importer for WooCommerce è stato disattivato perché la versione "
+"Premium è già attiva. La versione Premium include tutte le funzioni di quella "
+"gratuita, quindi puoi eliminare la versione gratuita."
+
 #~ msgid "Renew now"
 #~ msgstr "Aggiorna ora"
 

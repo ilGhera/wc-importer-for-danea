@@ -20,6 +20,37 @@
 /* Ensure WordPress is loaded. */
 defined( 'ABSPATH' ) || exit;
 
+/* Stop if the premium version is active: the two versions share constants and classes and can't run together. */
+$wcifd_premium        = 'wc-importer-for-danea-premium/wc-importer-for-danea.php';
+$wcifd_premium_active = defined( 'WCIFD_DIR' )
+	|| in_array( $wcifd_premium, (array) get_option( 'active_plugins', array() ), true )
+	|| ( is_multisite() && isset( get_site_option( 'active_sitewide_plugins', array() )[ $wcifd_premium ] ) );
+
+if ( $wcifd_premium_active ) {
+	$wcifd_basename = plugin_basename( __FILE__ );
+
+	add_action(
+		'admin_init',
+		function () use ( $wcifd_basename ) {
+			deactivate_plugins( $wcifd_basename );
+			unset( $_GET['activate'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		}
+	);
+
+	add_action(
+		'admin_notices',
+		function () {
+			echo '<div class="notice notice-warning is-dismissible"><p>';
+			esc_html_e( 'ilGhera Danea Importer for WooCommerce has been deactivated because the Premium version is already active. The Premium version includes all the features of the free one, so you can delete the free version.', 'wc-importer-for-danea' );
+			echo '</p></div>';
+		}
+	);
+
+	unset( $wcifd_premium, $wcifd_premium_active, $wcifd_basename );
+	return;
+}
+unset( $wcifd_premium, $wcifd_premium_active );
+
 /* Load Core Plugin Classes */
 if ( ! defined( 'WCIFD_DIR' ) ) {
 	define( 'WCIFD_DIR', plugin_dir_path( __FILE__ ) );
